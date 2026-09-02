@@ -27,6 +27,12 @@ function isUniqueNameViolation(error: unknown): boolean {
   );
 }
 
+/** Count fractional digits in a major decimal string (0 if none). */
+function fracDigitCount(major: string): number {
+  const m = /^[+-]?\d+(?:\.(\d+))?$/.exec(major.trim());
+  return m?.[1]?.length ?? 0;
+}
+
 /** Create typed account; creditLimitMinor only for FIAT_CREDIT (D-09, D-10). */
 export async function createAccount(
   _prev: AccountActionState,
@@ -66,6 +72,15 @@ export async function createAccount(
     let creditLimitMinor: bigint | null = null;
     if (type === "FIAT_CREDIT") {
       const major = validated.data.creditLimitMajor!;
+      if (fracDigitCount(major) > currency.scale) {
+        return {
+          errors: {
+            creditLimitMajor: [
+              `Не больше ${currency.scale} знаков после запятой`,
+            ],
+          },
+        };
+      }
       try {
         creditLimitMinor = parseMajorToMinor(major, currency.scale);
       } catch (err) {
