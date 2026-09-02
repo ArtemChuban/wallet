@@ -1,14 +1,22 @@
 ---
 phase: 02-currencies-accounts
-verified: 2026-09-02T21:11:27Z
+verified: 2026-09-02T22:30:00Z
 status: human_needed
-score: 4/4 must-haves verified
-behavior_unverified: 0
+score: 5/8 must-haves verified
+behavior_unverified: 3
 overrides_applied: 0
 decision_coverage:
   honored: 20
   total: 20
   not_honored: []
+re_verification:
+  previous_status: human_needed
+  previous_score: 4/4
+  gaps_closed:
+    - "G-02-1: CurrencyFormBody name Input controlled (useState + value/onChange; zero defaultValue)"
+    - "G-02-2: AccountFormBody name Input controlled (mirror pattern; zero defaultValue)"
+  gaps_remaining: []
+  regressions: []
 gaps: []
 deferred:
   - truth: "Outstanding debt stored on credit accounts and reduces net worth (full ACCT-02 wording)"
@@ -17,24 +25,37 @@ deferred:
   - truth: "User can delete accounts (full ACCT-01 wording)"
     addressed_in: "ACCT-04 / later"
     evidence: "CONTEXT D-14 — no account delete in v1; archive/close is ACCT-04"
+behavior_unverified_items:
+  - truth: "Editing a currency name and saving does not emit Base UI FieldControl uncontrolled default-value console error (G-02-1)"
+    test: "Rename a currency while DevTools console open; save through Dialog"
+    expected: "No Base UI FieldControl uncontrolled default-value warning; name persists; dialog closes"
+    why_human: "Console warning is runtime Base UI behavior after revalidatePath — no automated test asserts console silence"
+  - truth: "Editing an account name and saving does not emit Base UI FieldControl uncontrolled default-value console error (G-02-2)"
+    test: "Rename an account while DevTools console open; save through Dialog"
+    expected: "No FieldControl default-value warning; name persists; dialog closes"
+    why_human: "Same revalidatePath + mounted FormBody race; presence of controlled Input does not prove console silence"
+  - truth: "formKey remount on dialog open still resets local name state for a fresh edit session"
+    test: "Open edit, change name without save, close, reopen same row"
+    expected: "Name field shows current saved name (fresh mount-init), not abandoned draft"
+    why_human: "Ordering/remount invariant; no component test exercises formKey bump + useState init"
 human_verification:
-  - test: "Open app → /currencies → confirm seeded RUB with «Основная» → create secondary currency → edit name only → confirm no removal control and no primary switch"
-    expected: "RUB primary visible; create persists; only name editable after create; Russian chrome matches UI-SPEC"
-    why_human: "MVP user-flow + visual/locale; harvested from 02-04-PLAN human-check. SUMMARY claims prior approval — end-of-phase UAT still confirms goal outcome."
-  - test: "Open /accounts → empty/create UI → create FIAT_DEBIT, CRYPTO, CASH, and FIAT_CREDIT (with limit) → rename only → confirm type/currency/limit locked on edit → no delete control"
-    expected: "All four types creatable; credit limit required only for credit; edit locks identity fields; Russian empty/CTA copy correct"
-    why_human: "MVP user-flow for capital-structure outcome; Dialog pending/lock UX and absence of removal affordances need browser judgment"
-  - test: "Create currency and account with long names (near 120 chars); confirm list truncates with ellipsis; full name editable in Dialog"
-    expected: "List shows ellipsis; title/tooltip or Dialog shows full name"
-    why_human: "PLAN truths tagged verification: backstop — CSS truncate present but visual ellipsis not proven by automated test"
+  - test: "Open app → /currencies → confirm seeded RUB with «Основная» → create secondary currency → edit name only → confirm no removal control and no primary switch; Russian chrome matches UI-SPEC"
+    expected: "RUB primary visible; create persists; only name editable after create; no removal / no primary switch"
+    why_human: "MVP UAT re-run after gap closure; prior UAT blocked on G-02-1 console error"
+  - test: "Open /accounts → create FIAT_DEBIT, CRYPTO, CASH, and FIAT_CREDIT (with limit) → rename only → confirm type/currency/limit locked on edit → no delete; Russian empty/CTA copy"
+    expected: "All four types creatable; credit limit required only for credit; edit locks identity fields; no delete"
+    why_human: "MVP UAT re-run after gap closure; prior UAT blocked on G-02-2 console error"
+  - test: "Rename a currency and an account; confirm Browser/Next console shows no Base UI FieldControl uncontrolled default-value warning for CurrencyFormBody or AccountFormBody; names save and dialogs close"
+    expected: "No FieldControl default-value console error; names persist; dialogs close on success"
+    why_human: "02-05 human-check + G-02-1/G-02-2 closure proof — grep cannot see console"
 ---
 
 # Phase 2: Currencies + Accounts Verification Report
 
 **Phase Goal:** As a local Wallet user, I want to define free-form currencies with one forever primary and manage typed accounts with credit-limit metadata, so that I can set up capital structure before balances and net worth.
-**Verified:** 2026-09-02T21:11:27Z
+**Verified:** 2026-09-02T22:30:00Z
 **Status:** human_needed
-**Re-verification:** No — initial verification
+**Re-verification:** Yes — after gap-closure plan 02-05 (G-02-1 / G-02-2)
 **Mode:** mvp
 
 ## User Flow Coverage
@@ -43,14 +64,14 @@ User story: «As a local Wallet user, I want to define free-form currencies with
 
 | Step | Expected | Evidence | Status |
 |------|----------|----------|--------|
-| Open currencies | Nav → `/currencies`; see seeded primary RUB | `Nav` links; `currencies/page.tsx` `findMany` orderBy code; live DB `RUB\|Рубль\|2\|1`; list badge «Основная» | ✓ code / ⏳ human |
-| Create currency | Free-form code/name/scale; never sets primary | `createCurrency` hardcodes `isPrimary: false`; Zod + Dialog; vitest forces false under FormData tamper | ✓ |
-| Edit currency | Name only; code/scale locked | `updateCurrencyName` data `{ name }` only; edit Dialog; immutability test | ✓ |
-| Open accounts | Nav → `/accounts`; empty CTA «Добавить счёт» | `accounts/page.tsx` + `AccountList` empty state; live `Account` table | ✓ code / ⏳ human |
-| Create four types | FIAT_DEBIT / FIAT_CREDIT / CRYPTO / CASH | `AccountType` enum; Dialog `TYPE_OPTIONS`; createAccount tests all four | ✓ |
-| Credit limit | Required >0 on FIAT_CREDIT; major→minor via scale | Zod superRefine + `parseMajorToMinor`; action persists `creditLimitMinor`; list formats via `formatMinorToMajor` | ✓ |
-| Rename account | Name only; type/currency/limit locked | `updateAccountName` name-only; edit Dialog read-only meta; immutability test | ✓ |
-| Outcome | Capital structure ready before balances/NW | Currency+Account catalog wired; no BAL/NW math in this phase | ✓ code / ⏳ human |
+| Open currencies | Nav → `/currencies`; seeded primary RUB | `Nav` links; `currencies/page.tsx` findMany; live DB primary RUB (`isPrimary=1`); list badge «Основная» | ✓ code / ⏳ human re-UAT |
+| Create currency | Free-form code/name/scale; never sets primary | `createCurrency` hardcodes `isPrimary: false`; Zod + Dialog; actions tests | ✓ |
+| Edit currency | Name only; controlled Input; code/scale locked | `updateCurrencyName` data `{ name }` only; `value={name}` / `onChange`; zero `defaultValue` | ✓ code / ⏳ console human |
+| Open accounts | Nav → `/accounts`; empty CTA «Добавить счёт» | `accounts/page.tsx` + `AccountList`; live Account rows | ✓ code / ⏳ human re-UAT |
+| Create four types | FIAT_DEBIT / FIAT_CREDIT / CRYPTO / CASH | Enum + Dialog `TYPE_OPTIONS`; createAccount tests | ✓ |
+| Credit limit | Required >0 on FIAT_CREDIT; major→minor | Zod + `parseMajorToMinor`; `creditLimitMinor` persist | ✓ |
+| Rename account | Name only; controlled Input; locks | `updateAccountName`; AccountFormBody controlled name; edit read-only meta | ✓ code / ⏳ console human |
+| Outcome | Capital structure before balances/NW | Currency+Account catalog wired; no BAL/NW math | ✓ code / ⏳ human |
 
 ## Goal Achievement
 
@@ -58,12 +79,16 @@ User story: «As a local Wallet user, I want to define free-form currencies with
 
 | # | Truth | Status | Evidence |
 | --- | ------- | ---------- | -------------- |
-| 1 | User can create currencies and rely on exactly one seeded primary currency (RUB; no primary switch in v1) | ✓ VERIFIED | Migration `20260902201000_currency_primary_rub` INSERT RUB + `Currency_one_primary`; live DB primary RUB; `createCurrency` always `isPrimary: false`; export test forbids `setPrimaryCurrency`; foundation.test asserts seed+index (11/11 pass) |
-| 2 | User can create and rename accounts of types fiat debit, fiat credit, crypto, and cash (no account delete in v1) | ✓ VERIFIED | Enum + Dialog four types; `createAccount` / `updateAccountName`; actions.test covers all types + name-only update + no `deleteAccount` export; UI has no delete controls |
-| 3 | User can set a required credit limit on a credit account at create time | ✓ VERIFIED | Zod requires positive major for FIAT_CREDIT; action parses to `creditLimitMinor`; tests persist `100000n` for `"1000"` @ scale 2; non-credit persists `null` |
-| 4 | Credit limit is stored as metadata only (never treated as an asset in later NW math) | ✓ VERIFIED | Schema `creditLimitMinor BigInt?` with metadata comment; no outstandingDebt column; greps show limit used only for create/display — no NW helper treats it as asset (NW deferred Phase 5; must keep this invariant) |
+| 1 | User can create currencies and rely on exactly one seeded primary currency (RUB; no primary switch in v1) | ✓ VERIFIED | Migration seed + `Currency_one_primary`; live DB primary RUB; `createCurrency` always `isPrimary: false`; no `setPrimaryCurrency` export; foundation + currency action tests pass |
+| 2 | User can create and rename accounts of types fiat debit, fiat credit, crypto, and cash (no account delete in v1) | ✓ VERIFIED | Four-type enum + Dialog; `createAccount` / `updateAccountName`; actions tests all types + name-only; no `deleteAccount` export / no delete UI |
+| 3 | User can set a required credit limit on a credit account at create time | ✓ VERIFIED | Zod FIAT_CREDIT refine; `parseMajorToMinor` → `creditLimitMinor`; account action + validation tests |
+| 4 | Credit limit is stored as metadata only (never treated as an asset in later NW math) | ✓ VERIFIED | Schema comment + `BigInt?`; usages only create/display; no NW helper treats limit as asset |
+| 5 | Editing a currency name and saving does not emit Base UI FieldControl uncontrolled default-value console error (G-02-1) | ⚠️ PRESENT_BEHAVIOR_UNVERIFIED | Controlled `useState` + `value`/`onChange`; `defaultValue` count 0; no post-mount `setName` sync — console silence needs browser |
+| 6 | Editing an account name and saving does not emit Base UI FieldControl uncontrolled default-value console error (G-02-2) | ⚠️ PRESENT_BEHAVIOR_UNVERIFIED | Mirror controlled pattern in AccountFormBody; `defaultValue` count 0 — console silence needs browser |
+| 7 | Currency and account name edit still submits via FormData field `name` and closes dialog on success | ✓ VERIFIED | Both Inputs keep `name="name"`; `updateCurrencyName` / `updateAccountName` tests pass (39 tests in spot-check set); success `useEffect` → `onSuccess` → `setOpen(false)` present |
+| 8 | formKey remount on dialog open still resets local name state for a fresh edit session | ⚠️ PRESENT_BEHAVIOR_UNVERIFIED | `onOpenChange` bumps `formKey`; FormBody `key={formKey}`; mount-init `useState` — no test exercises remount reset |
 
-**Score:** 4/4 truths verified (0 present, behavior-unverified)
+**Score:** 5/8 truths verified (3 present, behavior-unverified)
 
 ### Deferred Items
 
@@ -76,22 +101,22 @@ User story: «As a local Wallet user, I want to define free-form currencies with
 
 | Artifact | Expected | Status | Details |
 | -------- | ----------- | ------ | ------- |
-| `prisma/schema.prisma` | Currency.isPrimary + Account + creditLimitMinor | ✓ VERIFIED | Enum four types; FK currencyCode; optional BigInt limit |
-| `prisma/migrations/20260902201000_currency_primary_rub` | RUB seed + one-primary index | ✓ VERIFIED | INSERT + partial unique index SQL |
-| `prisma/migrations/20260902202603_account_credit_limit` | Account table | ✓ VERIFIED | Table + name unique + FK |
-| `src/lib/money.ts` | parse/format BigInt helpers | ✓ VERIFIED | `parseMajorToMinor` / `formatMinorToMajor` |
-| `src/lib/validations/currency.ts` | Zod create/update | ✓ VERIFIED | Free-form code; scale 0–18; name-only update |
-| `src/lib/validations/account.ts` | Zod + credit limit refine | ✓ VERIFIED | Four types; FIAT_CREDIT limit rules |
-| `src/app/currencies/page.tsx` | RSC list /currencies | ✓ VERIFIED | Prisma findMany → CurrencyList |
-| `src/app/currencies/actions.ts` | create/update Server Actions | ✓ VERIFIED | Wired; no delete |
-| `src/components/currencies/*` | List + Dialog | ✓ VERIFIED | Empty/populated; truncate; badge |
-| `src/components/nav.tsx` | Готовность · Валюты · Счета | ✓ VERIFIED | Links `/` `/currencies` `/accounts`; in layout |
-| `src/app/accounts/page.tsx` | RSC list /accounts | ✓ VERIFIED | Accounts + currencies; BigInt serialized |
-| `src/app/accounts/actions.ts` | create/update + creditLimitMinor | ✓ VERIFIED | parseMajorToMinor for credit |
-| `src/components/accounts/*` | List + four-type Dialog | ✓ VERIFIED | Credit field create-only; edit locks |
-| `src/app/*/actions.test.ts` | Immutability / no-removal | ✓ VERIFIED | Export + tamper FormData tests |
-
-**Artifacts:** all substantive and wired (gsd `verify.artifacts` choked on migration **directory** paths — checked manually)
+| `prisma/schema.prisma` | Currency.isPrimary + Account + creditLimitMinor | ✓ VERIFIED | Enum four types; FK; metadata BigInt |
+| `prisma/migrations/20260902201000_currency_primary_rub` | RUB seed + one-primary index | ✓ VERIFIED | Prior + live primary row |
+| `prisma/migrations/20260902202603_account_credit_limit` | Account table | ✓ VERIFIED | Live Account schema |
+| `src/lib/money.ts` | parse/format BigInt helpers | ✓ VERIFIED | Used by account create/display |
+| `src/lib/validations/currency.ts` | Zod create/update | ✓ VERIFIED | Tests pass |
+| `src/lib/validations/account.ts` | Zod + credit limit refine | ✓ VERIFIED | Tests pass |
+| `src/app/currencies/page.tsx` | RSC list /currencies | ✓ VERIFIED | Prisma → CurrencyList |
+| `src/app/currencies/actions.ts` | create/update Server Actions | ✓ VERIFIED | revalidatePath; no delete |
+| `src/components/currencies/CurrencyFormDialog.tsx` | Controlled name (G-02-1) | ✓ VERIFIED | `gsd verify.artifacts` pass; controlled name |
+| `src/components/currencies/*` | List + Dialog | ✓ VERIFIED | Badge, truncate, Dialog |
+| `src/components/nav.tsx` | Готовность · Валюты · Счета | ✓ VERIFIED | Links in layout |
+| `src/app/accounts/page.tsx` | RSC list /accounts | ✓ VERIFIED | BigInt serialized |
+| `src/app/accounts/actions.ts` | create/update + creditLimitMinor | ✓ VERIFIED | revalidatePath |
+| `src/components/accounts/AccountFormDialog.tsx` | Controlled name (G-02-2) | ✓ VERIFIED | `gsd verify.artifacts` pass; controlled name |
+| `src/components/accounts/*` | List + four-type Dialog | ✓ VERIFIED | Credit create-only; edit locks |
+| `src/app/*/actions.test.ts` | Immutability / no-removal | ✓ VERIFIED | Spot-check pass |
 
 ### Key Link Verification
 
@@ -99,32 +124,32 @@ User story: «As a local Wallet user, I want to define free-form currencies with
 | ---- | -- | --- | ------ | ------- |
 | `currencies/actions.ts` | `prisma.currency` | Zod then create/update | ✓ WIRED | create + name-only update |
 | `accounts/actions.ts` | `prisma.account` | Zod + parseMajorToMinor | ✓ WIRED | creditLimitMinor on FIAT_CREDIT |
-| `Account.currencyCode` | `Currency.code` | Prisma FK | ✓ WIRED | schema + migration |
+| `Account.currencyCode` | `Currency.code` | Prisma FK | ✓ WIRED | schema + live DB |
 | `nav.tsx` | `/currencies`, `/accounts` | Next Link | ✓ WIRED | layout renders Nav |
 | `CurrencyFormDialog` | `createCurrency` / `updateCurrencyName` | useActionState | ✓ WIRED | imports actions |
 | `AccountFormDialog` | `createAccount` / `updateAccountName` | useActionState | ✓ WIRED | imports actions |
-| migration SQL | Currency RUB | INSERT on migrate deploy | ✓ WIRED | live DB row present |
+| CurrencyFormBody name `useState` | Input `value`/`onChange` + `name="name"` | controlled binding | ✓ WIRED | Manual (gsd key-links `from` not file paths — tool false-negative) |
+| AccountFormBody name `useState` | Input `value`/`onChange` + `name="name"` | controlled binding | ✓ WIRED | Same |
+| `revalidatePath` while FormBody mounted | Controlled Input | no control-mode flip | ✓ WIRED (code) / ⏳ human console | Controlled from mount; no `defaultValue`; no prop→state sync |
 
 ### Data-Flow Trace (Level 4)
 
 | Artifact | Data Variable | Source | Produces Real Data | Status |
 | -------- | ------------- | ------ | ------------------ | ------ |
-| `currencies/page.tsx` | `currencies` | `prisma.currency.findMany` | Live RUB (+ any user rows) | ✓ FLOWING |
-| `accounts/page.tsx` | `accounts` / `currencies` | `prisma.account` + `currency` | Live Account table + Currency FK | ✓ FLOWING |
-| `createAccount` | `creditLimitMinor` | Form major → `parseMajorToMinor(scale)` | Persisted BigInt metadata | ✓ FLOWING |
-| `AccountList` limit text | formatted limit | `formatMinorToMajor` + code | Display only — not NW asset | ✓ FLOWING |
+| `currencies/page.tsx` | `currencies` | `prisma.currency.findMany` | Live RUB (+ USDT etc.) | ✓ FLOWING |
+| `accounts/page.tsx` | `accounts` / `currencies` | prisma queries | Live Account + Currency FK | ✓ FLOWING |
+| `createAccount` | `creditLimitMinor` | Form major → `parseMajorToMinor` | Persisted BigInt metadata | ✓ FLOWING |
+| `AccountList` limit text | formatted limit | `formatMinorToMajor` | Display only | ✓ FLOWING |
+| Edit name Inputs | local `name` state | mount-init from row / `""` | FormData `name` on submit | ✓ FLOWING |
 
 ### Behavioral Spot-Checks
 
 | Behavior | Command | Result | Status |
 | -------- | ------- | ------ | ------ |
-| Currency actions immutability / primary lock | `npm test -- --run src/app/currencies/actions.test.ts` | 3 tests pass | ✓ PASS |
-| Account create types + immutability | `npm test -- --run src/app/accounts/actions.test.ts` | 4 tests pass | ✓ PASS |
-| Account Zod credit rules | `npm test -- --run src/lib/validations/account.test.ts` | pass | ✓ PASS |
-| Currency Zod | `npm test -- --run src/lib/validations/currency.test.ts` | pass | ✓ PASS |
-| Money + schema adjacency | `npm test -- --run src/lib/money.test.ts` | pass | ✓ PASS |
-| RUB seed + Account schema in migrated DB | `npm test -- --run src/lib/foundation.test.ts` | 11/11 pass | ✓ PASS |
-| Live SQLite seed | `sqlite3 data/wallet.db …` | `RUB\|Рубль\|2\|1`; Account table exists | ✓ PASS |
+| Currency + account actions + Zod + money + foundation | `npm test -- --run src/app/currencies/actions.test.ts src/app/accounts/actions.test.ts src/lib/validations/currency.test.ts src/lib/validations/account.test.ts src/lib/money.test.ts src/lib/foundation.test.ts` | 6 files / 39 tests pass | ✓ PASS |
+| Zero `defaultValue` in both dialogs | `grep -c defaultValue …FormDialog.tsx` | `0` / `0` | ✓ PASS |
+| Controlled name + formKey | Read CurrencyFormDialog / AccountFormDialog | `useState` name; `value`/`onChange`; `key={formKey}` on open | ✓ PASS |
+| Live primary currency | `sqlite3 … Currency WHERE isPrimary` | RUB primary present | ✓ PASS |
 
 ### Probe Execution
 
@@ -136,9 +161,9 @@ User story: «As a local Wallet user, I want to define free-form currencies with
 
 | Requirement | Source Plan | Description | Status | Evidence |
 | ----------- | ---------- | ----------- | ------ | -------- |
-| CURR-01 | 02-01, 02-02, 02-04 | Create currencies; one primary (e.g. RUB) | ✓ SATISFIED | Seeded forever-primary RUB (CONTEXT D-01/D-02 — no switch UI); create/edit wired |
-| ACCT-01 | 02-03, 02-04 | Create/edit/delete accounts of four types | ✓ SATISFIED (phase-scoped) | Create + rename four types verified; **delete intentionally out of scope** (D-14 → ACCT-04) — see Deferred |
-| ACCT-02 | 02-03, 02-04 | Credit limit + outstanding debt; debt reduces NW | ✓ SATISFIED (phase-scoped) | Credit limit metadata verified; **debt/NW deferred** Phase 3/5 (D-09) — see Deferred |
+| CURR-01 | 02-01, 02-02, 02-04, 02-05 | Create currencies; one primary (e.g. RUB) | ✓ SATISFIED | Seeded forever-primary RUB; create/edit wired; 02-05 controlled rename path |
+| ACCT-01 | 02-03, 02-04, 02-05 | Create/edit/delete accounts of four types | ✓ SATISFIED (phase-scoped) | Create + rename four types; **delete out of scope** (D-14 → ACCT-04); 02-05 controlled rename |
+| ACCT-02 | 02-03, 02-04 | Credit limit + outstanding debt; debt reduces NW | ✓ SATISFIED (phase-scoped) | Credit limit metadata verified; **debt/NW deferred** Phase 3/5 (D-09) |
 
 **Orphaned requirements:** none — REQUIREMENTS maps CURR-01, ACCT-01, ACCT-02 to Phase 2; all claimed by plans.
 
@@ -148,23 +173,23 @@ User story: «As a local Wallet user, I want to define free-form currencies with
 
 | File | Line | Pattern | Severity | Impact |
 | ---- | ---- | ------- | -------- | ------ |
-| — | — | No TBD/FIXME/XXX/TODO in phase `src/` files | — | — |
-| — | — | No delete/removal Server Action exports | — | — |
-| `src/app/accounts/actions.ts` | ~68–76 | Misleading error when scale parse fails (maps to «больше 0») | ℹ️ Info | From 02-REVIEW WR-01 — advisory; does not fail must_haves |
+| — | — | No TBD/FIXME/XXX in gap-closure dialog files | — | — |
+| — | — | No `defaultValue` left on name Inputs | — | — |
+| — | — | No delete/setPrimary Server Action exports | — | — |
 
 ### Test Quality Audit
 
 | Test File | Linked Req | Active | Skipped | Circular | Assertion Level | Verdict |
 |-----------|-----------|--------|---------|----------|-----------------|---------|
-| `currencies/actions.test.ts` | CURR-01 | 3 | 0 | 0 | Behavioral (FormData → prisma data) | OK |
+| `currencies/actions.test.ts` | CURR-01 | 3 | 0 | 0 | Behavioral | OK |
 | `accounts/actions.test.ts` | ACCT-01, ACCT-02 | 4 | 0 | 0 | Behavioral | OK |
 | `validations/account.test.ts` | ACCT-01, ACCT-02 | many | 0 | 0 | Value | OK |
 | `validations/currency.test.ts` | CURR-01 | many | 0 | 0 | Value | OK |
-| `foundation.test.ts` | CURR-01 / schema | 11 | 0 | 0 | Value (live/temp DB) | OK |
+| `foundation.test.ts` | CURR-01 / schema | 11 | 0 | 0 | Value | OK |
 
 **Disabled tests on requirements:** 0
 **Circular patterns detected:** 0
-**Insufficient assertions:** 0 (review WR-* are product polish, not missing tests for SCs)
+**Insufficient assertions:** 0 for roadmap SCs; G-02 console silence has no unit test (expected — human)
 
 ### Decision Coverage
 
@@ -172,29 +197,31 @@ All trackable CONTEXT.md decisions are honored by shipped artifacts. (20/20 hono
 
 ### Human Verification Required
 
-### 1. Currencies user flow (MVP)
+### 1. Currencies user flow (MVP) — re-UAT
 
 **Test:** Open app → `/currencies` → confirm seeded RUB «Основная» → create secondary → edit name only → confirm no removal / no primary switch
 **Expected:** RUB primary; create works; name-only edit; Russian chrome per UI-SPEC
-**Why human:** Visual/locale + MVP flow; harvested from 02-04-PLAN
+**Why human:** Prior UAT failed on G-02-1; must re-confirm full flow after 02-05
 
-### 2. Accounts user flow (MVP)
+### 2. Accounts user flow (MVP) — re-UAT
 
 **Test:** `/accounts` → create all four types including credit with limit → rename only → confirm locks + no delete
 **Expected:** Four types; required limit on credit; identity fields locked on edit
-**Why human:** End-to-end capital-structure outcome in browser
+**Why human:** Prior UAT failed on G-02-2; must re-confirm capital-structure outcome
 
-### 3. Long-name ellipsis (backstop)
+### 3. Gap re-check — FieldControl console (G-02-1 / G-02-2)
 
-**Test:** Long (~120) currency/account names in list
-**Expected:** Truncate + ellipsis; full name in Dialog
-**Why human:** `verification: backstop` — CSS `truncate` present; ellipsis not auto-proven
+**Test:** Rename a currency and an account with DevTools console open
+**Expected:** No Base UI FieldControl uncontrolled default-value warning; names persist; dialogs close
+**Why human:** Harvested from 02-05-PLAN `<human-check>`; runtime console only
+
+**Already passed (prior UAT):** Long-name ellipsis backstop — no re-check required unless chrome regresses.
 
 ### Gaps Summary
 
-No blocking gaps against ROADMAP success criteria. Automated score **4/4**. Status **human_needed** for MVP user-flow UAT (and backstop visual). 02-REVIEW warnings advisory only — not blockers.
+No blocking code gaps against ROADMAP success criteria or 02-05 artifact wiring. Controlled name fields close G-02-1/G-02-2 **code paths**. Status remains **human_needed**: re-run MVP UAT flows + confirm console clean on rename. Automated score **5/8** (3 behavior-unverified: console×2 + formKey remount).
 
 ---
 
-_Verified: 2026-09-02T21:11:27Z_
+_Verified: 2026-09-02T22:30:00Z_
 _Verifier: Claude (gsd-verifier)_
