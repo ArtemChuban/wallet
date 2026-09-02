@@ -471,20 +471,23 @@ exec node server.js
 | A5 | Prisma generator default ESM works with Next 16 without `package.json` `"type":"module"` | Prisma 7 | May need `moduleFormat = "cjs"` if import errors |
 | A6 | Stub model names can be temporary if column semantics preserved | Schema stub | Extra migration churn if renamed carelessly |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Standalone runner: minimal NFT vs ship prisma CLI deps**
    - What we know: Community copies `prisma/` + tracing includes; official Prisma Docker guide is not Next-standalone-specific.
    - What's unclear: Smallest reliable image layout for `migrate deploy` + better-sqlite3.
    - Recommendation: Plan a dedicated Docker smoke task; prefer slightly larger image over fragile partial copies.
+   - RESOLVED (Plan 04): Prefer larger/safe COPY — ship `prisma/`, `prisma.config.ts`, `outputFileTracingIncludes`, and/or explicit Prisma CLI bits; prove with docker compose tracer + persist smoke, not minimal fragile NFT.
 
 2. **Commit vs gitignore `src/generated/prisma`**
    - What we know: Prisma 7 requires custom output.
    - What's unclear: Team preference for committing generated client.
    - Recommendation: Generate in Docker build + local `postinstall`/`prisma generate`; gitignore generated output unless tooling forces commit.
+   - RESOLVED (Plan 03): gitignore `src/generated/`; run `prisma generate` in Docker build and via postinstall or before local build.
 
 3. **Exact ready-page Russian string**
    - Discretion — pick one phrase in plan and stick to it for UAT.
+   - RESOLVED (Plan 04): «Кошелёк готов»
 
 ## Environment Availability
 

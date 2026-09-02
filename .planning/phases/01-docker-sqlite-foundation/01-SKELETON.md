@@ -23,10 +23,10 @@ A local user can `docker compose up`, open http://127.0.0.1:3000/, see «Кош�
 ## Stack Touched in Phase 1
 
 - [ ] Project scaffold (framework, build, lint, test runner)
-- [ ] Routing — at least one real route
-- [ ] Database — at least one real read AND one real write
-- [ ] UI — at least one interactive element wired to the API
-- [ ] Deployment — running on dev environment OR documented local full-stack run command
+- [ ] Routing — at least one real route (`/` ready page + `/api/health`)
+- [ ] Database — at least one real read AND one real write (health/SSR read; persist smoke write)
+- [ ] UI — D-06 SSR ready page («Кошелёк готов») with DB readiness signal plus `/api/health` (no interactive CRUD UI in Phase 1)
+- [ ] Deployment — Docker Compose local full-stack (`docker compose up --build`)
 
 ## Out of Scope (Deferred to Later Slices)
 

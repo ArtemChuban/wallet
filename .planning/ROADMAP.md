@@ -30,11 +30,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. User can start the app with Docker Compose and open the UI in a browser
   2. App data survives a full container stop/start (SQLite file remains on the host mount)
   3. App reports healthy readiness only when the database is reachable and migrated
-**Plans:** 3 plans
+**Plans:** 4 plans
 Plans:
-- [ ] 01-01-PLAN.md — Package legitimacy gate + Next/shadcn scaffold + Wave 0 Vitest
-- [ ] 01-02-PLAN.md — One-way money/FX contract + Prisma schema migrate gate
-- [ ] 01-03-PLAN.md — Docker tracer: migrate-on-start, health, ready UI, persist smoke
+- [ ] 01-01-PLAN.md — Package legitimacy gate + Next scaffold + Wave 0 Vitest
+- [ ] 01-02-PLAN.md — shadcn/ui shell on App Router
+- [ ] 01-03-PLAN.md — One-way money/FX contract + Prisma schema migrate gate
+- [ ] 01-04-PLAN.md — Docker tracer: migrate-on-start, health, ready UI, persist smoke
 
 ### Phase 2: Currencies + Accounts
 **Goal**: User can define currencies (with one primary) and manage typed accounts including credit cards

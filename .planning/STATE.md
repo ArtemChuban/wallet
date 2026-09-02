@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 current_phase: 1
 current_phase_name: Docker + SQLite Foundation
 status: planning
-stopped_at: Phase 1 plans written (01-01..01-03)
-last_updated: "2026-09-02T13:59:01.235Z"
+stopped_at: Phase 1 plans revised (01-01..01-04) after checker feedback
+last_updated: "2026-09-02T14:10:00.000Z"
 last_activity: 2026-09-02
-last_activity_desc: Phase 1 PLAN.md set + SKELETON + COVERAGE created
+last_activity_desc: Phase 1 plans revised — split scaffold, renumbered to 4 plans
 state_head: 6254952
 progress:
   total_phases: 6
   completed_phases: 0
-  total_plans: 3
+  total_plans: 4
   completed_plans: 0
   percent: 0
 ---
@@ -28,9 +28,9 @@ See: .planning/PROJECT.md (updated 2026-09-02)
 ## Current Position
 
 Phase: 1 of 6 (Docker + SQLite Foundation)
-Plan: 0 of 3 in current phase
+Plan: 0 of 4 in current phase
 Status: Ready to execute
-Last activity: 2026-09-02 — Phase 1 plans created (3 plans, waves 1–3)
+Last activity: 2026-09-02 — Phase 1 plans revised (4 plans, waves 1–4)
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -73,9 +73,9 @@ None yet.
 
 ### Blockers/Concerns
 
-- SQLite journal_mode (WAL vs DELETE) — prefer WAL on native btrfs; confirm in Plan 03 smoke
+- SQLite journal_mode (WAL vs DELETE) — prefer WAL on native btrfs; confirm in Plan 04 smoke
 - Package legitimacy human gate before npm install (Plan 01)
-- One-way money/FX door human decision before schema (Plan 02)
+- One-way money/FX door human decision before schema (Plan 03)
 
 ## Deferred Items
 
@@ -88,5 +88,5 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-09-02T13:59:01.235Z
-Stopped at: Phase 1 plans written (01-01..01-03)
+Stopped at: Phase 1 plans revised (01-01..01-04)
 Resume file: /home/artem/Documents/wallet/.planning/phases/01-docker-sqlite-foundation/01-01-PLAN.md
