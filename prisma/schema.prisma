@@ -32,6 +32,7 @@ model Account {
   currencyCode     String
   currency         Currency    @relation(fields: [currencyCode], references: [code])
   /// Metadata only — never an NW asset. Required (>0) iff type == FIAT_CREDIT (D-09, D-10).
+  /// SQLite CHECK Account_credit_limit_invariant enforces FIAT_CREDIT ↔ creditLimitMinor > 0 (else null).
   creditLimitMinor BigInt?
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
