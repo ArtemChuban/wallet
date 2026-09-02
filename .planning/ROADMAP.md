@@ -22,7 +22,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 ## Phase Details
 
 ### Phase 1: Docker + SQLite Foundation
-**Goal**: User can run Wallet locally in Docker with all data persisted in SQLite on the host
+**Goal:** As a local user, I want to run Wallet in Docker with SQLite on the host, so that my data survives container restarts and readiness reflects a migrated database.
 **Mode:** mvp
 **Depends on**: Nothing (first phase)
 **Requirements**: PLAT-01
@@ -30,7 +30,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   1. User can start the app with Docker Compose and open the UI in a browser
   2. App data survives a full container stop/start (SQLite file remains on the host mount)
   3. App reports healthy readiness only when the database is reachable and migrated
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+- [ ] 01-01-PLAN.md — Package legitimacy gate + Next/shadcn scaffold + Wave 0 Vitest
+- [ ] 01-02-PLAN.md — One-way money/FX contract + Prisma schema migrate gate
+- [ ] 01-03-PLAN.md — Docker tracer: migrate-on-start, health, ready UI, persist smoke
 
 ### Phase 2: Currencies + Accounts
 **Goal**: User can define currencies (with one primary) and manage typed accounts including credit cards
@@ -104,7 +108,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Docker + SQLite Foundation | 0/TBD | Not started | - |
+| 1. Docker + SQLite Foundation | 0/3 | Not started | - |
 | 2. Currencies + Accounts | 0/TBD | Not started | - |
 | 3. Dated Balance Snapshots | 0/TBD | Not started | - |
 | 4. Dated FX | 0/TBD | Not started | - |
