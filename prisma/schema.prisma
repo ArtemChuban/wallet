@@ -1,0 +1,28 @@
+// Money/FX stub: BigInt → SQLite INTEGER (D-07, D-09). Currency.scale required (D-08).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Currency {
+  code  String @id
+  name  String
+  scale Int // required at create — no DB default
+}
+
+model FxRateStub {
+  id                  Int    @id @default(autoincrement())
+  currencyCode        String
+  asOfDate            String // YYYY-MM-DD
+  rateToPrimaryScaled BigInt // primary_units_per_1_other * 10^8
+}
+
+model BalanceAmountStub {
+  id          Int    @id @default(autoincrement())
+  amountMinor BigInt // minor units per Currency.scale
+}
