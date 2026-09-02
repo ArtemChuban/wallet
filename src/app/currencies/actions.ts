@@ -64,6 +64,7 @@ export async function createCurrency(
   }
 
   revalidatePath("/currencies");
+  revalidatePath("/accounts");
   return { success: true, message: "Сохранено" };
 }
 
@@ -97,5 +98,6 @@ export async function updateCurrencyName(
   }
 
   revalidatePath("/currencies");
+  revalidatePath("/accounts");
   return { success: true, message: "Сохранено" };
 }
