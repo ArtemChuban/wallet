@@ -1,18 +1,18 @@
 ---
 gsd_state_version: 1.0
-current_phase: 1
+current_phase: 01
 current_phase_name: Docker + SQLite Foundation
-status: planning
-stopped_at: Phase 1 plans revised (01-01..01-04) after checker feedback
-last_updated: "2026-09-02T14:11:51.791Z"
+status: executing
+stopped_at: Completed 01-01-PLAN.md
+last_updated: "2026-09-02T15:03:12.817Z"
 last_activity: 2026-09-02
-last_activity_desc: Phase 1 plans revised — split scaffold, renumbered to 4 plans
-state_head: fb92583d4862e7ca9687b683f4f2c70b43cc7409
+last_activity_desc: Phase 01 execution started
+state_head: 2aada71aa43aecc6aee017a99465c8f2fb110bbe
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 4
-  completed_plans: 0
+  completed_plans: 1
   percent: 0
 ---
 
@@ -23,14 +23,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-02)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 1 — Docker + SQLite Foundation
+**Current focus:** Phase 01 — Docker + SQLite Foundation
 
 ## Current Position
 
-Phase: 1 (Docker + SQLite Foundation) — READY TO EXECUTE
-Plan: 0 of 4 in current phase
+Phase: 01 (Docker + SQLite Foundation) — EXECUTING
+Plan: 2 of 4
 Status: Ready to execute
-Last activity: 2026-09-02 — Phase 1 plans revised (4 plans, waves 1–4)
+Last activity: 2026-09-02 — Phase 01 execution started
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -54,6 +54,11 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: —
 
 *Updated after each plan completion*
+**Per-Plan Metrics:**
+
+| Plan | Duration | Tasks | Files |
+|------|----------|-------|-------|
+| Phase 01 P01 | 4min | 2 tasks | 23 files |
 
 ## Accumulated Context
 
@@ -66,6 +71,8 @@ Recent decisions affecting current work:
 - Polish-only / Russian ops hardening folded into UI-bearing phases (no standalone polish phase)
 - v1 excludes transactions, auto FX APIs, and bank sync
 - Phase 1 locks Next.js + Prisma + shadcn (D-01–D-04); money INTEGER + scale + rate×10^8 (D-07–D-09)
+- [Phase 01]: Human-approved exact pins: next@16.3.4, prisma 7.10.0 stack, better-sqlite3@13.0.3 (no Prisma 8 RC)
+- [Phase 01]: Scaffolded create-next-app via temp dir rsync because repo root already had .planning/
 
 ### Pending Todos
 
@@ -87,6 +94,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-02T13:59:01.235Z
-Stopped at: Phase 1 plans revised (01-01..01-04)
-Resume file: /home/artem/Documents/wallet/.planning/phases/01-docker-sqlite-foundation/01-01-PLAN.md
+Last session: 2026-09-02T15:03:12.796Z
+Stopped at: Completed 01-01-PLAN.md
+Resume file: None

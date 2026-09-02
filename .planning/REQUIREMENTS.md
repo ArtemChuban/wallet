@@ -41,7 +41,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Platform
 
-- [ ] **PLAT-01**: App runs in Docker with all data in local SQLite on the host
+- [x] **PLAT-01**: App runs in Docker with all data in local SQLite on the host
 
 ## v2 Requirements
 
@@ -92,7 +92,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PLAT-01 | Phase 1 | Pending |
+| PLAT-01 | Phase 1 | Complete |
 | CURR-01 | Phase 2 | Pending |
 | ACCT-01 | Phase 2 | Pending |
 | ACCT-02 | Phase 2 | Pending |
@@ -109,6 +109,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CHART-03 | Phase 6 | Pending |
 
 **Coverage:**
+
 - v1 requirements: 15 total
 - Mapped to phases: 15
 - Unmapped: 0 ✓
