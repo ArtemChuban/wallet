@@ -28,9 +28,9 @@ See: .planning/PROJECT.md (updated 2026-09-02)
 ## Current Position
 
 Phase: 2 — Currencies + Accounts
-Plan: Not started
-Status: UI-SPEC approved — ready to plan
-Last activity: 2026-09-02 — Phase 2 UI-SPEC approved
+Plan: 02-01 ready (3 plans planned)
+Status: Plans created — ready for execute
+Last activity: 2026-09-02 — Phase 2 plans written (02-01..02-03)
 
 Progress: [░░░░░░░░░░] 0%
 
