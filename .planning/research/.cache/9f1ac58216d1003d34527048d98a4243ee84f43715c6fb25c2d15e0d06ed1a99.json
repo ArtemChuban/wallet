@@ -1,0 +1,1 @@
+{"content":"Hono 4.x with @hono/node-server is widely used for Node fullstack templates pairing Vite React SPA, Drizzle, better-sqlite3, Zod, and optional Hono RPC. Single-port serve of static+API is a common Docker pattern for personal apps.","source":"web","provider":"websearch","confidence":"MEDIUM","fetched_at":"2026-09-02T11:22:05.257Z","ttl":86400000,"kind":"docs"}

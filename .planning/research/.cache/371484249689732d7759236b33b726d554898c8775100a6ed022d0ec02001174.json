@@ -1,0 +1,1 @@
+{"content":"decimal.js 10.x is stable for arbitrary-precision currency math in TS. big.js is lighter but less featureful. dinero.js v2 still alpha (2.0.0-alpha) — avoid for production v1. Pair decimal.js with TEXT storage or custom Drizzle type.","source":"web","provider":"websearch","confidence":"MEDIUM","fetched_at":"2026-09-02T11:22:05.675Z","ttl":86400000,"kind":"web"}
