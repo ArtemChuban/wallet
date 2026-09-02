@@ -1,0 +1,14 @@
+node_modules
+.next
+.git
+.planning
+.claude
+.cursor
+.gsd
+data/*.db
+data/*-wal
+data/*-shm
+npm-debug.log*
+README.md
+*.md
+!public/**
