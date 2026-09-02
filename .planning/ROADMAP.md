@@ -54,18 +54,31 @@ Plans:
 
 ### Phase 2: Currencies + Accounts
 
-**Goal**: User can define currencies (with one primary) and manage typed accounts including credit cards
+**Goal:** As a local Wallet user, I want to define free-form currencies with one forever primary and manage typed accounts with credit-limit metadata, so that I can set up capital structure before balances and net worth.
 **Mode:** mvp
 **Depends on**: Phase 1
 **Requirements**: CURR-01, ACCT-01, ACCT-02
 **Success Criteria** (what must be TRUE):
 
-  1. User can create currencies and designate exactly one primary currency
-  2. User can create, edit, and delete accounts of types fiat debit, fiat credit, crypto, and cash
-  3. User can set a credit limit on a credit account and record outstanding debt for that account
+  1. User can create currencies and rely on exactly one seeded primary currency (RUB; no primary switch in v1)
+  2. User can create and rename accounts of types fiat debit, fiat credit, crypto, and cash (no account delete in v1 — CONTEXT D-14; archive is ACCT-04)
+  3. User can set a required credit limit on a credit account at create time (outstanding debt deferred to Phase 3 balance snapshots — CONTEXT D-09)
   4. Credit limit is stored as metadata only (never treated as an asset in later NW math)
 
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+**Wave 1**
+
+- [ ] 02-01-PLAN.md — Currency tracer: seeded RUB primary, create/edit secondary, migrate deploy
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 02-02-PLAN.md — Account tracer: FIAT_CREDIT + creditLimitMinor metadata, migrate deploy
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 02-03-PLAN.md — Four account types, immutability tests, Russian UI human verify
+
 **UI hint**: yes
 
 ### Phase 3: Dated Balance Snapshots
@@ -140,7 +153,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Docker + SQLite Foundation | 4/4 | Complete    | 2026-09-02 |
-| 2. Currencies + Accounts | 0/TBD | Not started | - |
+| 2. Currencies + Accounts | 0/3 | Planned | - |
 | 3. Dated Balance Snapshots | 0/TBD | Not started | - |
 | 4. Dated FX | 0/TBD | Not started | - |
 | 5. Net Worth Dashboard | 0/TBD | Not started | - |
