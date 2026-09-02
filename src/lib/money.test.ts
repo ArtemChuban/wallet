@@ -51,6 +51,7 @@ describe("schema conventions", () => {
     const schema = readFileSync("prisma/schema.prisma", "utf8");
     expect(schema).toMatch(/amountMinor\s+BigInt/);
     expect(schema).toMatch(/rateToPrimaryScaled\s+BigInt/);
+    expect(schema).toMatch(/creditLimitMinor\s+BigInt/);
     expect(schema).toMatch(/scale\s+Int/);
     expect(schema).not.toMatch(/\bFloat\b/);
     expect(schema).not.toMatch(/\bDecimal\b/);
