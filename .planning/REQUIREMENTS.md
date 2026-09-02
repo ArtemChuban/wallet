@@ -15,7 +15,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Currencies
 
-- [ ] **CURR-01**: User can create currencies and set one primary currency (e.g. RUB)
+- [x] **CURR-01**: User can create currencies and set one primary currency (e.g. RUB)
 
 ### FX
 
@@ -93,7 +93,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | PLAT-01 | Phase 1 | Complete |
-| CURR-01 | Phase 2 | Pending |
+| CURR-01 | Phase 2 | Complete |
 | ACCT-01 | Phase 2 | Complete |
 | ACCT-02 | Phase 2 | Complete |
 | BAL-01 | Phase 3 | Pending |
