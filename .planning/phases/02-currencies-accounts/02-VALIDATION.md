@@ -40,12 +40,12 @@ created: "2026-09-02"
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 02-W0-01 | 01 | 0 | CURR-01 | — | Zod currency rules (scale 0–18, unique code) | unit | `npm test -- src/lib/validations/currency.test.ts` | ❌ W0 | ⬜ pending |
-| 02-W0-02 | 01 | 0 | ACCT-01/02 | — | Zod account rules; creditLimit > 0; no debt field | unit | `npm test -- src/lib/validations/account.test.ts` | ❌ W0 | ⬜ pending |
-| 02-W0-03 | 01 | 0 | ACCT-02 | T-02-05 | money parse/format + creditLimitMinor BigInt | unit | `npm test -- src/lib/money.test.ts` | ⚠️ extend | ⬜ pending |
-| TBD | TBD | TBD | CURR-01 | T-02-03 | Seeded RUB primary; create secondary; name-only update | unit + schema | `npm test -- src/lib/currency*.test.ts` | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | ACCT-01 | T-02-01 | Four types; name update; reject type/currency change; no delete | unit | account action/schema tests | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | ACCT-02 | T-02-05 | FIAT_CREDIT creditLimitMinor > 0; other types null; BigInt | unit | Zod + prisma constraint tests | ❌ W0 | ⬜ pending |
+| 02-01-02 | 01 | 1 | CURR-01 | T-02-05 | Zod currency rules (scale 0–18) + money parse/format | unit | `npm test -- --run src/lib/validations/currency.test.ts src/lib/money.test.ts` | ❌ W0 | ⬜ pending |
+| 02-01-03 | 01 | 1 | CURR-01 | T-02-02 | Seeded RUB primary via migrate deploy + foundation assert | unit + migrate | `DATABASE_URL=file:./data/wallet.db npx prisma migrate deploy` + `npm test -- --run src/lib/foundation.test.ts` | ⚠️ extend | ⬜ pending |
+| 02-02-02 | 02 | 2 | ACCT-01/02 | T-02-06 | Zod account rules; creditLimit > 0; creditLimitMinor BigInt | unit | `npm test -- --run src/lib/validations/account.test.ts src/lib/money.test.ts` | ❌ W0 | ⬜ pending |
+| 02-02-03 | 02 | 2 | ACCT-02 | T-02-07 | Account table migrate deploy + foundation Account assert | unit + migrate | host migrate deploy + `npm test -- --run src/lib/foundation.test.ts` | ⚠️ extend | ⬜ pending |
+| 02-03-01 | 03 | 3 | ACCT-01 | — | Four account types creatable; non-credit null limit | unit | `npm test -- --run src/lib/validations/account.test.ts` | ❌ W0 | ⬜ pending |
+| 02-03-02 | 03 | 3 | ACCT-01/CURR-01 | T-02-01 | Name-only updates; no removal exports | unit | `npm test -- --run src/app/accounts/actions.test.ts src/app/currencies/actions.test.ts` | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
