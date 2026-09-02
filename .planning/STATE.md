@@ -3,16 +3,16 @@ gsd_state_version: 1.0
 current_phase: 02
 current_phase_name: Currencies + Accounts
 status: executing
-stopped_at: Completed 02-01-PLAN.md
-last_updated: "2026-09-02T20:13:55.127Z"
+stopped_at: Completed 02-02-PLAN.md
+last_updated: "2026-09-02T20:20:35.769Z"
 last_activity: 2026-09-02
 last_activity_desc: Phase 02 execution started
-state_head: 8bfaa1725ab9bf2e686adea688b8fa6cf7c66834
+state_head: 7603cb8cf0640fe3a01f7bb1c2cbf4891d249843
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 8
-  completed_plans: 5
+  completed_plans: 6
   percent: 17
 ---
 
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-09-02)
 ## Current Position
 
 Phase: 02 (Currencies + Accounts) — EXECUTING
-Plan: 2 of 4
+Plan: 3 of 4
 Status: Ready to execute
 Last activity: 2026-09-02 — Phase 02 execution started
 
@@ -63,6 +63,7 @@ Progress: [██░░░░░░░░] 17%
 | Phase 01 P03 | 3min | 3 tasks | 7 files |
 | Phase 01 P04 | 77min | 3 tasks | 15 files |
 | Phase 02-currencies-accounts P01 | 4min | 3 tasks | 7 files |
+| Phase 02-currencies-accounts P02 | 4min | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -86,6 +87,8 @@ Recent decisions affecting current work:
 - [Phase 01]: Ready page force-dynamic so DB status is not baked at image build time
 - [Phase 02]: Kept D-01 seed in migration SQL with Currency_one_primary partial unique index — CONTEXT D-01/D-02; migrate deploy must seed RUB
 - [Phase 02]: Briefly stopped wallet-web container so host migrate deploy could unlock SQLite — Compose app held data/wallet.db lock
+- [Phase 02]: Used Select for create scale 0–18 with hidden FormData field — Select UX for bounded scale; hidden input posts FormData for Server Action
+- [Phase 02]: Remount CurrencyFormBody on Dialog open so useActionState success does not stick — Stale success closed Dialog immediately on reopen
 
 ### Pending Todos
 
@@ -107,6 +110,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-02T20:13:55.082Z
-Stopped at: Completed 02-01-PLAN.md
+Last session: 2026-09-02T20:20:35.719Z
+Stopped at: Completed 02-02-PLAN.md
 Resume file: None
