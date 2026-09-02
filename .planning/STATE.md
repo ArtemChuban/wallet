@@ -3,11 +3,11 @@ gsd_state_version: 1.0
 current_phase: 2
 current_phase_name: Currencies + Accounts
 status: planning
-stopped_at: Phase 2 context gathered
-last_updated: "2026-09-02T18:29:18.251Z"
+stopped_at: Phase 2 UI-SPEC drafted
+last_updated: "2026-09-02T19:32:00.000Z"
 last_activity: 2026-09-02
-last_activity_desc: Phase 01 complete, transitioned to Phase 2
-state_head: 065ba3a6d3472ccaf8bc06b940d191b683a9d730
+last_activity_desc: Phase 02 UI design contract written
+state_head: 304cb9339833bd05ec89f3b4455f91ea34174194
 progress:
   total_phases: 6
   completed_phases: 1
@@ -23,14 +23,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-02)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 01 — Docker + SQLite Foundation
+**Current focus:** Phase 02 — Currencies + Accounts
 
 ## Current Position
 
 Phase: 2 — Currencies + Accounts
 Plan: Not started
-Status: Ready to plan
-Last activity: 2026-09-02 — Phase 01 complete, transitioned to Phase 2
+Status: UI-SPEC draft ready for checker
+Last activity: 2026-09-02 — Phase 02 UI design contract written
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -104,6 +104,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-02T18:29:18.193Z
-Stopped at: Phase 2 context gathered
-Resume file: /home/artem/Documents/wallet/.planning/phases/02-currencies-accounts/02-CONTEXT.md
+Last session: 2026-09-02T19:32:00.000Z
+Stopped at: Phase 2 UI-SPEC drafted
+Resume file: /home/artem/Documents/wallet/.planning/phases/02-currencies-accounts/02-UI-SPEC.md
