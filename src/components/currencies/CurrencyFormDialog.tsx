@@ -57,6 +57,9 @@ function CurrencyFormBody({
   const [scale, setScale] = useState(
     mode === "edit" && currency ? String(currency.scale) : "2",
   );
+  const [name, setName] = useState(
+    mode === "edit" && currency ? currency.name : "",
+  );
 
   const action = mode === "create" ? createCurrency : updateCurrencyName;
   const [state, formAction, isPending] = useActionState(action, initialState);
@@ -114,7 +117,8 @@ function CurrencyFormBody({
         <Input
           id="currency-name"
           name="name"
-          defaultValue={mode === "edit" ? currency?.name : undefined}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           maxLength={120}
           autoComplete="off"
           aria-invalid={Boolean(state.errors?.name)}
