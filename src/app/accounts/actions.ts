@@ -65,15 +65,15 @@ export async function createAccount(
 
     let creditLimitMinor: bigint | null = null;
     if (type === "FIAT_CREDIT") {
+      const major = validated.data.creditLimitMajor!;
       try {
-        creditLimitMinor = parseMajorToMinor(
-          validated.data.creditLimitMajor!,
-          currency.scale,
-        );
-      } catch {
-        return {
-          errors: { creditLimitMajor: ["Введите сумму больше 0"] },
-        };
+        creditLimitMinor = parseMajorToMinor(major, currency.scale);
+      } catch (err) {
+        const msg =
+          err instanceof Error && err.message === "too many fractional digits"
+            ? `Не больше ${currency.scale} знаков после запятой`
+            : "Некорректная сумма";
+        return { errors: { creditLimitMajor: [msg] } };
       }
       if (creditLimitMinor <= 0n) {
         return {
