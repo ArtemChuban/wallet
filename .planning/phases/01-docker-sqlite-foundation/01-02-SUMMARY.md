@@ -103,7 +103,7 @@ Each task was committed atomically:
 1. **Task 1: Initialize shadcn/ui + cn helper** - `7612c18` (feat)
 2. **Task 2: Wire globals.css into App Router layout** - (no commit; already satisfied by Plan 01 `./globals.css` import)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `4890454` (docs: complete plan)
 
 ## Files Created/Modified
 
