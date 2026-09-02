@@ -1,18 +1,14 @@
 ---
-status: testing
+status: complete
 phase: 02-currencies-accounts
 source: [02-VERIFICATION.md]
 started: 2026-09-02T21:12:00Z
-updated: 2026-09-02T21:58:00Z
+updated: 2026-09-02T21:59:00Z
 ---
 
 ## Current Test
 
-number: 3
-name: Long-name ellipsis (backstop)
-expected: |
-  List truncates with ellipsis; full name editable in Dialog
-awaiting: user response
+[testing complete]
 
 ## Tests
 
@@ -30,14 +26,14 @@ severity: blocker
 
 ### 3. Long-name ellipsis (backstop)
 expected: List truncates with ellipsis; full name editable in Dialog
-result: [pending]
+result: pass
 
 ## Summary
 
 total: 3
-passed: 0
+passed: 1
 issues: 2
-pending: 1
+pending: 0
 skipped: 0
 blocked: 0
 
