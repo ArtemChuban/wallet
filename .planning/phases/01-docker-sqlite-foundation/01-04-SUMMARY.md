@@ -126,7 +126,7 @@ Each task was committed atomically:
 3. **Task 2: Persist smoke + volume permission hardening** - `90cc9c8` (feat)
 4. **Task 3: Readiness negative path + security bind assertions** - `5780a2c` (test)
 
-**Plan metadata:** _(pending docs commit)_
+**Plan metadata:** `c3ebd9b` (docs: complete plan)
 
 ## Files Created/Modified
 
