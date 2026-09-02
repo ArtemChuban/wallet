@@ -34,7 +34,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. App data survives a full container stop/start (SQLite file remains on the host mount)
   3. App reports healthy readiness only when the database is reachable and migrated
 
-**Plans:** 2/4 plans executed
+**Plans:** 3/4 plans executed
 Plans:
 **Wave 1**
 
@@ -46,7 +46,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 01-03-PLAN.md — One-way money/FX contract + Prisma schema migrate gate
+- [x] 01-03-PLAN.md — One-way money/FX contract + Prisma schema migrate gate
 
 **Wave 4** *(blocked on Wave 3 completion)*
 
@@ -139,7 +139,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Docker + SQLite Foundation | 2/4 | In Progress|  |
+| 1. Docker + SQLite Foundation | 3/4 | In Progress|  |
 | 2. Currencies + Accounts | 0/TBD | Not started | - |
 | 3. Dated Balance Snapshots | 0/TBD | Not started | - |
 | 4. Dated FX | 0/TBD | Not started | - |

@@ -3,16 +3,16 @@ gsd_state_version: 1.0
 current_phase: 01
 current_phase_name: Docker + SQLite Foundation
 status: executing
-stopped_at: Completed 01-02-PLAN.md
-last_updated: "2026-09-02T15:07:05.378Z"
+stopped_at: Completed 01-03-PLAN.md
+last_updated: "2026-09-02T15:13:08.915Z"
 last_activity: 2026-09-02
 last_activity_desc: Phase 01 execution started
-state_head: 7612c18ee6ccd5cf31a7e17945e05bca0c9e48f9
+state_head: c649dd0045de201498443f0df1f8860780c57f6d
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 4
-  completed_plans: 2
+  completed_plans: 3
   percent: 0
 ---
 
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-09-02)
 ## Current Position
 
 Phase: 01 (Docker + SQLite Foundation) — EXECUTING
-Plan: 3 of 4
+Plan: 4 of 4
 Status: Ready to execute
 Last activity: 2026-09-02 — Phase 01 execution started
 
@@ -60,6 +60,7 @@ Progress: [░░░░░░░░░░] 0%
 |------|----------|-------|-------|
 | Phase 01 P01 | 4min | 2 tasks | 23 files |
 | Phase 01 P02 | 2min | 2 tasks | 6 files |
+| Phase 01 P03 | 3min | 3 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -76,6 +77,8 @@ Recent decisions affecting current work:
 - [Phase 01]: Scaffolded create-next-app via temp dir rsync because repo root already had .planning/
 - [Phase 01]: Used shadcn defaults (-d): base-nova style, CSS variables, lucide icons
 - [Phase 01]: Kept Plan 01 layout fonts/globals.css import; Task 2 already satisfied
+- [Phase 01]: Human locked-context: INTEGER minor units, required Currency.scale, FX × 10^8 BigInt
+- [Phase 01]: Host DATABASE_URL default file:./data/wallet.db; Compose overrides later
 
 ### Pending Todos
 
@@ -97,6 +100,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-02T15:07:05.356Z
-Stopped at: Completed 01-02-PLAN.md
+Last session: 2026-09-02T15:13:08.892Z
+Stopped at: Completed 01-03-PLAN.md
 Resume file: None
