@@ -1,10 +1,11 @@
 ---
 phase: "02"
 slug: currencies-accounts
-status: draft
+status: approved
 shadcn_initialized: true
 preset: "b2fA (base-nova / neutral / geist / lucide)"
 created: "2026-09-02"
+reviewed_at: "2026-09-02T21:36:00+02:00"
 ---
 
 # Phase 02 — UI Design Contract
@@ -187,21 +188,43 @@ Sources: D-17–D-20; RESEARCH Russian type map + Zod messages; yolo empty/error
 > Shape-rooted UI state coverage (empty / loading / error / populated / partial / overflow / zero-one-many / long-text).
 > Empty-state and error-state COPY live in `## Copywriting Contract` above — this section REFERENCES those rows.
 
-Applicable state considerations resolved: 10 covered, 1 backstop, 0 unresolved
+Applicable state considerations resolved: 21 covered, 2 backstop, 10 dismissed, 0 unresolved
 
 | Category | Element(s) | Status | Resolution / Reason |
 |----------|------------|--------|---------------------|
-| empty | accounts list | ✅ covered | Zero accounts render Copywriting empty heading/body + primary CTA «Добавить счёт» |
-| empty | currencies list | ✅ covered | Seed guarantees ≥1 (RUB); if empty, render currencies empty copy (seed/DB failure path) |
-| loading | currency/account lists | ✅ covered | RSC await on server — no client skeleton required; page streams when ready |
-| loading | create/edit Dialog forms | ✅ covered | `useActionState` pending disables submit; no double-post |
-| error | create/edit forms | ✅ covered | Field errors under inputs + form-level Copywriting error row on action failure |
-| populated | currency list | ✅ covered | Rows show name, code (mono), scale, «Основная» badge when `isPrimary` |
-| populated | account list | ✅ covered | Rows show name, Russian type, currency code; credit rows also show formatted limit |
-| partial | account create form | ✅ covered | Credit-limit field visible/required only when type = FIAT_CREDIT; hidden otherwise |
-| overflow | lists | ✅ covered | Page/main scrolls; Dialog body scrolls if viewport short; no horizontal page scroll |
-| zero-one-many | accounts list | ✅ covered | 0 = empty state; 1+ = list; plural copy not required beyond empty vs list |
-| long-text | account/currency names | 🧪 backstop | Names max 120 server-side; UI truncates with ellipsis in list cells (`truncate`); full name in edit Dialog |
+| empty | currencies list (E1) | ✅ covered | Zero currencies render Copywriting empty heading/body + CTA «Добавить валюту» (seed/DB failure path) |
+| empty | accounts list (E2) | ✅ covered | Zero accounts render Copywriting empty heading/body + CTA «Добавить счёт» |
+| empty | currency Dialog (E3) | ✅ covered | Create opens with empty editable fields; edit opens with name editable and code/scale read-only |
+| empty | account Dialog (E4) | ✅ covered | Create opens empty; edit opens with name only editable |
+| loading | currencies list (E1) | ✅ covered | RSC await on server — no client skeleton; page streams when ready |
+| loading | accounts list (E2) | ✅ covered | RSC await on server — no client skeleton; page streams when ready |
+| loading | currency Dialog (E3) | ✅ covered | `useActionState` pending disables submit; Dialog stays open until success |
+| loading | account Dialog (E4) | ✅ covered | `useActionState` pending disables submit; Dialog stays open until success |
+| loading | CTAs / row edit (E6) | ✅ covered | Primary submit CTA disabled while pending; labeled CTAs stay visible |
+| loading | top nav (E5) | dismissed | Static layout nav — no async data load |
+| error | currencies list (E1) | ✅ covered | Server/page failure surfaces error; refresh retries |
+| error | accounts list (E2) | ✅ covered | Server/page failure surfaces error; refresh retries |
+| error | currency Dialog (E3) | ✅ covered | Field errors under inputs + form-level Copywriting error on action failure |
+| error | account Dialog (E4) | ✅ covered | Field errors under inputs + form-level Copywriting error on action failure |
+| error | top nav (E5) | dismissed | Static links — no fetch failure state |
+| error | CTAs / row edit (E6) | dismissed | Errors attach to form fields/form banner, not button chrome |
+| populated | currencies list (E1) | ✅ covered | Rows show name, code (mono), scale, «Основная» badge when `isPrimary` |
+| populated | accounts list (E2) | ✅ covered | Rows show name, Russian type, currency code; credit rows show formatted limit |
+| partial | currencies list (E1) | dismissed | Currency rows are complete records; no partial-row UI in Phase 2 |
+| partial | accounts list (E2) | dismissed | Account rows are complete records; credit limit always present for FIAT_CREDIT |
+| partial | currency Dialog (E3) | dismissed | No draft/partial save; all create fields required before submit |
+| partial | account Dialog (E4) | ✅ covered | Credit-limit field visible/required only when type = FIAT_CREDIT; hidden otherwise |
+| overflow | currencies list (E1) | ✅ covered | Page/main scrolls; no horizontal page scroll |
+| overflow | accounts list (E2) | ✅ covered | Page/main scrolls; Dialog body scrolls if viewport short |
+| overflow | top nav (E5) | ✅ covered | Narrow viewports: nav wraps or horizontal scroll within header |
+| overflow | badge/type labels (E7) | dismissed | Fixed short chrome strings; list-cell truncate covers user names elsewhere |
+| zero-one-many | currencies list (E1) | ✅ covered | 0 = empty state; 1+ = list; seed expects ≥1 RUB after migrate |
+| zero-one-many | accounts list (E2) | ✅ covered | 0 = empty state; 1+ = list; plural copy not required beyond empty vs list |
+| long-text | currency Dialog (E3) | 🧪 backstop | Names max 120 server-side; list truncates with ellipsis; full name in edit Dialog |
+| long-text | account Dialog (E4) | 🧪 backstop | Names max 120 server-side; list truncates with ellipsis; full name in edit Dialog |
+| long-text | top nav (E5) | dismissed | Fixed Russian labels — no user-authored long text |
+| long-text | CTAs / row edit (E6) | dismissed | Fixed CTA strings; icon-only edit uses `aria-label`, not long text |
+| long-text | badge/type labels (E7) | dismissed | Fixed Russian chrome («Основная», type labels), not user text |
 
 <!-- Status vocabulary (locked by probe-core projectTruths):
      ✅ covered   → a plain truth string lifted into must_haves.truths
@@ -223,12 +246,12 @@ Applicable state considerations resolved: 10 covered, 1 backstop, 0 unresolved
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
-- [ ] Dimension 7 Inventory Provenance: PASS
+- [x] Dimension 1 Copywriting: FLAG (non-blocking — dialog «Сохранить» generic)
+- [x] Dimension 2 Visuals: FLAG (non-blocking — name focal point; icon edit a11y)
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
+- [x] Dimension 7 Inventory Provenance: PASS
 
-**Approval:** pending
+**Approval:** approved (2026-09-02)
