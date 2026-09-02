@@ -65,7 +65,7 @@ Plans:
   3. User can set a required credit limit on a credit account at create time (outstanding debt deferred to Phase 3 balance snapshots — CONTEXT D-09)
   4. Credit limit is stored as metadata only (never treated as an asset in later NW math)
 
-**Plans:** 4/4 plans executed
+**Plans:** 4/5 plans executed (1 gap-closure pending)
 Plans:
 **Wave 1**
 
@@ -82,6 +82,10 @@ Plans:
 **Wave 4** *(blocked on Wave 3 completion)*
 
 - [x] 02-04-PLAN.md — Four account types, immutability tests, Russian UI human verify
+
+**Wave 5** *(gap closure — UAT G-02-1 / G-02-2)*
+
+- [ ] 02-05-PLAN.md — Controlled name fields in Currency + Account form dialogs (FieldControl warning)
 
 **UI hint**: yes
 
