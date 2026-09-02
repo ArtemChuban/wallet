@@ -133,6 +133,30 @@ describe("prisma migrate deploy host gate (PLAT-01 / 01-03-03)", () => {
       expect(applied.some((r) => r.migration_name.includes("init_platform_stub"))).toBe(
         true,
       );
+      expect(
+        applied.some((r) => r.migration_name.includes("currency_primary_rub")),
+      ).toBe(true);
+
+      const rub = db
+        .prepare(
+          'SELECT code, name, scale, isPrimary FROM "Currency" WHERE code = ?',
+        )
+        .get("RUB") as
+        | { code: string; name: string; scale: number; isPrimary: number }
+        | undefined;
+      expect(rub).toEqual({
+        code: "RUB",
+        name: "Рубль",
+        scale: 2,
+        isPrimary: 1,
+      });
+
+      const indexes = db
+        .prepare(
+          "SELECT name FROM sqlite_master WHERE type='index' AND name = 'Currency_one_primary'",
+        )
+        .all() as Array<{ name: string }>;
+      expect(indexes).toEqual([{ name: "Currency_one_primary" }]);
     } finally {
       db.close();
       rmSync(dir, { recursive: true, force: true });
