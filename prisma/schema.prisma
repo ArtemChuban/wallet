@@ -10,9 +10,11 @@ datasource db {
 }
 
 model Currency {
-  code  String @id
-  name  String
-  scale Int // required at create — no DB default
+  code      String  @id
+  name      String
+  scale     Int // required at create — no DB default
+  /// Exactly-one primary enforced by migration SQL partial unique index Currency_one_primary (D-01, D-02).
+  isPrimary Boolean @default(false)
 }
 
 model FxRateStub {
