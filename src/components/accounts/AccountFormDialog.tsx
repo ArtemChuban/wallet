@@ -97,6 +97,9 @@ function AccountFormBody({
       ? account.currencyCode
       : (currencies[0]?.code ?? ""),
   );
+  const [name, setName] = useState(
+    mode === "edit" && account ? account.name : "",
+  );
 
   const action = mode === "create" ? createAccount : updateAccountName;
   const [state, formAction, isPending] = useActionState(action, initialState);
@@ -139,7 +142,8 @@ function AccountFormBody({
         <Input
           id="account-name"
           name="name"
-          defaultValue={mode === "edit" ? account?.name : undefined}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           maxLength={120}
           autoComplete="off"
           aria-invalid={Boolean(state.errors?.name)}
