@@ -50,3 +50,6 @@ data/*-shm
 
 # Prisma generated client
 src/generated/
+
+# GSD runtime / dispatch isolation sentinel
+.gsd/

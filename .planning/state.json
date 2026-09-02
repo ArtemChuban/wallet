@@ -1,0 +1,43 @@
+{
+  "contract": "1.0.0",
+  "flavor": "core",
+  "milestone": null,
+  "phases": [
+    {
+      "number": "1",
+      "name": "Docker + SQLite Foundation",
+      "status": "complete"
+    },
+    {
+      "number": "2",
+      "name": "Currencies + Accounts",
+      "status": "pending"
+    },
+    {
+      "number": "3",
+      "name": "Dated Balance Snapshots",
+      "status": "pending"
+    },
+    {
+      "number": "4",
+      "name": "Dated FX",
+      "status": "pending"
+    },
+    {
+      "number": "5",
+      "name": "Net Worth Dashboard",
+      "status": "pending"
+    },
+    {
+      "number": "6",
+      "name": "Historical Charts",
+      "status": "pending"
+    }
+  ],
+  "next": {
+    "command": "/gsd-progress --next",
+    "label": "Advance to the next step (plan phase 2)",
+    "reason": "Phase 2 of 6 — needs a plan"
+  },
+  "updated_at": "2026-09-02T17:34:02.746Z"
+}
