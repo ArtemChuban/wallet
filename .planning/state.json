@@ -11,7 +11,7 @@
     {
       "number": "2",
       "name": "Currencies + Accounts",
-      "status": "pending"
+      "status": "in_progress"
     },
     {
       "number": "3",
@@ -39,5 +39,5 @@
     "label": "Advance to the next step",
     "reason": "Phase 2 of 6 · 17% · executing"
   },
-  "updated_at": "2026-09-02T20:13:54.230Z"
+  "updated_at": "2026-09-02T20:20:34.816Z"
 }
