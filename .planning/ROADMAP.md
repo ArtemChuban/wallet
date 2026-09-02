@@ -7,6 +7,7 @@ Wallet ships as a local Dockerized net-worth tracker: durable SQLite first, then
 ## Phases
 
 **Phase Numbering:**
+
 - Integer phases (1, 2, 3): Planned milestone work
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
@@ -22,83 +23,112 @@ Decimal phases appear between their surrounding integers in numeric order.
 ## Phase Details
 
 ### Phase 1: Docker + SQLite Foundation
+
 **Goal:** As a local user, I want to run Wallet in Docker with SQLite on the host, so that my data survives container restarts and readiness reflects a migrated database.
 **Mode:** mvp
 **Depends on**: Nothing (first phase)
 **Requirements**: PLAT-01
 **Success Criteria** (what must be TRUE):
+
   1. User can start the app with Docker Compose and open the UI in a browser
   2. App data survives a full container stop/start (SQLite file remains on the host mount)
   3. App reports healthy readiness only when the database is reachable and migrated
+
 **Plans:** 4 plans
 Plans:
+**Wave 1**
+
 - [ ] 01-01-PLAN.md — Package legitimacy gate + Next scaffold + Wave 0 Vitest
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 01-02-PLAN.md — shadcn/ui shell on App Router
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
 - [ ] 01-03-PLAN.md — One-way money/FX contract + Prisma schema migrate gate
+
+**Wave 4** *(blocked on Wave 3 completion)*
+
 - [ ] 01-04-PLAN.md — Docker tracer: migrate-on-start, health, ready UI, persist smoke
 
 ### Phase 2: Currencies + Accounts
+
 **Goal**: User can define currencies (with one primary) and manage typed accounts including credit cards
 **Mode:** mvp
 **Depends on**: Phase 1
 **Requirements**: CURR-01, ACCT-01, ACCT-02
 **Success Criteria** (what must be TRUE):
+
   1. User can create currencies and designate exactly one primary currency
   2. User can create, edit, and delete accounts of types fiat debit, fiat credit, crypto, and cash
   3. User can set a credit limit on a credit account and record outstanding debt for that account
   4. Credit limit is stored as metadata only (never treated as an asset in later NW math)
+
 **Plans**: TBD
 **UI hint**: yes
 
 ### Phase 3: Dated Balance Snapshots
+
 **Goal**: User can record account balances as of a chosen date and read the correct as-of balance over time
 **Mode:** mvp
 **Depends on**: Phase 2
 **Requirements**: BAL-01, BAL-02
 **Success Criteria** (what must be TRUE):
+
   1. User can set an account balance for a chosen as-of date (including dates in the past)
   2. Asking for balance as of date D returns the latest snapshot with date ≤ D
   3. User can see each account’s current native balance from its latest applicable snapshot
   4. Days before an account’s first snapshot show no invented zero balance
+
 **Plans**: TBD
 **UI hint**: yes
 
 ### Phase 4: Dated FX
+
 **Goal**: User can maintain dated exchange rates so multi-currency amounts convert honestly as of any date
 **Mode:** mvp
 **Depends on**: Phase 3
 **Requirements**: FX-01, FX-02
 **Success Criteria** (what must be TRUE):
+
   1. User can set a dated exchange rate between the primary currency and another currency
   2. Conversion as of date D uses the latest rate with effective date ≤ D
   3. User cannot create FX pairs that are not primary ↔ other
   4. Rate changes apply forward from their date without rewriting earlier as-of conversions
+
 **Plans**: TBD
 **UI hint**: yes
 
 ### Phase 5: Net Worth Dashboard
+
 **Goal**: User can see true current net worth and per-account balances in native and primary currency
 **Mode:** mvp
 **Depends on**: Phase 4
 **Requirements**: NW-01, NW-02, NW-03, ACCT-03
 **Success Criteria** (what must be TRUE):
+
   1. User can see current net worth in the primary currency as assets minus credit-card outstanding debt
   2. User can see each account balance in its native currency
   3. User can see each account balance converted to the primary currency
   4. User can see available credit as limit − debt on credit accounts, and that figure never adds to assets
+
 **Plans**: TBD
 **UI hint**: yes
 
 ### Phase 6: Historical Charts
+
 **Goal**: User can trust historical net-worth and per-account charts built from as-of balances and as-of FX
 **Mode:** mvp
 **Depends on**: Phase 5
 **Requirements**: CHART-01, CHART-02, CHART-03
 **Success Criteria** (what must be TRUE):
+
   1. User can see a historical net-worth chart in the primary currency
   2. User can see a historical balance chart for an individual account
   3. Each chart point uses balance as of that date × FX as of that date (not today’s rate)
   4. Changing today’s FX does not rewrite earlier chart points that used a prior rate
+
 **Plans**: TBD
 **UI hint**: yes
 
