@@ -5,6 +5,9 @@ node_modules
 .claude
 .cursor
 .gsd
+.env
+.env.*
+!.env.example
 data/*.db
 data/*-wal
 data/*-shm

@@ -7,7 +7,7 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function createPrismaClient(): PrismaClient {
-  // Host tooling default; Compose overrides to file:/data/wallet.db (Plan 04).
+  // Host default file:./data/wallet.db; Compose sets file:/data/wallet.db.
   const url = process.env.DATABASE_URL ?? "file:./data/wallet.db";
   const adapter = new PrismaBetterSqlite3({ url, timeout: 5000 });
   return new PrismaClient({ adapter });
