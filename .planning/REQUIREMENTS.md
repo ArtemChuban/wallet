@@ -9,8 +9,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Accounts
 
-- [ ] **ACCT-01**: User can create, edit, and delete accounts with types: fiat debit, fiat credit, crypto, cash
-- [ ] **ACCT-02**: For credit accounts, user can set credit limit and outstanding debt; debt reduces net worth
+- [x] **ACCT-01**: User can create, edit, and delete accounts with types: fiat debit, fiat credit, crypto, cash
+- [x] **ACCT-02**: For credit accounts, user can set credit limit and outstanding debt; debt reduces net worth
 - [ ] **ACCT-03**: User can see available credit as limit − debt (display only, never counted as asset)
 
 ### Currencies
@@ -94,8 +94,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | PLAT-01 | Phase 1 | Complete |
 | CURR-01 | Phase 2 | Pending |
-| ACCT-01 | Phase 2 | Pending |
-| ACCT-02 | Phase 2 | Pending |
+| ACCT-01 | Phase 2 | Complete |
+| ACCT-02 | Phase 2 | Complete |
 | BAL-01 | Phase 3 | Pending |
 | BAL-02 | Phase 3 | Pending |
 | FX-01 | Phase 4 | Pending |
