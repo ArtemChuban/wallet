@@ -9,12 +9,32 @@ datasource db {
   provider = "sqlite"
 }
 
+enum AccountType {
+  FIAT_DEBIT
+  FIAT_CREDIT
+  CRYPTO
+  CASH
+}
+
 model Currency {
   code      String  @id
   name      String
   scale     Int // required at create — no DB default
   /// Exactly-one primary enforced by migration SQL partial unique index Currency_one_primary (D-01, D-02).
   isPrimary Boolean @default(false)
+  accounts  Account[]
+}
+
+model Account {
+  id               Int         @id @default(autoincrement())
+  name             String      @unique
+  type             AccountType
+  currencyCode     String
+  currency         Currency    @relation(fields: [currencyCode], references: [code])
+  /// Metadata only — never an NW asset. Required (>0) iff type == FIAT_CREDIT (D-09, D-10).
+  creditLimitMinor BigInt?
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
 }
 
 model FxRateStub {
