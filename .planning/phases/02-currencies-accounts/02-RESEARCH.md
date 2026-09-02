@@ -433,22 +433,19 @@ const accountCreateSchema = z
 
 **If empty of critical assumptions:** Core stack/patterns verified; only UI copy and discretionary names need soft confirmation.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **ROADMAP success criteria still list delete + outstanding debt**
-   - What we know: CONTEXT explicitly defers both.
-   - What's unclear: Whether orchestrator will amend ROADMAP before verify-work.
-   - Recommendation: Planner documents “Phase 2 interprets ACCT-01/02 per CONTEXT”; suggest roadmap patch in plan or discuss follow-up.
+1. **ROADMAP success criteria still list delete + outstanding debt** — RESOLVED
+   - What we know: CONTEXT explicitly defers both (D-09, D-14).
+   - Resolution: ROADMAP Phase 2 success criteria already CONTEXT-narrowed (no delete in v1; outstanding debt deferred to Phase 3). Plans interpret CURR-01 / ACCT-01 / ACCT-02 per CONTEXT.
 
-2. **Currency code charset**
+2. **Currency code charset** — RESOLVED
    - What we know: Free short strings, uniqueness only (D-05).
-   - What's unclear: Max length / allowed charset (e.g. `[A-Za-z0-9_]` vs any Unicode).
-   - Recommendation: Zod `min(1).max(16)` + printable ASCII unless user asks otherwise `[ASSUMED]`.
+   - Resolution: Plan 01 / Zod create schema — printable ASCII, `min(1).max(16)` (planner assumption locked for execution).
 
-3. **Empty-state copy**
+3. **Empty-state copy** — RESOLVED
    - What we know: Russian UI required (D-20).
-   - What's unclear: Exact empty-list strings.
-   - Recommendation: Discretion — short Russian empty states on both lists.
+   - Resolution: Exact strings from `02-UI-SPEC.md` Copywriting Contract (currencies: «Нет валют» / seed-check body; accounts: «Нет счетов» / first-account body; CTAs «Добавить валюту» / «Добавить счёт»).
 
 ## Environment Availability
 
