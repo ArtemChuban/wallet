@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 current_phase: 1
 current_phase_name: Docker + SQLite Foundation
 status: planning
-stopped_at: Phase 1 research complete
-last_updated: "2026-09-02T13:49:47.966Z"
+stopped_at: Phase 1 plans written (01-01..01-03)
+last_updated: "2026-09-02T13:59:01.235Z"
 last_activity: 2026-09-02
-last_activity_desc: Phase 1 research written to 01-RESEARCH.md
-state_head: e48dbfb7039bf2860b2d5239c067431a4650758a
+last_activity_desc: Phase 1 PLAN.md set + SKELETON + COVERAGE created
+state_head: 6254952
 progress:
   total_phases: 6
   completed_phases: 0
-  total_plans: 0
+  total_plans: 3
   completed_plans: 0
   percent: 0
 ---
@@ -28,9 +28,9 @@ See: .planning/PROJECT.md (updated 2026-09-02)
 ## Current Position
 
 Phase: 1 of 6 (Docker + SQLite Foundation)
-Plan: — of — in current phase
-Status: Ready to plan
-Last activity: 2026-09-02 — Initial roadmap created
+Plan: 0 of 3 in current phase
+Status: Ready to execute
+Last activity: 2026-09-02 — Phase 1 plans created (3 plans, waves 1–3)
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -65,6 +65,7 @@ Recent decisions affecting current work:
 - Roadmap follows research build order: persist → currencies/accounts → snapshots → FX → NW dashboard → charts
 - Polish-only / Russian ops hardening folded into UI-bearing phases (no standalone polish phase)
 - v1 excludes transactions, auto FX APIs, and bank sync
+- Phase 1 locks Next.js + Prisma + shadcn (D-01–D-04); money INTEGER + scale + rate×10^8 (D-07–D-09)
 
 ### Pending Todos
 
@@ -72,9 +73,9 @@ None yet.
 
 ### Blockers/Concerns
 
-- Money column representation (TEXT decimal vs INTEGER minor units) — decide in Phase 1/3 planning
-- SQLite journal_mode (WAL vs DELETE) depends on Docker host filesystem — confirm in Phase 1
-- Primary-currency change rules and partial-NW UX when FX missing — resolve in Phase 4–5 planning
+- SQLite journal_mode (WAL vs DELETE) — prefer WAL on native btrfs; confirm in Plan 03 smoke
+- Package legitimacy human gate before npm install (Plan 01)
+- One-way money/FX door human decision before schema (Plan 02)
 
 ## Deferred Items
 
@@ -86,6 +87,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-02T13:49:34.804Z
-Stopped at: Phase 1 research complete
-Resume file: /home/artem/Documents/wallet/.planning/phases/01-docker-sqlite-foundation/01-CONTEXT.md
+Last session: 2026-09-02T13:59:01.235Z
+Stopped at: Phase 1 plans written (01-01..01-03)
+Resume file: /home/artem/Documents/wallet/.planning/phases/01-docker-sqlite-foundation/01-01-PLAN.md
