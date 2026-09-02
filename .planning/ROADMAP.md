@@ -1,0 +1,134 @@
+# Roadmap: Wallet
+
+## Overview
+
+Wallet ships as a local Dockerized net-worth tracker: durable SQLite first, then currencies and typed accounts, dated balance snapshots, dated FX (primary ↔ other), a current net-worth dashboard, and historical charts that reuse the same as-of balance and rate rules — so capital history stays trustworthy.
+
+## Phases
+
+**Phase Numbering:**
+- Integer phases (1, 2, 3): Planned milestone work
+- Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
+
+Decimal phases appear between their surrounding integers in numeric order.
+
+- [ ] **Phase 1: Docker + SQLite Foundation** - Runnable container with durable local SQLite
+- [ ] **Phase 2: Currencies + Accounts** - Free-form currencies, primary, and typed account CRUD
+- [ ] **Phase 3: Dated Balance Snapshots** - As-of balances with backdating and LOCF reads
+- [ ] **Phase 4: Dated FX** - Manual primary ↔ other rates with forward-effective LOCF
+- [ ] **Phase 5: Net Worth Dashboard** - Current NW and per-account native/primary balances
+- [ ] **Phase 6: Historical Charts** - NW and per-account history using as-of balance × as-of FX
+
+## Phase Details
+
+### Phase 1: Docker + SQLite Foundation
+**Goal**: User can run Wallet locally in Docker with all data persisted in SQLite on the host
+**Mode:** mvp
+**Depends on**: Nothing (first phase)
+**Requirements**: PLAT-01
+**Success Criteria** (what must be TRUE):
+  1. User can start the app with Docker Compose and open the UI in a browser
+  2. App data survives a full container stop/start (SQLite file remains on the host mount)
+  3. App reports healthy readiness only when the database is reachable and migrated
+**Plans**: TBD
+
+### Phase 2: Currencies + Accounts
+**Goal**: User can define currencies (with one primary) and manage typed accounts including credit cards
+**Mode:** mvp
+**Depends on**: Phase 1
+**Requirements**: CURR-01, ACCT-01, ACCT-02
+**Success Criteria** (what must be TRUE):
+  1. User can create currencies and designate exactly one primary currency
+  2. User can create, edit, and delete accounts of types fiat debit, fiat credit, crypto, and cash
+  3. User can set a credit limit on a credit account and record outstanding debt for that account
+  4. Credit limit is stored as metadata only (never treated as an asset in later NW math)
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 3: Dated Balance Snapshots
+**Goal**: User can record account balances as of a chosen date and read the correct as-of balance over time
+**Mode:** mvp
+**Depends on**: Phase 2
+**Requirements**: BAL-01, BAL-02
+**Success Criteria** (what must be TRUE):
+  1. User can set an account balance for a chosen as-of date (including dates in the past)
+  2. Asking for balance as of date D returns the latest snapshot with date ≤ D
+  3. User can see each account’s current native balance from its latest applicable snapshot
+  4. Days before an account’s first snapshot show no invented zero balance
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 4: Dated FX
+**Goal**: User can maintain dated exchange rates so multi-currency amounts convert honestly as of any date
+**Mode:** mvp
+**Depends on**: Phase 3
+**Requirements**: FX-01, FX-02
+**Success Criteria** (what must be TRUE):
+  1. User can set a dated exchange rate between the primary currency and another currency
+  2. Conversion as of date D uses the latest rate with effective date ≤ D
+  3. User cannot create FX pairs that are not primary ↔ other
+  4. Rate changes apply forward from their date without rewriting earlier as-of conversions
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 5: Net Worth Dashboard
+**Goal**: User can see true current net worth and per-account balances in native and primary currency
+**Mode:** mvp
+**Depends on**: Phase 4
+**Requirements**: NW-01, NW-02, NW-03, ACCT-03
+**Success Criteria** (what must be TRUE):
+  1. User can see current net worth in the primary currency as assets minus credit-card outstanding debt
+  2. User can see each account balance in its native currency
+  3. User can see each account balance converted to the primary currency
+  4. User can see available credit as limit − debt on credit accounts, and that figure never adds to assets
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 6: Historical Charts
+**Goal**: User can trust historical net-worth and per-account charts built from as-of balances and as-of FX
+**Mode:** mvp
+**Depends on**: Phase 5
+**Requirements**: CHART-01, CHART-02, CHART-03
+**Success Criteria** (what must be TRUE):
+  1. User can see a historical net-worth chart in the primary currency
+  2. User can see a historical balance chart for an individual account
+  3. Each chart point uses balance as of that date × FX as of that date (not today’s rate)
+  4. Changing today’s FX does not rewrite earlier chart points that used a prior rate
+**Plans**: TBD
+**UI hint**: yes
+
+## Progress
+
+**Execution Order:**
+Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
+
+| Phase | Plans Complete | Status | Completed |
+|-------|----------------|--------|-----------|
+| 1. Docker + SQLite Foundation | 0/TBD | Not started | - |
+| 2. Currencies + Accounts | 0/TBD | Not started | - |
+| 3. Dated Balance Snapshots | 0/TBD | Not started | - |
+| 4. Dated FX | 0/TBD | Not started | - |
+| 5. Net Worth Dashboard | 0/TBD | Not started | - |
+| 6. Historical Charts | 0/TBD | Not started | - |
+
+## Coverage Map
+
+| Requirement | Phase |
+|-------------|-------|
+| PLAT-01 | Phase 1 |
+| CURR-01 | Phase 2 |
+| ACCT-01 | Phase 2 |
+| ACCT-02 | Phase 2 |
+| BAL-01 | Phase 3 |
+| BAL-02 | Phase 3 |
+| FX-01 | Phase 4 |
+| FX-02 | Phase 4 |
+| NW-01 | Phase 5 |
+| NW-02 | Phase 5 |
+| NW-03 | Phase 5 |
+| ACCT-03 | Phase 5 |
+| CHART-01 | Phase 6 |
+| CHART-02 | Phase 6 |
+| CHART-03 | Phase 6 |
+
+**Coverage:** 15/15 v1 requirements mapped ✓

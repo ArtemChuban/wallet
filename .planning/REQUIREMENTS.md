@@ -92,27 +92,27 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ACCT-01 | — | Pending |
-| ACCT-02 | — | Pending |
-| ACCT-03 | — | Pending |
-| CURR-01 | — | Pending |
-| FX-01 | — | Pending |
-| FX-02 | — | Pending |
-| BAL-01 | — | Pending |
-| BAL-02 | — | Pending |
-| NW-01 | — | Pending |
-| NW-02 | — | Pending |
-| NW-03 | — | Pending |
-| CHART-01 | — | Pending |
-| CHART-02 | — | Pending |
-| CHART-03 | — | Pending |
-| PLAT-01 | — | Pending |
+| PLAT-01 | Phase 1 | Pending |
+| CURR-01 | Phase 2 | Pending |
+| ACCT-01 | Phase 2 | Pending |
+| ACCT-02 | Phase 2 | Pending |
+| BAL-01 | Phase 3 | Pending |
+| BAL-02 | Phase 3 | Pending |
+| FX-01 | Phase 4 | Pending |
+| FX-02 | Phase 4 | Pending |
+| NW-01 | Phase 5 | Pending |
+| NW-02 | Phase 5 | Pending |
+| NW-03 | Phase 5 | Pending |
+| ACCT-03 | Phase 5 | Pending |
+| CHART-01 | Phase 6 | Pending |
+| CHART-02 | Phase 6 | Pending |
+| CHART-03 | Phase 6 | Pending |
 
 **Coverage:**
 - v1 requirements: 15 total
-- Mapped to phases: 0
-- Unmapped: 15 ⚠️
+- Mapped to phases: 15
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-09-02*
-*Last updated: 2026-09-02 after initialization*
+*Last updated: 2026-09-02 after roadmap creation*
