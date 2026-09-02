@@ -2,17 +2,17 @@
 gsd_state_version: 1.0
 current_phase: 02
 current_phase_name: Currencies + Accounts
-status: planning
-stopped_at: Created 02-05-PLAN.md (gap closure G-02-1/G-02-2)
-last_updated: "2026-09-03T00:10:00.000Z"
+status: executing
+stopped_at: Completed 02-05-PLAN.md
+last_updated: "2026-09-02T22:20:29.499Z"
 last_activity: 2026-09-03
-last_activity_desc: Phase 02 gap-closure plan for FieldControl warnings
-state_head: 6810bea243285f5749c217c0de482545ca3c0f43
+last_activity_desc: Phase 02 execution started
+state_head: 1e01c1b2f65c37142e2841749971a1a060fc0202
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 9
-  completed_plans: 8
+  completed_plans: 9
   percent: 17
 ---
 
@@ -28,9 +28,9 @@ See: .planning/PROJECT.md (updated 2026-09-02)
 ## Current Position
 
 Phase: 02 (Currencies + Accounts) — EXECUTING
-Plan: 4 of 4
-Status: Phase complete — ready for verification
-Last activity: 2026-09-02 — Phase 02 execution started
+Plan: 2 of 5
+Status: Ready to execute
+Last activity: 2026-09-03 — Phase 02 execution started
 
 Progress: [██░░░░░░░░] 17%
 
@@ -66,6 +66,7 @@ Progress: [██░░░░░░░░] 17%
 | Phase 02-currencies-accounts P02 | 4min | 2 tasks | 10 files |
 | Phase 02-currencies-accounts P03 | 5min | 3 tasks | 11 files |
 | Phase 02-currencies-accounts P04 | 35min | 3 tasks | 4 files |
+| Phase 02-currencies-accounts P05 | 1min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -95,6 +96,8 @@ Recent decisions affecting current work:
 - [Phase 02]: Briefly stopped wallet-web so host migrate deploy could unlock SQLite
 - [Phase 02]: SelectValue uses TYPE_LABELS formatter so trigger shows Russian type labels, not enum codes
 - [Phase 02]: Human-verify checkpoint PASSED after Select label defect fix (user: Все окей)
+- [Phase 02]: Controlled dialog name via mount-init useState; formKey remount resets; no post-mount prop sync useEffect
+- [Phase 02]: Create and edit name Inputs both controlled so control mode never flips across revalidatePath
 
 ### Pending Todos
 
@@ -116,6 +119,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-02T21:02:55.653Z
-Stopped at: Completed 02-04-PLAN.md
+Last session: 2026-09-02T22:20:29.393Z
+Stopped at: Completed 02-05-PLAN.md
 Resume file: None
