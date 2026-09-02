@@ -96,7 +96,7 @@ Each task was committed atomically:
 1. **Task 1: End-to-end controlled currency name field (G-02-1)** - `98322cf` (fix)
 2. **Task 2: Controlled account name field (G-02-2)** - `1e01c1b` (fix)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `7f78a20` (docs: complete plan)
 
 _Note: Tracer Task 1 automated verify re-run passed before Task 2 expansion (HUMAN_VERIFY_MODE=end-of-phase)._
 
