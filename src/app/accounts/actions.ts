@@ -124,10 +124,12 @@ export async function updateAccountName(
   formData: FormData,
 ): Promise<AccountActionState> {
   const idRaw = formData.get("id");
-  const id =
-    typeof idRaw === "string" && idRaw.trim() !== ""
-      ? Number(idRaw)
-      : Number.NaN;
+  if (typeof idRaw !== "string" || !/^\d+$/.test(idRaw.trim())) {
+    return {
+      message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    };
+  }
+  const id = Number(idRaw.trim());
   if (!Number.isInteger(id) || id <= 0) {
     return {
       message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
