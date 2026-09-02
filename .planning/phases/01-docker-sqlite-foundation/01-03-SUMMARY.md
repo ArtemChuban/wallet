@@ -106,7 +106,7 @@ Each task was committed atomically:
 2. **Task 2: Prisma schema stub + money.ts + db singleton** - `c649dd0` (feat)
 3. **Task 3: prisma migrate deploy against host data file** - no tracked commit (deploy smoke only; `data/wallet.db` gitignored)
 
-**Plan metadata:** _(pending docs commit)_
+**Plan metadata:** `dfea011` (docs: complete plan)
 
 _Note: Wave 0 RED for `money.test.ts` shipped in Plan 01; Task 2 was GREEN-only._
 
