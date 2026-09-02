@@ -168,7 +168,13 @@ function AccountFormBody({
                 className="w-full"
                 aria-invalid={Boolean(state.errors?.type)}
               >
-                <SelectValue />
+                <SelectValue>
+                  {(value: string | null) =>
+                    value
+                      ? (TYPE_LABELS[value as AccountRow["type"]] ?? value)
+                      : null
+                  }
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {TYPE_OPTIONS.map((opt) => (
