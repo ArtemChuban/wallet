@@ -239,6 +239,11 @@ function AccountFormBody({
             {state.errors.currencyCode[0]}
           </p>
         ) : null}
+        {mode === "create" && currencies.length === 0 ? (
+          <p className="text-sm text-muted-foreground" role="status">
+            Сначала добавьте валюту
+          </p>
+        ) : null}
       </div>
 
       {showCreditLimit ? (
@@ -277,7 +282,10 @@ function AccountFormBody({
       ) : null}
 
       <DialogFooter>
-        <Button type="submit" disabled={isPending}>
+        <Button
+          type="submit"
+          disabled={isPending || (mode === "create" && currencies.length === 0)}
+        >
           {isPending ? "Сохранение…" : submitLabel}
         </Button>
       </DialogFooter>
