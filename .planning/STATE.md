@@ -1,18 +1,18 @@
 ---
 gsd_state_version: 1.0
-current_phase: 2
+current_phase: 02
 current_phase_name: Currencies + Accounts
-status: planning
-stopped_at: Phase 2 plans revised (checker feedback)
-last_updated: "2026-09-02T20:03:31.098Z"
+status: executing
+stopped_at: Completed 02-01-PLAN.md
+last_updated: "2026-09-02T20:13:55.127Z"
 last_activity: 2026-09-02
-last_activity_desc: Phase 02 plans revised to 4 plans (scope split + research RESOLVED)
-state_head: a753a414a89762e98bf615f1462f5740c8d09c66
+last_activity_desc: Phase 02 execution started
+state_head: 8bfaa1725ab9bf2e686adea688b8fa6cf7c66834
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 8
-  completed_plans: 4
+  completed_plans: 5
   percent: 17
 ---
 
@@ -27,12 +27,12 @@ See: .planning/PROJECT.md (updated 2026-09-02)
 
 ## Current Position
 
-Phase: 2 (Currencies + Accounts) — READY TO EXECUTE
-Plan: 02-01 ready (4 plans planned after revision)
-Status: Plans revised — ready for checker / execute
-Last activity: 2026-09-02 — Phase 2 plans revised (02-01..02-04; split currency data vs UI)
+Phase: 02 (Currencies + Accounts) — EXECUTING
+Plan: 2 of 4
+Status: Ready to execute
+Last activity: 2026-09-02 — Phase 02 execution started
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [██░░░░░░░░] 17%
 
 ## Performance Metrics
 
@@ -62,6 +62,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 01 P02 | 2min | 2 tasks | 6 files |
 | Phase 01 P03 | 3min | 3 tasks | 7 files |
 | Phase 01 P04 | 77min | 3 tasks | 15 files |
+| Phase 02-currencies-accounts P01 | 4min | 3 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -83,6 +84,8 @@ Recent decisions affecting current work:
 - [Phase 01]: Safe/larger COPY of node_modules + src/generated into runner for migrate + Prisma client
 - [Phase 01]: npm overrides pin better-sqlite3@13.0.3; rebuild native addon in Docker deps stage
 - [Phase 01]: Ready page force-dynamic so DB status is not baked at image build time
+- [Phase 02]: Kept D-01 seed in migration SQL with Currency_one_primary partial unique index — CONTEXT D-01/D-02; migrate deploy must seed RUB
+- [Phase 02]: Briefly stopped wallet-web container so host migrate deploy could unlock SQLite — Compose app held data/wallet.db lock
 
 ### Pending Todos
 
@@ -104,6 +107,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-02T19:37:18.398Z
-Stopped at: Phase 2 UI-SPEC approved
-Resume file: /home/artem/Documents/wallet/.planning/phases/02-currencies-accounts/02-UI-SPEC.md
+Last session: 2026-09-02T20:13:55.082Z
+Stopped at: Completed 02-01-PLAN.md
+Resume file: None

@@ -65,11 +65,11 @@ Plans:
   3. User can set a required credit limit on a credit account at create time (outstanding debt deferred to Phase 3 balance snapshots — CONTEXT D-09)
   4. Credit limit is stored as metadata only (never treated as an asset in later NW math)
 
-**Plans:** 4 plans
+**Plans:** 1/4 plans executed
 Plans:
 **Wave 1**
 
-- [ ] 02-01-PLAN.md — Currency data: isPrimary + RUB seed migration + money/Zod + migrate deploy
+- [x] 02-01-PLAN.md — Currency data: isPrimary + RUB seed migration + money/Zod + migrate deploy
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -157,7 +157,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Docker + SQLite Foundation | 4/4 | Complete    | 2026-09-02 |
-| 2. Currencies + Accounts | 0/4 | Planned | - |
+| 2. Currencies + Accounts | 1/4 | In Progress|  |
 | 3. Dated Balance Snapshots | 0/TBD | Not started | - |
 | 4. Dated FX | 0/TBD | Not started | - |
 | 5. Net Worth Dashboard | 0/TBD | Not started | - |
