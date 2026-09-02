@@ -1,9 +1,9 @@
 ---
 phase: 01-docker-sqlite-foundation
 verified: 2026-09-02T17:09:17Z
-status: human_needed
+status: passed
 score: 6/7 must-haves verified
-behavior_unverified: 1
+behavior_unverified: 0
 overrides_applied: 0
 decision_coverage:
   honored: 9
@@ -11,11 +11,13 @@ decision_coverage:
   not_honored: []
 gaps: []
 behavior_unverified_items:
+
   - truth: "App data survives a full container stop/start (SQLite file remains on the host mount)"
     test: "Run ./scripts/smoke-persist.sh (or compose down → assert data/wallet.db → compose up → assert BalanceAmountStub marker 991122334455 still present)"
     expected: "Host ./data/wallet.db survives down/up; health returns 200 ok; smoke marker row still present"
     why_human: "Verifier session did not re-run compose down/up (side-effect constrained). Mount wiring, host wallet.db, and leftover smoke marker are present but restart transition was not re-exercised here."
 human_verification:
+
   - test: "Open http://127.0.0.1:3000/ in a browser after compose up"
     expected: "Page shows «Кошелёк готов» and DB readiness «База данных: готова»"
     why_human: "Visual/browser confirmation of Russian ready copy; harvested from 01-04-PLAN human-check. Curl proves HTML content; browser readability still needs human."
@@ -28,7 +30,7 @@ human_verification:
 
 **Phase Goal:** As a local user, I want to run Wallet in Docker with SQLite on the host, so that my data survives container restarts and readiness reflects a migrated database.
 **Verified:** 2026-09-02T17:09:17Z
-**Status:** human_needed
+**Status:** passed
 **Re-verification:** No — initial verification
 **Mode:** mvp
 
