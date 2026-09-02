@@ -12,8 +12,8 @@ COPY prisma ./prisma
 COPY prisma.config.ts ./
 # Dummy URL so prisma.config env() resolves during postinstall generate.
 ENV DATABASE_URL=file:./data/wallet.db
-RUN npm ci \
-  && npm --prefix node_modules/@prisma/adapter-better-sqlite3/node_modules/better-sqlite3 run build-release
+# overrides force single better-sqlite3@13; rebuild native bindings for bookworm.
+RUN npm ci && npm rebuild better-sqlite3
 
 FROM node:${NODE_VERSION} AS builder
 WORKDIR /app

@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Wallet
 
-## Getting Started
+Local single-user net-worth tracker. Runs in Docker; SQLite stays on the host under `./data`.
 
-First, run the development server:
+## Quick start (Docker)
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+chmod 700 data   # T-01-02: restrict host DB directory (mode 700)
+docker compose up --build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://127.0.0.1:3000/](http://127.0.0.1:3000/) — port publishes to loopback only (`127.0.0.1:3000:3000`, T-01-01).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Ready page shows «Кошелёк готов» when the UI is up; `/api/health` returns `{"status":"ok"}` only when the migrated SQLite DB is reachable.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Stop:
 
-## Learn More
+```bash
+docker compose down
+```
 
-To learn more about Next.js, take a look at the following resources:
+SQLite file `./data/wallet.db` remains on the host (bind mount `./data:/data`, `DATABASE_URL=file:/data/wallet.db` in the container).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Host data contract
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Path | Role |
+|------|------|
+| `./data` | Host bind-mount target (mode `700` recommended) |
+| `./data/wallet.db` | SQLite database (gitignored) |
+| `/data/wallet.db` | Same file inside the container |
 
-## Deploy on Vercel
+Never copy `*.db` into the image. Migrations run on container start via `docker/entrypoint.sh` (`prisma migrate deploy` then `node server.js`).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Persist smoke (wave-gate; may take several minutes):
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+./scripts/smoke-persist.sh
+```
+
+## Local development (optional)
+
+```bash
+cp .env.example .env   # DATABASE_URL=file:./data/wallet.db
+npm install
+npx prisma migrate deploy
+npm run dev
+```
+
+Open [http://127.0.0.1:3000/](http://127.0.0.1:3000/).
+
+## SQLite journal mode
+
+Default on native Linux (e.g. btrfs): **WAL** with foreign keys and `busy_timeout` (see `src/lib/db.ts`).
+
+If the host filesystem is virtiofs/NFS and WAL proves unsafe, fall back to **DELETE** journal mode and document the change for that environment.
+
+## Stack pins
+
+- Next.js 16.3.4 (App Router, `output: "standalone"`)
+- Prisma 7.10.0 + `@prisma/adapter-better-sqlite3` + `better-sqlite3@13.0.3`
+- shadcn/ui on Tailwind
