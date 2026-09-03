@@ -232,7 +232,16 @@ export async function upsertBalanceSnapshot(
       return { errors: { amountMajor: [msg] } };
     }
 
-    if (amountMinor < 0n) {
+    if (account.type === "FIAT_CREDIT") {
+      const limit = account.creditLimitMinor ?? 0n;
+      if (amountMinor < 0n || amountMinor > limit) {
+        return {
+          errors: {
+            amountMajor: ["Введите сумму от 0 до кредитного лимита"],
+          },
+        };
+      }
+    } else if (amountMinor < 0n) {
       return { errors: { amountMajor: ["Введите корректную сумму"] } };
     }
 
