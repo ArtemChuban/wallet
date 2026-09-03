@@ -28,7 +28,7 @@ vi.mock("@/lib/balances", () => ({
 vi.mock("@/lib/money", () => ({
   parseMajorToMinor: vi.fn((major: string) => {
     const n = Number(major);
-    if (!Number.isFinite(n) || n < 0) throw new Error("bad major");
+    if (!Number.isFinite(n)) throw new Error("bad major");
     return BigInt(Math.round(n * 100));
   }),
 }));
@@ -200,5 +200,77 @@ describe("upsertBalanceSnapshot (BAL-01 / D-09 / D-12)", () => {
       },
     });
     expect(revalidatePath).toHaveBeenCalledWith("/accounts");
+  });
+});
+
+describe("upsertBalanceSnapshot credit available (D-05–D-07 / T-03-06)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+    vi.mocked(calendarDateToday).mockReturnValue("2026-09-03");
+    vi.mocked(prisma.account.findUnique).mockResolvedValue({
+      id: 2,
+      name: "Кредитка",
+      type: "FIAT_CREDIT",
+      currencyCode: "RUB",
+      creditLimitMinor: 500000n,
+      currency: { code: "RUB", name: "Рубль", scale: 2, isPrimary: true },
+    } as never);
+    vi.mocked(prisma.balanceSnapshot.upsert).mockResolvedValue({} as never);
+  });
+
+  it("rejects available above credit limit with UI-SPEC Russian message", async () => {
+    const formData = new FormData();
+    formData.set("accountId", "2");
+    formData.set("amountMajor", "5000.01");
+    formData.set("asOfDate", "2026-09-03");
+
+    const result = await upsertBalanceSnapshot({}, formData);
+
+    expect(result.errors?.amountMajor).toEqual([
+      "Введите сумму от 0 до кредитного лимита",
+    ]);
+    expect(prisma.balanceSnapshot.upsert).not.toHaveBeenCalled();
+  });
+
+  it("rejects negative available", async () => {
+    const formData = new FormData();
+    formData.set("accountId", "2");
+    formData.set("amountMajor", "-1");
+    formData.set("asOfDate", "2026-09-03");
+
+    const result = await upsertBalanceSnapshot({}, formData);
+
+    expect(result.errors?.amountMajor).toEqual([
+      "Введите сумму от 0 до кредитного лимита",
+    ]);
+    expect(prisma.balanceSnapshot.upsert).not.toHaveBeenCalled();
+  });
+
+  it("persists available in amountMinor only — no debt field (D-05 / T-03-07)", async () => {
+    const formData = new FormData();
+    formData.set("accountId", "2");
+    formData.set("amountMajor", "3000");
+    formData.set("asOfDate", "2026-09-03");
+    formData.set("debtMajor", "2000");
+    formData.set("debtMinor", "200000");
+
+    const result = await upsertBalanceSnapshot({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.balanceSnapshot.upsert).toHaveBeenCalledTimes(1);
+    const args = vi.mocked(prisma.balanceSnapshot.upsert).mock.calls[0]![0]!;
+    expect(args.create).toEqual({
+      accountId: 2,
+      asOfDate: "2026-09-03",
+      amountMinor: 300000n,
+    });
+    expect(args.update).toEqual({ amountMinor: 300000n });
+    expect(Object.keys(args.create as object).sort()).toEqual([
+      "accountId",
+      "amountMinor",
+      "asOfDate",
+    ]);
+    expect(Object.keys(args.update as object)).toEqual(["amountMinor"]);
   });
 });
