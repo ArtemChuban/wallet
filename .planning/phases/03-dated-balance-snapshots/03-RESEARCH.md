@@ -380,19 +380,22 @@ revalidatePath("/accounts");
 
 **If empty table:** N/A — assumptions listed above need planner confirmation only where noted.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Non-credit negative balances?**
    - What we know: Credit range locked 0..limit. Debit/cash/crypto not specified.
    - Recommendation: Disallow negatives in v1 (A2); revisit if user needs overdraft.
+   - RESOLVED: Non-credit `amountMinor` must be ≥ 0 (A2) — reject negatives for debit/cash/crypto; credit stays 0..limit.
 
 2. **Canonical “today” timezone**
    - What we know: No `TZ` in Compose; Russian-first UI.
    - Recommendation: `Europe/Moscow` helper + optional Compose `TZ` (A3).
+   - RESOLVED: Canonical today = `Europe/Moscow` (A3) via `calendarDateToday` default.
 
 3. **Delete confirmation?**
-   - What we know: D-10 allows delete; no confirm decision.
+   - What we know: D-10 allows delete; history-only delete UI (D-11).
    - Recommendation: Simple delete button + Russian error on failure; optional `window.confirm` — discretion.
+   - RESOLVED: `window.confirm` with UI-SPEC dated Russian copy before delete (D-11 / Plan 03).
 
 ## Environment Availability
 

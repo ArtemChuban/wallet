@@ -40,14 +40,15 @@ created: "2026-09-03"
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 03-W0-01 | 01 | 0 | BAL-01 | T-03-01 | Reject future asOfDate server-side | unit | `npm test -- --run src/lib/validations/balance.test.ts` | ❌ W0 | ⬜ pending |
-| 03-W0-02 | 01 | 0 | BAL-01 | T-03-03 | Credit available outside 0..limit rejected | unit | `npm test -- --run src/lib/validations/balance.test.ts` | ❌ W0 | ⬜ pending |
-| 03-W0-03 | 01 | 0 | BAL-01 | — | Upsert same (account, date) overwrites amount | unit | `npm test -- --run src/lib/balances.test.ts` | ❌ W0 | ⬜ pending |
-| 03-W0-04 | 01 | 0 | BAL-02 | — | LOCF returns latest asOfDate ≤ D | unit | `npm test -- --run src/lib/balances.test.ts` | ❌ W0 | ⬜ pending |
-| 03-W0-05 | 01 | 0 | BAL-02 | — | Before first snapshot returns null (not 0) | unit | `npm test -- --run src/lib/balances.test.ts` | ❌ W0 | ⬜ pending |
-| 03-XX | TBD | TBD | BAL-01/02 | T-03-04 | Schema has BalanceSnapshot + unique; stub gone | unit | `npm test -- --run src/lib/money.test.ts src/lib/foundation.test.ts` | ✅ update | ⬜ pending |
-| 03-XX | TBD | TBD | — | — | Set-balance Dialog remount / controlled defaults | unit | `npm test -- --run src/components/accounts/SetBalanceDialog.test.ts` | ❌ W0 | ⬜ pending |
-| 03-XX | TBD | TBD | BAL-01 | T-03-05 | Actions export set + delete; no debt column | unit | `npm test -- --run src/app/accounts/actions.test.ts` | ✅ extend | ⬜ pending |
+| 03-W0-01 | 01 | 0 | BAL-01 | — | setBalanceSchema shape (date/amount Zod; Russian messages) | unit | `npm test -- --run src/lib/validations/balance.test.ts` | ❌ W0 | ⬜ pending |
+| 03-W0-02 | 01 | 0 | BAL-01 | — | Upsert same (account, date) overwrites amount | unit | `npm test -- --run src/lib/balances.test.ts` | ❌ W0 | ⬜ pending |
+| 03-W0-03 | 01 | 0 | BAL-02 | — | LOCF returns latest asOfDate ≤ D | unit | `npm test -- --run src/lib/balances.test.ts` | ❌ W0 | ⬜ pending |
+| 03-W0-04 | 01 | 0 | BAL-02 | — | Before first snapshot returns null (not 0) | unit | `npm test -- --run src/lib/balances.test.ts` | ❌ W0 | ⬜ pending |
+| 03-P01-01 | 01 | 1 | BAL-01/02 | T-03-04 | Schema has BalanceSnapshot + unique; stub gone | unit | `npm test -- --run src/lib/money.test.ts src/lib/foundation.test.ts` | ✅ update | ⬜ pending |
+| 03-P02-01 | 02 | 2 | BAL-01 | T-03-01 | Reject future asOfDate server-side (Server Action) | unit | `npm test -- --run src/app/accounts/actions.test.ts` | ✅ extend | ⬜ pending |
+| 03-P02-02 | 02 | 2 | BAL-01 | T-03-03 | Credit available outside 0..limit rejected (Server Action) | unit | `npm test -- --run src/app/accounts/actions.test.ts` | ✅ extend | ⬜ pending |
+| 03-P02-03 | 02 | 2 | — | — | Set-balance Dialog remount / controlled defaults | unit | `npm test -- --run src/components/accounts/SetBalanceDialog.test.ts` | ❌ W0 | ⬜ pending |
+| 03-P02-04 | 02 | 2 | BAL-01 | T-03-05 | Actions export set + delete; no debt column | unit | `npm test -- --run src/app/accounts/actions.test.ts` | ✅ extend | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -55,12 +56,16 @@ created: "2026-09-03"
 
 ## Wave 0 Requirements
 
-- [ ] `src/lib/validations/balance.test.ts` — BAL-01 date/amount/credit bounds
+- [ ] `src/lib/validations/balance.test.ts` — BAL-01 Zod shape only (past/today date strings, amountMajor, Russian invalid messages); **not** future-date reject or credit 0..limit (those live in Plan 02 `actions.test.ts`)
 - [ ] `src/lib/balances.test.ts` — BAL-02 LOCF + null-before-first + overwrite
 - [ ] `src/lib/validations/balance.ts` — schemas under test
 - [ ] `src/lib/balances.ts` — LOCF + debt helpers under test
 - [ ] Update `foundation.test.ts` expectations when stub dropped
-- [ ] Optional: `SetBalanceDialog.test.ts` source-contract (formKey / default today)
+- [ ] Optional: `SetBalanceDialog.test.ts` source-contract (formKey / default today) — Plan 02
+
+### Plan 02 Server Action tests (not Wave 0)
+
+- [ ] `src/app/accounts/actions.test.ts` — reject future asOfDate (T-03-01) + credit available outside 0..limit (T-03-03 / D-07)
 
 ---
 
