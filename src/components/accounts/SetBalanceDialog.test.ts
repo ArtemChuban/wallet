@@ -21,4 +21,10 @@ describe("SetBalanceDialog formKey + date contract (BAL-01)", () => {
     expect(dialogSrc).toMatch(/defaultValue=\{today\}/);
     expect(dialogSrc).toMatch(/max=\{today\}/);
   });
+
+  it("disables submit while isPending and uses Сохранить баланс", () => {
+    expect(dialogSrc).toMatch(/isPending/);
+    expect(dialogSrc).toMatch(/disabled=\{isPending\}/);
+    expect(dialogSrc).toMatch(/Сохранить баланс/);
+  });
 });

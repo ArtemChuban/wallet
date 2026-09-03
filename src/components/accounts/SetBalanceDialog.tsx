@@ -71,8 +71,8 @@ function SetBalanceFormBody({
         <DialogTitle>{title}</DialogTitle>
         <DialogDescription>
           {isCredit
-            ? "Остаток лимита — сколько ещё можно потратить. Долг = лимит − доступно."
-            : "Баланс на выбранную дату. Прошлая дата перезапишет снимок за этот день."}
+            ? `Доступный остаток по «${account.name}» на выбранную дату.`
+            : `Баланс «${account.name}» на выбранную дату.`}
         </DialogDescription>
       </DialogHeader>
 
