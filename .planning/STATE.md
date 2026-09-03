@@ -3,16 +3,16 @@ gsd_state_version: 1.0
 current_phase: 5
 current_phase_name: Net Worth Dashboard
 status: executing
-stopped_at: Phase 5 context gathered
-last_updated: "2026-09-03T16:11:02.050Z"
+stopped_at: Completed 05-01-PLAN.md
+last_updated: "2026-09-03T16:42:46.489Z"
 last_activity: 2026-09-03
-last_activity_desc: Phase 4 complete, transitioned to Phase 5
-state_head: 33b461cd8544f3900a81b794326f39d6c6cfad45
+last_activity_desc: Phase 5 execution started
+state_head: 0bae718b16fe9f6b7922d0009fcb6f99066a4185
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 18
-  completed_plans: 15
+  completed_plans: 16
   percent: 67
 ---
 
@@ -23,16 +23,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-02)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 4 — Dated FX
+**Current focus:** Phase 5 — Net Worth Dashboard
 
 ## Current Position
 
-Phase: 5 (Net Worth Dashboard) — READY TO EXECUTE
-Plan: Not started
+Phase: 5 (Net Worth Dashboard) — EXECUTING
+Plan: 2 of 3
 Status: Ready to execute
-Last activity: 2026-09-03 — Phase 4 complete, transitioned to Phase 5
+Last activity: 2026-09-03 — Phase 5 execution started
 
-Progress: [█████░░░░░] 50%
+Progress: [███████░░░] 67%
 
 ## Performance Metrics
 
@@ -75,6 +75,7 @@ Progress: [█████░░░░░] 50%
 | Phase 03-dated-balance-snapshots P03 | 15min | 3 tasks | 4 files |
 | Phase 04-dated-fx P01 | 4min | 3 tasks | 9 files |
 | Phase 04-dated-fx P02 | 6min | 3 tasks | 9 files |
+| Phase 05-net-worth-dashboard P01 | 3 min | 3 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -118,6 +119,9 @@ Recent decisions affecting current work:
 - [Phase 4]: Nav Валюты href /currencies/rates with active on any /currencies* path (D-03)
 - [Phase 4]: Layout tabs exact-path active so Валюты and Курсы never highlight together
 - [Phase 4]: fromPrimary inverts via invertRateScaled before upsert; storage always rateToPrimaryScaled
+- [Phase 5]: Primary-currency accounts convert via identity; never require an FxRate row — FX table stores non-primary pairs only (Phase 4 D-16); requiring a rate for RUB would exclude primary debit accounts (RESEARCH pitfall 3)
+- [Phase 5]: DashboardAccountList is a Server Component with pre-formatted native/primary strings — D-16 forbids actions on dashboard; formatting on the RSC avoids BigInt client serialization
+- [Phase 5]: Credit copy, partial banner, empty state, and DB try/catch deferred to Plans 02–03 — Plan 01 scope is tracer math plus hero and flat asset list; Plan 02/03 own chrome
 
 ### Pending Todos
 
@@ -139,6 +143,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-03T15:53:16.664Z
-Stopped at: Phase 5 context gathered
-Resume file: .planning/phases/05-net-worth-dashboard/05-CONTEXT.md
+Last session: 2026-09-03T16:42:46.377Z
+Stopped at: Completed 05-01-PLAN.md
+Resume file: None
