@@ -83,8 +83,22 @@ function rowFor(account: NetWorthAccountInput): NetWorthRow {
   }
 
   if (account.type === "FIAT_CREDIT") {
-    const limit = account.creditLimitMinor ?? 0n;
-    const debtNativeMinor = creditDebtMinor(limit, account.locfAmountMinor);
+    if (account.creditLimitMinor == null) {
+      return {
+        accountId: account.id,
+        includedInTotal: false,
+        excludeReason: "no_balance",
+        contributionPrimaryMinor: 0n,
+        nativeDisplayMinor: account.locfAmountMinor,
+        debtNativeMinor: null,
+        primaryDisplayMinor: null,
+      };
+    }
+    const rawDebt = creditDebtMinor(
+      account.creditLimitMinor,
+      account.locfAmountMinor,
+    );
+    const debtNativeMinor = rawDebt < 0n ? 0n : rawDebt;
     const primaryDebt = toPrimaryMinor(account, debtNativeMinor);
     if (primaryDebt === null) {
       return {

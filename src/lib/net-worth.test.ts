@@ -48,6 +48,42 @@ describe("computeNetWorthRows (NW-01–03, ACCT-03)", () => {
     expect(rows[0]!.primaryDisplayMinor).toBe(200_000n);
   });
 
+  it("excludes credit with null creditLimitMinor (no_balance)", () => {
+    const { rows, totalPrimaryMinor, isPartial } = computeNetWorthRows([
+      input({
+        id: 24,
+        type: "FIAT_CREDIT",
+        creditLimitMinor: null,
+        locfAmountMinor: 100_000n,
+      }),
+    ]);
+    expect(rows[0]!.includedInTotal).toBe(false);
+    expect(rows[0]!.excludeReason).toBe("no_balance");
+    expect(rows[0]!.contributionPrimaryMinor).toBe(0n);
+    expect(rows[0]!.contributionPrimaryMinor).toBeLessThanOrEqual(0n);
+    expect(rows[0]!.nativeDisplayMinor).toBe(100_000n);
+    expect(rows[0]!.debtNativeMinor).toBeNull();
+    expect(totalPrimaryMinor).toBe(0n);
+    expect(isPartial).toBe(true);
+  });
+
+  it("clamps available-over-limit so contribution never positive", () => {
+    const { rows, totalPrimaryMinor } = computeNetWorthRows([
+      input({
+        id: 25,
+        type: "FIAT_CREDIT",
+        creditLimitMinor: 100_000n,
+        locfAmountMinor: 150_000n,
+      }),
+    ]);
+    expect(rows[0]!.debtNativeMinor).toBe(0n);
+    expect(rows[0]!.contributionPrimaryMinor).toBe(0n);
+    expect(rows[0]!.contributionPrimaryMinor).toBeLessThanOrEqual(0n);
+    expect(rows[0]!.includedInTotal).toBe(true);
+    expect(rows[0]!.nativeDisplayMinor).toBe(150_000n);
+    expect(totalPrimaryMinor).toBe(0n);
+  });
+
   it("increasing available decreases debt and makes total less negative", () => {
     const lowAvailable = computeNetWorthRows([
       input({
