@@ -90,7 +90,7 @@ export default async function Home() {
     };
   });
 
-  const { rows, totalPrimaryMinor } = computeNetWorthRows(inputs);
+  const { rows, totalPrimaryMinor, isPartial } = computeNetWorthRows(inputs);
   const rowById = new Map(rows.map((row) => [row.accountId, row]));
   const heroAmount = formatMinorToMajor(totalPrimaryMinor, primaryScale);
 
@@ -136,6 +136,18 @@ export default async function Home() {
           {heroAmount} {primaryCode}
         </p>
       </section>
+      {isPartial ? (
+        <div
+          className="rounded-lg border border-border bg-muted/60 p-4"
+          role="status"
+        >
+          <p className="text-sm font-medium text-foreground">Итог неполный</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Не все счета учтены в сумме: у части счетов нет баланса или нет курса
+            валюты. Задайте балансы на странице «Счета» и курсы на «Курсы».
+          </p>
+        </div>
+      ) : null}
       <DashboardAccountList accounts={listRows} primaryCode={primaryCode} />
     </main>
   );
