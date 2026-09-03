@@ -3,10 +3,10 @@ gsd_state_version: 1.0
 current_phase: 4
 current_phase_name: Dated FX
 status: planning
-stopped_at: Phase 4 research complete
-last_updated: "2026-09-03T12:25:00.000Z"
+stopped_at: Phase 4 UI-SPEC draft written
+last_updated: "2026-09-03T12:45:00.000Z"
 last_activity: 2026-09-03
-last_activity_desc: Phase 4 RESEARCH.md written — ready to plan
+last_activity_desc: Phase 4 UI-SPEC.md drafted — ready for UI checker
 state_head: 3f09783
 progress:
   total_phases: 6
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-09-02)
 Phase: 4 — Dated FX
 Plan: Not started
 Status: Ready to plan
-Last activity: 2026-09-03 — Phase 4 research complete (04-RESEARCH.md)
+Last activity: 2026-09-03 — Phase 4 UI-SPEC draft (04-UI-SPEC.md)
 
 Progress: [█████░░░░░] 50%
 
@@ -130,6 +130,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-03T12:14:31.714Z
-Stopped at: Phase 4 research complete
-Resume file: /home/artem/Documents/wallet/.planning/phases/04-dated-fx/04-RESEARCH.md
+Last session: 2026-09-03T12:45:00.000Z
+Stopped at: Phase 4 UI-SPEC draft written
+Resume file: /home/artem/Documents/wallet/.planning/phases/04-dated-fx/04-UI-SPEC.md
