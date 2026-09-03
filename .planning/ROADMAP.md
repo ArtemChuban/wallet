@@ -190,12 +190,12 @@ Plans:
   3. Each chart point uses balance as of that date × FX as of that date (not today’s rate)
   4. Changing today’s FX does not rewrite earlier chart points that used a prior rate
 
-**Plans:** 3 plans
+**Plans:** 1/3 plans executed
 
 Plans:
 **Wave 1**
 
-- [ ] 06-01-PLAN.md — NW series lib + shadcn Chart + NW history on / with shared range
+- [x] 06-01-PLAN.md — NW series lib + shadcn Chart + NW history on / with shared range
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -219,7 +219,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Dated Balance Snapshots | 3/3 | Complete    | 2026-09-03 |
 | 4. Dated FX | 3/3 | Complete    | 2026-09-03 |
 | 5. Net Worth Dashboard | 3/3 | Complete    | 2026-09-03 |
-| 6. Historical Charts | 0/3 | Planned | - |
+| 6. Historical Charts | 1/3 | In Progress|  |
 
 ## Coverage Map
 
