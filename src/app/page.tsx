@@ -94,25 +94,23 @@ export default async function Home() {
   const rowById = new Map(rows.map((row) => [row.accountId, row]));
   const heroAmount = formatMinorToMajor(totalPrimaryMinor, primaryScale);
 
-  const assetRows = accountsRaw
-    .filter((account) => account.type !== "FIAT_CREDIT")
-    .map((account) => {
-      const row = rowById.get(account.id);
-      const nativeMinor = row?.nativeDisplayMinor ?? null;
-      const primaryMinor = row?.primaryDisplayMinor ?? null;
-      return {
-        id: account.id,
-        name: account.name,
-        nativeDisplay:
-          nativeMinor == null
-            ? "—"
-            : `${formatMinorToMajor(nativeMinor, account.currency.scale)} ${account.currencyCode}`,
-        primaryDisplay:
-          primaryMinor == null
-            ? "—"
-            : `${formatMinorToMajor(primaryMinor, primaryScale)} ${primaryCode}`,
-      };
-    });
+  const listRows = accountsRaw.map((account) => {
+    const row = rowById.get(account.id);
+    const nativeMinor = row?.nativeDisplayMinor ?? null;
+    const primaryMinor = row?.primaryDisplayMinor ?? null;
+    return {
+      id: account.id,
+      name: account.name,
+      nativeDisplay:
+        nativeMinor == null
+          ? "—"
+          : `${formatMinorToMajor(nativeMinor, account.currency.scale)} ${account.currencyCode}`,
+      primaryDisplay:
+        primaryMinor == null
+          ? "—"
+          : `${formatMinorToMajor(primaryMinor, primaryScale)} ${primaryCode}`,
+    };
+  });
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-4 py-8 font-sans">
@@ -122,7 +120,7 @@ export default async function Home() {
           {heroAmount} {primaryCode}
         </p>
       </section>
-      <DashboardAccountList accounts={assetRows} />
+      <DashboardAccountList accounts={listRows} primaryCode={primaryCode} />
     </main>
   );
 }
