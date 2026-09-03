@@ -3,16 +3,16 @@ gsd_state_version: 1.0
 current_phase: 06
 current_phase_name: Historical Charts
 status: executing
-stopped_at: Completed 06-01-PLAN.md
-last_updated: "2026-09-03T22:46:46.484Z"
+stopped_at: Completed 06-02-PLAN.md
+last_updated: "2026-09-03T22:54:44.205Z"
 last_activity: 2026-09-04
 last_activity_desc: Completed 06-01 NW history tracer plan
-state_head: d630d32a7b74499f75c9400e012ae0b0d92ab207
+state_head: 2f570a98c0ba185d9e5fdef500c1ba885d57eb52
 progress:
   total_phases: 6
   completed_phases: 5
   total_plans: 21
-  completed_plans: 19
+  completed_plans: 20
   percent: 83
 ---
 
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-09-03)
 ## Current Position
 
 Phase: 06 (Historical Charts) — IN PROGRESS
-Plan: 02 of 03
+Plan: 3 of 03
 Status: Executing — 06-01 complete; next 06-02
 Last activity: 2026-09-04 — Completed 06-01-PLAN.md (NW LOCF chart tracer)
 
@@ -80,6 +80,7 @@ Progress: [████████░░] 83%
 | Phase 05 P02 | 4min | 3 tasks | 3 files |
 | Phase 05-net-worth-dashboard P03 | 7min | 3 tasks | 2 files |
 | Phase 06-historical-charts P01 | 14min | 3 tasks | 11 files |
+| Phase 06-historical-charts P02 | 5min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -132,6 +133,8 @@ Recent decisions affecting current work:
 - [Phase 5]: DB failures stay on / inside mx-auto max-w-3xl shell; no separate readiness route
 - [Phase 06]: Pinned recharts@3.10.1; chart.tsx from official registry after shadcn CLI hang
 - [Phase 06]: RSC serializes chart minors as strings; client rebuilds series on RangePreset
+- [Phase 06]: Moved account list inside DashboardChartsShell for shared RangePreset (D-08)
+- [Phase 06]: Credit rows keep Line path; isCredit reserved for Plan 03 stacked Areas
 
 ### Pending Todos
 
@@ -153,6 +156,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-03T22:46:46.380Z
-Stopped at: Completed 06-01-PLAN.md
+Last session: 2026-09-03T22:54:44.100Z
+Stopped at: Completed 06-02-PLAN.md
 Resume file: None

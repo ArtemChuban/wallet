@@ -36,7 +36,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Charts
 
 - [x] **CHART-01**: User can see historical net-worth chart in primary currency
-- [ ] **CHART-02**: User can see historical balance chart per account
+- [x] **CHART-02**: User can see historical balance chart per account
 - [x] **CHART-03**: Chart points use as-of balance × as-of FX (no rewrite with today’s rate)
 
 ### Platform
@@ -105,7 +105,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | NW-03 | Phase 5 | Complete |
 | ACCT-03 | Phase 5 | Complete |
 | CHART-01 | Phase 6 | Complete |
-| CHART-02 | Phase 6 | Pending |
+| CHART-02 | Phase 6 | Complete |
 | CHART-03 | Phase 6 | Complete |
 
 **Coverage:**
