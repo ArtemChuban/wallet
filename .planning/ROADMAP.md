@@ -14,8 +14,8 @@ Wallet ships as a local Dockerized net-worth tracker: durable SQLite first, then
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Docker + SQLite Foundation** - Runnable container with durable local SQLite (completed 2026-09-02)
-- [ ] **Phase 2: Currencies + Accounts** - Free-form currencies, primary, and typed account CRUD
-- [ ] **Phase 3: Dated Balance Snapshots** - As-of balances with backdating and LOCF reads
+- [x] **Phase 2: Currencies + Accounts** - Free-form currencies, primary, and typed account CRUD (completed 2026-09-03)
+- [x] **Phase 3: Dated Balance Snapshots** - As-of balances with backdating and LOCF reads (completed 2026-09-03)
 - [ ] **Phase 4: Dated FX** - Manual primary ↔ other rates with forward-effective LOCF
 - [ ] **Phase 5: Net Worth Dashboard** - Current NW and per-account native/primary balances
 - [ ] **Phase 6: Historical Charts** - NW and per-account history using as-of balance × as-of FX
@@ -65,7 +65,7 @@ Plans:
   3. User can set a required credit limit on a credit account at create time (outstanding debt deferred to Phase 3 balance snapshots — CONTEXT D-09)
   4. Credit limit is stored as metadata only (never treated as an asset in later NW math)
 
-**Plans:** 5/5 plans executed (1 gap-closure pending)
+**Plans:** 5/5 plans complete
 Plans:
 **Wave 1**
 
@@ -102,7 +102,7 @@ Plans:
   3. User can see each account’s current native balance from its latest applicable snapshot
   4. Days before an account’s first snapshot show no invented zero balance
 
-**Plans:** 3/3 plans executed
+**Plans:** 3/3 plans complete
 Plans:
 **Wave 1**
 
@@ -174,8 +174,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Docker + SQLite Foundation | 4/4 | Complete    | 2026-09-02 |
-| 2. Currencies + Accounts | 5/5 | In Progress|  |
-| 3. Dated Balance Snapshots | 3/3 | In Progress|  |
+| 2. Currencies + Accounts | 5/5 | Complete    | 2026-09-03 |
+| 3. Dated Balance Snapshots | 3/3 | Complete    | 2026-09-03 |
 | 4. Dated FX | 0/TBD | Not started | - |
 | 5. Net Worth Dashboard | 0/TBD | Not started | - |
 | 6. Historical Charts | 0/TBD | Not started | - |

@@ -12,19 +12,18 @@ At any moment, see true net worth (assets minus credit-card debt) in the primary
 
 ### Validated
 
-(None yet — ship to validate)
+- ✓ User can create and manage accounts of types: fiat debit card, fiat credit card, crypto (e.g. USDT), cash — Phase 2
+- ✓ User can define currencies freely (not hardcoded) and pick one primary currency (e.g. RUB) — Phase 2
+- ✓ User can set/update an account balance as of a chosen date (backdating allowed) — Phase 3
+- ✓ Credit-card accounts store credit limit and outstanding debt (debt derived from limit − available) — Phase 3
+- ✓ App runs in Docker; all data persists in local SQLite — Phase 1
 
 ### Active
 
-- [ ] User can create and manage accounts of types: fiat debit card, fiat credit card, crypto (e.g. USDT), cash
-- [ ] User can set/update an account balance as of a chosen date (backdating allowed)
-- [ ] Credit-card accounts store credit limit and outstanding debt; debt subtracts from net worth
-- [ ] User can define currencies freely (not hardcoded) and pick one primary currency (e.g. RUB)
 - [ ] User can set exchange rates primary ↔ other as of a chosen date (manual)
 - [ ] Charts and totals as of a date use the FX rate effective for that date (rate changes apply forward from their date)
 - [ ] User can see current net worth overall and per-account balances
 - [ ] User can see balance history charts per account and overall (in primary currency and originals where relevant)
-- [ ] App runs in Docker; all data persists in local SQLite
 
 ### Out of Scope
 
@@ -78,4 +77,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-02 after initialization*
+*Last updated: 2026-09-03 after Phase 03*
