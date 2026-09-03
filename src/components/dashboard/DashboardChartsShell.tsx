@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 
+import { DashboardRangeControl } from "@/components/dashboard/DashboardRangeControl";
 import { NetWorthHistoryChart } from "@/components/dashboard/NetWorthHistoryChart";
 import { windowStartForPreset, type RangePreset } from "@/lib/dates";
 import {
@@ -76,7 +77,7 @@ export function DashboardChartsShell({
   primaryScale,
   today,
 }: DashboardChartsShellProps) {
-  const [range] = useState<RangePreset>("30d");
+  const [range, setRange] = useState<RangePreset>("30d");
 
   const seriesAccounts = useMemo(() => reviveAccounts(accounts), [accounts]);
   const seriesSnapshots = useMemo(
@@ -109,6 +110,7 @@ export function DashboardChartsShell({
 
   return (
     <section className="flex flex-col">
+      <DashboardRangeControl value={range} onChange={setRange} />
       <NetWorthHistoryChart
         data={points}
         windowStart={windowStart}
