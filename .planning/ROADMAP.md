@@ -120,7 +120,7 @@ Plans:
 
 ### Phase 4: Dated FX
 
-**Goal**: User can maintain dated exchange rates so multi-currency amounts convert honestly as of any date
+**Goal:** As a local Wallet user, I want to maintain dated exchange rates between the primary currency and other currencies, so that multi-currency amounts convert honestly as of any date.
 **Mode:** mvp
 **Depends on**: Phase 3
 **Requirements**: FX-01, FX-02
@@ -131,7 +131,20 @@ Plans:
   3. User cannot create FX pairs that are not primary ↔ other
   4. Rate changes apply forward from their date without rewriting earlier as-of conversions
 
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+**Wave 1**
+
+- [ ] 04-01-PLAN.md — FxRate schema + LOCF helpers + Zod + migrate deploy
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 04-02-PLAN.md — Currencies tabs + SetRateDialog + LOCF rates list
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 04-03-PLAN.md — Rate history expand/delete + Russian UI human smoke
+
 **UI hint**: yes
 
 ### Phase 5: Net Worth Dashboard
@@ -176,7 +189,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Docker + SQLite Foundation | 4/4 | Complete    | 2026-09-02 |
 | 2. Currencies + Accounts | 5/5 | Complete    | 2026-09-03 |
 | 3. Dated Balance Snapshots | 3/3 | Complete    | 2026-09-03 |
-| 4. Dated FX | 0/TBD | Not started | - |
+| 4. Dated FX | 0/3 | Planned | - |
 | 5. Net Worth Dashboard | 0/TBD | Not started | - |
 | 6. Historical Charts | 0/TBD | Not started | - |
 
