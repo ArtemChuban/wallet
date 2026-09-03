@@ -114,7 +114,7 @@ Each task was committed atomically:
 3. **Task 2 GREEN: FIAT_CREDIT available 0..limit** - `4f06b52` (feat)
 4. **Task 3: Set-balance pending UX + Russian error copy smoke** - `ab42d2d` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `e92bb54` (docs: complete plan)
 
 ## Files Created/Modified
 
