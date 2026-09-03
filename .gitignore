@@ -53,3 +53,6 @@ src/generated/
 
 # GSD runtime / dispatch isolation sentinel
 .gsd/
+
+# GSD research fetch cache
+.planning/research/.cache/
