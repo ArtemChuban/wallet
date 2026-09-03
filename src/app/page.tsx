@@ -1,4 +1,5 @@
 import { DashboardAccountList } from "@/components/dashboard/DashboardAccountList";
+import { DashboardChartsShell } from "@/components/dashboard/DashboardChartsShell";
 import { calendarDateToday } from "@/lib/balances";
 import { ensureSqlitePragmas, prisma } from "@/lib/db";
 import { formatMinorToMajor } from "@/lib/money";
@@ -153,6 +154,33 @@ export default async function Home() {
               «Курсы».
             </p>
           </div>
+        ) : null}
+        {hasAccounts ? (
+          <DashboardChartsShell
+            accounts={accounts.map((account) => ({
+              id: account.id,
+              type: account.type,
+              currencyCode: account.currencyCode,
+              currencyScale: account.currency.scale,
+              isPrimaryCurrency: account.currency.isPrimary,
+              creditLimitMinor:
+                account.creditLimitMinor == null
+                  ? null
+                  : account.creditLimitMinor.toString(),
+            }))}
+            snapshots={snapshotsLteToday.map((snap) => ({
+              accountId: snap.accountId,
+              asOfDate: snap.asOfDate,
+              amountMinor: snap.amountMinor.toString(),
+            }))}
+            rates={ratesLteToday.map((rate) => ({
+              currencyCode: rate.currencyCode,
+              asOfDate: rate.asOfDate,
+              rateToPrimaryScaled: rate.rateToPrimaryScaled.toString(),
+            }))}
+            primaryScale={primaryScale}
+            today={today}
+          />
         ) : null}
         <DashboardAccountList accounts={listRows} primaryCode={primaryCode} />
       </main>

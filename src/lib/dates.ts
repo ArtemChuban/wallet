@@ -2,11 +2,54 @@
  * Calendar date display helpers (UI-SPEC: DD.MM.YYYY display, YYYY-MM-DD wire).
  */
 
+export type RangePreset = "30d" | "90d" | "1y" | "all";
+
 /** YYYY-MM-DD → DD.MM.YYYY */
 export function formatAsOfDisplay(iso: string): string {
   const [y, m, d] = iso.split("-");
   if (!y || !m || !d) return iso;
   return `${d}.${m}.${y}`;
+}
+
+/**
+ * Add (or subtract) whole calendar days to a YYYY-MM-DD string using UTC math.
+ * Avoids local-TZ drift when shifting window starts.
+ */
+export function addCalendarDays(iso: string, days: number): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  if (!y || !m || !d) {
+    throw new Error(`invalid ISO date: ${iso}`);
+  }
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  dt.setUTCDate(dt.getUTCDate() + days);
+  const yy = dt.getUTCFullYear();
+  const mm = String(dt.getUTCMonth() + 1).padStart(2, "0");
+  const dd = String(dt.getUTCDate()).padStart(2, "0");
+  return `${yy}-${mm}-${dd}`;
+}
+
+/**
+ * Inclusive window start for a range preset, or null for "all".
+ * 1y = 365 calendar days before today (RESEARCH A4).
+ */
+export function windowStartForPreset(
+  preset: RangePreset,
+  today: string,
+): string | null {
+  switch (preset) {
+    case "30d":
+      return addCalendarDays(today, -30);
+    case "90d":
+      return addCalendarDays(today, -90);
+    case "1y":
+      return addCalendarDays(today, -365);
+    case "all":
+      return null;
+    default: {
+      const _exhaustive: never = preset;
+      throw new Error(`unknown preset: ${_exhaustive}`);
+    }
+  }
 }
 
 /**
