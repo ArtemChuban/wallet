@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { RATE_SCALE_E8 } from "@/lib/money";
 import {
+  buildAccountSeries,
   buildNetWorthSeries,
   type NetWorthSeriesPoint,
   type SeriesAccount,
@@ -218,5 +219,183 @@ describe("buildNetWorthSeries (CHART-01/CHART-03)", () => {
         today: "2026-01-31",
       }),
     ).toEqual([]);
+  });
+});
+
+describe("buildAccountSeries (CHART-02/CHART-03)", () => {
+  it("native mode events = account snapshots ∪ today with native majors", () => {
+    const account = usdDebit(1);
+    const snapshots: SeriesSnapshot[] = [
+      { accountId: 1, asOfDate: "2026-01-01", amountMinor: 10_000n },
+      { accountId: 1, asOfDate: "2026-01-20", amountMinor: 20_000n },
+      { accountId: 2, asOfDate: "2026-01-15", amountMinor: 99_999n },
+    ];
+    const rates: SeriesRate[] = [
+      {
+        currencyCode: "USD",
+        asOfDate: "2026-01-10",
+        rateToPrimaryScaled: 50n * RATE_SCALE_E8,
+      },
+    ];
+
+    const points = buildAccountSeries({
+      account,
+      snapshots,
+      rates,
+      primaryScale: 2,
+      preset: "all",
+      today: "2026-01-31",
+      mode: "native",
+    });
+
+    // Native: snapshots for this account ∪ today — FX date 01-10 not included
+    expect(points.map((p) => p.asOfDate)).toEqual([
+      "2026-01-01",
+      "2026-01-20",
+      "2026-01-31",
+    ]);
+    expect(points[0]!.valueMinor).toBe(10_000n);
+    expect(points[0]!.value).toBe(100);
+    expect(points[1]!.valueMinor).toBe(20_000n);
+    expect(points[1]!.value).toBe(200);
+    expect(points[2]!.valueMinor).toBe(20_000n);
+  });
+
+  it("primary mode converts with as-of FX and unions FX event dates", () => {
+    const account = usdDebit(1);
+    const snapshots: SeriesSnapshot[] = [
+      { accountId: 1, asOfDate: "2026-01-01", amountMinor: 10_000n },
+    ];
+    const rates: SeriesRate[] = [
+      {
+        currencyCode: "USD",
+        asOfDate: "2026-01-01",
+        rateToPrimaryScaled: 50n * RATE_SCALE_E8,
+      },
+      {
+        currencyCode: "USD",
+        asOfDate: "2026-01-20",
+        rateToPrimaryScaled: 60n * RATE_SCALE_E8,
+      },
+    ];
+
+    const points = buildAccountSeries({
+      account,
+      snapshots,
+      rates,
+      primaryScale: 2,
+      preset: "all",
+      today: "2026-01-31",
+      mode: "primary",
+    });
+
+    expect(points.map((p) => p.asOfDate)).toEqual([
+      "2026-01-01",
+      "2026-01-20",
+      "2026-01-31",
+    ]);
+    expect(points[0]!.valueMinor).toBe(500_000n);
+    expect(points[1]!.valueMinor).toBe(600_000n);
+    expect(points[2]!.valueMinor).toBe(600_000n);
+  });
+
+  it("primary mode skips dates with null LOCF FX (D-16); native still includes", () => {
+    const account = usdDebit(1);
+    const snapshots: SeriesSnapshot[] = [
+      { accountId: 1, asOfDate: "2026-01-01", amountMinor: 10_000n },
+      { accountId: 1, asOfDate: "2026-01-15", amountMinor: 10_000n },
+    ];
+    // FX starts only on 01-20 — earlier balance events have null FX
+    const rates: SeriesRate[] = [
+      {
+        currencyCode: "USD",
+        asOfDate: "2026-01-20",
+        rateToPrimaryScaled: 50n * RATE_SCALE_E8,
+      },
+    ];
+
+    const native = buildAccountSeries({
+      account,
+      snapshots,
+      rates,
+      primaryScale: 2,
+      preset: "all",
+      today: "2026-01-31",
+      mode: "native",
+    });
+    expect(native.map((p) => p.asOfDate)).toEqual([
+      "2026-01-01",
+      "2026-01-15",
+      "2026-01-31",
+    ]);
+
+    const primary = buildAccountSeries({
+      account,
+      snapshots,
+      rates,
+      primaryScale: 2,
+      preset: "all",
+      today: "2026-01-31",
+      mode: "primary",
+    });
+    // 01-01 and 01-15 skipped (null FX); 01-20 FX event + today remain
+    expect(primary.map((p) => p.asOfDate)).toEqual([
+      "2026-01-20",
+      "2026-01-31",
+    ]);
+    expect(primary[0]!.valueMinor).toBe(500_000n);
+  });
+
+  it("primary-currency account primary mode equals native without FxRate", () => {
+    const account = primaryDebit(1);
+    const snapshots: SeriesSnapshot[] = [
+      { accountId: 1, asOfDate: "2026-01-01", amountMinor: 123_45n },
+    ];
+
+    const native = buildAccountSeries({
+      account,
+      snapshots,
+      rates: [],
+      primaryScale: 2,
+      preset: "all",
+      today: "2026-01-10",
+      mode: "native",
+    });
+    const primary = buildAccountSeries({
+      account,
+      snapshots,
+      rates: [],
+      primaryScale: 2,
+      preset: "all",
+      today: "2026-01-10",
+      mode: "primary",
+    });
+
+    expect(primary).toEqual(native);
+    expect(primary[0]!.valueMinor).toBe(123_45n);
+    expect(primary[0]!.value).toBe(123.45);
+  });
+
+  it("window filter matches buildNetWorthSeries via windowStartForPreset", () => {
+    const account = primaryDebit(1);
+    const snapshots: SeriesSnapshot[] = [
+      { accountId: 1, asOfDate: "2025-06-01", amountMinor: 10_000n },
+      { accountId: 1, asOfDate: "2026-01-01", amountMinor: 20_000n },
+      { accountId: 1, asOfDate: "2026-02-01", amountMinor: 30_000n },
+    ];
+    const today = "2026-03-03";
+
+    const windowed = buildAccountSeries({
+      account,
+      snapshots,
+      rates: [],
+      primaryScale: 2,
+      preset: "30d",
+      today,
+      mode: "native",
+    });
+    expect(windowed.some((p) => p.asOfDate === "2026-01-01")).toBe(false);
+    expect(windowed.some((p) => p.asOfDate === "2026-02-01")).toBe(true);
+    expect(windowed.some((p) => p.asOfDate === today)).toBe(true);
   });
 });
