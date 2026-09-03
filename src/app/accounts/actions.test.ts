@@ -14,28 +14,44 @@ vi.mock("@/lib/db", () => ({
     currency: {
       findUnique: vi.fn(),
     },
+    balanceSnapshot: {
+      upsert: vi.fn(),
+    },
   },
   ensureSqlitePragmas: vi.fn(),
+}));
+
+vi.mock("@/lib/balances", () => ({
+  calendarDateToday: vi.fn(() => "2026-09-03"),
 }));
 
 vi.mock("@/lib/money", () => ({
   parseMajorToMinor: vi.fn((major: string) => {
     const n = Number(major);
-    if (!Number.isFinite(n) || n <= 0) throw new Error("bad major");
+    if (!Number.isFinite(n) || n < 0) throw new Error("bad major");
     return BigInt(Math.round(n * 100));
   }),
 }));
 
 import { revalidatePath } from "next/cache";
+import { calendarDateToday } from "@/lib/balances";
 import { ensureSqlitePragmas, prisma } from "@/lib/db";
 import * as accountActions from "./actions";
-import { createAccount, updateAccountName } from "./actions";
+import {
+  createAccount,
+  updateAccountName,
+  upsertBalanceSnapshot,
+} from "./actions";
 
 describe("accounts/actions exports (D-14 / T-02-10)", () => {
-  it("exports create/update helpers only — no removal symbols", () => {
+  it("exports create/update/upsert helpers — no account-removal symbols", () => {
     const names = Object.keys(accountActions);
     expect(names).toEqual(
-      expect.arrayContaining(["createAccount", "updateAccountName"]),
+      expect.arrayContaining([
+        "createAccount",
+        "updateAccountName",
+        "upsertBalanceSnapshot",
+      ]),
     );
     for (const forbidden of [
       "deleteAccount",
@@ -131,5 +147,58 @@ describe("createAccount types (ACCT-01)", () => {
         creditLimitMinor: 100000n,
       },
     });
+  });
+});
+
+describe("upsertBalanceSnapshot (BAL-01 / D-09 / D-12)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+    vi.mocked(calendarDateToday).mockReturnValue("2026-09-03");
+    vi.mocked(prisma.account.findUnique).mockResolvedValue({
+      id: 1,
+      name: "Дебет",
+      type: "FIAT_DEBIT",
+      currencyCode: "RUB",
+      creditLimitMinor: null,
+      currency: { code: "RUB", name: "Рубль", scale: 2, isPrimary: true },
+    } as never);
+    vi.mocked(prisma.balanceSnapshot.upsert).mockResolvedValue({} as never);
+  });
+
+  it("rejects future asOfDate with Russian message (D-12 / T-03-01)", async () => {
+    const formData = new FormData();
+    formData.set("accountId", "1");
+    formData.set("amountMajor", "100");
+    formData.set("asOfDate", "2026-09-04");
+
+    const result = await upsertBalanceSnapshot({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.errors?.asOfDate).toEqual(["Дата не может быть в будущем"]);
+    expect(prisma.balanceSnapshot.upsert).not.toHaveBeenCalled();
+  });
+
+  it("upserts on accountId_asOfDate and revalidates (D-09)", async () => {
+    const formData = new FormData();
+    formData.set("accountId", "1");
+    formData.set("amountMajor", "250.50");
+    formData.set("asOfDate", "2026-09-01");
+
+    const result = await upsertBalanceSnapshot({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.balanceSnapshot.upsert).toHaveBeenCalledWith({
+      where: {
+        accountId_asOfDate: { accountId: 1, asOfDate: "2026-09-01" },
+      },
+      update: { amountMinor: 25050n },
+      create: {
+        accountId: 1,
+        asOfDate: "2026-09-01",
+        amountMinor: 25050n,
+      },
+    });
+    expect(revalidatePath).toHaveBeenCalledWith("/accounts");
   });
 });

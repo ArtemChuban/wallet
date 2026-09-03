@@ -2,12 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 import { Prisma } from "@/generated/prisma/client";
+import { calendarDateToday } from "@/lib/balances";
 import { ensureSqlitePragmas, prisma } from "@/lib/db";
 import { parseMajorToMinor } from "@/lib/money";
 import {
   createAccountSchema,
   updateAccountNameSchema,
 } from "@/lib/validations/account";
+import { setBalanceSchema } from "@/lib/validations/balance";
 
 export type AccountActionState = {
   errors?: {
@@ -15,6 +17,16 @@ export type AccountActionState = {
     type?: string[];
     currencyCode?: string[];
     creditLimitMajor?: string[];
+  };
+  message?: string;
+  success?: boolean;
+};
+
+export type BalanceActionState = {
+  errors?: {
+    accountId?: string[];
+    amountMajor?: string[];
+    asOfDate?: string[];
   };
   message?: string;
   success?: boolean;
@@ -154,6 +166,82 @@ export async function updateAccountName(
     if (isUniqueNameViolation(error)) {
       return { errors: { name: ["Счёт с таким названием уже есть"] } };
     }
+    return {
+      message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/accounts");
+  return { success: true, message: "Сохранено" };
+}
+
+/** Upsert dated balance snapshot (BAL-01); LOCF read on list (BAL-02). */
+export async function upsertBalanceSnapshot(
+  _prev: BalanceActionState,
+  formData: FormData,
+): Promise<BalanceActionState> {
+  const validated = setBalanceSchema.safeParse({
+    accountId: formData.get("accountId"),
+    amountMajor: formData.get("amountMajor"),
+    asOfDate: formData.get("asOfDate"),
+  });
+
+  if (!validated.success) {
+    return { errors: validated.error.flatten().fieldErrors };
+  }
+
+  const { accountId, amountMajor, asOfDate } = validated.data;
+  const today = calendarDateToday();
+  if (asOfDate > today) {
+    return {
+      errors: { asOfDate: ["Дата не может быть в будущем"] },
+    };
+  }
+
+  try {
+    await ensureSqlitePragmas();
+
+    const account = await prisma.account.findUnique({
+      where: { id: accountId },
+      include: { currency: true },
+    });
+    if (!account) {
+      return {
+        message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+      };
+    }
+
+    if (fracDigitCount(amountMajor) > account.currency.scale) {
+      return {
+        errors: {
+          amountMajor: [
+            `Не больше ${account.currency.scale} знаков после запятой`,
+          ],
+        },
+      };
+    }
+
+    let amountMinor: bigint;
+    try {
+      amountMinor = parseMajorToMinor(amountMajor, account.currency.scale);
+    } catch (err) {
+      const msg =
+        err instanceof Error && err.message === "too many fractional digits"
+          ? `Не больше ${account.currency.scale} знаков после запятой`
+          : "Некорректная сумма";
+      return { errors: { amountMajor: [msg] } };
+    }
+
+    if (amountMinor < 0n) {
+      return { errors: { amountMajor: ["Введите корректную сумму"] } };
+    }
+
+    await prisma.balanceSnapshot.upsert({
+      where: { accountId_asOfDate: { accountId, asOfDate } },
+      update: { amountMinor },
+      create: { accountId, asOfDate, amountMinor },
+    });
+  } catch {
     return {
       message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
     };

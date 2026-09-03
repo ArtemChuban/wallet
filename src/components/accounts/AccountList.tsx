@@ -1,4 +1,7 @@
 import { AccountFormDialog } from "@/components/accounts/AccountFormDialog";
+import { SetBalanceDialog } from "@/components/accounts/SetBalanceDialog";
+import { Button } from "@/components/ui/button";
+import { creditDebtMinor } from "@/lib/balances";
 import { formatMinorToMajor } from "@/lib/money";
 
 export type AccountCurrencyOption = {
@@ -15,6 +18,8 @@ export type AccountListItem = {
   /** Serialized BigInt for RSC→client props (never treat as NW asset). */
   creditLimitMinor: string | null;
   currency: { code: string; name: string; scale: number };
+  /** LOCF as of today; null before first snapshot (BAL-02). */
+  locf: { asOfDate: string; amountMinor: string } | null;
 };
 
 const TYPE_LABELS: Record<AccountListItem["type"], string> = {
@@ -24,12 +29,69 @@ const TYPE_LABELS: Record<AccountListItem["type"], string> = {
   CASH: "Наличные",
 };
 
+/** YYYY-MM-DD → DD.MM.YYYY for LOCF meta line. */
+function formatAsOfDisplay(iso: string): string {
+  const [y, m, d] = iso.split("-");
+  if (!y || !m || !d) return iso;
+  return `${d}.${m}.${y}`;
+}
+
+function LocfDisplay({ account }: { account: AccountListItem }) {
+  if (!account.locf) return null;
+
+  const amount = formatMinorToMajor(
+    BigInt(account.locf.amountMinor),
+    account.currency.scale,
+  );
+  const asOf = formatAsOfDisplay(account.locf.asOfDate);
+  const code = account.currencyCode;
+
+  if (
+    account.type === "FIAT_CREDIT" &&
+    account.creditLimitMinor != null
+  ) {
+    const available = amount;
+    const debt = formatMinorToMajor(
+      creditDebtMinor(
+        BigInt(account.creditLimitMinor),
+        BigInt(account.locf.amountMinor),
+      ),
+      account.currency.scale,
+    );
+    return (
+      <p className="mt-1 font-mono text-sm text-foreground">
+        <span>
+          доступно {available} {code}
+        </span>
+        <span className="mx-2 text-muted-foreground">·</span>
+        <span className="text-muted-foreground">
+          долг {debt} {code}
+        </span>
+        <span className="mx-2 text-muted-foreground">·</span>
+        <span className="text-muted-foreground">на {asOf}</span>
+      </p>
+    );
+  }
+
+  return (
+    <p className="mt-1 font-mono text-sm text-foreground">
+      <span>
+        {amount} {code}
+      </span>
+      <span className="mx-2 text-muted-foreground">·</span>
+      <span className="text-muted-foreground">на {asOf}</span>
+    </p>
+  );
+}
+
 export function AccountList({
   accounts,
   currencies,
+  today,
 }: {
   accounts: AccountListItem[];
   currencies: AccountCurrencyOption[];
+  today: string;
 }) {
   if (accounts.length === 0) {
     return (
@@ -77,12 +139,36 @@ export function AccountList({
                   </>
                 ) : null}
               </p>
+              <LocfDisplay account={account} />
             </div>
-            <AccountFormDialog
-              mode="edit"
-              account={account}
-              currencies={currencies}
-            />
+            <div className="flex shrink-0 items-center gap-2">
+              {account.locf == null ? (
+                <SetBalanceDialog
+                  account={account}
+                  today={today}
+                  variant="first"
+                  trigger={
+                    <Button type="button">Задать первый баланс</Button>
+                  }
+                />
+              ) : (
+                <SetBalanceDialog
+                  account={account}
+                  today={today}
+                  variant="secondary"
+                  trigger={
+                    <Button type="button" variant="outline">
+                      Задать баланс
+                    </Button>
+                  }
+                />
+              )}
+              <AccountFormDialog
+                mode="edit"
+                account={account}
+                currencies={currencies}
+              />
+            </div>
           </li>
         );
       })}
