@@ -3,16 +3,16 @@ gsd_state_version: 1.0
 current_phase: 06
 current_phase_name: Historical Charts
 status: executing
-stopped_at: Completed 06-02-PLAN.md
-last_updated: "2026-09-03T22:54:44.205Z"
+stopped_at: Completed 06-03-PLAN.md
+last_updated: "2026-09-03T23:24:34.593Z"
 last_activity: 2026-09-04
-last_activity_desc: Completed 06-01 NW history tracer plan
-state_head: 2f570a98c0ba185d9e5fdef500c1ba885d57eb52
+last_activity_desc: Completed 06-02 account expand charts plan
+state_head: 3d62f4e7fd9c6bc257bb94c097c760251c5e92b3
 progress:
   total_phases: 6
   completed_phases: 5
   total_plans: 21
-  completed_plans: 20
+  completed_plans: 21
   percent: 83
 ---
 
@@ -29,8 +29,8 @@ See: .planning/PROJECT.md (updated 2026-09-03)
 
 Phase: 06 (Historical Charts) — IN PROGRESS
 Plan: 3 of 03
-Status: Executing — 06-01 complete; next 06-02
-Last activity: 2026-09-04 — Completed 06-01-PLAN.md (NW LOCF chart tracer)
+Status: Executing — 06-02 complete; next 06-03
+Last activity: 2026-09-04 — Completed 06-02-PLAN.md (account expand charts)
 
 Progress: [████████░░] 83%
 
@@ -81,6 +81,7 @@ Progress: [████████░░] 83%
 | Phase 05-net-worth-dashboard P03 | 7min | 3 tasks | 2 files |
 | Phase 06-historical-charts P01 | 14min | 3 tasks | 11 files |
 | Phase 06-historical-charts P02 | 5min | 3 tasks | 6 files |
+| Phase 06 P03 | 1min | 3 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -135,6 +136,9 @@ Recent decisions affecting current work:
 - [Phase 06]: RSC serializes chart minors as strings; client rebuilds series on RangePreset
 - [Phase 06]: Moved account list inside DashboardChartsShell for shared RangePreset (D-08)
 - [Phase 06]: Credit rows keep Line path; isCredit reserved for Plan 03 stacked Areas
+- [Phase 06]: Credit stack from creditDebtMinor+available LOCF, not NW contribution
+- [Phase 06]: Human-verify 06-03 Task 3 PASSED: approved RU UI charts on /
+- [Phase 06]: Post-checkpoint: client-safe money/dates, db:seed, NW stacked by account
 
 ### Pending Todos
 
@@ -156,6 +160,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-03T22:54:44.100Z
-Stopped at: Completed 06-02-PLAN.md
+Last session: 2026-09-03T23:24:34.440Z
+Stopped at: Completed 06-03-PLAN.md
 Resume file: None
