@@ -512,22 +512,19 @@ Russian positivity error (discretion wording): `"Курс должен быть 
 
 **If this table is empty:** N/A — assumptions listed for planner/human confirmation where noted.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Exact Russian chrome for direction toggle**
+1. **Exact Russian chrome for direction toggle** — **RESOLVED**
    - What we know: Default «1 other = N primary»; storage column fixed (D-05/D-06).
-   - What's unclear: Precise labels (e.g. `1 USD = N RUB` vs generic wording).
-   - Recommendation: Show selected code + primary code in toggle labels; UI-SPEC / discretion in plan.
+   - Answer: Code-labeled toggle per UI-SPEC / Plan 02: `1 {OTHER} = N {PRIMARY}` / `1 {PRIMARY} = N {OTHER}` (placeholders until Select chosen); two Button states, no ToggleGroup package.
 
-2. **Convert helper placement**
+2. **Convert helper placement** — **RESOLVED**
    - What we know: D-17 requires unit-tested convert math without rates-tab calculator.
-   - What's unclear: `money.ts` vs `fx.ts`.
-   - Recommendation: LOCF in `fx.ts`; parse/format/invert next to `RATE_SCALE_E8` in `money.ts`; convert in `fx.ts` importing money.
+   - Answer: LOCF (`getRateAsOf`) + `convertOtherMinorToPrimaryMinor` in `fx.ts`; parse/format/invert (`parseRateToScaled`, `formatRateScaled`, `invertRateScaled`) next to `RATE_SCALE_E8` in `money.ts` (Plan 01).
 
-3. **A3 major-unit semantics**
+3. **A3 major-unit semantics** — **RESOLVED**
    - What we know: Stub comment `primary_units_per_1_other * 10^8` `[VERIFIED: prisma/schema.prisma:46]`.
-   - What's unclear: Whether “units” means major or minor.
-   - Recommendation: Treat as **major** (1 USD = 90.00 RUB → store `90 * 10^8`); encode convert formula accordingly; Wave 0 test with scale-2/scale-2 example.
+   - Answer: Major units × 10⁸ — `rateToPrimaryScaled` = primary major per 1 other major × 10⁸ (e.g. 1 USD = 90.00 RUB → store `90 * 10^8`); convert formula and Wave 0 tests use that semantics (Plan 01).
 
 ## Environment Availability
 
