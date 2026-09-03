@@ -48,6 +48,14 @@ function formatAsOfDisplay(iso: string): string {
   return `${d}.${m}.${y}`;
 }
 
+/** Client-safe copy of balances.creditDebtMinor (no Prisma import). */
+function creditDebtMinor(
+  creditLimitMinor: bigint,
+  availableMinor: bigint,
+): bigint {
+  return creditLimitMinor - availableMinor;
+}
+
 function LocfDisplay({ account }: { account: AccountListItem }) {
   if (!account.locf) return null;
 
