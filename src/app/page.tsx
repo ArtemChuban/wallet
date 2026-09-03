@@ -96,19 +96,35 @@ export default async function Home() {
 
   const listRows = accountsRaw.map((account) => {
     const row = rowById.get(account.id);
+    const excludeReason = row?.excludeReason ?? "no_balance";
+    const isCredit = account.type === "FIAT_CREDIT";
     const nativeMinor = row?.nativeDisplayMinor ?? null;
+    const debtNativeMinor = row?.debtNativeMinor ?? null;
     const primaryMinor = row?.primaryDisplayMinor ?? null;
+    const scale = account.currency.scale;
+    const code = account.currencyCode;
+
+    const nativeDisplay =
+      nativeMinor == null
+        ? "—"
+        : `${formatMinorToMajor(nativeMinor, scale)} ${code}`;
+    const debtNativeDisplay =
+      debtNativeMinor == null
+        ? null
+        : `${formatMinorToMajor(debtNativeMinor, scale)} ${code}`;
+    const primaryDisplay =
+      primaryMinor == null
+        ? "—"
+        : `${formatMinorToMajor(primaryMinor, primaryScale)} ${primaryCode}`;
+
     return {
       id: account.id,
       name: account.name,
-      nativeDisplay:
-        nativeMinor == null
-          ? "—"
-          : `${formatMinorToMajor(nativeMinor, account.currency.scale)} ${account.currencyCode}`,
-      primaryDisplay:
-        primaryMinor == null
-          ? "—"
-          : `${formatMinorToMajor(primaryMinor, primaryScale)} ${primaryCode}`,
+      nativeDisplay,
+      primaryDisplay,
+      excludeReason,
+      isCredit,
+      debtNativeDisplay,
     };
   });
 

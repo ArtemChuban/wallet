@@ -48,6 +48,55 @@ describe("computeNetWorthRows (NW-01–03, ACCT-03)", () => {
     expect(rows[0]!.primaryDisplayMinor).toBe(200_000n);
   });
 
+  it("increasing available decreases debt and makes total less negative", () => {
+    const lowAvailable = computeNetWorthRows([
+      input({
+        id: 20,
+        type: "FIAT_CREDIT",
+        creditLimitMinor: 500_000n,
+        locfAmountMinor: 200_000n,
+      }),
+    ]);
+    const highAvailable = computeNetWorthRows([
+      input({
+        id: 21,
+        type: "FIAT_CREDIT",
+        creditLimitMinor: 500_000n,
+        locfAmountMinor: 400_000n,
+      }),
+    ]);
+    expect(lowAvailable.rows[0]!.debtNativeMinor).toBe(300_000n);
+    expect(highAvailable.rows[0]!.debtNativeMinor).toBe(100_000n);
+    expect(highAvailable.totalPrimaryMinor).toBeGreaterThan(
+      lowAvailable.totalPrimaryMinor,
+    );
+    expect(highAvailable.totalPrimaryMinor).toBe(-100_000n);
+  });
+
+  it("increasing credit limit alone does not inflate hero with available", () => {
+    const base = computeNetWorthRows([
+      input({
+        id: 22,
+        type: "FIAT_CREDIT",
+        creditLimitMinor: 500_000n,
+        locfAmountMinor: 300_000n,
+      }),
+    ]);
+    const higherLimit = computeNetWorthRows([
+      input({
+        id: 23,
+        type: "FIAT_CREDIT",
+        creditLimitMinor: 800_000n,
+        locfAmountMinor: 300_000n,
+      }),
+    ]);
+    // Higher limit with same available ⇒ more debt (more negative), never +available as asset
+    expect(base.totalPrimaryMinor).toBe(-200_000n);
+    expect(higherLimit.totalPrimaryMinor).toBe(-500_000n);
+    expect(higherLimit.rows[0]!.nativeDisplayMinor).toBe(300_000n);
+    expect(higherLimit.rows[0]!.contributionPrimaryMinor).toBeLessThan(0n);
+  });
+
   it("excludes account without LOCF with excludeReason no_balance", () => {
     const { rows, totalPrimaryMinor, isPartial } = computeNetWorthRows([
       input({
