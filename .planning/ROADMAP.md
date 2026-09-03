@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Docker + SQLite Foundation** - Runnable container with durable local SQLite (completed 2026-09-02)
 - [x] **Phase 2: Currencies + Accounts** - Free-form currencies, primary, and typed account CRUD (completed 2026-09-03)
 - [x] **Phase 3: Dated Balance Snapshots** - As-of balances with backdating and LOCF reads (completed 2026-09-03)
-- [ ] **Phase 4: Dated FX** - Manual primary ↔ other rates with forward-effective LOCF
+- [x] **Phase 4: Dated FX** - Manual primary ↔ other rates with forward-effective LOCF (completed 2026-09-03)
 - [ ] **Phase 5: Net Worth Dashboard** - Current NW and per-account native/primary balances
 - [ ] **Phase 6: Historical Charts** - NW and per-account history using as-of balance × as-of FX
 
@@ -131,7 +131,7 @@ Plans:
   3. User cannot create FX pairs that are not primary ↔ other
   4. Rate changes apply forward from their date without rewriting earlier as-of conversions
 
-**Plans:** 3/3 plans executed
+**Plans:** 3/3 plans complete
 Plans:
 **Wave 1**
 
@@ -189,7 +189,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Docker + SQLite Foundation | 4/4 | Complete    | 2026-09-02 |
 | 2. Currencies + Accounts | 5/5 | Complete    | 2026-09-03 |
 | 3. Dated Balance Snapshots | 3/3 | Complete    | 2026-09-03 |
-| 4. Dated FX | 3/3 | In Progress|  |
+| 4. Dated FX | 3/3 | Complete    | 2026-09-03 |
 | 5. Net Worth Dashboard | 0/TBD | Not started | - |
 | 6. Historical Charts | 0/TBD | Not started | - |
 
