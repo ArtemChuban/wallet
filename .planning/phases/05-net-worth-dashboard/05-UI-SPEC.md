@@ -1,7 +1,7 @@
 ---
 phase: "05"
 slug: net-worth-dashboard
-status: draft
+status: approved
 shadcn_initialized: true
 preset: "b2fA (base-nova / neutral / geist / lucide)"
 created: "2026-09-03"

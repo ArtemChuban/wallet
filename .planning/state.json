@@ -21,7 +21,7 @@
     {
       "number": "4",
       "name": "Dated FX",
-      "status": "pending"
+      "status": "complete"
     },
     {
       "number": "5",
@@ -35,9 +35,9 @@
     }
   ],
   "next": {
-    "command": "/gsd:progress --next",
-    "label": "Advance to the next step (plan phase 4)",
-    "reason": "Phase 4 of 6 — needs a plan"
+    "command": "/gsd-progress --next",
+    "label": "Advance to the next step",
+    "reason": "Phase 5 of 6 · 67% · executing"
   },
-  "updated_at": "2026-09-03T11:53:44.804Z"
+  "updated_at": "2026-09-03T16:11:02.064Z"
 }
