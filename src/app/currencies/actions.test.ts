@@ -229,4 +229,20 @@ describe("upsertFxRate (FX-01 / D-05–D-11 / T-04-01)", () => {
     expect(upsertCall.update.rateToPrimaryScaled).toBe(1111111n);
     expect(upsertCall.create.rateToPrimaryScaled).toBe(1111111n);
   });
+
+  it("defaults direction to toPrimary when FormData omits direction (D-06)", async () => {
+    const formData = new FormData();
+    formData.set("currencyCode", "USD");
+    formData.set("rateMajor", "90");
+    formData.set("asOfDate", "2026-09-03");
+
+    const result = await upsertFxRate({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.fxRate.upsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        update: { rateToPrimaryScaled: 9000000000n },
+      }),
+    );
+  });
 });

@@ -35,6 +35,7 @@ describe("SetRateDialog formKey + date contract (FX-01)", () => {
     expect(dialogSrc).toMatch(/fromPrimary/);
     expect(dialogSrc).toMatch(/Направление/);
     expect(dialogSrc).toMatch(/name=["']direction["']/);
+    expect(dialogSrc).toMatch(/setDirection\]\s*=\s*useState[\s\S]*"toPrimary"/);
   });
 
   it("shows catch-all Russian form error message", () => {
