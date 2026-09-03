@@ -119,6 +119,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-03T09:05:00.000Z
-Stopped at: Phase 02 SECURITY.md verified (threats_open: 0)
+Last session: 2026-09-03T11:10:00.000Z
+Stopped at: Phase 02 Nyquist-validated (nyquist_compliant: true)
 Resume file: None
