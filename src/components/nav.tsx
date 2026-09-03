@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 const links = [
   { href: "/", label: "Готовность" },
-  { href: "/currencies", label: "Валюты" },
+  { href: "/currencies/rates", label: "Валюты" },
   { href: "/accounts", label: "Счета" },
 ] as const;
 
@@ -23,7 +23,10 @@ export function Nav() {
           const active =
             href === "/"
               ? pathname === "/"
-              : pathname === href || pathname.startsWith(`${href}/`);
+              : href === "/currencies/rates"
+                ? pathname === "/currencies" ||
+                  pathname.startsWith("/currencies/")
+                : pathname === href || pathname.startsWith(`${href}/`);
           return (
             <li key={href}>
               <Link
