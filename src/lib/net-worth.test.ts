@@ -133,6 +133,29 @@ describe("computeNetWorthRows (NW-01–03, ACCT-03)", () => {
     expect(rows[0]!.primaryDisplayMinor).toBeNull();
   });
 
+  it("excludes non-primary credit without FX keeping native available and debt", () => {
+    const { rows, totalPrimaryMinor, isPartial } = computeNetWorthRows([
+      input({
+        id: 30,
+        type: "FIAT_CREDIT",
+        currencyCode: "USD",
+        currencyScale: 2,
+        isPrimaryCurrency: false,
+        creditLimitMinor: 100_000n,
+        locfAmountMinor: 40_000n,
+        rateToPrimaryScaled: null,
+      }),
+    ]);
+    expect(rows[0]!.excludeReason).toBe("no_fx");
+    expect(rows[0]!.includedInTotal).toBe(false);
+    expect(rows[0]!.contributionPrimaryMinor).toBe(0n);
+    expect(rows[0]!.nativeDisplayMinor).toBe(40_000n);
+    expect(rows[0]!.debtNativeMinor).toBe(60_000n);
+    expect(rows[0]!.primaryDisplayMinor).toBeNull();
+    expect(totalPrimaryMinor).toBe(0n);
+    expect(isPartial).toBe(true);
+  });
+
   it("uses primary currency identity without rateToPrimaryScaled", () => {
     const { rows, totalPrimaryMinor, isPartial } = computeNetWorthRows([
       input({
