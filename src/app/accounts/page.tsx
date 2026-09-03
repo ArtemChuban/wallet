@@ -8,25 +8,35 @@ export const dynamic = "force-dynamic";
 export default async function AccountsPage() {
   await ensureSqlitePragmas();
   const today = calendarDateToday();
-  const [accountsRaw, currencies, snapshotsLteToday] = await Promise.all([
-    prisma.account.findMany({
-      include: { currency: true },
-      orderBy: { name: "asc" },
-    }),
-    prisma.currency.findMany({
-      orderBy: { code: "asc" },
-      select: { code: true, name: true, scale: true },
-    }),
-    prisma.balanceSnapshot.findMany({
-      where: { asOfDate: { lte: today } },
-      orderBy: { asOfDate: "desc" },
-      select: {
-        accountId: true,
-        asOfDate: true,
-        amountMinor: true,
-      },
-    }),
-  ]);
+  const [accountsRaw, currencies, snapshotsLteToday, allSnapshots] =
+    await Promise.all([
+      prisma.account.findMany({
+        include: { currency: true },
+        orderBy: { name: "asc" },
+      }),
+      prisma.currency.findMany({
+        orderBy: { code: "asc" },
+        select: { code: true, name: true, scale: true },
+      }),
+      prisma.balanceSnapshot.findMany({
+        where: { asOfDate: { lte: today } },
+        orderBy: { asOfDate: "desc" },
+        select: {
+          accountId: true,
+          asOfDate: true,
+          amountMinor: true,
+        },
+      }),
+      prisma.balanceSnapshot.findMany({
+        orderBy: [{ asOfDate: "desc" }, { id: "desc" }],
+        select: {
+          id: true,
+          accountId: true,
+          asOfDate: true,
+          amountMinor: true,
+        },
+      }),
+    ]);
 
   const locfByAccount = new Map<
     number,
@@ -39,6 +49,20 @@ export default async function AccountsPage() {
         amountMinor: snap.amountMinor,
       });
     }
+  }
+
+  const historyByAccount = new Map<
+    number,
+    { id: number; asOfDate: string; amountMinor: string }[]
+  >();
+  for (const snap of allSnapshots) {
+    const list = historyByAccount.get(snap.accountId) ?? [];
+    list.push({
+      id: snap.id,
+      asOfDate: snap.asOfDate,
+      amountMinor: snap.amountMinor.toString(),
+    });
+    historyByAccount.set(snap.accountId, list);
   }
 
   // Serialize BigInt for client Dialog props (RSC boundary).
@@ -62,6 +86,7 @@ export default async function AccountsPage() {
             amountMinor: locf.amountMinor.toString(),
           }
         : null,
+      snapshots: historyByAccount.get(a.id) ?? [],
     };
   });
 

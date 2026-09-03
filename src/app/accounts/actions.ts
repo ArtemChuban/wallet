@@ -9,7 +9,10 @@ import {
   createAccountSchema,
   updateAccountNameSchema,
 } from "@/lib/validations/account";
-import { setBalanceSchema } from "@/lib/validations/balance";
+import {
+  deleteBalanceSchema,
+  setBalanceSchema,
+} from "@/lib/validations/balance";
 
 export type AccountActionState = {
   errors?: {
@@ -258,4 +261,33 @@ export async function upsertBalanceSnapshot(
 
   revalidatePath("/accounts");
   return { success: true, message: "Сохранено" };
+}
+
+/** Delete one BalanceSnapshot by id (history only — D-10, D-11). */
+export async function deleteBalanceSnapshot(
+  formData: FormData,
+): Promise<BalanceActionState> {
+  const validated = deleteBalanceSchema.safeParse({
+    id: formData.get("id"),
+  });
+
+  if (!validated.success) {
+    return {
+      message: "Не удалось удалить снимок. Попробуйте снова.",
+    };
+  }
+
+  try {
+    await ensureSqlitePragmas();
+    await prisma.balanceSnapshot.delete({
+      where: { id: validated.data.id },
+    });
+  } catch {
+    return {
+      message: "Не удалось удалить снимок. Попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/accounts");
+  return { success: true, message: "Удалено" };
 }

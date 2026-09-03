@@ -16,6 +16,7 @@ vi.mock("@/lib/db", () => ({
     },
     balanceSnapshot: {
       upsert: vi.fn(),
+      delete: vi.fn(),
     },
   },
   ensureSqlitePragmas: vi.fn(),
@@ -39,18 +40,20 @@ import { ensureSqlitePragmas, prisma } from "@/lib/db";
 import * as accountActions from "./actions";
 import {
   createAccount,
+  deleteBalanceSnapshot,
   updateAccountName,
   upsertBalanceSnapshot,
 } from "./actions";
 
 describe("accounts/actions exports (D-14 / T-02-10)", () => {
-  it("exports create/update/upsert helpers — no account-removal symbols", () => {
+  it("exports create/update/upsert/delete helpers — no account-removal symbols", () => {
     const names = Object.keys(accountActions);
     expect(names).toEqual(
       expect.arrayContaining([
         "createAccount",
         "updateAccountName",
         "upsertBalanceSnapshot",
+        "deleteBalanceSnapshot",
       ]),
     );
     for (const forbidden of [
@@ -272,5 +275,54 @@ describe("upsertBalanceSnapshot credit available (D-05–D-07 / T-03-06)", () =>
       "asOfDate",
     ]);
     expect(Object.keys(args.update as object)).toEqual(["amountMinor"]);
+  });
+});
+
+describe("deleteBalanceSnapshot (BAL-01 / D-10 / D-11)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+    vi.mocked(prisma.balanceSnapshot.delete).mockResolvedValue({} as never);
+  });
+
+  it("deletes by validated id and revalidates", async () => {
+    const formData = new FormData();
+    formData.set("id", "42");
+
+    const result = await deleteBalanceSnapshot(formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.balanceSnapshot.delete).toHaveBeenCalledWith({
+      where: { id: 42 },
+    });
+    expect(revalidatePath).toHaveBeenCalledWith("/accounts");
+  });
+
+  it("returns Russian error on invalid id", async () => {
+    const formData = new FormData();
+    formData.set("id", "0");
+
+    const result = await deleteBalanceSnapshot(formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBe(
+      "Не удалось удалить снимок. Попробуйте снова.",
+    );
+    expect(prisma.balanceSnapshot.delete).not.toHaveBeenCalled();
+  });
+
+  it("returns Russian error when prisma delete fails", async () => {
+    vi.mocked(prisma.balanceSnapshot.delete).mockRejectedValue(
+      new Error("not found"),
+    );
+    const formData = new FormData();
+    formData.set("id", "99");
+
+    const result = await deleteBalanceSnapshot(formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBe(
+      "Не удалось удалить снимок. Попробуйте снова.",
+    );
   });
 });
