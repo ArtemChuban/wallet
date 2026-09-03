@@ -69,10 +69,19 @@ function SetBalanceFormBody({
     <form action={formAction} className="grid gap-4">
       <DialogHeader>
         <DialogTitle>{title}</DialogTitle>
-        <DialogDescription>
-          {isCredit
-            ? `Доступный остаток по «${account.name}» на выбранную дату.`
-            : `Баланс «${account.name}» на выбранную дату.`}
+        <DialogDescription className="min-w-0 break-words [overflow-wrap:anywhere]">
+          {isCredit ? (
+            <>
+              Доступный остаток по «
+              <span className="break-all">{account.name}</span>» на выбранную
+              дату.
+            </>
+          ) : (
+            <>
+              Баланс «<span className="break-all">{account.name}</span>» на
+              выбранную дату.
+            </>
+          )}
         </DialogDescription>
       </DialogHeader>
 
@@ -161,7 +170,7 @@ export function SetBalanceDialog({
       }}
     >
       <DialogTrigger render={trigger ?? defaultTrigger} />
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="min-w-0 overflow-hidden sm:max-w-md">
         {open ? (
           <SetBalanceFormBody
             key={formKey}

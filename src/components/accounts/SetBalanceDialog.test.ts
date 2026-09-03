@@ -27,4 +27,9 @@ describe("SetBalanceDialog formKey + date contract (BAL-01)", () => {
     expect(dialogSrc).toMatch(/disabled=\{isPending\}/);
     expect(dialogSrc).toMatch(/Сохранить баланс/);
   });
+
+  it("wraps long account names in description (no layout blowout)", () => {
+    expect(dialogSrc).toMatch(/break-all/);
+    expect(dialogSrc).toMatch(/overflow-wrap:anywhere|overflow-hidden/);
+  });
 });
