@@ -107,7 +107,7 @@ Each task was committed atomically:
 2. **Task 2: Missing balance and missing FX row states** - `1dd9238` (test; UI shipped in Task 1)
 3. **Task 3: Partial-total warning callout when isPartial** - `322e2e6` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `45f3638` (docs: complete plan)
 
 ## Files Created/Modified
 - `src/lib/net-worth.test.ts` - Available/limit sensitivity + credit no_fx exclusion tests
