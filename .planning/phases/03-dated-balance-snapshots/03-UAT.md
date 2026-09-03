@@ -1,18 +1,14 @@
 ---
-status: testing
+status: complete
 phase: 03-dated-balance-snapshots
 source: [03-VERIFICATION.md]
 started: 2026-09-03T11:36:00Z
-updated: 2026-09-03T11:49:00Z
+updated: 2026-09-03T11:50:00Z
 ---
 
 ## Current Test
 
-number: 4
-name: Long name truncate (backstop)
-expected: |
-  Account name near 120 chars shows ellipsis on list; full name in edit Dialog.
-awaiting: user response
+[testing complete]
 
 ## Tests
 
@@ -30,14 +26,14 @@ result: pass
 
 ### 4. Long name truncate (backstop)
 expected: Account name near 120 chars shows ellipsis on list; full name in edit Dialog.
-result: [pending]
+result: pass
 
 ## Summary
 
 total: 4
-passed: 3
+passed: 4
 issues: 0
-pending: 1
+pending: 0
 skipped: 0
 blocked: 0
 

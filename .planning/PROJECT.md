@@ -54,9 +54,9 @@ Today money lives in disconnected places: bank app transactions, USDT crypto, ca
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
 | Docker + SQLite local stack | User already plans to run site in container; data stays on disk | — Pending |
-| Balance snapshots with date (not transactions) | User updates occasionally; wants history charts without full ledger | — Pending |
+| Balance snapshots with date (not transactions) | User updates occasionally; wants history charts without full ledger | Shipped Phase 3 (BalanceSnapshot + LOCF) |
 | Manual dated FX, primary ↔ other | Two currencies for now; historical charts need rate-as-of-date | — Pending |
-| Credit card: limit + debt; debt reduces net worth | Matches real mental model (e.g. 500k limit, 250k debt) | — Pending |
+| Credit card: limit + debt; debt reduces net worth | Matches real mental model (e.g. 500k limit, 250k debt) | Phase 3: available stored; debt = limit − available |
 | Defer spend/cash-flow/debts/goals | Ship capital visibility first | — Pending |
 
 ## Evolution

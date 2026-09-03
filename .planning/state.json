@@ -11,12 +11,12 @@
     {
       "number": "2",
       "name": "Currencies + Accounts",
-      "status": "in_progress"
+      "status": "complete"
     },
     {
       "number": "3",
       "name": "Dated Balance Snapshots",
-      "status": "pending"
+      "status": "complete"
     },
     {
       "number": "4",
@@ -35,9 +35,9 @@
     }
   ],
   "next": {
-    "command": "/gsd:progress",
-    "label": "Show progress",
-    "reason": "Unsure of state — showing progress"
+    "command": "/gsd:progress --next",
+    "label": "Advance to the next step (plan phase 4)",
+    "reason": "Phase 4 of 6 — needs a plan"
   },
-  "updated_at": "2026-09-03T10:50:22.697Z"
+  "updated_at": "2026-09-03T11:53:44.804Z"
 }
