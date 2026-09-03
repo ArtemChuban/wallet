@@ -398,4 +398,79 @@ describe("buildAccountSeries (CHART-02/CHART-03)", () => {
     expect(windowed.some((p) => p.asOfDate === "2026-02-01")).toBe(true);
     expect(windowed.some((p) => p.asOfDate === today)).toBe(true);
   });
+
+  it("FIAT_CREDIT native emits stacked debt+available via creditDebtMinor (D-11)", () => {
+    const account: SeriesAccount = {
+      id: 1,
+      type: "FIAT_CREDIT",
+      currencyCode: "USD",
+      currencyScale: 2,
+      isPrimaryCurrency: false,
+      creditLimitMinor: 500_000n, // 5000.00
+    };
+    const snapshots: SeriesSnapshot[] = [
+      { accountId: 1, asOfDate: "2026-01-01", amountMinor: 200_000n }, // available 2000
+    ];
+
+    const points = buildAccountSeries({
+      account,
+      snapshots,
+      rates: [],
+      primaryScale: 2,
+      preset: "all",
+      today: "2026-01-10",
+      mode: "native",
+    });
+
+    expect(points).toHaveLength(2); // event + today
+    expect(points[0]!.availableMinor).toBe(200_000n);
+    expect(points[0]!.debtMinor).toBe(300_000n); // limit − available
+    expect(points[0]!.available).toBe(2000);
+    expect(points[0]!.debt).toBe(3000);
+    // Stack heights are both positive — not NW debt-only contribution
+    expect(points[0]!.debt! + points[0]!.available!).toBe(5000);
+  });
+
+  it("FIAT_CREDIT primary converts both stack segments; skips null FX (D-12, D-16)", () => {
+    const account: SeriesAccount = {
+      id: 1,
+      type: "FIAT_CREDIT",
+      currencyCode: "USD",
+      currencyScale: 2,
+      isPrimaryCurrency: false,
+      creditLimitMinor: 500_000n,
+    };
+    const snapshots: SeriesSnapshot[] = [
+      { accountId: 1, asOfDate: "2026-01-01", amountMinor: 200_000n },
+      { accountId: 1, asOfDate: "2026-01-15", amountMinor: 100_000n },
+    ];
+    const rates: SeriesRate[] = [
+      {
+        currencyCode: "USD",
+        asOfDate: "2026-01-20",
+        rateToPrimaryScaled: 50n * RATE_SCALE_E8,
+      },
+    ];
+
+    const primary = buildAccountSeries({
+      account,
+      snapshots,
+      rates,
+      primaryScale: 2,
+      preset: "all",
+      today: "2026-01-31",
+      mode: "primary",
+    });
+
+    // 01-01 and 01-15 skipped (null FX); FX event 01-20 + today
+    expect(primary.map((p) => p.asOfDate)).toEqual([
+      "2026-01-20",
+      "2026-01-31",
+    ]);
+    // LOCF available 100_000, debt 400_000 at rate 50 → primary majors
+    expect(primary[0]!.availableMinor).toBe(5_000_000n);
+    expect(primary[0]!.debtMinor).toBe(20_000_000n);
+    expect(primary[0]!.available).toBe(50_000);
+    expect(primary[0]!.debt).toBe(200_000);
+  });
 });
