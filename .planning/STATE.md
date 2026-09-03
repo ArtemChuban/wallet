@@ -3,17 +3,17 @@ gsd_state_version: 1.0
 current_phase: 6
 current_phase_name: Historical Charts
 status: planning
-stopped_at: Phase 6 UI-SPEC drafted
-last_updated: "2026-09-04T00:10:00.000Z"
+stopped_at: Phase 6 plans created (06-01..06-03)
+last_updated: "2026-09-04T00:30:00.000Z"
 last_activity: 2026-09-04
-last_activity_desc: Phase 6 UI design contract written (06-UI-SPEC.md)
+last_activity_desc: Phase 6 PLAN.md files written (3 plans, waves 1–3)
 state_head: 3f84138
 progress:
   total_phases: 6
   completed_phases: 5
-  total_plans: 18
+  total_plans: 21
   completed_plans: 18
-  percent: 83
+  percent: 86
 ---
 
 # Project State
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-09-03)
 ## Current Position
 
 Phase: 6 — Historical Charts
-Plan: Not started
-Status: Ready to plan (UI-SPEC draft ready for checker)
-Last activity: 2026-09-04 — Phase 6 UI-SPEC drafted
+Plan: 06-01 (next to execute)
+Status: Planned — ready for /gsd-execute-phase 6
+Last activity: 2026-09-04 — Phase 6 plans created (06-01, 06-02, 06-03)
 
-Progress: [████████░░] 83%
+Progress: [████████░░] 86%
 
 ## Performance Metrics
 
