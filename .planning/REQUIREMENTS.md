@@ -11,7 +11,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **ACCT-01**: User can create, edit, and delete accounts with types: fiat debit, fiat credit, crypto, cash
 - [x] **ACCT-02**: For credit accounts, user can set credit limit and outstanding debt; debt reduces net worth
-- [ ] **ACCT-03**: User can see available credit as limit − debt (display only, never counted as asset)
+- [x] **ACCT-03**: User can see available credit as limit − debt (display only, never counted as asset)
 
 ### Currencies
 
@@ -29,9 +29,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Net Worth
 
-- [ ] **NW-01**: User can see current net worth (assets − credit debt) in primary currency
-- [ ] **NW-02**: User can see each account balance in its native currency
-- [ ] **NW-03**: User can see each account balance converted to primary currency
+- [x] **NW-01**: User can see current net worth (assets − credit debt) in primary currency
+- [x] **NW-02**: User can see each account balance in its native currency
+- [x] **NW-03**: User can see each account balance converted to primary currency
 
 ### Charts
 
@@ -100,10 +100,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | BAL-02 | Phase 3 | Complete |
 | FX-01 | Phase 4 | Complete |
 | FX-02 | Phase 4 | Complete |
-| NW-01 | Phase 5 | Pending |
-| NW-02 | Phase 5 | Pending |
-| NW-03 | Phase 5 | Pending |
-| ACCT-03 | Phase 5 | Pending |
+| NW-01 | Phase 5 | Complete |
+| NW-02 | Phase 5 | Complete |
+| NW-03 | Phase 5 | Complete |
+| ACCT-03 | Phase 5 | Complete |
 | CHART-01 | Phase 6 | Pending |
 | CHART-02 | Phase 6 | Pending |
 | CHART-03 | Phase 6 | Pending |

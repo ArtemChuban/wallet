@@ -3,16 +3,16 @@ gsd_state_version: 1.0
 current_phase: 5
 current_phase_name: Net Worth Dashboard
 status: executing
-stopped_at: Completed 05-01-PLAN.md
-last_updated: "2026-09-03T16:42:46.489Z"
+stopped_at: Completed 05-02-PLAN.md
+last_updated: "2026-09-03T16:52:07.413Z"
 last_activity: 2026-09-03
 last_activity_desc: Phase 5 execution started
-state_head: 0bae718b16fe9f6b7922d0009fcb6f99066a4185
+state_head: 322e2e6ef07f84ce0aaa4c8ac4e16e18a57654d9
 progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 18
-  completed_plans: 16
+  completed_plans: 17
   percent: 67
 ---
 
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-09-02)
 ## Current Position
 
 Phase: 5 (Net Worth Dashboard) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 Status: Ready to execute
 Last activity: 2026-09-03 — Phase 5 execution started
 
@@ -76,6 +76,7 @@ Progress: [███████░░░] 67%
 | Phase 04-dated-fx P01 | 4min | 3 tasks | 9 files |
 | Phase 04-dated-fx P02 | 6min | 3 tasks | 9 files |
 | Phase 05-net-worth-dashboard P01 | 3 min | 3 tasks | 5 files |
+| Phase 05 P02 | 4min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -122,6 +123,8 @@ Recent decisions affecting current work:
 - [Phase 5]: Primary-currency accounts convert via identity; never require an FxRate row — FX table stores non-primary pairs only (Phase 4 D-16); requiring a rate for RUB would exclude primary debit accounts (RESEARCH pitfall 3)
 - [Phase 5]: DashboardAccountList is a Server Component with pre-formatted native/primary strings — D-16 forbids actions on dashboard; formatting on the RSC avoids BigInt client serialization
 - [Phase 5]: Credit copy, partial banner, empty state, and DB try/catch deferred to Plans 02–03 — Plan 01 scope is tracer math plus hero and flat asset list; Plan 02/03 own chrome
+- [Phase 5]: Credit/exclusion labels in DashboardAccountList; page passes formatted majors + excludeReason/isCredit
+- [Phase 5]: Partial banner omitted when isPartial false; body copy verbatim from UI-SPEC
 
 ### Pending Todos
 
@@ -143,6 +146,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-03T16:42:46.377Z
-Stopped at: Completed 05-01-PLAN.md
+Last session: 2026-09-03T16:52:07.318Z
+Stopped at: Completed 05-02-PLAN.md
 Resume file: None

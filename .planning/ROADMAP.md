@@ -160,7 +160,7 @@ Plans:
   3. User can see each account balance converted to the primary currency
   4. User can see available credit as limit − debt on credit accounts, and that figure never adds to assets
 
-**Plans:** 1/3 plans executed
+**Plans:** 2/3 plans executed
 
 Plans:
 **Wave 1**
@@ -169,7 +169,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 05-02-PLAN.md — Credit rows, missing states, partial-warning callout
+- [x] 05-02-PLAN.md — Credit rows, missing states, partial-warning callout
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -204,7 +204,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Currencies + Accounts | 5/5 | Complete    | 2026-09-03 |
 | 3. Dated Balance Snapshots | 3/3 | Complete    | 2026-09-03 |
 | 4. Dated FX | 3/3 | Complete    | 2026-09-03 |
-| 5. Net Worth Dashboard | 1/3 | In Progress|  |
+| 5. Net Worth Dashboard | 2/3 | In Progress|  |
 | 6. Historical Charts | 0/TBD | Not started | - |
 
 ## Coverage Map
