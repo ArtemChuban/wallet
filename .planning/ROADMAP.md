@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 3: Dated Balance Snapshots** - As-of balances with backdating and LOCF reads (completed 2026-09-03)
 - [x] **Phase 4: Dated FX** - Manual primary ↔ other rates with forward-effective LOCF (completed 2026-09-03)
 - [x] **Phase 5: Net Worth Dashboard** - Current NW and per-account native/primary balances (completed 2026-09-03)
-- [ ] **Phase 6: Historical Charts** - NW and per-account history using as-of balance × as-of FX
+- [x] **Phase 6: Historical Charts** - NW and per-account history using as-of balance × as-of FX (completed 2026-09-04)
 
 ## Phase Details
 
@@ -190,7 +190,7 @@ Plans:
   3. Each chart point uses balance as of that date × FX as of that date (not today’s rate)
   4. Changing today’s FX does not rewrite earlier chart points that used a prior rate
 
-**Plans:** 3/3 plans executed
+**Plans:** 3/3 plans complete
 
 Plans:
 **Wave 1**
@@ -219,7 +219,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 3. Dated Balance Snapshots | 3/3 | Complete    | 2026-09-03 |
 | 4. Dated FX | 3/3 | Complete    | 2026-09-03 |
 | 5. Net Worth Dashboard | 3/3 | Complete    | 2026-09-03 |
-| 6. Historical Charts | 3/3 | In Progress|  |
+| 6. Historical Charts | 3/3 | Complete    | 2026-09-04 |
 
 ## Coverage Map
 
