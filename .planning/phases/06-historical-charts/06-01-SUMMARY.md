@@ -112,7 +112,9 @@ status: complete
 2. **Task 2: Wave 0 historical-series.test.ts full CHART matrix** - `b0a99df` (test)
 3. **Task 3: Shared range presets 30д 90д 1г всё on NW chart** - `d630d32` (feat)
 
-## Files Created/Modified
+**Plan metadata:** `16beb41` (docs: complete plan)
+
+## Self-Check: PASSED
 
 - `src/lib/dates.ts` — `addCalendarDays`, `windowStartForPreset`, `RangePreset`
 - `src/lib/dates.test.ts` — window/leap edges
