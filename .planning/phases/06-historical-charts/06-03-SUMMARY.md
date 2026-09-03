@@ -114,7 +114,7 @@ status: complete
 
 **Post-checkpoint follow-ups (already shipped before SUMMARY):** `3d62f4e` — client-safe money/dates split (no Prisma on client), `npm run db:seed`, NW chart stacked by account
 
-**Plan metadata:** (this docs commit)
+**Plan metadata:** `b34401d` (docs: complete plan); `0072f48` (docs: sync STATE position)
 
 ## Files Created/Modified
 
