@@ -36,6 +36,7 @@ model Account {
   creditLimitMinor BigInt?
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
+  balanceSnapshots BalanceSnapshot[]
 }
 
 model FxRateStub {
@@ -45,7 +46,12 @@ model FxRateStub {
   rateToPrimaryScaled BigInt // primary_units_per_1_other * 10^8
 }
 
-model BalanceAmountStub {
-  id          Int    @id @default(autoincrement())
-  amountMinor BigInt // minor units per Currency.scale
+model BalanceSnapshot {
+  id          Int     @id @default(autoincrement())
+  accountId   Int
+  account     Account @relation(fields: [accountId], references: [id], onDelete: Restrict)
+  asOfDate    String // YYYY-MM-DD (same convention as FxRateStub.asOfDate)
+  amountMinor BigInt // native balance; for FIAT_CREDIT = available remaining
+
+  @@unique([accountId, asOfDate], name: "accountId_asOfDate")
 }
