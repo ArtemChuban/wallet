@@ -2,6 +2,7 @@ import {
   type RangePreset,
   windowStartForPreset,
 } from "@/lib/dates";
+import { convertOtherMinorToPrimaryMinor } from "@/lib/fx";
 import { formatMinorToMajor } from "@/lib/money";
 import {
   computeNetWorthRows,
@@ -138,4 +139,113 @@ export function buildNetWorthSeries(
       nw: Number(formatMinorToMajor(totalPrimaryMinor, primaryScale)),
     };
   });
+}
+
+export type AccountSeriesMode = "native" | "primary";
+
+export type AccountSeriesPoint = {
+  asOfDate: string;
+  /** Chart Y major as number at client boundary. */
+  value: number;
+  /** Authoritative LOCF amount — keep BigInt in lib/tests. */
+  valueMinor: bigint;
+};
+
+export type BuildAccountSeriesInput = {
+  account: SeriesAccount;
+  snapshots: SeriesSnapshot[];
+  rates: SeriesRate[];
+  primaryScale: number;
+  preset: RangePreset;
+  today: string;
+  mode: AccountSeriesMode;
+};
+
+/**
+ * Sparse per-account series (CHART-02).
+ * Native: snapshot dates ∪ today; Y = native LOCF major.
+ * Primary: snapshots ∪ FX dates for account currency ∪ today; convert via
+ * LOCF rate (identity when primary currency). Skip when FX null (D-16).
+ * Skip dates with no LOCF balance. Window via windowStartForPreset.
+ * Credit stack fields deferred to Plan 03.
+ */
+export function buildAccountSeries(
+  input: BuildAccountSeriesInput,
+): AccountSeriesPoint[] {
+  const { account, snapshots, rates, primaryScale, preset, today, mode } =
+    input;
+
+  const windowStart = windowStartForPreset(preset, today);
+  const dateSet = new Set<string>();
+
+  for (const snap of snapshots) {
+    if (snap.accountId === account.id) {
+      dateSet.add(snap.asOfDate);
+    }
+  }
+
+  if (mode === "primary" && !account.isPrimaryCurrency) {
+    for (const rate of rates) {
+      if (rate.currencyCode === account.currencyCode) {
+        dateSet.add(rate.asOfDate);
+      }
+    }
+  }
+
+  dateSet.add(today);
+
+  const sampleDates = [...dateSet]
+    .filter((d) => d <= today && (windowStart === null || d >= windowStart))
+    .sort();
+
+  const points: AccountSeriesPoint[] = [];
+
+  for (const asOfDate of sampleDates) {
+    const nativeMinor = locfAmountAsOf(snapshots, account.id, asOfDate);
+    if (nativeMinor === null) {
+      continue;
+    }
+
+    if (mode === "native") {
+      points.push({
+        asOfDate,
+        valueMinor: nativeMinor,
+        value: Number(
+          formatMinorToMajor(nativeMinor, account.currencyScale),
+        ),
+      });
+      continue;
+    }
+
+    // primary mode
+    if (account.isPrimaryCurrency) {
+      points.push({
+        asOfDate,
+        valueMinor: nativeMinor,
+        value: Number(
+          formatMinorToMajor(nativeMinor, account.currencyScale),
+        ),
+      });
+      continue;
+    }
+
+    const rate = locfRateAsOf(rates, account.currencyCode, asOfDate);
+    if (rate === null) {
+      continue; // D-16
+    }
+
+    const primaryMinor = convertOtherMinorToPrimaryMinor(
+      nativeMinor,
+      rate,
+      account.currencyScale,
+      primaryScale,
+    );
+    points.push({
+      asOfDate,
+      valueMinor: primaryMinor,
+      value: Number(formatMinorToMajor(primaryMinor, primaryScale)),
+    });
+  }
+
+  return points;
 }
