@@ -17,7 +17,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Currencies + Accounts** - Free-form currencies, primary, and typed account CRUD (completed 2026-09-03)
 - [x] **Phase 3: Dated Balance Snapshots** - As-of balances with backdating and LOCF reads (completed 2026-09-03)
 - [x] **Phase 4: Dated FX** - Manual primary ↔ other rates with forward-effective LOCF (completed 2026-09-03)
-- [ ] **Phase 5: Net Worth Dashboard** - Current NW and per-account native/primary balances
+- [x] **Phase 5: Net Worth Dashboard** - Current NW and per-account native/primary balances (completed 2026-09-03)
 - [ ] **Phase 6: Historical Charts** - NW and per-account history using as-of balance × as-of FX
 
 ## Phase Details
@@ -160,7 +160,7 @@ Plans:
   3. User can see each account balance converted to the primary currency
   4. User can see available credit as limit − debt on credit accounts, and that figure never adds to assets
 
-**Plans:** 3/3 plans executed
+**Plans:** 3/3 plans complete
 
 Plans:
 **Wave 1**
@@ -204,7 +204,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 2. Currencies + Accounts | 5/5 | Complete    | 2026-09-03 |
 | 3. Dated Balance Snapshots | 3/3 | Complete    | 2026-09-03 |
 | 4. Dated FX | 3/3 | Complete    | 2026-09-03 |
-| 5. Net Worth Dashboard | 3/3 | In Progress|  |
+| 5. Net Worth Dashboard | 3/3 | Complete    | 2026-09-03 |
 | 6. Historical Charts | 0/TBD | Not started | - |
 
 ## Coverage Map
