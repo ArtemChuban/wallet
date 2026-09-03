@@ -78,15 +78,16 @@ describe("upsert overwrite (BAL-01 / D-09)", () => {
     const key = `${compound.accountId}:${compound.asOfDate}`;
 
     vi.mocked(prisma.balanceSnapshot.upsert).mockImplementation(
-      async (args) => {
-        const where = args.where as {
-          accountId_asOfDate: { accountId: number; asOfDate: string };
-        };
-        const { accountId, asOfDate } = where.accountId_asOfDate;
+      (async (args: {
+        where: { accountId_asOfDate: { accountId: number; asOfDate: string } };
+        update: { amountMinor: bigint };
+        create: { amountMinor: bigint };
+      }) => {
+        const { accountId, asOfDate } = args.where.accountId_asOfDate;
         const k = `${accountId}:${asOfDate}`;
         const amountMinor = store.has(k)
-          ? (args.update as { amountMinor: bigint }).amountMinor
-          : (args.create as { amountMinor: bigint }).amountMinor;
+          ? args.update.amountMinor
+          : args.create.amountMinor;
         store.set(k, amountMinor);
         return {
           id: 1,
@@ -94,7 +95,7 @@ describe("upsert overwrite (BAL-01 / D-09)", () => {
           asOfDate,
           amountMinor,
         };
-      },
+      }) as never,
     );
 
     await prisma.balanceSnapshot.upsert({
