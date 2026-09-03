@@ -114,7 +114,7 @@ status: complete
 
 **Plan metadata:** `16beb41` (docs: complete plan)
 
-## Self-Check: PASSED
+## Files Created/Modified
 
 - `src/lib/dates.ts` — `addCalendarDays`, `windowStartForPreset`, `RangePreset`
 - `src/lib/dates.test.ts` — window/leap edges
