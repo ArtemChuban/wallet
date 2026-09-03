@@ -3,16 +3,16 @@ gsd_state_version: 1.0
 current_phase: 4
 current_phase_name: Dated FX
 status: executing
-stopped_at: Completed 04-01-PLAN.md
-last_updated: "2026-09-03T15:03:13.080Z"
+stopped_at: Completed 04-02-PLAN.md
+last_updated: "2026-09-03T15:09:53.104Z"
 last_activity: 2026-09-03
 last_activity_desc: Phase 4 execution started
-state_head: b884732a5cb99af02c418e7b6bc7d19e817e7d04
+state_head: 1d66eeb0d3c82ad07c017c722d2961f695787a1d
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 15
-  completed_plans: 13
+  completed_plans: 14
   percent: 50
 ---
 
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-09-02)
 ## Current Position
 
 Phase: 4 (Dated FX) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 Status: Ready to execute
 Last activity: 2026-09-03 — Phase 4 execution started
 
@@ -73,6 +73,7 @@ Progress: [█████░░░░░] 50%
 | Phase 03-dated-balance-snapshots P02 | 6min | 3 tasks | 6 files |
 | Phase 03-dated-balance-snapshots P03 | 15min | 3 tasks | 4 files |
 | Phase 04-dated-fx P01 | 4min | 3 tasks | 9 files |
+| Phase 04-dated-fx P02 | 6min | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -113,6 +114,9 @@ Recent decisions affecting current work:
 - [Phase 4]: FxRate replaces FxRateStub with currencyCode_asOfDate unique LOCF identity
 - [Phase 4]: getRateAsOf returns null before first rate — never 0 or 1 (D-15)
 - [Phase 4]: Rate helpers at scale 8: parseRateToScaled, formatRateScaled, invertRateScaled
+- [Phase 4]: Nav Валюты href /currencies/rates with active on any /currencies* path (D-03)
+- [Phase 4]: Layout tabs exact-path active so Валюты and Курсы never highlight together
+- [Phase 4]: fromPrimary inverts via invertRateScaled before upsert; storage always rateToPrimaryScaled
 
 ### Pending Todos
 
@@ -134,6 +138,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-03T15:03:12.995Z
-Stopped at: Completed 04-01-PLAN.md
+Last session: 2026-09-03T15:09:53.010Z
+Stopped at: Completed 04-02-PLAN.md
 Resume file: None
