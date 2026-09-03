@@ -3,7 +3,10 @@ import { describe, expect, it } from "vitest";
 import {
   RATE_SCALE_E8,
   formatMinorToMajor,
+  formatRateScaled,
+  invertRateScaled,
   parseMajorToMinor,
+  parseRateToScaled,
 } from "./money";
 
 /**
@@ -43,6 +46,31 @@ describe("parseMajorToMinor / formatMinorToMajor", () => {
   it("rejects scientific notation", () => {
     expect(() => parseMajorToMinor("1e2", 2)).toThrow();
     expect(() => parseMajorToMinor("1E-3", 8)).toThrow();
+  });
+});
+
+describe("parseRateToScaled / formatRateScaled / invertRateScaled", () => {
+  it("round-trips rate at scale 8", () => {
+    const scaled = parseRateToScaled("90.00");
+    expect(scaled).toBe(90_00000000n);
+    expect(formatRateScaled(scaled)).toBe("90.00000000");
+  });
+
+  it("invertRateScaled uses integer truncation toward zero", () => {
+    const scaled = parseRateToScaled("90.00");
+    const inverted = invertRateScaled(scaled);
+    expect(inverted).toBe(11111111n);
+    expect(invertRateScaled(inverted)).toBeLessThanOrEqual(scaled);
+  });
+
+  it("invertRateScaled rejects rate less than or equal to 0n", () => {
+    expect(() => invertRateScaled(0n)).toThrow();
+    expect(() => invertRateScaled(-1n)).toThrow();
+  });
+
+  it("parseRateToScaled rejects invalid major strings", () => {
+    expect(() => parseRateToScaled("")).toThrow();
+    expect(() => parseRateToScaled("1e2")).toThrow();
   });
 });
 
