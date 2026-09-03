@@ -24,8 +24,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Balances
 
-- [ ] **BAL-01**: User can set an account balance as of a chosen date (backdating allowed)
-- [ ] **BAL-02**: Balance as of date D is the latest snapshot with date ≤ D
+- [x] **BAL-01**: User can set an account balance as of a chosen date (backdating allowed)
+- [x] **BAL-02**: Balance as of date D is the latest snapshot with date ≤ D
 
 ### Net Worth
 
@@ -96,8 +96,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CURR-01 | Phase 2 | Complete |
 | ACCT-01 | Phase 2 | Complete |
 | ACCT-02 | Phase 2 | Complete |
-| BAL-01 | Phase 3 | Pending |
-| BAL-02 | Phase 3 | Pending |
+| BAL-01 | Phase 3 | Complete |
+| BAL-02 | Phase 3 | Complete |
 | FX-01 | Phase 4 | Pending |
 | FX-02 | Phase 4 | Pending |
 | NW-01 | Phase 5 | Pending |
