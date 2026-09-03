@@ -1,3 +1,6 @@
+import { creditDebtMinor } from "@/lib/balances";
+import { convertOtherMinorToPrimaryMinor } from "@/lib/fx";
+
 export type NetWorthAccountType =
   | "FIAT_DEBIT"
   | "FIAT_CREDIT"
@@ -34,48 +37,24 @@ export type NetWorthRow = {
   primaryDisplayMinor: bigint | null;
 };
 
-const ASSET_TYPES = new Set<NetWorthAccountType>([
-  "FIAT_DEBIT",
-  "CRYPTO",
-  "CASH",
-]);
-
-function excludedRow(
-  accountId: number,
-  reason: Exclude<NetWorthExcludeReason, "none">,
-  nativeDisplayMinor: bigint | null = null,
-): NetWorthRow {
-  return {
-    accountId,
-    includedInTotal: false,
-    excludeReason: reason,
-    contributionPrimaryMinor: 0n,
-    nativeDisplayMinor,
-    debtNativeMinor: null,
-    primaryDisplayMinor: null,
-  };
+function toPrimaryMinor(
+  account: NetWorthAccountInput,
+  nativeMinor: bigint,
+): bigint | null {
+  if (account.isPrimaryCurrency) {
+    return nativeMinor;
+  }
+  if (account.rateToPrimaryScaled === null) {
+    return null;
+  }
+  return convertOtherMinorToPrimaryMinor(
+    nativeMinor,
+    account.rateToPrimaryScaled,
+    account.currencyScale,
+    account.primaryScale,
+  );
 }
 
-function includedAssetRow(
-  accountId: number,
-  amountPrimaryMinor: bigint,
-  nativeDisplayMinor: bigint,
-): NetWorthRow {
-  return {
-    accountId,
-    includedInTotal: true,
-    excludeReason: "none",
-    contributionPrimaryMinor: amountPrimaryMinor,
-    nativeDisplayMinor,
-    debtNativeMinor: null,
-    primaryDisplayMinor: amountPrimaryMinor,
-  };
-}
-
-/**
- * Pure NW aggregation. Tracer covers primary-currency asset identity;
- * credit sign, FX conversion, and no_fx exclusion land in Plan 01 Task 2.
- */
 export function computeNetWorthRows(accounts: NetWorthAccountInput[]): {
   rows: NetWorthRow[];
   totalPrimaryMinor: bigint;
@@ -92,21 +71,66 @@ export function computeNetWorthRows(accounts: NetWorthAccountInput[]): {
 
 function rowFor(account: NetWorthAccountInput): NetWorthRow {
   if (account.locfAmountMinor === null) {
-    return excludedRow(account.id, "no_balance");
+    return {
+      accountId: account.id,
+      includedInTotal: false,
+      excludeReason: "no_balance",
+      contributionPrimaryMinor: 0n,
+      nativeDisplayMinor: null,
+      debtNativeMinor: null,
+      primaryDisplayMinor: null,
+    };
   }
 
-  if (ASSET_TYPES.has(account.type) && account.isPrimaryCurrency) {
-    return includedAssetRow(
-      account.id,
-      account.locfAmountMinor,
-      account.locfAmountMinor,
-    );
+  if (account.type === "FIAT_CREDIT") {
+    const limit = account.creditLimitMinor ?? 0n;
+    const debtNativeMinor = creditDebtMinor(limit, account.locfAmountMinor);
+    const primaryDebt = toPrimaryMinor(account, debtNativeMinor);
+    if (primaryDebt === null) {
+      return {
+        accountId: account.id,
+        includedInTotal: false,
+        excludeReason: "no_fx",
+        contributionPrimaryMinor: 0n,
+        nativeDisplayMinor: account.locfAmountMinor,
+        debtNativeMinor,
+        primaryDisplayMinor: null,
+      };
+    }
+    return {
+      accountId: account.id,
+      includedInTotal: true,
+      excludeReason: "none",
+      contributionPrimaryMinor: -primaryDebt,
+      nativeDisplayMinor: account.locfAmountMinor,
+      debtNativeMinor,
+      primaryDisplayMinor: primaryDebt,
+    };
   }
 
-  // Incomplete on purpose: remaining cases (credit, non-primary FX) fail Task 2 RED.
-  return includedAssetRow(
-    account.id,
-    account.locfAmountMinor,
+  const primaryDisplayMinor = toPrimaryMinor(
+    account,
     account.locfAmountMinor,
   );
+  if (primaryDisplayMinor === null) {
+    return {
+      accountId: account.id,
+      includedInTotal: false,
+      excludeReason: "no_fx",
+      contributionPrimaryMinor: 0n,
+      nativeDisplayMinor: account.locfAmountMinor,
+      debtNativeMinor: null,
+      primaryDisplayMinor: null,
+    };
+  }
+
+  return {
+    accountId: account.id,
+    includedInTotal: true,
+    excludeReason: "none",
+    contributionPrimaryMinor: primaryDisplayMinor,
+    nativeDisplayMinor: account.locfAmountMinor,
+    debtNativeMinor: null,
+    primaryDisplayMinor,
+  };
 }
