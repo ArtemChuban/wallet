@@ -1,5 +1,7 @@
-import { creditDebtMinor } from "@/lib/balances";
-import { convertOtherMinorToPrimaryMinor } from "@/lib/fx";
+import {
+  convertOtherMinorToPrimaryMinor,
+  creditDebtMinor,
+} from "@/lib/money";
 
 export type NetWorthAccountType =
   | "FIAT_DEBIT"

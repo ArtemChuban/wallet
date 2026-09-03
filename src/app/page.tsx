@@ -167,6 +167,7 @@ export default async function Home() {
           <DashboardChartsShell
             accounts={accounts.map((account) => ({
               id: account.id,
+              name: account.name,
               type: account.type,
               currencyCode: account.currencyCode,
               currencyScale: account.currency.scale,

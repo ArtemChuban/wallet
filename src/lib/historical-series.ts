@@ -1,10 +1,12 @@
-import { creditDebtMinor } from "@/lib/balances";
 import {
   type RangePreset,
   windowStartForPreset,
 } from "@/lib/dates";
-import { convertOtherMinorToPrimaryMinor } from "@/lib/fx";
-import { formatMinorToMajor } from "@/lib/money";
+import {
+  convertOtherMinorToPrimaryMinor,
+  creditDebtMinor,
+  formatMinorToMajor,
+} from "@/lib/money";
 import {
   computeNetWorthRows,
   type NetWorthAccountType,
@@ -39,7 +41,18 @@ export type NetWorthSeriesPoint = {
   totalPrimaryMinor: bigint;
   /** Chart Y major as number at client boundary (RESEARCH A1). */
   nw: number;
+  /**
+   * Per-account primary contribution majors keyed by `accountStackKey(id)`.
+   * Credit debt contributes negative (same as computeNetWorthRows).
+   * Excluded accounts (no balance / no FX) omit the key for that date.
+   */
+  stacks: Record<string, number>;
 };
+
+/** Stable Recharts dataKey for an account stack layer. */
+export function accountStackKey(accountId: number): string {
+  return `a${accountId}`;
+}
 
 export type BuildNetWorthSeriesInput = {
   accounts: SeriesAccount[];
@@ -133,11 +146,23 @@ export function buildNetWorthSeries(
       primaryScale,
     }));
 
-    const { totalPrimaryMinor } = computeNetWorthRows(nwInputs);
+    const { rows, totalPrimaryMinor } = computeNetWorthRows(nwInputs);
+    const byId = new Map(rows.map((row) => [row.accountId, row]));
+    const stacks: Record<string, number> = {};
+    for (const account of accounts) {
+      const row = byId.get(account.id);
+      stacks[accountStackKey(account.id)] =
+        row?.includedInTotal
+          ? Number(
+              formatMinorToMajor(row.contributionPrimaryMinor, primaryScale),
+            )
+          : 0;
+    }
     return {
       asOfDate,
       totalPrimaryMinor,
       nw: Number(formatMinorToMajor(totalPrimaryMinor, primaryScale)),
+      stacks,
     };
   });
 }

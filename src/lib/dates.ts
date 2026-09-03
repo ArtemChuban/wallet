@@ -4,6 +4,27 @@
 
 export type RangePreset = "30d" | "90d" | "1y" | "all";
 
+/**
+ * Calendar YYYY-MM-DD in the given IANA time zone.
+ * Defaults to Europe/Moscow for D-12 / dialog default (A3).
+ * Client-safe — no Prisma / Node fs.
+ */
+export function calendarDateToday(timeZone: string = "Europe/Moscow"): string {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const year = parts.find((p) => p.type === "year")?.value;
+  const month = parts.find((p) => p.type === "month")?.value;
+  const day = parts.find((p) => p.type === "day")?.value;
+  if (!year || !month || !day) {
+    throw new Error("calendarDateToday: failed to format date parts");
+  }
+  return `${year}-${month}-${day}`;
+}
+
 /** YYYY-MM-DD → DD.MM.YYYY */
 export function formatAsOfDisplay(iso: string): string {
   const [y, m, d] = iso.split("-");

@@ -17,6 +17,7 @@ import type { NetWorthAccountType } from "@/lib/net-worth";
 
 export type ChartAccountPayload = {
   id: number;
+  name: string;
   type: NetWorthAccountType;
   currencyCode: string;
   currencyScale: number;
@@ -101,7 +102,11 @@ export function DashboardChartsShell({
         primaryScale,
         preset: range,
         today,
-      }).map(({ asOfDate, nw }) => ({ asOfDate, nw })),
+      }).map(({ asOfDate, nw, stacks }) => ({
+        asOfDate,
+        nw,
+        ...stacks,
+      })),
     [
       seriesAccounts,
       seriesSnapshots,
@@ -113,6 +118,10 @@ export function DashboardChartsShell({
   );
 
   const windowStart = windowStartForPreset(range, today);
+  const stackAccounts = useMemo(
+    () => accounts.map((a) => ({ id: a.id, name: a.name })),
+    [accounts],
+  );
 
   return (
     <>
@@ -120,6 +129,7 @@ export function DashboardChartsShell({
         <DashboardRangeControl value={range} onChange={setRange} />
         <NetWorthHistoryChart
           data={points}
+          accounts={stackAccounts}
           windowStart={windowStart}
           today={today}
         />

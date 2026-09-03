@@ -73,3 +73,29 @@ export function formatMinorToMajor(minor: bigint, scale: number): string {
   const frac = padded.slice(-scale);
   return `${neg ? "-" : ""}${intPart}.${frac}`;
 }
+
+/**
+ * primaryMinor = otherMinor * rateToPrimaryScaled * 10^primaryScale
+ *              / (10^otherScale * 10^8)
+ * Truncates toward zero. Caller handles missing rate (null LOCF).
+ * Client-safe — no Prisma / Node fs.
+ */
+export function convertOtherMinorToPrimaryMinor(
+  otherMinor: bigint,
+  rateToPrimaryScaled: bigint,
+  otherScale: number,
+  primaryScale: number,
+): bigint {
+  const num =
+    otherMinor * rateToPrimaryScaled * 10n ** BigInt(primaryScale);
+  const den = 10n ** BigInt(otherScale) * RATE_SCALE_E8;
+  return num / den;
+}
+
+/** Credit debt = limit − available (D-05–D-08). Pure; bounds enforced in actions. */
+export function creditDebtMinor(
+  creditLimitMinor: bigint,
+  availableMinor: bigint,
+): bigint {
+  return creditLimitMinor - availableMinor;
+}

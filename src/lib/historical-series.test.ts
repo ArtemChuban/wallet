@@ -70,6 +70,39 @@ describe("buildNetWorthSeries (CHART-01/CHART-03)", () => {
     expect(afterFx?.totalPrimaryMinor).toBe(600_000n);
   });
 
+  it("stacks per-account primary contributions; sum equals nw (incl. credit negative)", () => {
+    const accounts: SeriesAccount[] = [
+      primaryDebit(1),
+      {
+        id: 2,
+        type: "FIAT_CREDIT",
+        currencyCode: "RUB",
+        currencyScale: 2,
+        isPrimaryCurrency: true,
+        creditLimitMinor: 100_000n,
+      },
+    ];
+    const snapshots: SeriesSnapshot[] = [
+      { accountId: 1, asOfDate: "2026-01-10", amountMinor: 200_000n },
+      { accountId: 2, asOfDate: "2026-01-10", amountMinor: 40_000n }, // debt 60_000
+    ];
+    const points = buildNetWorthSeries({
+      accounts,
+      snapshots,
+      rates: [],
+      primaryScale: 2,
+      preset: "all",
+      today: "2026-01-10",
+    });
+    expect(points).toHaveLength(1);
+    const p = points[0]!;
+    expect(p.stacks.a1).toBe(2000);
+    expect(p.stacks.a2).toBe(-600);
+    expect(p.nw).toBe(1400);
+    const stackSum = Object.values(p.stacks).reduce((a, b) => a + b, 0);
+    expect(stackSum).toBeCloseTo(p.nw);
+  });
+
   it("series length equals distinct event∪today dates not calendar day count (D-07)", () => {
     const accounts = [primaryDebit(1)];
     const snapshots: SeriesSnapshot[] = [

@@ -7,7 +7,7 @@ import { AccountFormDialog } from "@/components/accounts/AccountFormDialog";
 import { SetBalanceDialog } from "@/components/accounts/SetBalanceDialog";
 import { Button } from "@/components/ui/button";
 import { formatAsOfDisplay } from "@/lib/dates";
-import { formatMinorToMajor } from "@/lib/money";
+import { creditDebtMinor, formatMinorToMajor } from "@/lib/money";
 
 export type AccountCurrencyOption = {
   code: string;
@@ -41,14 +41,6 @@ const TYPE_LABELS: Record<AccountListItem["type"], string> = {
   CRYPTO: "Крипто",
   CASH: "Наличные",
 };
-
-/** Client-safe copy of balances.creditDebtMinor (no Prisma import). */
-function creditDebtMinor(
-  creditLimitMinor: bigint,
-  availableMinor: bigint,
-): bigint {
-  return creditLimitMinor - availableMinor;
-}
 
 function LocfDisplay({ account }: { account: AccountListItem }) {
   if (!account.locf) return null;
