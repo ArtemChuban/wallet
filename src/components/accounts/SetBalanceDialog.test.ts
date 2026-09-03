@@ -15,11 +15,13 @@ describe("SetBalanceDialog formKey + date contract (BAL-01)", () => {
     expect(dialogSrc).toMatch(/key=\{formKey\}/);
   });
 
-  it("uses type=date asOfDate with today default and max", () => {
-    expect(dialogSrc).toMatch(/type=["']date["']/);
+  it("uses DD.MM.YYYY display with hidden YYYY-MM-DD asOfDate", () => {
+    expect(dialogSrc).toMatch(/formatAsOfDisplay/);
+    expect(dialogSrc).toMatch(/parseAsOfDisplay/);
     expect(dialogSrc).toMatch(/name=["']asOfDate["']/);
-    expect(dialogSrc).toMatch(/defaultValue=\{today\}/);
-    expect(dialogSrc).toMatch(/max=\{today\}/);
+    expect(dialogSrc).toMatch(/type=["']hidden["']/);
+    expect(dialogSrc).toMatch(/placeholder=["']ДД\.ММ\.ГГГГ["']/);
+    expect(dialogSrc).not.toMatch(/type=["']date["']/);
   });
 
   it("disables submit while isPending and uses Сохранить баланс", () => {

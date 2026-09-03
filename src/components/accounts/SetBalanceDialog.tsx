@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { formatAsOfDisplay, parseAsOfDisplay } from "@/lib/dates";
 
 type AccountForBalance = {
   id: number;
@@ -54,6 +55,10 @@ function SetBalanceFormBody({
     upsertBalanceSnapshot,
     initialState,
   );
+  const [asOfDisplay, setAsOfDisplay] = useState(() =>
+    formatAsOfDisplay(today),
+  );
+  const asOfIso = parseAsOfDisplay(asOfDisplay) ?? "";
 
   useEffect(() => {
     if (state?.success) {
@@ -86,6 +91,7 @@ function SetBalanceFormBody({
       </DialogHeader>
 
       <input type="hidden" name="accountId" value={account.id} />
+      <input type="hidden" name="asOfDate" value={asOfIso} />
 
       <div className="grid gap-2">
         <Label htmlFor="balance-amount">{amountLabel}</Label>
@@ -114,13 +120,20 @@ function SetBalanceFormBody({
         <Label htmlFor="balance-as-of">Дата</Label>
         <Input
           id="balance-as-of"
-          name="asOfDate"
-          type="date"
-          defaultValue={today}
-          max={today}
-          aria-invalid={Boolean(state.errors?.asOfDate)}
+          type="text"
+          inputMode="numeric"
+          placeholder="ДД.ММ.ГГГГ"
+          autoComplete="off"
+          value={asOfDisplay}
+          onChange={(e) => setAsOfDisplay(e.target.value)}
+          aria-invalid={
+            Boolean(state.errors?.asOfDate) ||
+            (asOfDisplay !== "" && !asOfIso)
+          }
           disabled={isPending}
+          className="font-mono"
         />
+        <p className="text-sm text-muted-foreground">Формат: ДД.ММ.ГГГГ</p>
         {state.errors?.asOfDate?.[0] ? (
           <p className="text-sm text-destructive" role="alert">
             {state.errors.asOfDate[0]}

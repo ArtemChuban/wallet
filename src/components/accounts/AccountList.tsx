@@ -6,6 +6,7 @@ import { deleteBalanceSnapshot } from "@/app/accounts/actions";
 import { AccountFormDialog } from "@/components/accounts/AccountFormDialog";
 import { SetBalanceDialog } from "@/components/accounts/SetBalanceDialog";
 import { Button } from "@/components/ui/button";
+import { formatAsOfDisplay } from "@/lib/dates";
 import { formatMinorToMajor } from "@/lib/money";
 
 export type AccountCurrencyOption = {
@@ -40,13 +41,6 @@ const TYPE_LABELS: Record<AccountListItem["type"], string> = {
   CRYPTO: "Крипто",
   CASH: "Наличные",
 };
-
-/** YYYY-MM-DD → DD.MM.YYYY for LOCF meta line. */
-function formatAsOfDisplay(iso: string): string {
-  const [y, m, d] = iso.split("-");
-  if (!y || !m || !d) return iso;
-  return `${d}.${m}.${y}`;
-}
 
 /** Client-safe copy of balances.creditDebtMinor (no Prisma import). */
 function creditDebtMinor(
