@@ -2,12 +2,12 @@
 gsd_state_version: 1.0
 current_phase: 03
 current_phase_name: Dated Balance Snapshots
-status: research_complete
-stopped_at: Phase 3 research complete — ready for planning
-last_updated: "2026-09-03T10:15:00.000Z"
+status: ui_spec_draft
+stopped_at: Phase 3 UI-SPEC draft — ready for ui-checker / planning
+last_updated: "2026-09-03T12:20:00.000Z"
 last_activity: 2026-09-03
-last_activity_desc: /gsd-plan-phase research — wrote 03-RESEARCH.md (BAL-01/BAL-02 LOCF snapshots)
-state_head: d0534d10ca66554c61880e8a11d9f91d61627395
+last_activity_desc: /gsd-ui-phase — wrote 03-UI-SPEC.md (balance Dialog, LOCF row, history)
+state_head: 3760caf
 progress:
   total_phases: 6
   completed_phases: 2
@@ -23,14 +23,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-02)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 03 — Dated Balance Snapshots (research complete)
+**Current focus:** Phase 03 — Dated Balance Snapshots (UI-SPEC draft)
 
 ## Current Position
 
-Phase: 03 (Dated Balance Snapshots) — research complete
+Phase: 03 (Dated Balance Snapshots) — UI-SPEC draft
 Plan: 0 of TBD
-Status: Research complete — ready for `/gsd-plan-phase` planning
-Last activity: 2026-09-03 — wrote `.planning/phases/03-dated-balance-snapshots/03-RESEARCH.md`
+Status: UI-SPEC draft written — checker can validate; then `/gsd-plan-phase`
+Last activity: 2026-09-03 — wrote `.planning/phases/03-dated-balance-snapshots/03-UI-SPEC.md`
 
 Progress: [███░░░░░░░] 33%
 
@@ -119,6 +119,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-03T10:15:00.000Z
-Stopped at: Phase 3 research complete — ready for planning
-Resume file: /home/artem/Documents/wallet/.planning/phases/03-dated-balance-snapshots/03-RESEARCH.md
+Last session: 2026-09-03T12:20:00.000Z
+Stopped at: Phase 3 UI-SPEC draft — ready for ui-checker / planning
+Resume file: /home/artem/Documents/wallet/.planning/phases/03-dated-balance-snapshots/03-UI-SPEC.md
