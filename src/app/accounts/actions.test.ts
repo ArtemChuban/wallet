@@ -94,6 +94,7 @@ describe("updateAccountName immutability (D-15 / T-02-01)", () => {
     const data = vi.mocked(prisma.account.update).mock.calls[0]![0]!.data;
     expect(Object.keys(data as object)).toEqual(["name"]);
     expect(revalidatePath).toHaveBeenCalledWith("/accounts");
+    expect(revalidatePath).toHaveBeenCalledWith("/");
   });
 });
 
@@ -203,6 +204,7 @@ describe("upsertBalanceSnapshot (BAL-01 / D-09 / D-12)", () => {
       },
     });
     expect(revalidatePath).toHaveBeenCalledWith("/accounts");
+    expect(revalidatePath).toHaveBeenCalledWith("/");
   });
 });
 
@@ -296,6 +298,7 @@ describe("deleteBalanceSnapshot (BAL-01 / D-10 / D-11)", () => {
       where: { id: 42 },
     });
     expect(revalidatePath).toHaveBeenCalledWith("/accounts");
+    expect(revalidatePath).toHaveBeenCalledWith("/");
   });
 
   it("returns Russian error on invalid id", async () => {

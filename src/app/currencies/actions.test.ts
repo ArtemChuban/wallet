@@ -83,6 +83,7 @@ describe("updateCurrencyName immutability (D-04 / D-08 / T-02-01)", () => {
     const data = vi.mocked(prisma.currency.update).mock.calls[0]![0]!.data;
     expect(Object.keys(data as object)).toEqual(["name"]);
     expect(revalidatePath).toHaveBeenCalledWith("/currencies");
+    expect(revalidatePath).toHaveBeenCalledWith("/");
   });
 });
 
@@ -216,6 +217,7 @@ describe("upsertFxRate (FX-01 / D-05–D-11 / T-04-01)", () => {
     });
     expect(revalidatePath).toHaveBeenCalledWith("/currencies");
     expect(revalidatePath).toHaveBeenCalledWith("/currencies/rates");
+    expect(revalidatePath).toHaveBeenCalledWith("/");
   });
 
   it("inverts fromPrimary before persist (D-05 / D-06 / T-04-06)", async () => {
@@ -269,6 +271,7 @@ describe("deleteFxRate (FX-01 / D-13 / T-04-09)", () => {
     });
     expect(revalidatePath).toHaveBeenCalledWith("/currencies");
     expect(revalidatePath).toHaveBeenCalledWith("/currencies/rates");
+    expect(revalidatePath).toHaveBeenCalledWith("/");
   });
 
   it("returns Russian error on invalid id", async () => {
@@ -317,6 +320,7 @@ describe("deleteFxRate (FX-01 / D-13 / T-04-09)", () => {
     });
     expect(revalidatePath).toHaveBeenCalledWith("/currencies");
     expect(revalidatePath).toHaveBeenCalledWith("/currencies/rates");
+    expect(revalidatePath).toHaveBeenCalledWith("/");
   });
 
   it("returns Russian error on invalid id", async () => {

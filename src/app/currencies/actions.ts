@@ -84,6 +84,7 @@ export async function createCurrency(
 
   revalidatePath("/currencies");
   revalidatePath("/accounts");
+  revalidatePath("/");
   return { success: true, message: "Сохранено" };
 }
 
@@ -118,6 +119,7 @@ export async function updateCurrencyName(
 
   revalidatePath("/currencies");
   revalidatePath("/accounts");
+  revalidatePath("/");
   return { success: true, message: "Сохранено" };
 }
 
@@ -196,6 +198,7 @@ export async function upsertFxRate(
 
   revalidatePath("/currencies");
   revalidatePath("/currencies/rates");
+  revalidatePath("/");
   return { success: true, message: "Сохранено" };
 }
 
@@ -226,5 +229,6 @@ export async function deleteFxRate(
 
   revalidatePath("/currencies");
   revalidatePath("/currencies/rates");
+  revalidatePath("/");
   return { success: true };
 }

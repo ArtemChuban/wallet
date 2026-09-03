@@ -130,6 +130,7 @@ export async function createAccount(
   }
 
   revalidatePath("/accounts");
+  revalidatePath("/");
   return { success: true, message: "Сохранено" };
 }
 
@@ -175,6 +176,7 @@ export async function updateAccountName(
   }
 
   revalidatePath("/accounts");
+  revalidatePath("/");
   return { success: true, message: "Сохранено" };
 }
 
@@ -260,6 +262,7 @@ export async function upsertBalanceSnapshot(
   }
 
   revalidatePath("/accounts");
+  revalidatePath("/");
   return { success: true, message: "Сохранено" };
 }
 
@@ -289,5 +292,6 @@ export async function deleteBalanceSnapshot(
   }
 
   revalidatePath("/accounts");
+  revalidatePath("/");
   return { success: true, message: "Удалено" };
 }
