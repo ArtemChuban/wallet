@@ -3,11 +3,11 @@ gsd_state_version: 1.0
 current_phase: 4
 current_phase_name: Dated FX
 status: planning
-stopped_at: Phase 4 UI-SPEC draft written
-last_updated: "2026-09-03T12:45:00.000Z"
+stopped_at: Phase 4 UI-SPEC approved
+last_updated: "2026-09-03T12:49:49.052Z"
 last_activity: 2026-09-03
 last_activity_desc: Phase 4 UI-SPEC.md drafted — ready for UI checker
-state_head: 3f09783
+state_head: 57178315329718d7308f6fb14428d2b35891aceb
 progress:
   total_phases: 6
   completed_phases: 3
@@ -130,6 +130,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-03T12:45:00.000Z
-Stopped at: Phase 4 UI-SPEC draft written
+Last session: 2026-09-03T12:49:48.915Z
+Stopped at: Phase 4 UI-SPEC approved
 Resume file: /home/artem/Documents/wallet/.planning/phases/04-dated-fx/04-UI-SPEC.md

@@ -244,7 +244,7 @@ Sources: 04-CONTEXT D-01–D-17; 04-RESEARCH Pattern 4–6 + Open Question 1 dis
 > Shape-rooted UI state coverage (empty / loading / error / populated / partial / overflow / zero-one-many / long-text).
 > Empty-state and error-state COPY live in `## Copywriting Contract` above — this section REFERENCES those rows.
 >
-> Probe kinds accepted as detected (2026-09-03).
+> Probe kinds confirmed (yolo/auto, 2026-09-03): E1/E2/E4 = list-collection; E3 = form; E5/E7/E8 = interactive-control; E6/E9 = nav. Post-checker probe re-run: section replaced idempotently.
 
 Applicable state considerations resolved: 28 covered, 1 backstop, 14 dismissed, 0 unresolved
 
