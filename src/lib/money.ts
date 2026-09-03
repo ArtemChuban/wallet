@@ -34,6 +34,32 @@ export function parseMajorToMinor(major: string, scale: number): bigint {
   return sign * BigInt(digits);
 }
 
+/** Parse major-unit rate string → scaled BigInt at fixed scale 8. */
+export function parseRateToScaled(major: string): bigint {
+  return parseMajorToMinor(major, 8);
+}
+
+/** Format scaled rate BigInt → major decimal string at scale 8. */
+export function formatRateScaled(scaled: bigint): string {
+  return formatMinorToMajor(scaled, 8);
+}
+
+/**
+ * Invert primary-per-other ↔ other-per-primary at fixed scale 8.
+ * Truncates toward zero; rejects result <= 0n.
+ */
+export function invertRateScaled(rateToPrimaryScaled: bigint): bigint {
+  if (rateToPrimaryScaled <= 0n) {
+    throw new Error("rate must be > 0");
+  }
+  const inverted =
+    (RATE_SCALE_E8 * RATE_SCALE_E8) / rateToPrimaryScaled;
+  if (inverted <= 0n) {
+    throw new Error("rate must be > 0");
+  }
+  return inverted;
+}
+
 /** Exact decimal string for display/input from minor BigInt. */
 export function formatMinorToMajor(minor: bigint, scale: number): string {
   assertScale(scale);

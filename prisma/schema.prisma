@@ -23,6 +23,7 @@ model Currency {
   /// Exactly-one primary enforced by migration SQL partial unique index Currency_one_primary (D-01, D-02).
   isPrimary Boolean @default(false)
   accounts  Account[]
+  fxRates   FxRate[]
 }
 
 model Account {
@@ -39,11 +40,14 @@ model Account {
   balanceSnapshots BalanceSnapshot[]
 }
 
-model FxRateStub {
-  id                  Int    @id @default(autoincrement())
+model FxRate {
+  id                  Int      @id @default(autoincrement())
   currencyCode        String
+  currency            Currency @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
   asOfDate            String // YYYY-MM-DD
   rateToPrimaryScaled BigInt // primary_units_per_1_other * 10^8
+
+  @@unique([currencyCode, asOfDate], name: "currencyCode_asOfDate")
 }
 
 model BalanceSnapshot {

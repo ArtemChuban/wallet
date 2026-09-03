@@ -59,8 +59,8 @@ describe("parseRateToScaled / formatRateScaled / invertRateScaled", () => {
   it("invertRateScaled uses integer truncation toward zero", () => {
     const scaled = parseRateToScaled("90.00");
     const inverted = invertRateScaled(scaled);
-    expect(inverted).toBe(11111111n);
-    expect(invertRateScaled(inverted)).toBeLessThanOrEqual(scaled);
+    expect(inverted).toBe(1111111n);
+    expect(formatRateScaled(inverted)).toBe("0.01111111");
   });
 
   it("invertRateScaled rejects rate less than or equal to 0n", () => {
