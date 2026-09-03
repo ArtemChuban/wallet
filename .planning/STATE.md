@@ -2,18 +2,18 @@
 gsd_state_version: 1.0
 current_phase: 06
 current_phase_name: Historical Charts
-status: executing
+status: ready_for_verification
 stopped_at: Completed 06-03-PLAN.md
 last_updated: "2026-09-03T23:24:34.593Z"
 last_activity: 2026-09-04
-last_activity_desc: Completed 06-02 account expand charts plan
-state_head: 3d62f4e7fd9c6bc257bb94c097c760251c5e92b3
+last_activity_desc: Completed 06-03 credit stack and chart polish plan
+state_head: b34401d9e1f2ca215800a148e1c540bdb5bf2073
 progress:
   total_phases: 6
   completed_phases: 5
   total_plans: 21
   completed_plans: 21
-  percent: 83
+  percent: 100
 ---
 
 # Project State
@@ -23,16 +23,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-03)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 6 — Historical Charts
+**Current focus:** Phase 6 — Historical Charts — ready for verification
 
 ## Current Position
 
-Phase: 06 (Historical Charts) — IN PROGRESS
-Plan: 3 of 03
-Status: Executing — 06-02 complete; next 06-03
-Last activity: 2026-09-04 — Completed 06-02-PLAN.md (account expand charts)
+Phase: 06 (Historical Charts) — READY FOR VERIFICATION
+Plan: 3 of 03 (all plans complete)
+Status: Ready for verification — 06-03 complete (CHART-01–03)
+Last activity: 2026-09-04 — Completed 06-03-PLAN.md (credit stack + chart polish + human smoke)
 
-Progress: [████████░░] 83%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
