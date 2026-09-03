@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 
+import { DashboardAccountList } from "@/components/dashboard/DashboardAccountList";
+import type { DashboardAccountRow } from "@/components/dashboard/DashboardAccountList";
 import { DashboardRangeControl } from "@/components/dashboard/DashboardRangeControl";
 import { NetWorthHistoryChart } from "@/components/dashboard/NetWorthHistoryChart";
 import { windowStartForPreset, type RangePreset } from "@/lib/dates";
@@ -40,6 +42,8 @@ type DashboardChartsShellProps = {
   rates: ChartRatePayload[];
   primaryScale: number;
   today: string;
+  listAccounts: DashboardAccountRow[];
+  primaryCode: string;
 };
 
 function reviveAccounts(rows: ChartAccountPayload[]): SeriesAccount[] {
@@ -76,6 +80,8 @@ export function DashboardChartsShell({
   rates,
   primaryScale,
   today,
+  listAccounts,
+  primaryCode,
 }: DashboardChartsShellProps) {
   const [range, setRange] = useState<RangePreset>("30d");
 
@@ -109,13 +115,24 @@ export function DashboardChartsShell({
   const windowStart = windowStartForPreset(range, today);
 
   return (
-    <section className="flex flex-col">
-      <DashboardRangeControl value={range} onChange={setRange} />
-      <NetWorthHistoryChart
-        data={points}
-        windowStart={windowStart}
+    <>
+      <section className="flex flex-col">
+        <DashboardRangeControl value={range} onChange={setRange} />
+        <NetWorthHistoryChart
+          data={points}
+          windowStart={windowStart}
+          today={today}
+        />
+      </section>
+      <DashboardAccountList
+        accounts={listAccounts}
+        primaryCode={primaryCode}
+        range={range}
         today={today}
+        snapshots={seriesSnapshots}
+        rates={seriesRates}
+        primaryScale={primaryScale}
       />
-    </section>
+    </>
   );
 }

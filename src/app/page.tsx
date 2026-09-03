@@ -127,6 +127,14 @@ export default async function Home() {
         excludeReason,
         isCredit,
         debtNativeDisplay,
+        currencyCode: account.currencyCode,
+        currencyScale: account.currency.scale,
+        isPrimaryCurrency: account.currency.isPrimary,
+        type: account.type,
+        creditLimitMinor:
+          account.creditLimitMinor == null
+            ? null
+            : account.creditLimitMinor.toString(),
       };
     });
 
@@ -180,9 +188,12 @@ export default async function Home() {
             }))}
             primaryScale={primaryScale}
             today={today}
+            listAccounts={listRows}
+            primaryCode={primaryCode}
           />
-        ) : null}
-        <DashboardAccountList accounts={listRows} primaryCode={primaryCode} />
+        ) : (
+          <DashboardAccountList accounts={listRows} primaryCode={primaryCode} />
+        )}
       </main>
     );
   } catch (error) {
