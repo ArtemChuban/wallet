@@ -107,7 +107,7 @@ Each task was committed atomically:
 2. **Task 2: History empty/overflow polish + full automated suite** - `b68f639` (feat)
 3. **Task 3: Russian UI smoke on /accounts balances** - human-verify PASS (no code commit)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `e9b00f8` (docs: complete plan)
 
 _Note: Task 3 was checkpoint:human-verify; user response `pass`._
 
