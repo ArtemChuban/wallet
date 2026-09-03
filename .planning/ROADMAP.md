@@ -131,11 +131,11 @@ Plans:
   3. User cannot create FX pairs that are not primary ↔ other
   4. Rate changes apply forward from their date without rewriting earlier as-of conversions
 
-**Plans:** 3 plans
+**Plans:** 1/3 plans executed
 Plans:
 **Wave 1**
 
-- [ ] 04-01-PLAN.md — FxRate schema + LOCF helpers + Zod + migrate deploy
+- [x] 04-01-PLAN.md — FxRate schema + LOCF helpers + Zod + migrate deploy
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -189,7 +189,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | 1. Docker + SQLite Foundation | 4/4 | Complete    | 2026-09-02 |
 | 2. Currencies + Accounts | 5/5 | Complete    | 2026-09-03 |
 | 3. Dated Balance Snapshots | 3/3 | Complete    | 2026-09-03 |
-| 4. Dated FX | 0/3 | Planned | - |
+| 4. Dated FX | 1/3 | In Progress|  |
 | 5. Net Worth Dashboard | 0/TBD | Not started | - |
 | 6. Historical Charts | 0/TBD | Not started | - |
 

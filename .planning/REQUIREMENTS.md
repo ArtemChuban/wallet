@@ -19,8 +19,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### FX
 
-- [ ] **FX-01**: User can set a dated exchange rate between primary and another currency
-- [ ] **FX-02**: Totals and charts as of date D use the latest rate with effective date ≤ D
+- [x] **FX-01**: User can set a dated exchange rate between primary and another currency
+- [x] **FX-02**: Totals and charts as of date D use the latest rate with effective date ≤ D
 
 ### Balances
 
@@ -98,8 +98,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ACCT-02 | Phase 2 | Complete |
 | BAL-01 | Phase 3 | Complete |
 | BAL-02 | Phase 3 | Complete |
-| FX-01 | Phase 4 | Pending |
-| FX-02 | Phase 4 | Pending |
+| FX-01 | Phase 4 | Complete |
+| FX-02 | Phase 4 | Complete |
 | NW-01 | Phase 5 | Pending |
 | NW-02 | Phase 5 | Pending |
 | NW-03 | Phase 5 | Pending |

@@ -1,18 +1,18 @@
 ---
 gsd_state_version: 1.0
-current_phase: 04
-current_phase_name: dated-fx
-status: planning
-stopped_at: Phase 4 plans created (04-01..04-03)
-last_updated: "2026-09-03T14:56:38.431Z"
+current_phase: 4
+current_phase_name: Dated FX
+status: executing
+stopped_at: Completed 04-01-PLAN.md
+last_updated: "2026-09-03T15:03:13.080Z"
 last_activity: 2026-09-03
-last_activity_desc: Phase 4 PLAN.md files authored — ready for plan-check / execute
-state_head: e3db61a29853e9769224bad0e79287e72b3a9bbd
+last_activity_desc: Phase 4 execution started
+state_head: b884732a5cb99af02c418e7b6bc7d19e817e7d04
 progress:
   total_phases: 6
   completed_phases: 3
   total_plans: 15
-  completed_plans: 12
+  completed_plans: 13
   percent: 50
 ---
 
@@ -27,10 +27,10 @@ See: .planning/PROJECT.md (updated 2026-09-02)
 
 ## Current Position
 
-Phase: 04 (dated-fx) — READY TO EXECUTE
-Plan: 01 (of 03) ready to execute
-Status: Plans complete — awaiting execute
-Last activity: 2026-09-03 — Phase 4 plans 04-01..04-03 created
+Phase: 4 (Dated FX) — EXECUTING
+Plan: 2 of 3
+Status: Ready to execute
+Last activity: 2026-09-03 — Phase 4 execution started
 
 Progress: [█████░░░░░] 50%
 
@@ -72,6 +72,7 @@ Progress: [█████░░░░░] 50%
 | Phase 03 P01 | 5min | 3 tasks | 7 files |
 | Phase 03-dated-balance-snapshots P02 | 6min | 3 tasks | 6 files |
 | Phase 03-dated-balance-snapshots P03 | 15min | 3 tasks | 4 files |
+| Phase 04-dated-fx P01 | 4min | 3 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -109,6 +110,9 @@ Recent decisions affecting current work:
 - [Phase 03]: Credit labels shipped in tracer dialog; bounds enforced in Task 2 TDD
 - [Phase 03]: Human-verify PASS for Russian /accounts balance chrome (set, LOCF, credit, history delete)
 - [Phase 03]: History panel bg-muted/40; delete destructive; expand aria Показать/Скрыть историю балансов
+- [Phase 4]: FxRate replaces FxRateStub with currencyCode_asOfDate unique LOCF identity
+- [Phase 4]: getRateAsOf returns null before first rate — never 0 or 1 (D-15)
+- [Phase 4]: Rate helpers at scale 8: parseRateToScaled, formatRateScaled, invertRateScaled
 
 ### Pending Todos
 
@@ -130,6 +134,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-03T13:15:00.000Z
-Stopped at: Phase 4 plans created (04-01..04-03)
-Resume file: /home/artem/Documents/wallet/.planning/phases/04-dated-fx/04-01-PLAN.md
+Last session: 2026-09-03T15:03:12.995Z
+Stopped at: Completed 04-01-PLAN.md
+Resume file: None
