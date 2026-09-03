@@ -1,10 +1,11 @@
 ---
 phase: "04"
 slug: dated-fx
-status: draft
+status: approved
 shadcn_initialized: true
 preset: "b2fA (base-nova / neutral / geist / lucide)"
 created: "2026-09-03"
+reviewed_at: "2026-09-03T14:45:00+02:00"
 ---
 
 # Phase 04 — UI Design Contract
@@ -132,7 +133,7 @@ All chrome Russian. Currency codes stay Latin as entered. Rates via `formatRateS
 | Primary CTA (no rates for currency) | Задать первый курс |
 | Secondary row CTA (has ≥1 rate) | Задать курс |
 | Dialog submit | Сохранить курс |
-| Dialog cancel / close | Отмена (or Dialog close affordance — no extra label required) |
+| Dialog cancel / close | Dialog close affordance preferred; if labeled text button, «Закрыть без сохранения» (avoid bare «Отмена» as sole CTA) |
 | Page title (currencies area) | Валюты |
 | Tab: currency list | Валюты |
 | Tab: rates | Курсы |
@@ -148,7 +149,7 @@ All chrome Russian. Currency codes stay Latin as entered. Rates via `formatRateS
 | Field: rate ≤ 0 | Курс должен быть больше 0 |
 | Field: primary / invalid pair | Выберите валюту, отличную от основной |
 | Error state (delete) | Не удалось удалить курс. Попробуйте снова. |
-| Destructive confirmation | Удалить курс за {date}: «Удалить курс за {date}? Это нельзя отменить.» — confirm **Удалить** / dismiss **Отмена** (`window.confirm` acceptable; AlertDialog not required) |
+| Destructive confirmation | Удалить курс за {date}: «Удалить курс за {date}? Это нельзя отменить.» — confirm **Удалить курс** / dismiss **Отмена** (`window.confirm` acceptable; AlertDialog not required) |
 
 ### Currencies area tabs
 
@@ -186,6 +187,8 @@ Same-date overwrite: no extra confirm in dialog — upsert intended (D-11).
 
 ### Rate row LOCF display (populated)
 
+**Visual focal (populated rates tab):** LOCF rate + as-of meta (`{rate}` · `на {DD.MM.YYYY}`) is the primary visual anchor per row. Accent CTA appears only for empty «Нет курса» rows («Задать первый курс»).
+
 | State | Display pattern |
 |-------|-----------------|
 | Has LOCF today | `{CODE}` · `{rate}` {PRIMARY} · `на {DD.MM.YYYY}` — rate is primary-per-1-other (storage direction), Geist Mono |
@@ -203,7 +206,7 @@ Primary currency never appears as a rates-list row (D-16).
 | Collapse control aria-label | Скрыть историю курсов |
 | History section label (optional) | История |
 | History row | `{DD.MM.YYYY}` · `{rate}` {PRIMARY} за 1 {CODE} |
-| Delete control label | Удалить |
+| Delete control label | Удалить курс |
 | Delete control aria-label | Удалить курс за {date} |
 
 Order: newest first (Phase 3 D-14 mirror). Delete only in history (D-13). No amount convert/preview on this tab (D-17).
@@ -312,12 +315,12 @@ Applicable state considerations resolved: 28 covered, 1 backstop, 14 dismissed, 
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
-- [ ] Dimension 7 Inventory Provenance: PASS
+- [x] Dimension 1 Copywriting: FLAG → addressed (confirm/history «Удалить курс»; dialog dismiss prefers close / «Закрыть без сохранения»)
+- [x] Dimension 2 Visuals: FLAG → addressed (populated rates focal = LOCF rate + as-of meta)
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
+- [x] Dimension 7 Inventory Provenance: PASS
 
-**Approval:** pending
+**Approval:** approved (2026-09-03)
