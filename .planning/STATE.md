@@ -23,7 +23,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-02)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 02 — Currencies + Accounts
+**Current focus:** Phase 03 — Dated Balance Snapshots (research complete)
 
 ## Current Position
 
