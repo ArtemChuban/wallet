@@ -112,7 +112,7 @@ Each task was committed atomically:
 2. **Task 2: End-to-end BalanceSnapshot schema + LOCF helpers + Zod** - `b752d84` (feat)
 3. **Task 3: prisma migrate deploy host gate** - `001f030` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `14ede9c` (docs: complete plan); `f5f9ea4` (docs: STATE/ROADMAP)
 
 ## Files Created/Modified
 
