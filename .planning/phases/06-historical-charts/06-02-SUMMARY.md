@@ -141,3 +141,5 @@ Plan 03 can replace credit Line branch with stacked Area (долг/доступ�
 ---
 *Phase: 06-historical-charts*
 *Completed: 2026-09-04*
+
+## Self-Check: PASSED
