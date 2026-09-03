@@ -40,11 +40,19 @@ describe("windowStartForPreset", () => {
     expect(windowStartForPreset("30d", "2026-09-03")).toBe("2026-08-04");
   });
 
+  it("returns 90 calendar days before today for 90d", () => {
+    expect(windowStartForPreset("90d", "2026-09-03")).toBe("2026-06-05");
+  });
+
   it("returns null for all", () => {
     expect(windowStartForPreset("all", "2026-09-03")).toBeNull();
   });
 
   it("uses 365 calendar days for 1y (A4)", () => {
     expect(windowStartForPreset("1y", "2026-09-03")).toBe("2025-09-03");
+  });
+
+  it("leap-year 1y from day after leap day", () => {
+    expect(windowStartForPreset("1y", "2025-03-01")).toBe("2024-03-01");
   });
 });
