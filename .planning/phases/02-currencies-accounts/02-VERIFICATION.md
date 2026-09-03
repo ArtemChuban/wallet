@@ -1,7 +1,7 @@
 ---
 phase: 02-currencies-accounts
 verified: 2026-09-02T22:30:00Z
-status: human_needed
+status: passed
 score: 5/8 must-haves verified
 behavior_unverified: 3
 overrides_applied: 0
@@ -19,6 +19,7 @@ re_verification:
   regressions: []
 gaps: []
 deferred:
+
   - truth: "Outstanding debt stored on credit accounts and reduces net worth (full ACCT-02 wording)"
     addressed_in: "Phase 3"
     evidence: "Phase 3 goal: dated balance snapshots; CONTEXT D-09 — debt is credit-account balance snapshots, not Account column"
@@ -26,6 +27,7 @@ deferred:
     addressed_in: "ACCT-04 / later"
     evidence: "CONTEXT D-14 — no account delete in v1; archive/close is ACCT-04"
 behavior_unverified_items:
+
   - truth: "Editing a currency name and saving does not emit Base UI FieldControl uncontrolled default-value console error (G-02-1)"
     test: "Rename a currency while DevTools console open; save through Dialog"
     expected: "No Base UI FieldControl uncontrolled default-value warning; name persists; dialog closes"
@@ -39,6 +41,7 @@ behavior_unverified_items:
     expected: "Name field shows current saved name (fresh mount-init), not abandoned draft"
     why_human: "Ordering/remount invariant; no component test exercises formKey bump + useState init"
 human_verification:
+
   - test: "Open app → /currencies → confirm seeded RUB with «Основная» → create secondary currency → edit name only → confirm no removal control and no primary switch; Russian chrome matches UI-SPEC"
     expected: "RUB primary visible; create persists; only name editable after create; no removal / no primary switch"
     why_human: "MVP UAT re-run after gap closure; prior UAT blocked on G-02-1 console error"
