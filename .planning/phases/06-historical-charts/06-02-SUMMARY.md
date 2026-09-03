@@ -106,7 +106,7 @@ status: complete
 3. **Task 2: Account expand chart-only with native LineChart** - `648c63e` (feat)
 4. **Task 3: Native↔primary toggle hide when primary currency** - `2f570a9` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `a585222` (docs: complete plan)
 
 ## Files Created/Modified
 
