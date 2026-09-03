@@ -98,7 +98,7 @@ Each task was committed atomically:
 2. **Task 2: Inline DB fetch error — Russian message in page shell** - `be36d65` (feat)
 3. **Task 3: Russian dashboard UI smoke on /** - human-verify PASS (no code commit; user: passed)
 
-**Plan metadata:** _(pending docs commit)_
+**Plan metadata:** `841474c` (docs: complete plan)
 
 ## Files Created/Modified
 - `src/components/dashboard/DashboardAccountList.tsx` - Empty state heading, body, Button asChild Link CTA
