@@ -13,7 +13,7 @@ export default async function Home() {
   await ensureSqlitePragmas();
   const today = calendarDateToday("Europe/Moscow");
 
-  const [accountsRaw, primaryCurrency, snapshotsLteToday, ratesLteToday] =
+  const [accounts, primaryCurrency, snapshotsLteToday, ratesLteToday] =
     await Promise.all([
       prisma.account.findMany({
         include: { currency: true },
@@ -72,7 +72,7 @@ export default async function Home() {
   const primaryCode = primaryCurrency?.code ?? "RUB";
   const primaryScale = primaryCurrency?.scale ?? 2;
 
-  const inputs: NetWorthAccountInput[] = accountsRaw.map((account) => {
+  const inputs: NetWorthAccountInput[] = accounts.map((account) => {
     const locf = locfByAccount.get(account.id) ?? null;
     const rate = locfByCurrency.get(account.currencyCode) ?? null;
     return {
@@ -94,7 +94,7 @@ export default async function Home() {
   const rowById = new Map(rows.map((row) => [row.accountId, row]));
   const heroAmount = formatMinorToMajor(totalPrimaryMinor, primaryScale);
 
-  const listRows = accountsRaw.map((account) => {
+  const listRows = accounts.map((account) => {
     const row = rowById.get(account.id);
     const excludeReason = row?.excludeReason ?? "no_balance";
     const isCredit = account.type === "FIAT_CREDIT";
@@ -128,15 +128,19 @@ export default async function Home() {
     };
   });
 
+  const hasAccounts = accounts.length > 0;
+
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-4 py-8 font-sans">
-      <section>
-        <p className="text-sm text-muted-foreground">Капитал</p>
-        <p className="font-mono text-3xl font-semibold text-foreground">
-          {heroAmount} {primaryCode}
-        </p>
-      </section>
-      {isPartial ? (
+      {hasAccounts ? (
+        <section>
+          <p className="text-sm text-muted-foreground">Капитал</p>
+          <p className="font-mono text-3xl font-semibold text-foreground">
+            {heroAmount} {primaryCode}
+          </p>
+        </section>
+      ) : null}
+      {hasAccounts && isPartial ? (
         <div
           className="rounded-lg border border-border bg-muted/60 p-4"
           role="status"

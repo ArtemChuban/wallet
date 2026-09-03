@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+
 export type DashboardAccountRow = {
   id: number;
   name: string;
@@ -18,6 +21,20 @@ export function DashboardAccountList({
   accounts: DashboardAccountRow[];
   primaryCode: string;
 }) {
+  if (accounts.length === 0) {
+    return (
+      <div className="rounded-lg border border-border bg-background px-4 py-8 text-center">
+        <h2 className="text-base font-semibold text-foreground">Нет счетов</h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Создайте первый счёт, чтобы увидеть капитал.
+        </p>
+        <Button render={<Link href="/accounts" />} className="mt-4">
+          Перейти к счетам
+        </Button>
+      </div>
+    );
+  }
+
   const primaryHeader = `В ${primaryCode}`;
 
   return (
