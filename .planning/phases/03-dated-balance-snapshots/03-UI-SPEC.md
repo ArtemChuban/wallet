@@ -1,10 +1,11 @@
 ---
 phase: "03"
 slug: dated-balance-snapshots
-status: draft
+status: approved
 shadcn_initialized: true
 preset: "b2fA (base-nova / neutral / geist / lucide)"
 created: "2026-09-03"
+reviewed_at: "2026-09-03T12:25:00+02:00"
 ---
 
 # Phase 03 — UI Design Contract
@@ -215,8 +216,10 @@ Sources: 03-CONTEXT D-01–D-16; 03-RESEARCH Pattern 4–5 + Open Question 3 def
 
 > Shape-rooted UI state coverage (empty / loading / error / populated / partial / overflow / zero-one-many / long-text).
 > Empty-state and error-state COPY live in `## Copywriting Contract` above — this section REFERENCES those rows.
+>
+> Probe kinds accepted as detected (2026-09-03). Extra E5 list-collection categories dismissed — delete is a control, not a collection.
 
-Applicable state considerations resolved: 24 covered, 1 backstop, 8 dismissed, 0 unresolved
+Applicable state considerations resolved: 26 covered, 1 backstop, 16 dismissed, 0 unresolved
 
 | Category | Element(s) | Status | Resolution / Reason |
 |----------|------------|--------|---------------------|
@@ -224,31 +227,44 @@ Applicable state considerations resolved: 24 covered, 1 backstop, 8 dismissed, 0
 | empty | per-account balance slot (E2) | ✅ covered | LOCF null: no dash/zero — CTA «Задать первый баланс» (D-04) |
 | empty | set-balance Dialog (E3) | ✅ covered | Opens with empty amount; as-of default today; credit label «Доступный лимит» |
 | empty | snapshot history (E4) | ✅ covered | No expand when zero snapshots; after last delete, collapse to first-balance CTA |
+| empty | delete control (E5) | dismissed | Not a collection — empty snapshot set handled on E2/E4 |
 | loading | accounts list (E1) | ✅ covered | RSC await — no client skeleton; page streams when ready |
+| loading | balance slot (E2) | ✅ covered | Same RSC page load as E1 — no separate balance fetch |
 | loading | set-balance Dialog (E3) | ✅ covered | `useActionState` pending disables «Сохранить баланс»; Dialog stays open |
 | loading | expand / history (E4) | ✅ covered | History rows SSR-loaded with page; expand is client reveal only — no fetch spinner |
 | loading | delete control (E5) | ✅ covered | Disable delete while Server Action pending |
 | loading | top nav (E6) | dismissed | Static layout nav — no async data load |
+| loading | expand control (E7) | dismissed | Local `useState` toggle — no async load |
 | error | accounts list (E1) | ✅ covered | Server/page failure surfaces error; refresh retries |
+| error | balance slot (E2) | dismissed | Balance data rides E1 page load — no separate error chrome |
 | error | set-balance Dialog (E3) | ✅ covered | Field errors (future date, amount, credit bounds) + form-level Copywriting error |
+| error | history (E4) | dismissed | History is SSR with page; mutation errors surface on E5 delete / E3 save |
 | error | delete control (E5) | ✅ covered | Copywriting delete error; row remains until success |
 | error | top nav (E6) | dismissed | Static links — no fetch failure state |
 | error | expand control (E7) | dismissed | Expand is local state — no network error surface |
 | populated | accounts list + LOCF (E1/E2) | ✅ covered | Non-credit: amount+date; credit: available+debt+date (D-02, D-08) |
 | populated | snapshot history (E4) | ✅ covered | Newest-first rows date+amount or date+available (D-14–D-16) |
+| populated | delete control (E5) | dismissed | Control has no populated-content state — lives on history rows (E4) |
 | partial | credit Dialog (E3) | ✅ covered | Amount field is available only; debt never an input; hint explains derivation |
 | partial | account row credit (E2) | dismissed | When snapshot exists both available and debt always shown together — no half-credit UI |
 | partial | accounts list (E1) | dismissed | Account records complete; balance absence is empty CTA not partial row |
+| partial | history (E4) | dismissed | Each history row is complete date+amount; no partial row shape |
+| partial | delete control (E5) | dismissed | Not a data surface — N/A |
 | overflow | accounts list (E1) | ✅ covered | Page/main scrolls; no horizontal page scroll |
+| overflow | balance slot (E2) | ✅ covered | Amounts/dates mono; long account name overflow handled with E1 long-text backstop |
 | overflow | history panel (E4) | ✅ covered | Long history scrolls within page flow (no nested max-height trap required for v1 personal scale) |
 | overflow | set-balance Dialog (E3) | ✅ covered | Dialog body scrolls if viewport short |
+| overflow | delete control (E5) | dismissed | Fixed label/icon control — no content overflow |
 | overflow | top nav (E6) | ✅ covered | Narrow viewports: nav wraps or horizontal scroll within header |
+| overflow | expand control (E7) | dismissed | Fixed 44×44 icon button — no overflow |
 | zero-one-many | accounts list (E1) | ✅ covered | 0 = empty state; 1+ = list |
+| zero-one-many | balance slot (E2) | ✅ covered | 0 snapshots = first-balance CTA; ≥1 = LOCF display (cardinality on E4) |
 | zero-one-many | snapshots per account (E4) | ✅ covered | 0 = first-balance CTA; 1 = single history row; many = newest-first list |
+| zero-one-many | delete control (E5) | dismissed | Single control per row — cardinality is E4 |
 | long-text | account name (E1) | 🧪 backstop | Names max 120 server-side; list truncates with ellipsis; full name in edit Dialog (Phase 02) |
 | long-text | set-balance Dialog (E3) | dismissed | Amount/date are bounded inputs — not free long text |
 | long-text | history amounts (E4) | dismissed | Formatted money + fixed date — mono, no truncate needed at personal scales |
-| long-text | CTAs / expand (E5/E7) | dismissed | Fixed Russian chrome strings / aria-labels |
+| long-text | CTAs / delete / expand (E5/E7) | dismissed | Fixed Russian chrome strings / aria-labels |
 | long-text | top nav (E6) | dismissed | Fixed Russian labels |
 
 <!-- Status vocabulary (locked by probe-core projectTruths):
@@ -271,12 +287,12 @@ Applicable state considerations resolved: 24 covered, 1 backstop, 8 dismissed, 0
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
-- [ ] Dimension 7 Inventory Provenance: PASS
+- [x] Dimension 1 Copywriting: PASS (FLAG: confirm «Удалить» single-word — prefer «Удалить снимок»; non-blocking)
+- [x] Dimension 2 Visuals: PASS
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
+- [x] Dimension 7 Inventory Provenance: PASS
 
-**Approval:** pending
+**Approval:** approved 2026-09-03
