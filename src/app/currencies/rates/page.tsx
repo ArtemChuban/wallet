@@ -8,7 +8,7 @@ export default async function RatesPage() {
   await ensureSqlitePragmas();
   const today = calendarDateToday("Europe/Moscow");
 
-  const [nonPrimaryCurrencies, primaryCurrency, ratesLteToday] =
+  const [nonPrimaryCurrencies, primaryCurrency, ratesLteToday, allRates] =
     await Promise.all([
       prisma.currency.findMany({
         where: { isPrimary: false },
@@ -23,6 +23,16 @@ export default async function RatesPage() {
         where: { asOfDate: { lte: today } },
         orderBy: { asOfDate: "desc" },
         select: {
+          currencyCode: true,
+          asOfDate: true,
+          rateToPrimaryScaled: true,
+        },
+      }),
+      prisma.fxRate.findMany({
+        where: { currency: { isPrimary: false } },
+        orderBy: [{ currencyCode: "asc" }, { asOfDate: "desc" }],
+        select: {
+          id: true,
           currencyCode: true,
           asOfDate: true,
           rateToPrimaryScaled: true,
@@ -43,6 +53,20 @@ export default async function RatesPage() {
     }
   }
 
+  const historyByCurrency = new Map<
+    string,
+    { id: number; asOfDate: string; rateToPrimaryScaled: string }[]
+  >();
+  for (const rate of allRates) {
+    const list = historyByCurrency.get(rate.currencyCode) ?? [];
+    list.push({
+      id: rate.id,
+      asOfDate: rate.asOfDate,
+      rateToPrimaryScaled: rate.rateToPrimaryScaled.toString(),
+    });
+    historyByCurrency.set(rate.currencyCode, list);
+  }
+
   const currencies = nonPrimaryCurrencies.map((c) => {
     const locf = locfByCurrency.get(c.code) ?? null;
     return {
@@ -54,6 +78,7 @@ export default async function RatesPage() {
             rateToPrimaryScaled: locf.rateToPrimaryScaled.toString(),
           }
         : null,
+      history: historyByCurrency.get(c.code) ?? [],
     };
   });
 

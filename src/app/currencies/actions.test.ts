@@ -17,6 +17,7 @@ vi.mock("@/lib/db", () => ({
     },
     fxRate: {
       upsert: vi.fn(),
+      delete: vi.fn(),
     },
   },
   ensureSqlitePragmas: vi.fn(),
@@ -28,6 +29,7 @@ import { ensureSqlitePragmas, prisma } from "@/lib/db";
 import * as currencyActions from "./actions";
 import {
   createCurrency,
+  deleteFxRate,
   updateCurrencyName,
   upsertFxRate,
 } from "./actions";
@@ -40,6 +42,7 @@ describe("currencies/actions exports (D-07 / T-02-10)", () => {
         "createCurrency",
         "updateCurrencyName",
         "upsertFxRate",
+        "deleteFxRate",
       ]),
     );
     for (const forbidden of [
@@ -243,6 +246,102 @@ describe("upsertFxRate (FX-01 / D-05–D-11 / T-04-01)", () => {
       expect.objectContaining({
         update: { rateToPrimaryScaled: 9000000000n },
       }),
+    );
+  });
+});
+
+describe("deleteFxRate (FX-01 / D-13 / T-04-09)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+    vi.mocked(prisma.fxRate.delete).mockResolvedValue({} as never);
+  });
+
+  it("deletes by validated id and revalidates both paths", async () => {
+    const formData = new FormData();
+    formData.set("id", "7");
+
+    const result = await deleteFxRate(formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.fxRate.delete).toHaveBeenCalledWith({
+      where: { id: 7 },
+    });
+    expect(revalidatePath).toHaveBeenCalledWith("/currencies");
+    expect(revalidatePath).toHaveBeenCalledWith("/currencies/rates");
+  });
+
+  it("returns Russian error on invalid id", async () => {
+    const formData = new FormData();
+    formData.set("id", "0");
+
+    const result = await deleteFxRate(formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBe(
+      "Не удалось удалить курс. Попробуйте снова.",
+    );
+    expect(prisma.fxRate.delete).not.toHaveBeenCalled();
+  });
+
+  it("returns Russian error when prisma delete fails", async () => {
+    vi.mocked(prisma.fxRate.delete).mockRejectedValue(new Error("not found"));
+    const formData = new FormData();
+    formData.set("id", "99");
+
+    const result = await deleteFxRate(formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBe(
+      "Не удалось удалить курс. Попробуйте снова.",
+    );
+  });
+});
+
+describe("deleteFxRate (FX-01 / D-13 / T-04-09)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+    vi.mocked(prisma.fxRate.delete).mockResolvedValue({} as never);
+  });
+
+  it("deletes by validated id and revalidates both paths", async () => {
+    const formData = new FormData();
+    formData.set("id", "7");
+
+    const result = await deleteFxRate(formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.fxRate.delete).toHaveBeenCalledWith({
+      where: { id: 7 },
+    });
+    expect(revalidatePath).toHaveBeenCalledWith("/currencies");
+    expect(revalidatePath).toHaveBeenCalledWith("/currencies/rates");
+  });
+
+  it("returns Russian error on invalid id", async () => {
+    const formData = new FormData();
+    formData.set("id", "0");
+
+    const result = await deleteFxRate(formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBe(
+      "Не удалось удалить курс. Попробуйте снова.",
+    );
+    expect(prisma.fxRate.delete).not.toHaveBeenCalled();
+  });
+
+  it("returns Russian error when prisma delete fails", async () => {
+    vi.mocked(prisma.fxRate.delete).mockRejectedValue(new Error("not found"));
+    const formData = new FormData();
+    formData.set("id", "99");
+
+    const result = await deleteFxRate(formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBe(
+      "Не удалось удалить курс. Попробуйте снова.",
     );
   });
 });

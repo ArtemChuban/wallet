@@ -9,7 +9,7 @@ import {
   createCurrencySchema,
   updateCurrencyNameSchema,
 } from "@/lib/validations/currency";
-import { setFxRateSchema } from "@/lib/validations/fx";
+import { deleteFxRateSchema, setFxRateSchema } from "@/lib/validations/fx";
 
 export type CurrencyActionState = {
   errors?: {
@@ -28,6 +28,11 @@ export type FxRateActionState = {
     asOfDate?: string[];
     direction?: string[];
   };
+  message?: string;
+  success?: boolean;
+};
+
+export type FxRateDeleteActionState = {
   message?: string;
   success?: boolean;
 };
@@ -192,4 +197,34 @@ export async function upsertFxRate(
   revalidatePath("/currencies");
   revalidatePath("/currencies/rates");
   return { success: true, message: "Сохранено" };
+}
+
+/** Delete a single dated FX rate by id (history-only; FX-01). */
+export async function deleteFxRate(
+  formData: FormData,
+): Promise<FxRateDeleteActionState> {
+  const validated = deleteFxRateSchema.safeParse({
+    id: formData.get("id"),
+  });
+
+  if (!validated.success) {
+    return {
+      message: "Не удалось удалить курс. Попробуйте снова.",
+    };
+  }
+
+  try {
+    await ensureSqlitePragmas();
+    await prisma.fxRate.delete({
+      where: { id: validated.data.id },
+    });
+  } catch {
+    return {
+      message: "Не удалось удалить курс. Попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/currencies");
+  revalidatePath("/currencies/rates");
+  return { success: true };
 }
