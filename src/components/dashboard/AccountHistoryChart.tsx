@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 import {
+  Area,
+  AreaChart,
   CartesianGrid,
   Line,
   LineChart,
@@ -12,6 +14,8 @@ import {
 import { Button } from "@/components/ui/button";
 import {
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
@@ -38,7 +42,6 @@ export type AccountHistoryChartProps = {
   isPrimaryCurrency: boolean;
   type: NetWorthAccountType;
   creditLimitMinor: string | null;
-  /** Plan 03 replaces Line with stacked Areas when true. */
   isCredit: boolean;
   snapshots: SeriesSnapshot[];
   rates: SeriesRate[];
@@ -48,6 +51,17 @@ export type AccountHistoryChartProps = {
   today: string;
 };
 
+const creditChartConfig = {
+  debt: {
+    label: "долг",
+    color: "var(--chart-5)",
+  },
+  available: {
+    label: "доступно",
+    color: "var(--chart-2)",
+  },
+} satisfies ChartConfig;
+
 export function AccountHistoryChart({
   accountId,
   accountName,
@@ -56,7 +70,7 @@ export function AccountHistoryChart({
   isPrimaryCurrency,
   type,
   creditLimitMinor,
-  isCredit: _isCredit,
+  isCredit,
   snapshots,
   rates,
   primaryScale,
@@ -90,7 +104,7 @@ export function AccountHistoryChart({
     ? "native"
     : mode;
 
-  const data = useMemo(
+  const series = useMemo(
     () =>
       buildAccountSeries({
         account,
@@ -100,10 +114,26 @@ export function AccountHistoryChart({
         preset: range,
         today,
         mode: effectiveMode,
-      }).map(({ asOfDate, value }) => ({ asOfDate, value })),
+      }),
     [account, snapshots, rates, primaryScale, range, today, effectiveMode],
   );
 
+  const lineData = useMemo(
+    () => series.map(({ asOfDate, value }) => ({ asOfDate, value })),
+    [series],
+  );
+
+  const creditData = useMemo(
+    () =>
+      series.map(({ asOfDate, debt = 0, available = 0 }) => ({
+        asOfDate,
+        debt,
+        available,
+      })),
+    [series],
+  );
+
+  const data = isCredit ? creditData : lineData;
   const windowStart = windowStartForPreset(range, today);
   const empty = data.length === 0;
   const xTicks =
@@ -112,18 +142,25 @@ export function AccountHistoryChart({
       : empty
         ? [today]
         : undefined;
+  const showDot = data.length <= 1;
 
-  const seriesConfig = {
+  const lineConfig = {
     value: {
       label: accountName,
       color: "var(--chart-3)",
     },
   } satisfies ChartConfig;
 
+  const seriesConfig = isCredit ? creditChartConfig : lineConfig;
+
   return (
     <div className="flex flex-col gap-2">
       {!isPrimaryCurrency ? (
-        <div className="flex flex-wrap gap-2" role="group" aria-label="Валюта графика">
+        <div
+          className="flex flex-wrap gap-2"
+          role="group"
+          aria-label="Валюта графика"
+        >
           <Button
             type="button"
             size="sm"
@@ -147,52 +184,115 @@ export function AccountHistoryChart({
         </div>
       ) : null}
       <ChartContainer config={seriesConfig} className="h-[200px] w-full">
-        <LineChart
-          accessibilityLayer
-          data={data}
-          margin={{ left: 8, right: 8, top: 8, bottom: 0 }}
-        >
-          <CartesianGrid vertical={false} />
-          <XAxis
-            dataKey="asOfDate"
-            tickLine={false}
-            axisLine={false}
-            tickMargin={8}
-            ticks={xTicks}
-            tickFormatter={(value: string) => formatAsOfDisplay(value)}
-          />
-          <YAxis
-            tickLine={false}
-            axisLine={false}
-            width={48}
-            domain={empty ? [0, 1] : ["auto", "auto"]}
-            tickFormatter={(value: number) =>
-              typeof value === "number"
-                ? value.toLocaleString("ru-RU")
-                : String(value)
-            }
-          />
-          <ChartTooltip
-            content={
-              <ChartTooltipContent
-                labelFormatter={(value) =>
-                  typeof value === "string"
-                    ? formatAsOfDisplay(value)
-                    : String(value ?? "")
-                }
-              />
-            }
-          />
-          <Line
-            dataKey="value"
-            type="linear"
-            stroke="var(--color-value)"
-            strokeWidth={2}
-            dot={data.length <= 1}
-            connectNulls={false}
-            activeDot={{ r: 4 }}
-          />
-        </LineChart>
+        {isCredit ? (
+          <AreaChart
+            accessibilityLayer
+            data={creditData}
+            margin={{ left: 8, right: 8, top: 8, bottom: 0 }}
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="asOfDate"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              ticks={xTicks}
+              tickFormatter={(value: string) => formatAsOfDisplay(value)}
+            />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              width={48}
+              domain={empty ? [0, 1] : ["auto", "auto"]}
+              tickFormatter={(value: number) =>
+                typeof value === "number"
+                  ? value.toLocaleString("ru-RU")
+                  : String(value)
+              }
+            />
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  labelFormatter={(value) =>
+                    typeof value === "string"
+                      ? formatAsOfDisplay(value)
+                      : String(value ?? "")
+                  }
+                />
+              }
+            />
+            <ChartLegend content={<ChartLegendContent />} />
+            <Area
+              dataKey="debt"
+              type="linear"
+              stackId="credit"
+              fill="var(--color-debt)"
+              stroke="var(--color-debt)"
+              fillOpacity={0.4}
+              dot={showDot}
+              connectNulls={false}
+              activeDot={{ r: 4 }}
+            />
+            <Area
+              dataKey="available"
+              type="linear"
+              stackId="credit"
+              fill="var(--color-available)"
+              stroke="var(--color-available)"
+              fillOpacity={0.4}
+              dot={showDot}
+              connectNulls={false}
+              activeDot={{ r: 4 }}
+            />
+          </AreaChart>
+        ) : (
+          <LineChart
+            accessibilityLayer
+            data={lineData}
+            margin={{ left: 8, right: 8, top: 8, bottom: 0 }}
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="asOfDate"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              ticks={xTicks}
+              tickFormatter={(value: string) => formatAsOfDisplay(value)}
+            />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              width={48}
+              domain={empty ? [0, 1] : ["auto", "auto"]}
+              tickFormatter={(value: number) =>
+                typeof value === "number"
+                  ? value.toLocaleString("ru-RU")
+                  : String(value)
+              }
+            />
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  labelFormatter={(value) =>
+                    typeof value === "string"
+                      ? formatAsOfDisplay(value)
+                      : String(value ?? "")
+                  }
+                />
+              }
+            />
+            <Line
+              dataKey="value"
+              type="linear"
+              stroke="var(--color-value)"
+              strokeWidth={2}
+              dot={showDot}
+              connectNulls={false}
+              activeDot={{ r: 4 }}
+            />
+          </LineChart>
+        )}
       </ChartContainer>
     </div>
   );

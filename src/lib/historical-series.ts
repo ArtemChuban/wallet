@@ -1,3 +1,4 @@
+import { creditDebtMinor } from "@/lib/balances";
 import {
   type RangePreset,
   windowStartForPreset,
@@ -145,10 +146,15 @@ export type AccountSeriesMode = "native" | "primary";
 
 export type AccountSeriesPoint = {
   asOfDate: string;
-  /** Chart Y major as number at client boundary. */
+  /** Chart Y major as number at client boundary (non-credit / available). */
   value: number;
   /** Authoritative LOCF amount — keep BigInt in lib/tests. */
   valueMinor: bigint;
+  /** Credit stack majors (FIAT_CREDIT only) — both positive heights (D-11). */
+  debt?: number;
+  available?: number;
+  debtMinor?: bigint;
+  availableMinor?: bigint;
 };
 
 export type BuildAccountSeriesInput = {
@@ -167,7 +173,8 @@ export type BuildAccountSeriesInput = {
  * Primary: snapshots ∪ FX dates for account currency ∪ today; convert via
  * LOCF rate (identity when primary currency). Skip when FX null (D-16).
  * Skip dates with no LOCF balance. Window via windowStartForPreset.
- * Credit stack fields deferred to Plan 03.
+ * FIAT_CREDIT: emit debt+available stack (creditDebtMinor); both convert in
+ * primary mode (D-11, D-12) — not NW debt-only contribution.
  */
 export function buildAccountSeries(
   input: BuildAccountSeriesInput,
@@ -203,6 +210,59 @@ export function buildAccountSeries(
   for (const asOfDate of sampleDates) {
     const nativeMinor = locfAmountAsOf(snapshots, account.id, asOfDate);
     if (nativeMinor === null) {
+      continue;
+    }
+
+    const isCredit =
+      account.type === "FIAT_CREDIT" && account.creditLimitMinor != null;
+
+    if (isCredit) {
+      const availableMinor = nativeMinor;
+      const debtMinor = creditDebtMinor(
+        account.creditLimitMinor!,
+        availableMinor,
+      );
+
+      if (mode === "native" || account.isPrimaryCurrency) {
+        const scale = account.currencyScale;
+        points.push({
+          asOfDate,
+          valueMinor: availableMinor,
+          value: Number(formatMinorToMajor(availableMinor, scale)),
+          availableMinor,
+          debtMinor,
+          available: Number(formatMinorToMajor(availableMinor, scale)),
+          debt: Number(formatMinorToMajor(debtMinor, scale)),
+        });
+        continue;
+      }
+
+      const rate = locfRateAsOf(rates, account.currencyCode, asOfDate);
+      if (rate === null) {
+        continue; // D-16
+      }
+
+      const availablePrimary = convertOtherMinorToPrimaryMinor(
+        availableMinor,
+        rate,
+        account.currencyScale,
+        primaryScale,
+      );
+      const debtPrimary = convertOtherMinorToPrimaryMinor(
+        debtMinor,
+        rate,
+        account.currencyScale,
+        primaryScale,
+      );
+      points.push({
+        asOfDate,
+        valueMinor: availablePrimary,
+        value: Number(formatMinorToMajor(availablePrimary, primaryScale)),
+        availableMinor: availablePrimary,
+        debtMinor: debtPrimary,
+        available: Number(formatMinorToMajor(availablePrimary, primaryScale)),
+        debt: Number(formatMinorToMajor(debtPrimary, primaryScale)),
+      });
       continue;
     }
 
