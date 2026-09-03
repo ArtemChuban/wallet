@@ -388,17 +388,15 @@ const [expanded, setExpanded] = useState(false);
 | A3 | Linear interpolation between sparse events is OK (vs `stepAfter`) | Code Examples | Visual LOCF plateau preference differs — switch `type` only |
 | A4 | `1y` = 365 calendar days from today (not trailing year-to-date) | Pattern 2 | Off-by-one day count vs user expectation |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **UI-SPEC for chart chrome**
+1. **UI-SPEC for chart chrome** — **RESOLVED** via `06-UI-SPEC.md` (heights, Russian strings, credit stack colors, range/toggle chrome).
    - What we know: `workflow.ui_phase: true`; Phase 5 had `05-UI-SPEC.md`.
-   - What's unclear: Exact heights, Russian strings, credit stack colors — owned by `/gsd-ui-phase` after research/plan.
-   - Recommendation: Planner defer visual tokens to UI-SPEC; lock series math in PLAN now.
+   - Resolution: Exact chrome locked in 06-UI-SPEC.md Copywriting / Interaction / Color contracts; planner and executors follow UI-SPEC, not this open question.
 
-2. **Precompute all series in RSC vs compute in client from raw rows**
+2. **Precompute all series in RSC vs compute in client from raw rows** — **RESOLVED**: serialize minors as strings; recompute filtered series in client (matches Plan 01 assumption).
    - What we know: Snapshots/rates arrays are small for personal wallet.
-   - What's unclear: Whether expanding many accounts should precompute every account series on the server.
-   - Recommendation: RSC builds NW series for active preset **or** passes raw arrays + pure builders imported into client (builders are isomorphic if no Prisma). Prefer **RSC precompute NW for default 30d** + pass raw snapshots for client recompute on preset change to avoid four round-trips — or pass all event dates and recompute purely on client from JSON-serialized minors (strings). Smallest: serialize `amountMinor`/`rateToPrimaryScaled` as **strings**, recompute in client with BigInt when preset changes.
+   - Resolution: RSC passes JSON-serialized `amountMinor`/`rateToPrimaryScaled` as **strings**; client revives BigInt and recomputes via pure builders when preset changes (Plan 01 `<assumptions>` / DashboardChartsShell).
 
 ## Environment Availability
 
