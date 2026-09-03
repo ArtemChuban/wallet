@@ -142,7 +142,7 @@ export function AccountHistoryChart({
       : empty
         ? [today]
         : undefined;
-  const showDot = data.length <= 1;
+  // D-13 empty axes / D-15 single-point dots via data.length below
 
   const lineConfig = {
     value: {
@@ -229,7 +229,7 @@ export function AccountHistoryChart({
               fill="var(--color-debt)"
               stroke="var(--color-debt)"
               fillOpacity={0.4}
-              dot={showDot}
+              dot={data.length <= 1}
               connectNulls={false}
               activeDot={{ r: 4 }}
             />
@@ -240,7 +240,7 @@ export function AccountHistoryChart({
               fill="var(--color-available)"
               stroke="var(--color-available)"
               fillOpacity={0.4}
-              dot={showDot}
+              dot={data.length <= 1}
               connectNulls={false}
               activeDot={{ r: 4 }}
             />
@@ -287,7 +287,7 @@ export function AccountHistoryChart({
               type="linear"
               stroke="var(--color-value)"
               strokeWidth={2}
-              dot={showDot}
+              dot={data.length <= 1}
               connectNulls={false}
               activeDot={{ r: 4 }}
             />

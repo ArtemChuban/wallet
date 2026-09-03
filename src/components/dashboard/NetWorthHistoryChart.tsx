@@ -41,6 +41,7 @@ export function NetWorthHistoryChart({
   today,
 }: NetWorthHistoryChartProps) {
   const empty = data.length === 0;
+  // D-13: empty → axes only (Y domain [0,1], X = window start + today); no overlay copy
   const xTicks =
     empty && windowStart != null
       ? [windowStart, today]
@@ -87,6 +88,7 @@ export function NetWorthHistoryChart({
           type="linear"
           stroke="var(--color-nw)"
           strokeWidth={2}
+          // D-15: one point → paint dot; Recharts draws no connecting segment
           dot={data.length <= 1}
           connectNulls={false}
           activeDot={{ r: 4 }}
