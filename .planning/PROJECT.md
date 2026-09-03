@@ -17,12 +17,12 @@ At any moment, see true net worth (assets minus credit-card debt) in the primary
 - ✓ User can set/update an account balance as of a chosen date (backdating allowed) — Phase 3
 - ✓ Credit-card accounts store credit limit and outstanding debt (debt derived from limit − available) — Phase 3
 - ✓ App runs in Docker; all data persists in local SQLite — Phase 1
+- ✓ User can set exchange rates primary ↔ other as of a chosen date (manual) — Phase 4
+- ✓ Charts and totals as of a date use the FX rate effective for that date (rate changes apply forward from their date) — Phase 4
+- ✓ User can see current net worth overall and per-account balances (native + primary; credit debt reduces NW; available never an asset) — Phase 5
 
 ### Active
 
-- [ ] User can set exchange rates primary ↔ other as of a chosen date (manual)
-- [ ] Charts and totals as of a date use the FX rate effective for that date (rate changes apply forward from their date)
-- [ ] User can see current net worth overall and per-account balances
 - [ ] User can see balance history charts per account and overall (in primary currency and originals where relevant)
 
 ### Out of Scope
@@ -55,9 +55,11 @@ Today money lives in disconnected places: bank app transactions, USDT crypto, ca
 |----------|-----------|---------|
 | Docker + SQLite local stack | User already plans to run site in container; data stays on disk | — Pending |
 | Balance snapshots with date (not transactions) | User updates occasionally; wants history charts without full ledger | Shipped Phase 3 (BalanceSnapshot + LOCF) |
-| Manual dated FX, primary ↔ other | Two currencies for now; historical charts need rate-as-of-date | — Pending |
-| Credit card: limit + debt; debt reduces net worth | Matches real mental model (e.g. 500k limit, 250k debt) | Phase 3: available stored; debt = limit − available |
+| Manual dated FX, primary ↔ other | Two currencies for now; historical charts need rate-as-of-date | Shipped Phase 4 (FxRate LOCF) |
+| Credit card: limit + debt; debt reduces net worth | Matches real mental model (e.g. 500k limit, 250k debt) | Phase 3: available stored; debt = limit − available; Phase 5 hero subtracts debt only |
 | Defer spend/cash-flow/debts/goals | Ship capital visibility first | — Pending |
+| `/` is NW dashboard (Капитал); readiness not primary UX | D-01/D-02 — capital at a glance | Shipped Phase 5 |
+| Pure `computeNetWorthRows` for Phase 6 reuse | Charts need same inclusion math | Shipped Phase 5 |
 
 ## Evolution
 
@@ -77,4 +79,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-03 after Phase 03*
+*Last updated: 2026-09-03 after Phase 5*
