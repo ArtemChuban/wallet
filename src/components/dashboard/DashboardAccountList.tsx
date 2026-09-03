@@ -60,11 +60,7 @@ function NativeColumn({ account }: { account: DashboardAccountRow }) {
     );
   }
 
-  if (
-    account.isCredit &&
-    account.debtNativeDisplay != null &&
-    account.excludeReason !== "no_balance"
-  ) {
+  if (account.isCredit && account.debtNativeDisplay != null) {
     return (
       <p className="font-mono text-sm text-foreground sm:text-right">
         <span>доступно {account.nativeDisplay}</span>
