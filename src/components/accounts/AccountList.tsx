@@ -6,7 +6,6 @@ import { deleteBalanceSnapshot } from "@/app/accounts/actions";
 import { AccountFormDialog } from "@/components/accounts/AccountFormDialog";
 import { SetBalanceDialog } from "@/components/accounts/SetBalanceDialog";
 import { Button } from "@/components/ui/button";
-import { creditDebtMinor } from "@/lib/balances";
 import { formatMinorToMajor } from "@/lib/money";
 
 export type AccountCurrencyOption = {
