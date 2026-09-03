@@ -3,11 +3,11 @@ gsd_state_version: 1.0
 current_phase: 02
 current_phase_name: Currencies + Accounts
 status: executing
-stopped_at: Phase 02 SECURITY.md verified (threats_open: 0)
-last_updated: "2026-09-03T09:05:00.000Z"
+stopped_at: Phase 02 Nyquist-validated (nyquist_compliant: true)
+last_updated: "2026-09-03T11:10:00.000Z"
 last_activity: 2026-09-03
-last_activity_desc: /gsd-secure-phase 02 — threats_open 0; awaiting validate/verify
-state_head: 4c99635
+last_activity_desc: /gsd-validate-phase 02 — VALIDATION.md validated; 46/46 tests green
+state_head: dcd681a
 progress:
   total_phases: 6
   completed_phases: 1
@@ -29,8 +29,8 @@ See: .planning/PROJECT.md (updated 2026-09-02)
 
 Phase: 02 (Currencies + Accounts) — EXECUTING
 Plan: 5 of 5
-Status: Security verified (threats_open: 0) — ready for validate/UAT
-Last activity: 2026-09-03 — /gsd-secure-phase 02 wrote 02-SECURITY.md
+Status: Nyquist-compliant (validated) — ready for milestone audit / ship
+Last activity: 2026-09-03 — /gsd-validate-phase 02 filled 3 gaps; 02-VALIDATION.md validated
 
 Progress: [██░░░░░░░░] 17%
 
