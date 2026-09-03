@@ -102,7 +102,7 @@ Plans:
   3. User can see each account’s current native balance from its latest applicable snapshot
   4. Days before an account’s first snapshot show no invented zero balance
 
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans executed
 Plans:
 **Wave 1**
 
@@ -114,7 +114,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 03-03-PLAN.md — Inline history expand + delete + Russian UI human smoke
+- [x] 03-03-PLAN.md — Inline history expand + delete + Russian UI human smoke
 
 **UI hint**: yes
 
@@ -175,7 +175,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Docker + SQLite Foundation | 4/4 | Complete    | 2026-09-02 |
 | 2. Currencies + Accounts | 5/5 | In Progress|  |
-| 3. Dated Balance Snapshots | 2/3 | In Progress|  |
+| 3. Dated Balance Snapshots | 3/3 | In Progress|  |
 | 4. Dated FX | 0/TBD | Not started | - |
 | 5. Net Worth Dashboard | 0/TBD | Not started | - |
 | 6. Historical Charts | 0/TBD | Not started | - |
