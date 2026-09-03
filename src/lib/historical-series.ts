@@ -5,7 +5,7 @@ import {
 import {
   convertOtherMinorToPrimaryMinor,
   creditDebtMinor,
-  formatMinorToMajor,
+  minorToMajorNumber,
 } from "@/lib/money";
 import {
   computeNetWorthRows,
@@ -153,15 +153,13 @@ export function buildNetWorthSeries(
       const row = byId.get(account.id);
       stacks[accountStackKey(account.id)] =
         row?.includedInTotal
-          ? Number(
-              formatMinorToMajor(row.contributionPrimaryMinor, primaryScale),
-            )
+          ? minorToMajorNumber(row.contributionPrimaryMinor, primaryScale)
           : 0;
     }
     return {
       asOfDate,
       totalPrimaryMinor,
-      nw: Number(formatMinorToMajor(totalPrimaryMinor, primaryScale)),
+      nw: minorToMajorNumber(totalPrimaryMinor, primaryScale),
       stacks,
     };
   });
@@ -253,11 +251,11 @@ export function buildAccountSeries(
         points.push({
           asOfDate,
           valueMinor: availableMinor,
-          value: Number(formatMinorToMajor(availableMinor, scale)),
+          value: minorToMajorNumber(availableMinor, scale),
           availableMinor,
           debtMinor,
-          available: Number(formatMinorToMajor(availableMinor, scale)),
-          debt: Number(formatMinorToMajor(debtMinor, scale)),
+          available: minorToMajorNumber(availableMinor, scale),
+          debt: minorToMajorNumber(debtMinor, scale),
         });
         continue;
       }
@@ -282,11 +280,11 @@ export function buildAccountSeries(
       points.push({
         asOfDate,
         valueMinor: availablePrimary,
-        value: Number(formatMinorToMajor(availablePrimary, primaryScale)),
+        value: minorToMajorNumber(availablePrimary, primaryScale),
         availableMinor: availablePrimary,
         debtMinor: debtPrimary,
-        available: Number(formatMinorToMajor(availablePrimary, primaryScale)),
-        debt: Number(formatMinorToMajor(debtPrimary, primaryScale)),
+        available: minorToMajorNumber(availablePrimary, primaryScale),
+        debt: minorToMajorNumber(debtPrimary, primaryScale),
       });
       continue;
     }
@@ -295,9 +293,7 @@ export function buildAccountSeries(
       points.push({
         asOfDate,
         valueMinor: nativeMinor,
-        value: Number(
-          formatMinorToMajor(nativeMinor, account.currencyScale),
-        ),
+        value: minorToMajorNumber(nativeMinor, account.currencyScale),
       });
       continue;
     }
@@ -307,9 +303,7 @@ export function buildAccountSeries(
       points.push({
         asOfDate,
         valueMinor: nativeMinor,
-        value: Number(
-          formatMinorToMajor(nativeMinor, account.currencyScale),
-        ),
+        value: minorToMajorNumber(nativeMinor, account.currencyScale),
       });
       continue;
     }
@@ -328,7 +322,7 @@ export function buildAccountSeries(
     points.push({
       asOfDate,
       valueMinor: primaryMinor,
-      value: Number(formatMinorToMajor(primaryMinor, primaryScale)),
+      value: minorToMajorNumber(primaryMinor, primaryScale),
     });
   }
 

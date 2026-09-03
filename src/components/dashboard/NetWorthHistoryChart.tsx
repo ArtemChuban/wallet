@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/chart";
 import { formatAsOfDisplay } from "@/lib/dates";
 import { accountStackKey } from "@/lib/historical-series";
+import { formatChartNumber } from "@/lib/money";
 
 const CHART_COLORS = [
   "var(--chart-1)",
@@ -96,7 +97,7 @@ export function NetWorthHistoryChart({
           width={48}
           domain={empty ? [0, 1] : ["auto", "auto"]}
           tickFormatter={(value: number) =>
-            typeof value === "number" ? value.toLocaleString("ru-RU") : String(value)
+            typeof value === "number" ? formatChartNumber(value) : String(value)
           }
         />
         <ChartTooltip

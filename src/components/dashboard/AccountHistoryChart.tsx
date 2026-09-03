@@ -32,6 +32,7 @@ import {
   type SeriesRate,
   type SeriesSnapshot,
 } from "@/lib/historical-series";
+import { formatChartNumber } from "@/lib/money";
 import type { NetWorthAccountType } from "@/lib/net-worth";
 
 export type AccountHistoryChartProps = {
@@ -206,7 +207,7 @@ export function AccountHistoryChart({
               domain={empty ? [0, 1] : ["auto", "auto"]}
               tickFormatter={(value: number) =>
                 typeof value === "number"
-                  ? value.toLocaleString("ru-RU")
+                  ? formatChartNumber(value)
                   : String(value)
               }
             />
@@ -267,7 +268,7 @@ export function AccountHistoryChart({
               domain={empty ? [0, 1] : ["auto", "auto"]}
               tickFormatter={(value: number) =>
                 typeof value === "number"
-                  ? value.toLocaleString("ru-RU")
+                  ? formatChartNumber(value)
                   : String(value)
               }
             />
