@@ -134,7 +134,7 @@ Each task was committed atomically:
 2. **Task 2: updateDebtMeta + deleteDebt** - `91b76a3` (test) → `6690389` (feat)
 3. **Task 3: DebtFormDialog + remaining rows** - `8ae6b97` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `a201e65` (docs: complete plan)
 
 ## Files Created/Modified
 - `src/components/debts/DebtFormDialog.tsx` - create/edit dialog, locked fields, cascade delete step
