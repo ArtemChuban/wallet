@@ -4,11 +4,11 @@ milestone: v1.1
 milestone_name: Долги людям
 current_phase: 09
 current_phase_name: people-debts-crud-nav
-status: uat_complete
-stopped_at: Completed 09-04-PLAN.md
-last_updated: "2026-09-04T22:35:24.960Z"
-last_activity: 2026-09-04
-last_activity_desc: Phase 09 UAT complete — 8/8 passed (Orca browser)
+status: security_verified
+stopped_at: Completed 09-SECURITY.md (threats_open: 0)
+last_updated: "2026-09-05T00:45:00.000Z"
+last_activity: 2026-09-05
+last_activity_desc: Phase 09 security verified — 13/13 threats closed (L1 ASVS)
 state_head: 8813b61
 progress:
   total_phases: 4
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 ## Current Position
 
-Phase: 09 (people-debts-crud-nav) — UAT COMPLETE (awaiting security)
+Phase: 09 (people-debts-crud-nav) — SECURITY VERIFIED
 Plan: 4 of 4
-Status: UAT 8/8 passed via Orca browser — SECURITY.md still required before advance
+Status: UAT 8/8 + SECURITY.md verified (threats_open: 0)
 Total Plans in Phase: 4
-Last activity: 2026-09-04 — Completed 09-04 AccountList D-17 confirm migration
+Last activity: 2026-09-05 — /gsd-secure-phase 09 (L1 ASVS, 13 threats closed)
 
 ## Performance Metrics
 
@@ -208,4 +208,6 @@ Resume file: None
 
 ## Operator Next Steps
 
-- Run `/gsd-execute-phase 9` (or plan-checker first if desired)
+- `/gsd-validate-phase 9` — validate test coverage (if not already)
+- `/gsd-verify-work 9` — UAT already complete; optional re-check
+- Advance milestone when ready
