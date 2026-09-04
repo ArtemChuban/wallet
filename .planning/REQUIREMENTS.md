@@ -17,7 +17,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 - [ ] **DEBT-01**: User can create and edit a debt with direction (I owe / they owe me), currency, initial amount, optional due date, optional note
 - [x] **DEBT-02**: Remaining balance = initial − sum of repayments − write-off
-- [ ] **DEBT-03**: Initial amount cannot change after the first repayment
+- [x] **DEBT-03**: Initial amount cannot change after the first repayment
 - [ ] **DEBT-04**: Debt auto-closes when remaining reaches 0
 - [ ] **DEBT-05**: User can close early by writing off / forgiving remaining
 
@@ -85,7 +85,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PERSON-02 | Phase 9 | Pending |
 | DEBT-01 | Phase 9 | Pending |
 | DEBT-02 | Phase 8 | Complete |
-| DEBT-03 | Phase 8 | Pending |
+| DEBT-03 | Phase 8 | Complete |
 | DEBT-04 | Phase 10 | Pending |
 | DEBT-05 | Phase 10 | Pending |
 | REPAY-01 | Phase 10 | Pending |
