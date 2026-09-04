@@ -249,7 +249,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 **Goal:** Consolidate triplicate LOCF into one shared path with unchanged semantics, and close Nyquist for phases 3–6 by reconciling VALIDATION.md drafts to validated with evidence — no new user-facing features.
 **Requirements**: LOCF-01, LOCF-02, LOCF-03, LOCF-04, LOCF-05, NYQ-03, NYQ-04, NYQ-05, NYQ-06
 **Depends on:** Phase 6
-**Plans:** 1/3 plans executed
+**Plans:** 2/3 plans executed
 
 Plans:
 **Wave 1**
@@ -258,7 +258,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 07-02-PLAN.md — historical-series onto shared locf; keep Prisma get*AsOf wrappers
+- [x] 07-02-PLAN.md — historical-series onto shared locf; keep Prisma get*AsOf wrappers
 
 **Wave 3** *(blocked on Wave 2 completion)*
 

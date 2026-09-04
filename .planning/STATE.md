@@ -3,16 +3,16 @@ gsd_state_version: 1.0
 current_phase: 07
 current_phase_name: "Address tech debt: LOCF consolidation + Nyquist 3–6"
 status: executing
-stopped_at: Completed 07-01-PLAN.md
-last_updated: "2026-09-04T09:59:48.721Z"
+stopped_at: Completed 07-02-PLAN.md
+last_updated: "2026-09-04T10:04:03.411Z"
 last_activity: 2026-09-04
 last_activity_desc: Phase 07 execution started
-state_head: 5415717adc9aa883a1751bedf5a728a6126d49b8
+state_head: b4a7410f73478798c0c66e4aceb6d6acd1f9f6e2
 progress:
   total_phases: 7
   completed_phases: 5
   total_plans: 24
-  completed_plans: 22
+  completed_plans: 23
   percent: 71
 ---
 
@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-09-03)
 ## Current Position
 
 Phase: 07 (Address tech debt: LOCF consolidation + Nyquist 3–6) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 Status: Ready to execute
 Last activity: 2026-09-04 — Phase 07 execution started
 
@@ -84,6 +84,7 @@ Progress: [███████░░░] 71%
 | Phase 06-historical-charts P02 | 5min | 3 tasks | 6 files |
 | Phase 06 P03 | 1min | 3 tasks | 11 files |
 | Phase 07 P01 | 2 min | 2 tasks | 5 files |
+| Phase 07 P02 | 1 min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -143,6 +144,8 @@ Recent decisions affecting current work:
 - [Phase 06]: Post-checkpoint: client-safe money/dates, db:seed, NW stacked by account
 - [Phase 07]: Hybrid LOCF API: pickLatestAsOf + firstHitLocfMap + typed wrappers — RESEARCH Q2 / D-01 discretion; minimal drift from page batch + series pure
 - [Phase 07]: firstHitLocfMap stores full row; pages read amount/rate fields — Preserves existing Map value shape without mapping adapters
+- [Phase 07]: Deleted private locfAmountAsOf/locfRateAsOf in historical-series; import shared wrappers — LOCF-03 / D-05 single semantics surface
+- [Phase 07]: Kept getBalanceAsOf/getRateAsOf as Prisma findFirst; pointer comments to @/lib/locf only — LOCF-04 keep thin wrappers; no page N× get*AsOf
 
 ### Pending Todos
 
@@ -171,6 +174,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-04T09:59:48.582Z
-Stopped at: Completed 07-01-PLAN.md
+Last session: 2026-09-04T10:04:03.265Z
+Stopped at: Completed 07-02-PLAN.md
 Resume file: None
