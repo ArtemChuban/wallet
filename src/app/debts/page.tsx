@@ -8,12 +8,17 @@ export default async function DebtsPage() {
   await ensureSqlitePragmas();
   const peopleRaw = await prisma.person.findMany({
     orderBy: { name: "asc" },
-    select: { id: true, name: true },
+    select: {
+      id: true,
+      name: true,
+      _count: { select: { debts: true } },
+    },
   });
 
   const people = peopleRaw.map((p) => ({
     id: p.id,
     name: p.name,
+    debtCount: p._count.debts,
   }));
 
   return (

@@ -8,6 +8,7 @@ import {
 } from "react";
 import {
   createPerson,
+  renamePerson,
   type PersonActionState,
 } from "@/app/debts/actions";
 import { Button } from "@/components/ui/button";
@@ -24,19 +25,39 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-type PersonFormDialogProps = {
-  mode: "create";
-  trigger?: ReactElement;
+type PersonRow = {
+  id: number;
+  name: string;
 };
+
+type PersonFormDialogProps =
+  | {
+      mode: "create";
+      person?: undefined;
+      trigger?: ReactElement;
+    }
+  | {
+      mode: "edit";
+      person: PersonRow;
+      trigger?: ReactElement;
+    };
 
 const initialState: PersonActionState = {};
 
-function PersonFormBody({ onSuccess }: { onSuccess: () => void }) {
-  const [name, setName] = useState("");
-  const [state, formAction, isPending] = useActionState(
-    createPerson,
-    initialState,
+function PersonFormBody({
+  mode,
+  person,
+  onSuccess,
+}: {
+  mode: "create" | "edit";
+  person?: PersonRow;
+  onSuccess: () => void;
+}) {
+  const [name, setName] = useState(
+    mode === "edit" && person ? person.name : "",
   );
+  const action = mode === "create" ? createPerson : renamePerson;
+  const [state, formAction, isPending] = useActionState(action, initialState);
 
   useEffect(() => {
     if (state?.success) {
@@ -44,14 +65,24 @@ function PersonFormBody({ onSuccess }: { onSuccess: () => void }) {
     }
   }, [state, onSuccess]);
 
+  const title = mode === "create" ? "Новый человек" : "Изменить имя";
+  const description =
+    mode === "create"
+      ? "Добавьте человека, чтобы учитывать долги."
+      : "Можно изменить только имя.";
+  const submitLabel =
+    mode === "create" ? "Создать человека" : "Сохранить имя";
+
   return (
     <form action={formAction} className="grid gap-4">
       <DialogHeader>
-        <DialogTitle>Новый человек</DialogTitle>
-        <DialogDescription>
-          Добавьте человека, чтобы учитывать долги.
-        </DialogDescription>
+        <DialogTitle>{title}</DialogTitle>
+        <DialogDescription>{description}</DialogDescription>
       </DialogHeader>
+
+      {mode === "edit" && person ? (
+        <input type="hidden" name="personId" value={person.id} />
+      ) : null}
 
       <div className="grid gap-2">
         <Label htmlFor="person-name">Имя</Label>
@@ -83,20 +114,26 @@ function PersonFormBody({ onSuccess }: { onSuccess: () => void }) {
           Не сохранять
         </DialogClose>
         <Button type="submit" disabled={isPending}>
-          {isPending ? "Сохранение…" : "Создать человека"}
+          {isPending ? "Сохранение…" : submitLabel}
         </Button>
       </DialogFooter>
     </form>
   );
 }
 
-export function PersonFormDialog({ trigger }: PersonFormDialogProps) {
+export function PersonFormDialog(props: PersonFormDialogProps) {
+  const { mode, trigger } = props;
   const [open, setOpen] = useState(false);
   const [formKey, setFormKey] = useState(0);
 
-  const defaultTrigger = (
-    <Button type="button">Новый человек</Button>
-  );
+  const defaultTrigger =
+    mode === "create" ? (
+      <Button type="button">Новый человек</Button>
+    ) : (
+      <Button type="button" variant="outline">
+        Изменить имя
+      </Button>
+    );
 
   return (
     <Dialog
@@ -111,6 +148,8 @@ export function PersonFormDialog({ trigger }: PersonFormDialogProps) {
         {open ? (
           <PersonFormBody
             key={formKey}
+            mode={mode}
+            person={mode === "edit" ? props.person : undefined}
             onSuccess={() => setOpen(false)}
           />
         ) : null}
