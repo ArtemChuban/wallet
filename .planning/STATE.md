@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Долги людям
-current_phase: 09
-current_phase_name: people-debts-crud-nav
-status: audit_gaps_found
-stopped_at: Phase 10 context gathered
-last_updated: "2026-09-04T23:40:33.510Z"
+current_phase: 10
+current_phase_name: repayments-close-write-off
+status: research_complete
+stopped_at: Phase 10 research complete — ready for planning
+last_updated: "2026-09-05T00:00:00.000Z"
 last_activity: 2026-09-05
-last_activity_desc: /gsd-audit-milestone re-run — same 8 unsatisfied reqs; Nyquist 08+09 compliant
-state_head: 06f4d05b6b7839fbf581d53d82e623d905bd4789
+last_activity_desc: Phase 10 RESEARCH.md written — repayments/close/write-off
+state_head: b93a35d
 progress:
   total_phases: 4
   completed_phases: 2
@@ -24,15 +24,15 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 9 — People + debts CRUD + nav
+**Current focus:** Phase 10 — Repayments + close/write-off
 
 ## Current Position
 
-Phase: 09 (people-debts-crud-nav) — audited; milestone gaps_found
-Plan: 4 of 4
-Status: audit_gaps_found (phases 10–11 pending)
-Total Plans in Phase: 4
-Last activity: 2026-09-05 — /gsd-audit-milestone re-run (7/15; Nyquist 08+09 OK)
+Phase: 10 (repayments-close-write-off) — research complete
+Plan: 0 of TBD
+Status: research_complete (ready for `/gsd-plan-phase` planning)
+Total Plans in Phase: 0
+Last activity: 2026-09-05 — Phase 10 RESEARCH.md committed
 
 ## Performance Metrics
 
