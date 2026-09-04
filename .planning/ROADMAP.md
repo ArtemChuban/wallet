@@ -26,7 +26,7 @@ Full detail: [milestones/v1.0-ROADMAP.md](./milestones/v1.0-ROADMAP.md)
 
 </details>
 
-- [ ] **Phase 8: Debts schema + domain math** — Person/Debt/DebtRepayment models; remaining, write-off, primary totals helpers + tests; NW untouched
+- [x] **Phase 8: Debts schema + domain math** — Person/Debt/DebtRepayment models; remaining, write-off, primary totals helpers + tests; NW untouched (completed 2026-09-04)
 - [ ] **Phase 9: People + debts CRUD + nav** — `/debts` list, person/debt dialogs, «Долги» nav, RU empty states
 - [ ] **Phase 10: Repayments + close/write-off** — Dated repayments, history, delete/reopen, auto-close, early forgive
 - [ ] **Phase 11: Charts + primary totals** — Remaining + repayment charts; I-owe/they-owe primary hero with FX partial banner
@@ -45,7 +45,7 @@ Full detail: [milestones/v1.0-ROADMAP.md](./milestones/v1.0-ROADMAP.md)
   3. initialAmountMinor not edited after create; adjustments via size-change events (D-03)
   4. No debt imports exist in `net-worth.ts`, `historical-series.ts`, or `/` page
 
-**Plans:** 3/3 plans executed
+**Plans:** 3/3 plans complete
 
 Plans:
 **Wave 1**
@@ -104,7 +104,7 @@ Plans:
 | Phase | Milestone | Plans complete | Status |
 |-------|-----------|----------------|--------|
 | 1–7 | v1.0 | 24/24 | Shipped |
-| 8 | v1.1 | 0/3 | In Progress|
+| 8 | v1.1 | 0/3 | Complete   |
 | 9 | v1.1 | 0/TBD | Not started |
 | 10 | v1.1 | 0/TBD | Not started |
 | 11 | v1.1 | 0/TBD | Not started |
