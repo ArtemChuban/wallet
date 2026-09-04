@@ -39,7 +39,7 @@ At any moment, see true net worth (assets minus credit-card debt) in the primary
 
 ## Context
 
-Today money lives in disconnected places: bank app transactions, USDT crypto, cash, credit debt, and mental goals — with no single net-worth view. User wants one local place to periodically update "how much where" and see capital over time. Starting currencies will likely be just two (e.g. RUB + USDT). UI language and day-to-day use are Russian-first personal tooling. Existing repo currently has GSD tooling only; application code not started (greenfield product).
+Today money lives in disconnected places: bank app transactions, USDT crypto, cash, credit debt, and mental goals — with no single net-worth view. User wants one local place to periodically update "how much where" and see capital over time. Starting currencies will likely be just two (e.g. RUB + USDT). UI language and day-to-day use are Russian-first personal tooling. v1 roadmap complete (Phases 1–6): Docker/SQLite foundation through historical NW and per-account charts.
 
 ## Constraints
 
@@ -79,4 +79,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-03 after Phase 5*
+*Last updated: 2026-09-04 after Phase 6 (v1 roadmap complete)*
