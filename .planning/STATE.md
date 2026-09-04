@@ -1,18 +1,18 @@
 ---
 gsd_state_version: 1.0
-current_phase: 06
-status: completed
-stopped_at: Phase 06 complete — all phases complete
-last_updated: "2026-09-03T23:30:18.179Z"
+current_phase: 07
+status: planning
+stopped_at: Phase 7 context gathered
+last_updated: "2026-09-04T09:21:43.991Z"
 last_activity: 2026-09-04
-last_activity_desc: Phase 06 complete
-state_head: b35217c64afba1793e2faca6f560ddec7d744deb
+last_activity_desc: Milestone v1 audit written (tech_debt)
+state_head: 570be390e802e71d575dee3f094440365091e40f
 progress:
-  total_phases: 6
-  completed_phases: 6
+  total_phases: 7
+  completed_phases: 5
   total_plans: 21
   completed_plans: 21
-  percent: 100
+  percent: 71
 ---
 
 # Project State
@@ -22,16 +22,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-03)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 6 — Historical Charts — ready for verification
+**Current focus:** Phase 7 — Address tech debt: LOCF consolidation + Nyquist 3–6
 
 ## Current Position
 
-Phase: 06
-Plan: Not started
-Status: All phases complete
-Last activity: 2026-09-04 — Phase 06 complete
+Phase: 07
+Plan: —
+Status: Phase 7 added — ready to plan
+Last activity: 2026-09-04 — v1-MILESTONE-AUDIT.md (15/15 reqs, 15/15 integration, Nyquist 3–6 NOT-VALIDATED)
 
-Progress: [██████████] 100%
+Progress: [████████░░] 86%
 
 ## Performance Metrics
 
@@ -150,16 +150,23 @@ None yet.
 - Package legitimacy human gate before npm install (Plan 01)
 - One-way money/FX door human decision before schema (Plan 03)
 
+### Roadmap Evolution
+
+- Phase 7 added: Address tech debt: LOCF consolidation + Nyquist 3–6
+
 ## Deferred Items
 
 Items acknowledged and deferred at milestone close, most recent first:
 
 | Category | Item | Status | Deferred At | Milestone |
 |----------|------|--------|-------------|-----------|
-| *(none)* | | | | |
+| maintainability | Triplicate LOCF (helpers unused; page batch + historical-series copies) | open | 2026-09-04 | v1 |
+| nyquist | Phases 3–6 VALIDATION.md still `draft` / NOT-VALIDATED | open | 2026-09-04 | v1 |
+| docs | PROJECT.md Active still lists charts unchecked | open | 2026-09-04 | v1 |
+| scope | ACCT-01 delete → ACCT-04 (D-14) | deferred | 2026-09-02 | v1 |
 
 ## Session Continuity
 
-Last session: 2026-09-03T23:24:34.440Z
-Stopped at: Phase 06 complete — all phases complete
-Resume file: None
+Last session: 2026-09-04T09:21:43.860Z
+Stopped at: Phase 7 context gathered
+Resume file: .planning/phases/07-address-tech-debt-locf-consolidation-nyquist-3-6/07-CONTEXT.md
