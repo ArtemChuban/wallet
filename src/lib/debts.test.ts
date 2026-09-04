@@ -1,14 +1,31 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { convertOtherMinorToPrimaryMinor } from "./money";
+import type { DebtPrimaryTotalsInput } from "./debts";
 import {
   assertInitialImmutable,
   assertRepaymentAmount,
   assertSizeDelta,
   assertStatusSynced,
+  computeDebtPrimaryTotals,
   currentPrincipalMinor,
   remainingMinor,
   statusForRemaining,
 } from "./debts";
+
+function debtInput(
+  overrides: Partial<DebtPrimaryTotalsInput> &
+    Pick<DebtPrimaryTotalsInput, "id" | "direction" | "remainingMinor">,
+): DebtPrimaryTotalsInput {
+  return {
+    status: "OPEN",
+    currencyScale: 2,
+    isPrimaryCurrency: true,
+    rateToPrimaryScaled: null,
+    primaryScale: 2,
+    ...overrides,
+  };
+}
 
 describe("DEBT-02 remaining (CONTEXT D-04 size-change ledger)", () => {
   it("initial only: remaining equals initialAmountMinor", () => {
@@ -116,6 +133,129 @@ describe("assertStatusSynced (D-13)", () => {
   it("accepts CLOSED at 0n and OPEN at positive", () => {
     expect(() => assertStatusSynced("CLOSED", 0n)).not.toThrow();
     expect(() => assertStatusSynced("OPEN", 1n)).not.toThrow();
+  });
+});
+
+describe("computeDebtPrimaryTotals (D-16–D-19)", () => {
+  it("omits CLOSED debts from rows and aggregates", () => {
+    const { rows, iOwePrimaryMinor, theyOwePrimaryMinor, isPartial } =
+      computeDebtPrimaryTotals([
+        debtInput({
+          id: 1,
+          direction: "I_OWE",
+          remainingMinor: 0n,
+          status: "CLOSED",
+        }),
+        debtInput({
+          id: 2,
+          direction: "I_OWE",
+          remainingMinor: 1_000n,
+        }),
+      ]);
+    expect(rows).toHaveLength(1);
+    expect(rows[0]!.debtId).toBe(2);
+    expect(iOwePrimaryMinor).toBe(1_000n);
+    expect(theyOwePrimaryMinor).toBe(0n);
+    expect(isPartial).toBe(false);
+  });
+
+  it("uses primary currency identity without rateToPrimaryScaled", () => {
+    const { rows, iOwePrimaryMinor, isPartial } = computeDebtPrimaryTotals([
+      debtInput({
+        id: 5,
+        direction: "I_OWE",
+        remainingMinor: 42_00n,
+        rateToPrimaryScaled: null,
+      }),
+    ]);
+    expect(rows[0]!.includedInTotal).toBe(true);
+    expect(rows[0]!.excludeReason).toBe("none");
+    expect(rows[0]!.contributionPrimaryMinor).toBe(42_00n);
+    expect(iOwePrimaryMinor).toBe(42_00n);
+    expect(isPartial).toBe(false);
+  });
+
+  it("excludes non-primary without FX with no_fx and isPartial", () => {
+    const { rows, iOwePrimaryMinor, isPartial } = computeDebtPrimaryTotals([
+      debtInput({
+        id: 3,
+        direction: "I_OWE",
+        remainingMinor: 50_000n,
+        isPrimaryCurrency: false,
+        rateToPrimaryScaled: null,
+      }),
+    ]);
+    expect(iOwePrimaryMinor).toBe(0n);
+    expect(isPartial).toBe(true);
+    expect(rows[0]!.excludeReason).toBe("no_fx");
+    expect(rows[0]!.includedInTotal).toBe(false);
+    expect(rows[0]!.contributionPrimaryMinor).toBe(0n);
+  });
+
+  it("converts non-primary with rate into direction buckets", () => {
+    const rate = 90_00000000n;
+    const remaining = 10_000n;
+    const expected = convertOtherMinorToPrimaryMinor(remaining, rate, 2, 2);
+    const { rows, iOwePrimaryMinor, theyOwePrimaryMinor, isPartial } =
+      computeDebtPrimaryTotals([
+        debtInput({
+          id: 7,
+          direction: "I_OWE",
+          remainingMinor: remaining,
+          isPrimaryCurrency: false,
+          rateToPrimaryScaled: rate,
+        }),
+        debtInput({
+          id: 8,
+          direction: "THEY_OWE",
+          remainingMinor: remaining,
+          isPrimaryCurrency: false,
+          rateToPrimaryScaled: rate,
+        }),
+      ]);
+    expect(rows[0]!.contributionPrimaryMinor).toBe(expected);
+    expect(rows[1]!.contributionPrimaryMinor).toBe(expected);
+    expect(iOwePrimaryMinor).toBe(expected);
+    expect(theyOwePrimaryMinor).toBe(expected);
+    expect(isPartial).toBe(false);
+  });
+
+  it("mixed OPEN set: aggregates correct and isPartial if any excluded", () => {
+    const rate = 90_00000000n;
+    const { iOwePrimaryMinor, theyOwePrimaryMinor, isPartial, rows } =
+      computeDebtPrimaryTotals([
+        debtInput({
+          id: 10,
+          direction: "I_OWE",
+          remainingMinor: 100n,
+        }),
+        debtInput({
+          id: 11,
+          direction: "THEY_OWE",
+          remainingMinor: 200n,
+          isPrimaryCurrency: false,
+          rateToPrimaryScaled: null,
+        }),
+        debtInput({
+          id: 12,
+          direction: "THEY_OWE",
+          remainingMinor: 50n,
+          isPrimaryCurrency: false,
+          rateToPrimaryScaled: rate,
+        }),
+        debtInput({
+          id: 13,
+          direction: "I_OWE",
+          remainingMinor: 0n,
+          status: "CLOSED",
+        }),
+      ]);
+    const theyConverted = convertOtherMinorToPrimaryMinor(50n, rate, 2, 2);
+    expect(iOwePrimaryMinor).toBe(100n);
+    expect(theyOwePrimaryMinor).toBe(theyConverted);
+    expect(isPartial).toBe(true);
+    expect(rows).toHaveLength(3);
+    expect(rows.find((r) => r.debtId === 11)!.includedInTotal).toBe(false);
   });
 });
 
