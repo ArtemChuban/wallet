@@ -72,8 +72,16 @@ Plans:
 **Plans:** 4 plans
 
 Plans:
+**Wave 1**
+
 - [ ] 09-01-PLAN.md — Tracer: nav «Долги» + /debts + createPerson + empty list
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 09-02-PLAN.md — Person rename/delete (PERSON-02) + groups/CTAs + DestructiveConfirmStep
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
 - [ ] 09-03-PLAN.md — Debt create/edit/delete + remaining rows + compound create
 - [ ] 09-04-PLAN.md — Migrate AccountList snapshot delete to in-dialog confirm (D-17)
 
