@@ -4,10 +4,10 @@ milestone: v1.1
 milestone_name: Долги людям
 current_phase: "09"
 status: planning
-stopped_at: Phase 9 UI-SPEC draft ready for checker
-last_updated: "2026-09-04T22:20:00.000Z"
+stopped_at: Phase 9 UI-SPEC revised (copywriting CTAs) — ready for checker
+last_updated: "2026-09-04T22:25:00.000Z"
 last_activity: 2026-09-04
-last_activity_desc: Phase 09 UI-SPEC.md written
+last_activity_desc: Phase 09 UI-SPEC copywriting CTAs fixed (Dim 1)
 state_head: 476a7a4615f9460d460065a0416392700528b272
 progress:
   total_phases: 4
@@ -30,9 +30,9 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 Phase: 09 — UI-SPEC DRAFT
 Plan: 0 of TBD
-Status: UI-SPEC draft — ready for checker
+Status: UI-SPEC draft — Dim 1 copywriting revised; ready for checker
 Total Plans in Phase: TBD
-Last activity: 2026-09-04 — Phase 09 UI-SPEC.md written
+Last activity: 2026-09-04 — Phase 09 UI-SPEC dialog CTAs made noun-specific
 
 ## Performance Metrics
 
