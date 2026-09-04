@@ -3,7 +3,10 @@
 import { revalidatePath } from "next/cache";
 import { Prisma } from "@/generated/prisma/client";
 import { ensureSqlitePragmas, prisma } from "@/lib/db";
+import { parseMajorToMinor } from "@/lib/money";
 import {
+  createDebtSchema,
+  createDebtWithNewPersonSchema,
   createPersonSchema,
   renamePersonSchema,
 } from "@/lib/validations/debts";
@@ -12,6 +15,21 @@ export type PersonActionState = {
   errors?: {
     name?: string[];
     personId?: string[];
+  };
+  message?: string;
+  success?: boolean;
+};
+
+export type DebtActionState = {
+  errors?: {
+    personId?: string[];
+    name?: string[];
+    direction?: string[];
+    currencyCode?: string[];
+    initialAmountMajor?: string[];
+    dueDate?: string[];
+    note?: string[];
+    debtId?: string[];
   };
   message?: string;
   success?: boolean;
@@ -29,6 +47,58 @@ function isForeignKeyViolation(error: unknown): boolean {
     error instanceof Prisma.PrismaClientKnownRequestError &&
     error.code === "P2003"
   );
+}
+
+/** Count fractional digits in a major decimal string (0 if none). */
+function fracDigitCount(major: string): number {
+  const m = /^[+-]?\d+(?:\.(\d+))?$/.exec(major.trim());
+  return m?.[1]?.length ?? 0;
+}
+
+async function resolveInitialMinor(
+  currencyCode: string,
+  initialAmountMajor: string,
+): Promise<
+  | { ok: true; initialAmountMinor: bigint }
+  | { ok: false; state: DebtActionState }
+> {
+  const currency = await prisma.currency.findUnique({
+    where: { code: currencyCode },
+  });
+  if (!currency) {
+    return {
+      ok: false,
+      state: { errors: { currencyCode: ["Валюта не найдена"] } },
+    };
+  }
+  if (fracDigitCount(initialAmountMajor) > currency.scale) {
+    return {
+      ok: false,
+      state: {
+        errors: {
+          initialAmountMajor: [
+            `Не больше ${currency.scale} знаков после запятой`,
+          ],
+        },
+      },
+    };
+  }
+  try {
+    const initialAmountMinor = parseMajorToMinor(
+      initialAmountMajor,
+      currency.scale,
+    );
+    return { ok: true, initialAmountMinor };
+  } catch (err) {
+    const msg =
+      err instanceof Error && err.message === "too many fractional digits"
+        ? `Не больше ${currency.scale} знаков после запятой`
+        : "Некорректная сумма";
+    return {
+      ok: false,
+      state: { errors: { initialAmountMajor: [msg] } },
+    };
+  }
 }
 
 /** Create person with unique trimmed name (PERSON-01). */
@@ -140,4 +210,117 @@ export async function deletePerson(
 
   revalidatePath("/debts");
   return { success: true, message: "Удалено" };
+}
+
+/**
+ * Create debt for existing person, or compound new-person+debt (D-06 / DEBT-01).
+ * Branch: personId present → createDebtSchema; else name → nested person+debt.
+ */
+export async function createDebt(
+  _prev: DebtActionState,
+  formData: FormData,
+): Promise<DebtActionState> {
+  const personIdRaw = formData.get("personId");
+  const hasPersonId =
+    typeof personIdRaw === "string" && personIdRaw.trim() !== "";
+
+  try {
+    await ensureSqlitePragmas();
+
+    if (hasPersonId) {
+      const validated = createDebtSchema.safeParse({
+        personId: personIdRaw,
+        direction: formData.get("direction"),
+        currencyCode: formData.get("currencyCode"),
+        initialAmountMajor: formData.get("initialAmountMajor"),
+        dueDate: formData.get("dueDate") ?? undefined,
+        note: formData.get("note") ?? undefined,
+      });
+
+      if (!validated.success) {
+        return { errors: validated.error.flatten().fieldErrors };
+      }
+
+      const {
+        personId,
+        direction,
+        currencyCode,
+        initialAmountMajor,
+        dueDate,
+        note,
+      } = validated.data;
+
+      const resolved = await resolveInitialMinor(
+        currencyCode,
+        initialAmountMajor,
+      );
+      if (!resolved.ok) return resolved.state;
+
+      await prisma.debt.create({
+        data: {
+          personId,
+          direction,
+          currencyCode,
+          initialAmountMinor: resolved.initialAmountMinor,
+          dueDate,
+          note,
+          status: "OPEN",
+        },
+      });
+    } else {
+      const validated = createDebtWithNewPersonSchema.safeParse({
+        name: formData.get("name"),
+        direction: formData.get("direction"),
+        currencyCode: formData.get("currencyCode"),
+        initialAmountMajor: formData.get("initialAmountMajor"),
+        dueDate: formData.get("dueDate") ?? undefined,
+        note: formData.get("note") ?? undefined,
+      });
+
+      if (!validated.success) {
+        return { errors: validated.error.flatten().fieldErrors };
+      }
+
+      const {
+        name,
+        direction,
+        currencyCode,
+        initialAmountMajor,
+        dueDate,
+        note,
+      } = validated.data;
+
+      const resolved = await resolveInitialMinor(
+        currencyCode,
+        initialAmountMajor,
+      );
+      if (!resolved.ok) return resolved.state;
+
+      await prisma.person.create({
+        data: {
+          name,
+          debts: {
+            create: {
+              direction,
+              currencyCode,
+              initialAmountMinor: resolved.initialAmountMinor,
+              dueDate,
+              note,
+              status: "OPEN",
+            },
+          },
+        },
+      });
+    }
+  } catch (error) {
+    if (isUniqueNameViolation(error)) {
+      return { errors: { name: ["Человек с таким именем уже есть"] } };
+    }
+    return {
+      message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/debts");
+  return { success: true, message: "Сохранено" };
 }

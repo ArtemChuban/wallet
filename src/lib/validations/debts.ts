@@ -80,6 +80,29 @@ export const createDebtSchema = z
   });
 
 /**
+ * Compound create: new person name + debt fields (no personId) — D-06.
+ */
+export const createDebtWithNewPersonSchema = z
+  .object({
+    name: personNameSchema,
+    direction: debtDirectionSchema,
+    currencyCode: currencyCodeSchema,
+    initialAmountMajor: z.string().trim().min(1, "Введите корректную сумму"),
+    dueDate: optionalDueDateSchema,
+    note: optionalNoteSchema,
+  })
+  .strict()
+  .superRefine((val, ctx) => {
+    if (!isStrictlyPositiveMajor(val.initialAmountMajor)) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["initialAmountMajor"],
+        message: "Введите сумму больше 0",
+      });
+    }
+  });
+
+/**
  * Update debt meta only — no initial amount fields (DEBT-03 / D-03).
  * Direction / dueDate / note editable; principal changes via size-change events.
  */
@@ -138,6 +161,9 @@ export const createSizeChangeSchema = z
 export type CreatePersonInput = z.infer<typeof createPersonSchema>;
 export type RenamePersonInput = z.infer<typeof renamePersonSchema>;
 export type CreateDebtInput = z.infer<typeof createDebtSchema>;
+export type CreateDebtWithNewPersonInput = z.infer<
+  typeof createDebtWithNewPersonSchema
+>;
 export type UpdateDebtMetaInput = z.infer<typeof updateDebtMetaSchema>;
 export type CreateRepaymentInput = z.infer<typeof createRepaymentSchema>;
 export type CreateSizeChangeInput = z.infer<typeof createSizeChangeSchema>;
