@@ -4,11 +4,11 @@ milestone: v1.1
 milestone_name: Долги людям
 current_phase: 09
 current_phase_name: people-debts-crud-nav
-status: ready_for_verification
+status: uat_complete
 stopped_at: Completed 09-04-PLAN.md
-last_updated: "2026-09-04T21:46:32.510Z"
+last_updated: "2026-09-04T22:35:24.960Z"
 last_activity: 2026-09-04
-last_activity_desc: Phase 09 plan 04 complete — AccountList D-17 confirm migration
+last_activity_desc: Phase 09 UAT complete — 8/8 passed (Orca browser)
 state_head: 8813b61
 progress:
   total_phases: 4
@@ -28,9 +28,9 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 ## Current Position
 
-Phase: 09 (people-debts-crud-nav) — READY FOR VERIFICATION
+Phase: 09 (people-debts-crud-nav) — UAT COMPLETE (awaiting security)
 Plan: 4 of 4
-Status: All plans complete — ready for verification
+Status: UAT 8/8 passed via Orca browser — SECURITY.md still required before advance
 Total Plans in Phase: 4
 Last activity: 2026-09-04 — Completed 09-04 AccountList D-17 confirm migration
 
