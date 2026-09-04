@@ -1,8 +1,8 @@
 ---
-status: diagnosed
+status: resolved
 trigger: "G-02-1-currency-uncontrolled-fieldcontrol — Editing/updating a currency form triggers Base UI console error: uncontrolled FieldControl default value state change after init (CurrencyFormDialog / CurrencyFormBody / Input)."
 created: 2026-09-03T00:00:00Z
-updated: 2026-09-04T12:35:36Z
+updated: 2026-09-04T13:00:00Z
 symptoms_prefilled: true
 goal: find_root_cause_only
 ---
@@ -89,10 +89,12 @@ started: Discovered during UAT phase 02
 ## Resolution
 
 root_cause: "Edit name Input is uncontrolled with defaultValue bound to live currency.name; updateCurrencyName's revalidatePath refreshes CurrencyList while CurrencyFormBody still mounted, so defaultValue changes after Base UI FieldControl init."
-fix: "not applied (diagnose-only session)"
-verification: "Out-of-session tree already has controlled Input (useState name + value/onChange) and CURR-01/G-02-1 regression test; this session made no code changes."
-files_changed: []
-oracle_type: "diagnose_only"
+fix: "Plan 02-05 — controlled mount-init useState name + value/onChange; formKey remount on dialog open; zero defaultValue (CurrencyFormDialog.tsx)."
+verification: "CurrencyFormDialog.test.ts CURR-01/G-02-1; 02-UAT.md test 3 FieldControl console silence — pass."
+files_changed:
+  - src/components/currencies/CurrencyFormDialog.tsx
+  - src/components/currencies/CurrencyFormDialog.test.ts
+oracle_type: "human_uat + unit"
 specialist_hint: react
 
 ## Prevention

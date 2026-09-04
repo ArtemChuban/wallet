@@ -19,10 +19,10 @@ current_phase: 07
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-09-04)
+See: .planning/PROJECT.md (updated 2026-09-04 after v1.0)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Milestone v1 complete — ready to archive
+**Current focus:** Planning next milestone (`/gsd-new-milestone`)
 
 ## Current Position
 

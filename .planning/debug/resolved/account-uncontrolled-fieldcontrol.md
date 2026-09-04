@@ -1,8 +1,8 @@
 ---
-status: diagnosed
+status: resolved
 trigger: "G-02-2-account-uncontrolled-fieldcontrol — Editing an account form triggers Base UI console error: uncontrolled FieldControl default value state change after init (AccountFormDialog / AccountFormBody / Input)."
 created: 2026-09-03T00:01:00Z
-updated: 2026-09-04T12:30:11Z
+updated: 2026-09-04T13:00:00Z
 symptoms_prefilled: true
 goal: find_root_cause_only
 ---
@@ -88,10 +88,12 @@ started: Discovered during UAT phase 02
 ## Resolution
 
 root_cause: "Edit name Input is uncontrolled with defaultValue bound to live account.name; updateAccountName's revalidatePath refreshes AccountList while AccountFormBody still mounted, so defaultValue changes after Base UI FieldControl init."
-fix: "not applied (diagnose-only)"
-verification: ""
-files_changed: []
-oracle_type: ""
+fix: "Plan 02-05 — controlled mount-init useState name + value/onChange; formKey remount on dialog open; zero defaultValue (AccountFormDialog.tsx)."
+verification: "AccountFormDialog.test.ts ACCT-01/G-02-2; 02-UAT.md test 3 FieldControl console silence — pass."
+files_changed:
+  - src/components/accounts/AccountFormDialog.tsx
+  - src/components/accounts/AccountFormDialog.test.ts
+oracle_type: "human_uat + unit"
 
 ## Specialist Review
 
