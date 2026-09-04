@@ -4,15 +4,15 @@ milestone: v1.1
 milestone_name: Долги людям
 current_phase: 09
 current_phase_name: people-debts-crud-nav
-status: validated
-stopped_at: "Completed 09-VALIDATION.md (nyquist_compliant: true)"
-last_updated: "2026-09-05T00:50:00.000Z"
+status: audit_gaps_found
+stopped_at: "Completed v1.1-MILESTONE-AUDIT.md (gaps_found: 8/15 reqs, phases 10–11 missing)"
+last_updated: "2026-09-04T22:54:58Z"
 last_activity: 2026-09-05
-last_activity_desc: Phase 09 Nyquist validated — 0 gaps, 63 tests green
+last_activity_desc: Milestone audit gaps_found — 7/15 reqs; continue phases 10–11
 state_head: b49c3d82fcc57d5b8abef2e4ed934ee76b32c254
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 7
   completed_plans: 7
 ---
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 ## Current Position
 
-Phase: 09 (people-debts-crud-nav) — NYQUIST VALIDATED
+Phase: 09 (people-debts-crud-nav) — audited; milestone gaps_found
 Plan: 4 of 4
-Status: validated (nyquist_compliant: true)
+Status: audit_gaps_found (phases 10–11 pending)
 Total Plans in Phase: 4
-Last activity: 2026-09-05 — /gsd-validate-phase 09 (0 gaps, 63 tests green)
+Last activity: 2026-09-05 — /gsd-audit-milestone (7/15 reqs; P08↔P09 wired)
 
 ## Performance Metrics
 
@@ -208,6 +208,5 @@ Resume file: None
 
 ## Operator Next Steps
 
-- `/gsd-audit-milestone` — milestone quality gate next
-- `/gsd-verify-work 9` — UAT already complete; optional re-check
-- Advance milestone when ready
+- `/gsd-discuss-phase 10` — repayments + close/write-off
+- Re-audit after Phase 11 before `/gsd-complete-milestone`
