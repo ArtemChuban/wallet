@@ -4,11 +4,11 @@ milestone: v1.1
 milestone_name: Долги людям
 current_phase: 08
 current_phase_name: Debts schema + domain math
-status: planning
-stopped_at: Phase 8 plans revised (checker feedback)
-last_updated: "2026-09-04T16:04:30.514Z"
-last_activity: 2026-09-04 Phase 8 plan revision (research open Q RESOLVED, validation map, D-18 A6, Docker A7)
-state_head: 395aab3f95a3767aaea7b9f8caef4755c35491d0
+status: "Ready to execute"
+stopped_at: Phase 8 planned — 3 plans
+last_updated: "2026-09-04T16:10:00.000Z"
+last_activity: 2026-09-04
+state_head: 5f8f7c3
 progress:
   total_phases: 4
   completed_phases: 0
@@ -28,9 +28,10 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 ## Current Position
 
 Phase: 08 (Debts schema + domain math) — READY TO EXECUTE
-Plan: 01
-Status: Plans revised — ready for re-check / execute
-Last activity: 2026-09-04 Phase 8 plan revision (research open Q RESOLVED, validation map, D-18 A6, Docker A7)
+Plan: 01 of 03
+Status: Ready to execute
+Total Plans in Phase: 3
+Last activity: 2026-09-04
 
 ## Performance Metrics
 
