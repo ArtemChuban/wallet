@@ -81,27 +81,27 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PERSON-01 | — | Pending |
-| PERSON-02 | — | Pending |
-| DEBT-01 | — | Pending |
-| DEBT-02 | — | Pending |
-| DEBT-03 | — | Pending |
-| DEBT-04 | — | Pending |
-| DEBT-05 | — | Pending |
-| REPAY-01 | — | Pending |
-| REPAY-02 | — | Pending |
-| REPAY-03 | — | Pending |
-| DCHART-01 | — | Pending |
-| DCHART-02 | — | Pending |
-| DTOTAL-01 | — | Pending |
-| DNAV-01 | — | Pending |
-| DISOL-01 | — | Pending |
+| PERSON-01 | Phase 9 | Pending |
+| PERSON-02 | Phase 9 | Pending |
+| DEBT-01 | Phase 9 | Pending |
+| DEBT-02 | Phase 8 | Pending |
+| DEBT-03 | Phase 8 | Pending |
+| DEBT-04 | Phase 10 | Pending |
+| DEBT-05 | Phase 10 | Pending |
+| REPAY-01 | Phase 10 | Pending |
+| REPAY-02 | Phase 10 | Pending |
+| REPAY-03 | Phase 10 | Pending |
+| DCHART-01 | Phase 11 | Pending |
+| DCHART-02 | Phase 11 | Pending |
+| DTOTAL-01 | Phase 11 | Pending |
+| DNAV-01 | Phase 9 | Pending |
+| DISOL-01 | Phase 8 + 11 | Pending |
 
 **Coverage:**
 - v1.1 requirements: 15 total
-- Mapped to phases: 0
-- Unmapped: 15
+- Mapped to phases: 15
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-09-04*
-*Last updated: 2026-09-04 after milestone v1.1 scoping*
+*Last updated: 2026-09-04 after roadmap mapping*

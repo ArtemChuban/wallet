@@ -2,32 +2,35 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Долги людям
+current_phase: 8
+current_phase_name: Debts schema + domain math
 status: planning
-last_updated: "2026-09-04T14:57:29.312Z"
+stopped_at: Phase 07 complete — milestone v1 ready to close
+last_updated: "2026-09-04T15:05:05.741Z"
 last_activity: 2026-09-04
+state_head: 4c86fc85ddd4043c54acbf9edea0ba439bd7445b
 progress:
-  total_phases: 0
+  total_phases: 4
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
-  percent: 0
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-09-04 after v1.0)
+See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Planning next milestone (`/gsd-new-milestone`)
+**Current focus:** Phase 8 — Debts schema + domain math
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 8 (Debts schema + domain math)
 Plan: —
-Status: Defining requirements
-Last activity: 2026-09-04 — Milestone v1.1 started
+Status: Ready to plan
+Last activity: 2026-09-04
 
 ## Performance Metrics
 
