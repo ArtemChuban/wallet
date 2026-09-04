@@ -2,19 +2,19 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Долги людям
-current_phase: 08
-status: completed
-stopped_at: Phase 9 context gathered
-last_updated: "2026-09-04T18:35:04.550Z"
+current_phase: "09"
+status: planning
+stopped_at: Phase 9 research complete
+last_updated: "2026-09-04T18:48:49.859Z"
 last_activity: 2026-09-04
-last_activity_desc: Phase 08 marked complete
-state_head: 4948b78f18c7b178c8f1911f2d506a09562b77fd
+last_activity_desc: Phase 09 RESEARCH.md written
+state_head: 476a7a4615f9460d460065a0416392700528b272
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 3
   completed_plans: 3
-current_phase_name: Debts schema + domain math
+current_phase_name: people-debts-crud-nav
 ---
 
 # Project State
@@ -24,15 +24,15 @@ current_phase_name: Debts schema + domain math
 See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 8 — Debts schema + domain math
+**Current focus:** Phase 9 — People + debts CRUD + nav
 
 ## Current Position
 
-Phase: 08 — COMPLETE
-Plan: 3 of 03
-Status: Phase 08 complete
-Total Plans in Phase: 3
-Last activity: 2026-09-04 — Phase 08 marked complete
+Phase: 09 — RESEARCH COMPLETE
+Plan: 0 of TBD
+Status: Research complete — ready for planning
+Total Plans in Phase: TBD
+Last activity: 2026-09-04 — Phase 09 RESEARCH.md written
 
 ## Performance Metrics
 
@@ -187,10 +187,10 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-04T18:35:04.508Z
-Stopped at: Phase 9 context gathered
-Resume file: /home/artem/Documents/wallet/.planning/phases/09-people-debts-crud-nav/09-CONTEXT.md
+Last session: 2026-09-04T18:47:56.656Z
+Stopped at: Phase 9 research complete
+Resume file: /home/artem/Documents/wallet/.planning/phases/09-people-debts-crud-nav/09-RESEARCH.md
 
 ## Operator Next Steps
 
-- Run `/gsd-execute-phase 8` (Wave 1 starts with D-01/D-02 decision checkpoint)
+- Run `/gsd-plan-phase 9` (research ready)
