@@ -1,3 +1,5 @@
+import { convertOtherMinorToPrimaryMinor } from "@/lib/money";
+
 /** Debt status mirrored from Prisma DebtStatus enum (pure helpers — no Prisma). */
 export type DebtStatus = "OPEN" | "CLOSED";
 
@@ -93,4 +95,103 @@ export function assertInitialImmutable(
   if (proposedInitialMinor !== storedInitialMinor) {
     throw new Error("initialAmountMinor is immutable after create");
   }
+}
+
+/** Debt direction mirrored from Prisma DebtDirection enum. */
+export type DebtDirection = "I_OWE" | "THEY_OWE";
+
+/**
+ * OPEN debt + caller-resolved LOCF rate (A6 / D-18 adaptation).
+ * asOfDate stays at the call site — helper takes rateToPrimaryScaled only.
+ */
+export type DebtPrimaryTotalsInput = {
+  id: number;
+  direction: DebtDirection;
+  status: DebtStatus;
+  remainingMinor: bigint;
+  currencyScale: number;
+  isPrimaryCurrency: boolean;
+  /** Null = missing FX for non-primary; ignored when isPrimaryCurrency. */
+  rateToPrimaryScaled: bigint | null;
+  primaryScale: number;
+};
+
+export type DebtExcludeReason = "none" | "no_fx";
+
+export type DebtPrimaryTotalsRow = {
+  debtId: number;
+  direction: DebtDirection;
+  includedInTotal: boolean;
+  excludeReason: DebtExcludeReason;
+  /** Primary-minor contribution to the matching side aggregate (0n if excluded). */
+  contributionPrimaryMinor: bigint;
+  remainingNativeMinor: bigint;
+};
+
+function toPrimaryMinor(
+  debt: DebtPrimaryTotalsInput,
+  nativeMinor: bigint,
+): bigint | null {
+  if (debt.isPrimaryCurrency) {
+    return nativeMinor;
+  }
+  if (debt.rateToPrimaryScaled === null) {
+    return null;
+  }
+  return convertOtherMinorToPrimaryMinor(
+    nativeMinor,
+    debt.rateToPrimaryScaled,
+    debt.currencyScale,
+    debt.primaryScale,
+  );
+}
+
+function rowForOpen(debt: DebtPrimaryTotalsInput): DebtPrimaryTotalsRow {
+  const primary = toPrimaryMinor(debt, debt.remainingMinor);
+  if (primary === null) {
+    return {
+      debtId: debt.id,
+      direction: debt.direction,
+      includedInTotal: false,
+      excludeReason: "no_fx",
+      contributionPrimaryMinor: 0n,
+      remainingNativeMinor: debt.remainingMinor,
+    };
+  }
+  return {
+    debtId: debt.id,
+    direction: debt.direction,
+    includedInTotal: true,
+    excludeReason: "none",
+    contributionPrimaryMinor: primary,
+    remainingNativeMinor: debt.remainingMinor,
+  };
+}
+
+/**
+ * OPEN-only primary totals with NW-style FX honesty (D-16–D-19).
+ * CLOSED omitted from rows and aggregates. Missing non-primary FX → exclude + isPartial.
+ */
+export function computeDebtPrimaryTotals(
+  debts: readonly DebtPrimaryTotalsInput[],
+): {
+  rows: DebtPrimaryTotalsRow[];
+  iOwePrimaryMinor: bigint;
+  theyOwePrimaryMinor: bigint;
+  isPartial: boolean;
+} {
+  const open = debts.filter((d) => d.status === "OPEN");
+  const rows = open.map((d) => rowForOpen(d));
+  let iOwePrimaryMinor = 0n;
+  let theyOwePrimaryMinor = 0n;
+  for (const row of rows) {
+    if (!row.includedInTotal) continue;
+    if (row.direction === "I_OWE") {
+      iOwePrimaryMinor += row.contributionPrimaryMinor;
+    } else {
+      theyOwePrimaryMinor += row.contributionPrimaryMinor;
+    }
+  }
+  const isPartial = rows.some((row) => !row.includedInTotal);
+  return { rows, iOwePrimaryMinor, theyOwePrimaryMinor, isPartial };
 }
