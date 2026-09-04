@@ -74,6 +74,8 @@ Shipped v1.0: capital visibility across disconnected money places (bank, USDT, c
 
 v1.1 adds personal debts (people ↔ money owed) as a parallel domain: same money/FX primitives for primary totals and charts, but debt balances must not flow into `computeNetWorthRows` or NW charts.
 
+**UI constitution — destructive actions:** Never use `window.confirm` (or equivalent browser confirm) for deletes or other irreversible actions. Always use an in-app second step inside the dialog/flow (explicit «точно удалить?» / equivalent) with Russian copy that states what will be lost. Applies app-wide from Phase 9 onward (debts, people, balance snapshots, and any future destructive UX).
+
 ## Constraints
 
 - **Runtime**: Dockerized web app — must run as a local container
@@ -101,6 +103,7 @@ v1.1 adds personal debts (people ↔ money owed) as a parallel domain: same mone
 | Debts excluded from NW | Capital stays account-based; debts are side ledger | — Pending v1.1 |
 | Early close = write-off/forgive remaining | Auto-close at 0 insufficient for real settlements | — Pending v1.1 |
 | Primary totals for I-owe / they-owe via FX as-of | Same conversion honesty as NW dashboard | — Pending v1.1 |
+| Destructive confirm = in-dialog second step, never `window.confirm` | Accidental deletes; consistent RU UX; honest cascade copy | Locked Phase 9 — app-wide constitution |
 
 ## Evolution
 
