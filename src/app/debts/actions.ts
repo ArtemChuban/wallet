@@ -9,6 +9,7 @@ import {
   createDebtWithNewPersonSchema,
   createPersonSchema,
   renamePersonSchema,
+  updateDebtMetaSchema,
 } from "@/lib/validations/debts";
 
 export type PersonActionState = {
@@ -323,4 +324,78 @@ export async function createDebt(
 
   revalidatePath("/debts");
   return { success: true, message: "Сохранено" };
+}
+
+/**
+ * Update debt meta only — direction / dueDate / note (D-09 / T-09-01).
+ * Smuggled initial/person/currency FormData fields are ignored via schema.strict.
+ */
+export async function updateDebtMeta(
+  _prev: DebtActionState,
+  formData: FormData,
+): Promise<DebtActionState> {
+  const validated = updateDebtMetaSchema.safeParse({
+    debtId: formData.get("debtId"),
+    direction: formData.get("direction") ?? undefined,
+    dueDate: formData.get("dueDate") ?? undefined,
+    note: formData.get("note") ?? undefined,
+  });
+
+  if (!validated.success) {
+    return { errors: validated.error.flatten().fieldErrors };
+  }
+
+  const { debtId, direction, dueDate, note } = validated.data;
+
+  try {
+    await ensureSqlitePragmas();
+    await prisma.debt.update({
+      where: { id: debtId },
+      data: {
+        ...(direction !== undefined ? { direction } : {}),
+        dueDate: dueDate ?? null,
+        note: note ?? null,
+      },
+    });
+  } catch {
+    return {
+      message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/debts");
+  return { success: true, message: "Сохранено" };
+}
+
+/**
+ * Delete debt; Cascade removes repayments and size-change history (D-13).
+ */
+export async function deleteDebt(
+  formData: FormData,
+): Promise<DebtActionState> {
+  const debtIdRaw = formData.get("debtId");
+  const debtId =
+    typeof debtIdRaw === "string" && /^\d+$/.test(debtIdRaw.trim())
+      ? Number(debtIdRaw.trim())
+      : NaN;
+
+  if (!Number.isInteger(debtId) || debtId <= 0) {
+    return {
+      message: "Не удалось удалить. Попробуйте снова.",
+    };
+  }
+
+  try {
+    await ensureSqlitePragmas();
+    await prisma.debt.delete({
+      where: { id: debtId },
+    });
+  } catch {
+    return {
+      message: "Не удалось удалить. Попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/debts");
+  return { success: true, message: "Удалено" };
 }
