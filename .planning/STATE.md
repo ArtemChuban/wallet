@@ -5,10 +5,10 @@ milestone_name: Долги людям
 current_phase: 8
 current_phase_name: Debts schema + domain math
 status: planning
-stopped_at: Phase 8 context gathered
-last_updated: "2026-09-04T15:36:35.495Z"
+stopped_at: Phase 8 research complete
+last_updated: "2026-09-04T15:45:00.000Z"
 last_activity: 2026-09-04
-state_head: f23fcd58d2993f57923172f4fcd2ff91562380b9
+state_head: 2a38046
 progress:
   total_phases: 4
   completed_phases: 0
@@ -29,8 +29,8 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 Phase: 8 (Debts schema + domain math)
 Plan: —
-Status: Ready to plan
-Last activity: 2026-09-04
+Status: Research complete — ready to plan
+Last activity: 2026-09-04 Phase 8 RESEARCH.md written
 
 ## Performance Metrics
 
@@ -176,10 +176,10 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-04T15:36:35.461Z
-Stopped at: Phase 8 context gathered
-Resume file: .planning/phases/08-debts-schema-domain-math/08-CONTEXT.md
+Last session: 2026-09-04T15:45:00.000Z
+Stopped at: Phase 8 research complete
+Resume file: .planning/phases/08-debts-schema-domain-math/08-RESEARCH.md
 
 ## Operator Next Steps
 
-- Start the next milestone with /gsd-new-milestone
+- Continue `/gsd-plan-phase` for Phase 8 (planner consumes 08-RESEARCH.md)
