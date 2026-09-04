@@ -111,7 +111,7 @@ status: complete
 1. **Task 1: Domain asserts** - `dfb5b79` (test) + `40fdc81` (feat)
 2. **Task 2: computeDebtPrimaryTotals** - `756670f` (test) + `794cdc6` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `d329e41` (docs: complete plan)
 
 ## Files Created/Modified
 
