@@ -1,10 +1,11 @@
 ---
 phase: "5"
 slug: "net-worth-dashboard"
-status: draft
-nyquist_compliant: false
-wave_0_complete: false
+status: validated
+nyquist_compliant: true
+wave_0_complete: true
 created: "2026-09-03"
+validated: "2026-09-04"
 ---
 
 # Phase 5 — Validation Strategy
@@ -38,13 +39,13 @@ created: "2026-09-03"
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 05-00-01 | 01 | 0 | NW-01 | — | Pure aggregation: assets − credit debt | unit | `npx vitest run src/lib/net-worth.test.ts -t "sums asset"` | ❌ W0 | ⬜ pending |
-| 05-00-02 | 01 | 0 | NW-01, ACCT-03 | — | Credit debt reduces total; available not in sum | unit | `npx vitest run src/lib/net-worth.test.ts -t "subtracts credit debt"` | ❌ W0 | ⬜ pending |
-| 05-00-03 | 01 | 0 | NW-01 | — | Missing balance/FX excluded; isPartial flag | unit | `npx vitest run src/lib/net-worth.test.ts -t "excludes"` | ❌ W0 | ⬜ pending |
-| 05-00-04 | 01 | 0 | NW-03 | — | Primary currency identity (no FX row) | unit | `npx vitest run src/lib/net-worth.test.ts -t "primary currency"` | ❌ W0 | ⬜ pending |
-| 05-00-05 | 01 | 0 | NW-02, ACCT-03 | — | Native column semantics per account type | unit | `npx vitest run src/lib/net-worth.test.ts -t "nativeDisplay\|available"` | ❌ W0 | ⬜ pending |
-| 05-W1 | 01 | 1 | NW-01–03 | — | Dashboard RSC + nav + list chrome | unit+grep | `npm test -- --run src/lib/net-worth.test.ts && grep -q 'Главная' src/components/nav.tsx && grep -q 'Капитал' src/app/page.tsx` | ❌ W0 | ⬜ pending |
-| 05-W2 | 02 | 2 | NW-01–03, ACCT-03 | — | Partial warning + empty state + credit rows | unit+manual | `npm test` + human UI on `/` | ❌ W0 | ⬜ pending |
+| 05-00-01 | 01 | 0 | NW-01 | — | Pure aggregation: assets − credit debt | unit | `npx vitest run src/lib/net-worth.test.ts -t "sums asset"` | ✅ | ✅ green |
+| 05-00-02 | 01 | 0 | NW-01, ACCT-03 | — | Credit debt reduces total; available not in sum | unit | `npx vitest run src/lib/net-worth.test.ts -t "subtracts credit debt"` | ✅ | ✅ green |
+| 05-00-03 | 01 | 0 | NW-01 | — | Missing balance/FX excluded; isPartial flag | unit | `npx vitest run src/lib/net-worth.test.ts -t "excludes"` | ✅ | ✅ green |
+| 05-00-04 | 01 | 0 | NW-03 | — | Primary currency identity (no FX row) | unit | `npx vitest run src/lib/net-worth.test.ts -t "primary currency"` | ✅ | ✅ green |
+| 05-00-05 | 01 | 0 | NW-02, ACCT-03 | — | Native column semantics per account type | unit | `npx vitest run src/lib/net-worth.test.ts -t "nativeDisplay\|available"` | ✅ | ✅ green |
+| 05-W1 | 01 | 1 | NW-01–03 | — | Dashboard RSC + nav + list chrome | unit+grep | `npm test -- --run src/lib/net-worth.test.ts && grep -q 'Главная' src/components/nav.tsx && grep -q 'Капитал' src/app/page.tsx` | ✅ | ✅ green |
+| 05-W2 | 02 | 2 | NW-01–03, ACCT-03 | — | Partial warning + empty state + credit rows | unit+manual | `npm test` + human UI on `/` | ✅ | ✅ green |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -52,12 +53,12 @@ created: "2026-09-03"
 
 ## Wave 0 Requirements
 
-- [ ] `src/lib/net-worth.ts` — pure aggregation API for rows + total + `isPartial`
-- [ ] `src/lib/net-worth.test.ts` — matrix covering NW-01–03, ACCT-03, primary identity, mixed portfolio
-- [ ] `src/app/page.tsx` — replace readiness stub with dashboard RSC
-- [ ] `src/components/dashboard/DashboardAccountList.tsx` — read-only list
-- [ ] `src/components/nav.tsx` — Главная first; remove Готовность
-- [ ] Framework install: none — vitest already present
+- [x] `src/lib/net-worth.ts` — pure aggregation API for rows + total + `isPartial`
+- [x] `src/lib/net-worth.test.ts` — matrix covering NW-01–03, ACCT-03, primary identity, mixed portfolio
+- [x] `src/app/page.tsx` — replace readiness stub with dashboard RSC
+- [x] `src/components/dashboard/DashboardAccountList.tsx` — read-only list
+- [x] `src/components/nav.tsx` — Главная first; remove Готовность
+- [x] Framework install: none — vitest already present
 
 ---
 
@@ -74,11 +75,28 @@ created: "2026-09-03"
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 60s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 covers all MISSING references
+- [x] No watch-mode flags
+- [x] Feedback latency < 60s
+- [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** approved 2026-09-04 (Phase 07 Nyquist reconcile — evidence on disk + suite green)
+
+---
+
+## Validation Audit 2026-09-04
+
+| Metric | Count |
+|--------|-------|
+| Gaps found | 0 |
+| Resolved | 0 |
+| Escalated | 0 |
+
+### Notes
+
+- Evidence-first reconcile (Phase 07 Plan 03 / NYQ-05): Wave 0 files already on disk (`net-worth.ts` / `net-worth.test.ts`, dashboard RSC, `DashboardAccountList.tsx`, `nav.tsx`).
+- No MISSING Wave 0 paths — auditor not spawned. No new chart/UI features; PROJECT.md Active unchanged (D-02 deferred).
+- Full suite evidence: `npm test` → 153 passed (2026-09-04, post LOCF consolidation).
+- Historical task IDs preserved; File Exists / Status flipped to present/green; Wave 0 boxes checked.
