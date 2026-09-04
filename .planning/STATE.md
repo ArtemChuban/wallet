@@ -5,10 +5,10 @@ milestone_name: Долги людям
 current_phase: 8
 current_phase_name: Debts schema + domain math
 status: planning
-stopped_at: Phase 07 complete — milestone v1 ready to close
-last_updated: "2026-09-04T15:05:05.741Z"
+stopped_at: Phase 8 context gathered
+last_updated: "2026-09-04T15:36:35.495Z"
 last_activity: 2026-09-04
-state_head: 4c86fc85ddd4043c54acbf9edea0ba439bd7445b
+state_head: f23fcd58d2993f57923172f4fcd2ff91562380b9
 progress:
   total_phases: 4
   completed_phases: 0
@@ -176,9 +176,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-04T12:15:00Z
-Stopped at: Phase 07 complete — milestone v1 ready to close
-Resume file: None
+Last session: 2026-09-04T15:36:35.461Z
+Stopped at: Phase 8 context gathered
+Resume file: .planning/phases/08-debts-schema-domain-math/08-CONTEXT.md
 
 ## Operator Next Steps
 
