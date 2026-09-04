@@ -4,12 +4,12 @@ milestone: v1.1
 milestone_name: Долги людям
 current_phase: 09
 current_phase_name: people-debts-crud-nav
-status: security_verified
-stopped_at: Completed 09-SECURITY.md (threats_open: 0)
-last_updated: "2026-09-05T00:45:00.000Z"
+status: validated
+stopped_at: "Completed 09-VALIDATION.md (nyquist_compliant: true)"
+last_updated: "2026-09-05T00:50:00.000Z"
 last_activity: 2026-09-05
-last_activity_desc: Phase 09 security verified — 13/13 threats closed (L1 ASVS)
-state_head: 8813b61
+last_activity_desc: Phase 09 Nyquist validated — 0 gaps, 63 tests green
+state_head: b49c3d82fcc57d5b8abef2e4ed934ee76b32c254
 progress:
   total_phases: 4
   completed_phases: 1
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 ## Current Position
 
-Phase: 09 (people-debts-crud-nav) — SECURITY VERIFIED
+Phase: 09 (people-debts-crud-nav) — NYQUIST VALIDATED
 Plan: 4 of 4
-Status: UAT 8/8 + SECURITY.md verified (threats_open: 0)
+Status: validated (nyquist_compliant: true)
 Total Plans in Phase: 4
-Last activity: 2026-09-05 — /gsd-secure-phase 09 (L1 ASVS, 13 threats closed)
+Last activity: 2026-09-05 — /gsd-validate-phase 09 (0 gaps, 63 tests green)
 
 ## Performance Metrics
 
@@ -208,6 +208,6 @@ Resume file: None
 
 ## Operator Next Steps
 
-- `/gsd-validate-phase 9` — validate test coverage (if not already)
+- `/gsd-audit-milestone` — milestone quality gate next
 - `/gsd-verify-work 9` — UAT already complete; optional re-check
 - Advance milestone when ready
