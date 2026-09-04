@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Долги людям
-current_phase: 8
+current_phase: 08
 current_phase_name: Debts schema + domain math
 status: planning
 stopped_at: Phase 8 plans revised (checker feedback)
-last_updated: "2026-09-04T16:00:00.000Z"
-last_activity: 2026-09-04
-state_head: 2a38046
+last_updated: "2026-09-04T16:04:30.514Z"
+last_activity: 2026-09-04 Phase 8 plan revision (research open Q RESOLVED, validation map, D-18 A6, Docker A7)
+state_head: 395aab3f95a3767aaea7b9f8caef4755c35491d0
 progress:
   total_phases: 4
   completed_phases: 0
@@ -27,7 +27,7 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 ## Current Position
 
-Phase: 8 (Debts schema + domain math)
+Phase: 08 (Debts schema + domain math) — READY TO EXECUTE
 Plan: 01
 Status: Plans revised — ready for re-check / execute
 Last activity: 2026-09-04 Phase 8 plan revision (research open Q RESOLVED, validation map, D-18 A6, Docker A7)
