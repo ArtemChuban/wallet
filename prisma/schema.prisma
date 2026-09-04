@@ -24,6 +24,62 @@ model Currency {
   isPrimary Boolean @default(false)
   accounts  Account[]
   fxRates   FxRate[]
+  debts     Debt[]
+}
+
+enum DebtDirection {
+  I_OWE
+  THEY_OWE
+}
+
+enum DebtStatus {
+  OPEN
+  CLOSED
+}
+
+model Person {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  debts     Debt[]
+}
+
+model Debt {
+  id                 Int              @id @default(autoincrement())
+  personId           Int
+  person             Person           @relation(fields: [personId], references: [id], onDelete: Restrict)
+  direction          DebtDirection
+  currencyCode       String
+  currency           Currency         @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
+  initialAmountMinor BigInt
+  dueDate            String? // YYYY-MM-DD
+  note               String?
+  status             DebtStatus       @default(OPEN)
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  repayments         DebtRepayment[]
+  sizeChanges        DebtSizeChange[]
+}
+
+model DebtRepayment {
+  id          Int      @id @default(autoincrement())
+  debtId      Int
+  debt        Debt     @relation(fields: [debtId], references: [id], onDelete: Cascade)
+  asOfDate    String // YYYY-MM-DD
+  amountMinor BigInt
+  note        String?
+  createdAt   DateTime @default(now())
+}
+
+model DebtSizeChange {
+  id         Int      @id @default(autoincrement())
+  debtId     Int
+  debt       Debt     @relation(fields: [debtId], references: [id], onDelete: Cascade)
+  asOfDate   String // YYYY-MM-DD
+  deltaMinor BigInt // signed; app rejects 0
+  note       String?
+  createdAt  DateTime @default(now())
 }
 
 model Account {
