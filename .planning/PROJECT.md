@@ -2,30 +2,44 @@
 
 ## What This Is
 
-A local, single-user personal finance site for tracking net worth across accounts (fiat debit, fiat credit, crypto USDT, cash). Runs in Docker with SQLite on the host; no cloud accounts. v1 focuses on account balances, multi-currency conversion to a primary currency, and historical net-worth charts — not budgeting or transaction categorization yet.
+A local, single-user personal finance site for tracking net worth across accounts (fiat debit, fiat credit, crypto USDT, cash). Runs in Docker with SQLite on the host; no cloud accounts. v1 ships account balances, multi-currency conversion to a primary currency, historical net-worth charts with shared LOCF semantics — not budgeting or transaction categorization.
 
 ## Core Value
 
 At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
 
+## Current State
+
+**Shipped:** v1.0 MVP (2026-09-04)
+
+Local Dockerized net-worth tracker: SQLite → currencies/accounts → dated balances → dated FX → current NW dashboard → historical charts (as-of balance × as-of FX). ~16k LOC TypeScript/TSX. Stack: Next.js 16 App Router, Prisma 7 + SQLite, shadcn/ui, recharts, Vitest (153 tests). Russian-first UI.
+
+## Next Milestone Goals
+
+Define via `/gsd-new-milestone`. Likely candidates from Out of Scope / residual debt:
+
+- Nav discoverability (Валюты → rates vs list)
+- Transaction history / income-expense (if desired)
+- Auto FX or bank import (still deferred unless promoted)
+
 ## Requirements
 
 ### Validated
 
-- ✓ User can create and manage accounts of types: fiat debit card, fiat credit card, crypto (e.g. USDT), cash — Phase 2
-- ✓ User can define currencies freely (not hardcoded) and pick one primary currency (e.g. RUB) — Phase 2
-- ✓ User can set/update an account balance as of a chosen date (backdating allowed) — Phase 3
-- ✓ Credit-card accounts store credit limit and outstanding debt (debt derived from limit − available) — Phase 3
-- ✓ App runs in Docker; all data persists in local SQLite — Phase 1
-- ✓ User can set exchange rates primary ↔ other as of a chosen date (manual) — Phase 4
-- ✓ Charts and totals as of a date use the FX rate effective for that date (rate changes apply forward from their date) — Phase 4
-- ✓ User can see current net worth overall and per-account balances (native + primary; credit debt reduces NW; available never an asset) — Phase 5
-- ✓ User can see balance history charts per account and overall (in primary currency and originals where relevant) — Phase 6
-- ✓ Shared LOCF path (`src/lib/locf.ts`) for pages + historical-series; Nyquist VALIDATION closed for phases 3–6 — Phase 7
+- ✓ User can create and manage accounts of types: fiat debit card, fiat credit card, crypto (e.g. USDT), cash — v1.0
+- ✓ User can define currencies freely (not hardcoded) and pick one primary currency (e.g. RUB) — v1.0
+- ✓ User can set/update an account balance as of a chosen date (backdating allowed) — v1.0
+- ✓ Credit-card accounts store credit limit and outstanding debt (debt derived from limit − available) — v1.0
+- ✓ App runs in Docker; all data persists in local SQLite — v1.0
+- ✓ User can set exchange rates primary ↔ other as of a chosen date (manual) — v1.0
+- ✓ Charts and totals as of a date use the FX rate effective for that date (rate changes apply forward from their date) — v1.0
+- ✓ User can see current net worth overall and per-account balances (native + primary; credit debt reduces NW; available never an asset) — v1.0
+- ✓ User can see balance history charts per account and overall (in primary currency and originals where relevant) — v1.0
+- ✓ Shared LOCF path (`src/lib/locf.ts`) for pages + historical-series; Nyquist VALIDATION closed for phases 3–6 — v1.0
 
 ### Active
 
-_(none — v1 roadmap phases complete)_
+_(none — next milestone defines fresh requirements via `/gsd-new-milestone`)_
 
 ### Out of Scope
 
@@ -41,7 +55,7 @@ _(none — v1 roadmap phases complete)_
 
 ## Context
 
-Today money lives in disconnected places: bank app transactions, USDT crypto, cash, credit debt, and mental goals — with no single net-worth view. User wants one local place to periodically update "how much where" and see capital over time. Starting currencies will likely be just two (e.g. RUB + USDT). UI language and day-to-day use are Russian-first personal tooling. v1 roadmap complete (Phases 1–6): Docker/SQLite foundation through historical NW and per-account charts.
+Shipped v1.0: capital visibility across disconnected money places (bank, USDT, cash, credit debt) in one local Docker + SQLite app. UI Russian-first. Residual audit tech debt: some human-only FieldControl/restart smoke checks; nav «Валюты» lands on rates not currency list.
 
 ## Constraints
 
@@ -55,15 +69,15 @@ Today money lives in disconnected places: bank app transactions, USDT crypto, ca
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Docker + SQLite local stack | User already plans to run site in container; data stays on disk | — Pending |
-| Balance snapshots with date (not transactions) | User updates occasionally; wants history charts without full ledger | Shipped Phase 3 (BalanceSnapshot + LOCF) |
-| Manual dated FX, primary ↔ other | Two currencies for now; historical charts need rate-as-of-date | Shipped Phase 4 (FxRate LOCF) |
-| Credit card: limit + debt; debt reduces net worth | Matches real mental model (e.g. 500k limit, 250k debt) | Phase 3: available stored; debt = limit − available; Phase 5 hero subtracts debt only |
-| Defer spend/cash-flow/debts/goals | Ship capital visibility first | — Pending |
-| `/` is NW dashboard (Капитал); readiness not primary UX | D-01/D-02 — capital at a glance | Shipped Phase 5 |
-| Pure `computeNetWorthRows` for Phase 6 reuse | Charts need same inclusion math | Shipped Phase 5 |
-| Shared hybrid LOCF (`pickLatestAsOf` + `firstHitLocfMap` + typed wrappers) | Kill triplicate scanners; keep page batch Maps + series pure | Shipped Phase 7 |
-| Keep Prisma `getBalanceAsOf` / `getRateAsOf` as thin findFirst | LOCF-04; pages stay on batch Maps | Shipped Phase 7 |
+| Docker + SQLite local stack | User already plans to run site in container; data stays on disk | ✓ Good — PLAT-01 shipped |
+| Balance snapshots with date (not transactions) | User updates occasionally; wants history charts without full ledger | ✓ Good — Phase 3 |
+| Manual dated FX, primary ↔ other | Two currencies for now; historical charts need rate-as-of-date | ✓ Good — Phase 4 |
+| Credit card: limit + debt; debt reduces net worth | Matches real mental model (e.g. 500k limit, 250k debt) | ✓ Good — Phases 3+5 |
+| Defer spend/cash-flow/debts/goals | Ship capital visibility first | ✓ Good — still correct for v1 |
+| `/` is NW dashboard (Капитал); readiness not primary UX | D-01/D-02 — capital at a glance | ✓ Good — Phase 5 |
+| Pure `computeNetWorthRows` for Phase 6 reuse | Charts need same inclusion math | ✓ Good — Phase 5–6 |
+| Shared hybrid LOCF (`pickLatestAsOf` + `firstHitLocfMap` + typed wrappers) | Kill triplicate scanners; keep page batch Maps + series pure | ✓ Good — Phase 7 |
+| Keep Prisma `getBalanceAsOf` / `getRateAsOf` as thin findFirst | LOCF-04; pages stay on batch Maps | ✓ Good — Phase 7 |
 
 ## Evolution
 
@@ -83,4 +97,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-04 after Phase 7 (LOCF consolidation + Nyquist 3–6)*
+*Last updated: 2026-09-04 after v1.0 milestone*
