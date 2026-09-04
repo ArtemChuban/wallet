@@ -1,103 +1,14 @@
 ---
 phase: 09-people-debts-crud-nav
-verified: 2026-09-04T21:50:28Z
+verified: "2026-09-04T21:50:28Z"
 status: human_needed
-score: 12/14 must-haves verified
+score: "12/14"
 behavior_unverified: 0
 overrides_applied: 0
-decision_coverage:
-  honored: 22
-  total: 22
-  not_honored: []
-gaps: []
-deferred: []
-behavior_unverified_items: []
-unverified_prohibitions:
-  - statement: MUST NOT place «Долги» under Валюты or Счета as a sub-tab — debts are a peer top-nav section
-    requirement_id: DNAV-01
-    verification: judgment
-    llm_judge: honored
-    flagged: true
-  - statement: MUST NOT import @/lib/debts or debts Server Actions into net-worth.ts, historical-series.ts, or app/page.tsx
-    requirement_id: DNAV-01
-    verification: judgment
-    llm_judge: honored
-    flagged: true
-  - statement: MUST NOT add /debts/[personId] nested person-detail routes in this phase
-    requirement_id: PERSON-01
-    verification: judgment
-    llm_judge: honored
-    flagged: true
-  - statement: MUST NOT delete a person who still has any debts (OPEN or CLOSED)
-    requirement_id: PERSON-02
-    verification: judgment
-    llm_judge: honored
-    flagged: true
-  - statement: MUST NOT use a browser native confirm dialog for person delete
-    requirement_id: PERSON-02
-    verification: judgment
-    llm_judge: honored
-    flagged: true
-  - statement: MUST NOT soft-delete people or cascade-delete their debts from the person delete action
-    requirement_id: PERSON-02
-    verification: judgment
-    llm_judge: honored
-    flagged: true
-  - statement: MUST NOT allow editing initial amount, currency, or person after debt create
-    requirement_id: DEBT-01
-    verification: judgment
-    llm_judge: honored
-    flagged: true
-  - statement: MUST NOT expose repayment, close, write-off, status picker, charts, or primary totals UI in this phase
-    requirement_id: DEBT-01
-    verification: judgment
-    llm_judge: honored
-    flagged: true
-  - statement: MUST NOT put debt delete controls on the list row — delete only inside edit dialog
-    requirement_id: DEBT-01
-    verification: judgment
-    llm_judge: honored
-    flagged: true
-  - statement: MUST NOT use a browser native confirm dialog for debt delete
-    requirement_id: DEBT-01
-    verification: judgment
-    llm_judge: honored
-    flagged: true
-  - statement: MUST NOT use a browser native confirm dialog for balance-snapshot delete
-    requirement_id: PERSON-02
-    verification: judgment
-    llm_judge: honored
-    flagged: true
-  - statement: MUST NOT expand this plan to migrate RateList confirm UX (out of D-17 scope)
-    requirement_id: DNAV-01
-    verification: judgment
-    llm_judge: honored
-    flagged: true
-human_verification:
-  - test: Open /debts with zero people; create a person; rename; list A–Z
-    expected: Russian chrome («Нет людей» / «Новый человек» / «Изменить имя»); person appears in list after create
-    why_human: Visual layout, dialog remount, and list density cannot be proven by unit tests alone
-  - test: On /debts, click «Долги» in nav; also visit a nested path if any
-    expected: «Долги» shows active underline; order Главная · Счета · Долги · Валюты
-    why_human: Active-state styling is pathname-driven UI; nav.test only scans source href/label order
-  - test: Delete person with debts vs without debts
-    expected: With debts — blocked «Нельзя удалить человека, пока есть долги» without native confirm; without debts — in-dialog confirm then delete
-    why_human: Client gate + confirm Dialog UX need visual confirmation beyond action unit tests
-  - test: Create debt (existing + new person), edit meta, delete from edit dialog
-    expected: Direction/currency/initial/due/note on create; locked person/currency/initial on edit; compact row shows direction + remaining + code; cascade confirm copy; no repayment UI
-    why_human: Full dialog UX and compact-row chrome need human confirmation (SUMMARY D6)
-  - test: On /accounts, delete a balance snapshot
-    expected: In-dialog «Удалить снимок за {date}? Это нельзя отменить.»; confirm disabled while pending; no browser native confirm
-    why_human: Pending disable and dialog feel are visual/runtime
-  - test: Long person name in group header; open rename
-    expected: Name wraps or ellipsis in header; full name editable in rename dialog
-    why_human: Backstop truth (verification: backstop) — layout truncation cannot be inferred from presence alone
-  - test: Debt with optional note; view compact row and edit dialog
-    expected: Note editable/visible in dialog; omitted from compact list row
-    why_human: Backstop truth (verification: backstop) — note omission from row is code-visible but wrap/visual still needs eyes
-  - test: Review flagged judgment-tier prohibitions (peer nav, DISOL isolation, no person-detail route, no cascade person delete, no repayment UI, RateList untouched)
-    expected: Each must-NOT still holds in the running app
-    why_human: Judgment-tier prohibitions require explicit human resolution (unverified-prohibition — human review recommended)
+decision_coverage_honored: 22
+decision_coverage_total: 22
+gaps: 0
+human_verification_count: 8
 ---
 
 # Phase 9: People + debts CRUD + nav Verification Report
