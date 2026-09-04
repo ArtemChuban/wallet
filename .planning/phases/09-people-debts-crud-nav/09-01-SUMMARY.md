@@ -123,7 +123,7 @@ Each task was committed atomically:
 2. **Task 2: End-to-end «Долги» nav → /debts → create person → list** - `c30b1eb` (feat)
 3. **Task 3: Keep DISOL isolation + debts suite green** - verification only (no code changes; suites passed)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `dd88ed1` (docs: complete plan)
 
 ## Files Created/Modified
 
