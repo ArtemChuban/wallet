@@ -2,6 +2,7 @@ import { AccountFormDialog } from "@/components/accounts/AccountFormDialog";
 import { AccountList } from "@/components/accounts/AccountList";
 import { calendarDateToday } from "@/lib/balances";
 import { ensureSqlitePragmas, prisma } from "@/lib/db";
+import { firstHitLocfMap } from "@/lib/locf";
 
 export const dynamic = "force-dynamic";
 
@@ -38,18 +39,10 @@ export default async function AccountsPage() {
       }),
     ]);
 
-  const locfByAccount = new Map<
-    number,
-    { asOfDate: string; amountMinor: bigint }
-  >();
-  for (const snap of snapshotsLteToday) {
-    if (!locfByAccount.has(snap.accountId)) {
-      locfByAccount.set(snap.accountId, {
-        asOfDate: snap.asOfDate,
-        amountMinor: snap.amountMinor,
-      });
-    }
-  }
+  const locfByAccount = firstHitLocfMap(
+    snapshotsLteToday,
+    (snap) => snap.accountId,
+  );
 
   const historyByAccount = new Map<
     number,
