@@ -107,7 +107,7 @@ Each task was committed atomically:
 1. **Task 1: Regression test: AccountList must not use browser native confirm** - `0614f8b` (test)
 2. **Task 2: Migrate snapshot delete to in-dialog second-step confirm** - `7f64332` (feat)
 
-**Plan metadata:** `8813b61` (docs: complete plan)
+**Plan metadata:** `8813b61` (docs: complete plan); `d6f9ae8` (docs: STATE/ROADMAP sync)
 
 ## Files Created/Modified
 
