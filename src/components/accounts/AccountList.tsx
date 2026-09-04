@@ -5,7 +5,14 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import { deleteBalanceSnapshot } from "@/app/accounts/actions";
 import { AccountFormDialog } from "@/components/accounts/AccountFormDialog";
 import { SetBalanceDialog } from "@/components/accounts/SetBalanceDialog";
+import { DestructiveConfirmStep } from "@/components/debts/DestructiveConfirmStep";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { formatAsOfDisplay } from "@/lib/dates";
 import { creditDebtMinor, formatMinorToMajor } from "@/lib/money";
 
@@ -122,12 +129,12 @@ function HistoryRow({
         type="button"
         variant="destructive"
         size="sm"
-        className="min-h-11 min-w-11 shrink-0"
+        className="min-h-11 shrink-0"
         disabled={isPending}
         aria-label={`Удалить снимок за ${dateLabel}`}
         onClick={() => onDelete(snap)}
       >
-        Удалить
+        Удалить снимок
       </Button>
     </li>
   );
@@ -144,6 +151,8 @@ function AccountRow({
 }) {
   const [expanded, setExpanded] = useState(false);
   const [pendingId, setPendingId] = useState<number | null>(null);
+  const [confirmSnap, setConfirmSnap] =
+    useState<BalanceSnapshotHistoryItem | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -153,14 +162,18 @@ function AccountRow({
     account.type === "FIAT_CREDIT" && account.creditLimitMinor != null
       ? `${formatMinorToMajor(BigInt(account.creditLimitMinor), account.currency.scale)} ${account.currencyCode}`
       : null;
+  const confirmDateLabel = confirmSnap
+    ? formatAsOfDisplay(confirmSnap.asOfDate)
+    : "";
 
-  function handleDelete(snap: BalanceSnapshotHistoryItem) {
-    const dateLabel = formatAsOfDisplay(snap.asOfDate);
-    const confirmed = window.confirm(
-      `Удалить снимок за ${dateLabel}? Это нельзя отменить.`,
-    );
-    if (!confirmed) return;
+  function handleDeleteClick(snap: BalanceSnapshotHistoryItem) {
+    setDeleteError(null);
+    setConfirmSnap(snap);
+  }
 
+  function handleConfirmDelete() {
+    if (!confirmSnap) return;
+    const snap = confirmSnap;
     setDeleteError(null);
     setPendingId(snap.id);
     startTransition(async () => {
@@ -169,12 +182,14 @@ function AccountRow({
       const result = await deleteBalanceSnapshot(formData);
       setPendingId(null);
       if (!result.success) {
+        setConfirmSnap(null);
         setDeleteError(
           result.message ??
             "Не удалось удалить снимок. Попробуйте снова.",
         );
         return;
       }
+      setConfirmSnap(null);
       if (account.snapshots.length <= 1) {
         setExpanded(false);
       }
@@ -271,12 +286,32 @@ function AccountRow({
                 account={account}
                 snap={snap}
                 pendingId={isPending ? pendingId : null}
-                onDelete={handleDelete}
+                onDelete={handleDeleteClick}
               />
             ))}
           </ul>
         </div>
       ) : null}
+
+      <Dialog
+        open={confirmSnap != null}
+        onOpenChange={(next) => {
+          if (!isPending && !next) setConfirmSnap(null);
+        }}
+      >
+        <DialogContent className="sm:max-w-md" showCloseButton={!isPending}>
+          <DialogHeader>
+            <DialogTitle>Удалить снимок</DialogTitle>
+          </DialogHeader>
+          <DestructiveConfirmStep
+            message={`Удалить снимок за ${confirmDateLabel}? Это нельзя отменить.`}
+            confirmLabel="Удалить снимок"
+            pending={isPending}
+            onConfirm={handleConfirmDelete}
+            onBack={() => setConfirmSnap(null)}
+          />
+        </DialogContent>
+      </Dialog>
     </li>
   );
 }
