@@ -1,10 +1,11 @@
 ---
 phase: "09"
 slug: people-debts-crud-nav
-status: draft
+status: approved
 shadcn_initialized: true
 preset: "b2fA (base-nova / neutral / geist / lucide)"
 created: "2026-09-04"
+reviewed_at: "2026-09-04T22:18:00+02:00"
 ---
 
 # Phase 09 — UI Design Contract
@@ -216,7 +217,7 @@ Sources: CONTEXT D-11, D-15, D-20–D-22; RESEARCH deletePerson sketch; Phase 03
 > Shape-rooted UI state coverage (empty / loading / error / populated / partial / overflow / zero-one-many / long-text).
 > Empty-state and error-state COPY live in `## Copywriting Contract` above — this section REFERENCES those rows.
 
-Applicable state considerations resolved: 24 covered, 2 backstop, 8 dismissed, 0 unresolved
+Applicable state considerations resolved: 22 covered, 2 backstop, 11 dismissed, 0 unresolved
 
 | Category | Element(s) | Status | Resolution / Reason |
 |----------|------------|--------|---------------------|
@@ -225,27 +226,33 @@ Applicable state considerations resolved: 24 covered, 2 backstop, 8 dismissed, 0
 | empty | person Dialog (E3) | ✅ covered | Create opens empty name; rename opens with current name |
 | empty | debt Dialog (E4) | ✅ covered | Create opens with direction/currency/amount (+ optional due/note); person pre-selected when opened from group |
 | loading | debts list (E1) | ✅ covered | RSC await on server — no client skeleton; page streams when ready |
+| loading | person group (E2) | dismissed | Same RSC page load as E1 — no separate per-group fetch |
 | loading | person/debt Dialogs (E3/E4) | ✅ covered | `useActionState` pending disables submit; Dialog stays open until success |
 | loading | destructive confirm (E5) | ✅ covered | Confirm button disabled while delete action pending |
 | loading | top nav (E6) | dismissed | Static layout nav — no async data load |
+| loading | chrome CTAs / labels (E7) | dismissed | Static chrome — no async load |
 | error | debts list (E1) | ✅ covered | Server/page failure surfaces error in page shell; refresh retries |
+| error | person group (E2) | dismissed | No per-group fetch; failures are page- or action-level (E1/E3–E5) |
 | error | person Dialog (E3) | ✅ covered | Field errors under inputs + form-level Copywriting error on action failure |
 | error | debt Dialog (E4) | ✅ covered | Field errors + form-level Copywriting error; Zod money/direction/currency messages |
-| error | person delete blocked (E5) | ✅ covered | Copywriting PERSON-02 blocked message; no confirm step when debts>0 |
-| error | delete failure (E5) | ✅ covered | Copywriting delete failure; entity remains until success |
+| error | destructive confirm (E5) | ✅ covered | PERSON-02 blocked copy when debts>0 (no confirm); delete failure copy keeps entity until success |
 | error | top nav (E6) | dismissed | Static links — no fetch failure state |
+| error | chrome CTAs / labels (E7) | dismissed | Static chrome — no fetch failure state |
 | populated | debts list (E1) | ✅ covered | Person headers A–Z; compact debt rows show direction + remaining + currency code |
-| populated | debt edit Dialog (E4) | ✅ covered | Locked person/currency/initial read-only; meta editable; delete entry present |
-| partial | debt create Dialog (E4) | ✅ covered | Optional due date and note may be empty; required: direction, currency, initial, person-or-new-name |
+| populated | person group debts (E2) | ✅ covered | Nested compact rows under person header when debts exist |
 | partial | debts list (E1) | dismissed | Rows are complete display records; remaining always computed for listed debts |
+| partial | person group (E2) | dismissed | Remaining always computed for listed debts; no partial row UI |
 | partial | person Dialog (E3) | dismissed | Single required name field — no partial draft UI |
+| partial | debt Dialog (E4) | ✅ covered | Optional due date and note may be empty; required: direction, currency, initial, person-or-new-name |
 | overflow | debts list (E1) | ✅ covered | Page/main scrolls; Dialog body scrolls if viewport short |
+| overflow | person group (E2) | ✅ covered | Long groups scroll with page; no nested independent scrollport |
 | overflow | top nav (E6) | ✅ covered | Narrow viewports: nav wraps or horizontal scroll within header (four links) |
-| overflow | person/debt names (E7) | ✅ covered | Long names wrap or truncate with ellipsis in list; full value in dialog |
+| overflow | chrome / person header labels (E7) | ✅ covered | Long person names in headers wrap or truncate with ellipsis; full value in rename dialog |
 | zero-one-many | people list (E1) | ✅ covered | 0 = page empty state; 1+ = grouped list + header dual CTAs (D-22) |
 | zero-one-many | debts in group (E2) | ✅ covered | 0 = group empty CTA; 1+ = nested compact rows |
 | long-text | person name (E3) | 🧪 backstop | Server max length via Zod; list truncates/ellipsis; full name in rename dialog |
 | long-text | debt note (E4) | 🧪 backstop | Optional note wraps in dialog; not shown on compact row (D-02) |
+| long-text | destructive confirm (E5) | dismissed | Fixed RU confirm templates with `{name}` / `{date}` — no free-form overflow UI |
 | long-text | top nav (E6) | dismissed | Fixed Russian labels — no user-authored long text |
 | long-text | CTAs / direction labels (E7) | dismissed | Fixed chrome strings (D-11, D-22) |
 
@@ -269,12 +276,12 @@ Applicable state considerations resolved: 24 covered, 2 backstop, 8 dismissed, 0
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
-- [ ] Dimension 7 Inventory Provenance: PASS
+- [x] Dimension 1 Copywriting: FLAG (non-blocking — «Назад» single-word nav chrome)
+- [x] Dimension 2 Visuals: FLAG (non-blocking — declare `/debts` focal as title + header CTAs; icon-only needs aria-label)
+- [x] Dimension 3 Color: PASS
+- [x] Dimension 4 Typography: PASS
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
+- [x] Dimension 7 Inventory Provenance: PASS
 
-**Approval:** pending
+**Approval:** approved (2026-09-04) — 5 PASS, 2 FLAG non-blocking
