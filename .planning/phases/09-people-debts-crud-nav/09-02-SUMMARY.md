@@ -117,7 +117,7 @@ Each task was committed atomically:
 3. **Task 2: DestructiveConfirmStep + rename/delete UX** - `22a2243` (feat)
 4. **Task 3: empty groups + dual header CTAs** - `62f00c8` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `a5cab43` (docs: complete plan)
 
 ## Files Created/Modified
 
@@ -187,6 +187,11 @@ None - no external service configuration required.
 ## Next Phase Readiness
 
 Ready for 09-03 debt create/edit/delete UI. Person CRUD + D-16 confirm constitution in place.
+
+## Self-Check: PASSED
+
+- FOUND: actions.ts, actions.test.ts, DestructiveConfirmStep.tsx, PersonFormDialog.tsx, DebtsList.tsx, page.tsx, 09-02-SUMMARY.md
+- FOUND: commits 4d22c65, 387c2df, 22a2243, 62f00c8
 
 ---
 *Phase: 09-people-debts-crud-nav*
