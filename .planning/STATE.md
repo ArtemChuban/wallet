@@ -5,16 +5,16 @@ milestone_name: Долги людям
 current_phase: 09
 current_phase_name: people-debts-crud-nav
 status: planned
-stopped_at: Phase 9 plans created (4 plans)
-last_updated: "2026-09-04T21:18:36.714Z"
+stopped_at: Completed 09-01-PLAN.md
+last_updated: "2026-09-04T21:25:23.965Z"
 last_activity: 2026-09-04
 last_activity_desc: Phase 09 plan-phase complete — 4 PLAN.md files
-state_head: f1fab92c1c1e0d9fe47ec2bc00933841a7910a54
+state_head: c30b1ebbdc39e7bdce9f6139d3dc314808b31ef6
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 7
-  completed_plans: 3
+  completed_plans: 4
 ---
 
 # Project State
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 ## Current Position
 
 Phase: 09 (people-debts-crud-nav) — READY TO EXECUTE
-Plan: 0 of 4
+Plan: 1 of 4
 Status: Plans ready for execute
 Total Plans in Phase: 4
 Last activity: 2026-09-04 — Phase 09 plans created (09-01..09-04)
@@ -90,6 +90,7 @@ Last activity: 2026-09-04 — Phase 09 plans created (09-01..09-04)
 | Phase 08 P01 | 3min | 3 tasks | 5 files |
 | Phase 08 P02 | 3min | 2 tasks | 2 files |
 | Phase 08 P03 | 2min | 2 tasks | 2 files |
+| Phase 09-people-debts-crud-nav P01 | 3min | 3 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -159,6 +160,9 @@ Recent decisions affecting current work:
 - [Phase 08]: assertInitialImmutable(stored, proposed) rejects unequal create-time principal
 - [Phase 08]: updateDebtMetaSchema omits all initial* fields; .strict() rejects smuggled initialAmountMajor
 - [Phase 08]: createSizeChangeSchema accepts signed deltaMajor strings; zero-delta deferred to assertSizeDelta
+- [Phase 09]: Duplicate person P2002 copy: «Человек с таким именем уже есть»
+- [Phase 09]: PersonFormDialog create-only in 09-01; rename/delete deferred to 09-02
+- [Phase 09]: revalidatePath('/debts') only for person create — never touch dashboard /
 
 ### Pending Todos
 
@@ -187,9 +191,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-04T21:20:00.000Z
-Stopped at: Phase 9 plans created
-Resume file: /home/artem/Documents/wallet/.planning/phases/09-people-debts-crud-nav/09-01-PLAN.md
+Last session: 2026-09-04T21:25:23.918Z
+Stopped at: Completed 09-01-PLAN.md
+Resume file: None
 
 ## Operator Next Steps
 

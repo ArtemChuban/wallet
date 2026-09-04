@@ -10,7 +10,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### People
 
-- [ ] **PERSON-01**: User can create, rename, and list people (counterparties)
+- [x] **PERSON-01**: User can create, rename, and list people (counterparties)
 - [ ] **PERSON-02**: User can delete a person only when that person has no debts
 
 ### Debts
@@ -35,7 +35,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Nav / isolation
 
-- [ ] **DNAV-01**: Separate nav section «Долги»
+- [x] **DNAV-01**: Separate nav section «Долги»
 - [x] **DISOL-01**: Debts never change net worth or NW charts
 
 ## Future Requirements
@@ -81,7 +81,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PERSON-01 | Phase 9 | Pending |
+| PERSON-01 | Phase 9 | Complete |
 | PERSON-02 | Phase 9 | Pending |
 | DEBT-01 | Phase 9 | Pending |
 | DEBT-02 | Phase 8 | Complete |
@@ -94,7 +94,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DCHART-01 | Phase 11 | Pending |
 | DCHART-02 | Phase 11 | Pending |
 | DTOTAL-01 | Phase 11 | Pending |
-| DNAV-01 | Phase 9 | Pending |
+| DNAV-01 | Phase 9 | Complete |
 | DISOL-01 | Phase 8 + 11 | Complete |
 
 **Coverage:**

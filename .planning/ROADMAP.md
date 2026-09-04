@@ -69,12 +69,12 @@ Plans:
   3. User can create/edit a debt (direction, currency, initial, optional due/note) attached to a person
   4. Nav shows «Долги» linking to `/debts` with correct active state
 
-**Plans:** 4 plans
+**Plans:** 1/4 plans executed
 
 Plans:
 **Wave 1**
 
-- [ ] 09-01-PLAN.md — Tracer: nav «Долги» + /debts + createPerson + empty list
+- [x] 09-01-PLAN.md — Tracer: nav «Долги» + /debts + createPerson + empty list
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -119,7 +119,7 @@ Plans:
 |-------|-----------|----------------|--------|
 | 1–7 | v1.0 | 24/24 | Shipped |
 | 8 | v1.1 | 0/3 | Complete   |
-| 9 | v1.1 | 0/4 | Planned |
+| 9 | v1.1 | 0/4 | In Progress|
 
 | 10 | v1.1 | 0/TBD | Not started |
 | 11 | v1.1 | 0/TBD | Not started |
