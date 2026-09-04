@@ -187,10 +187,10 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-04T20:21:17.881Z
-Stopped at: Phase 9 UI-SPEC approved
-Resume file: /home/artem/Documents/wallet/.planning/phases/09-people-debts-crud-nav/09-UI-SPEC.md
+Last session: 2026-09-04T21:20:00.000Z
+Stopped at: Phase 9 plans created
+Resume file: /home/artem/Documents/wallet/.planning/phases/09-people-debts-crud-nav/09-01-PLAN.md
 
 ## Operator Next Steps
 
-- Run UI-SPEC checker, then `/gsd-plan-phase 9`
+- Run `/gsd-execute-phase 9` (or plan-checker first if desired)
