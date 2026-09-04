@@ -19,7 +19,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Dated FX** - Manual primary ↔ other rates with forward-effective LOCF (completed 2026-09-03)
 - [x] **Phase 5: Net Worth Dashboard** - Current NW and per-account native/primary balances (completed 2026-09-03)
 - [x] **Phase 6: Historical Charts** - NW and per-account history using as-of balance × as-of FX (completed 2026-09-04)
-- [ ] **Phase 7: Address tech debt: LOCF consolidation + Nyquist 3–6** - Shared LOCF path + Nyquist validation for phases 3–6
+- [x] **Phase 7: Address tech debt: LOCF consolidation + Nyquist 3–6** - Shared LOCF path + Nyquist validation for phases 3–6 (completed 2026-09-04)
 
 ## Phase Details
 
@@ -249,7 +249,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 **Goal:** Consolidate triplicate LOCF into one shared path with unchanged semantics, and close Nyquist for phases 3–6 by reconciling VALIDATION.md drafts to validated with evidence — no new user-facing features.
 **Requirements**: LOCF-01, LOCF-02, LOCF-03, LOCF-04, LOCF-05, NYQ-03, NYQ-04, NYQ-05, NYQ-06
 **Depends on:** Phase 6
-**Plans:** 3/3 plans executed
+**Plans:** 3/3 plans complete
 
 Plans:
 **Wave 1**
