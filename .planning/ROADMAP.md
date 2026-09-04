@@ -45,7 +45,7 @@ Full detail: [milestones/v1.0-ROADMAP.md](./milestones/v1.0-ROADMAP.md)
   3. initialAmountMinor not edited after create; adjustments via size-change events (D-03)
   4. No debt imports exist in `net-worth.ts`, `historical-series.ts`, or `/` page
 
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans executed
 
 Plans:
 **Wave 1**
@@ -55,7 +55,7 @@ Plans:
 **Wave 2** *(blocked on Wave 1 completion)*
 
 - [x] 08-02-PLAN.md — Domain asserts (DEBT-03) + computeDebtPrimaryTotals (D-16–D-19)
-- [ ] 08-03-PLAN.md — Zod validations/debts + full suite green
+- [x] 08-03-PLAN.md — Zod validations/debts + full suite green
 
 ### Phase 9: People + debts CRUD + nav
 
