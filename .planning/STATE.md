@@ -4,10 +4,10 @@ milestone: v1.1
 milestone_name: Долги людям
 current_phase: "09"
 status: planning
-stopped_at: Phase 9 research complete
-last_updated: "2026-09-04T18:48:49.859Z"
+stopped_at: Phase 9 UI-SPEC draft ready for checker
+last_updated: "2026-09-04T22:20:00.000Z"
 last_activity: 2026-09-04
-last_activity_desc: Phase 09 RESEARCH.md written
+last_activity_desc: Phase 09 UI-SPEC.md written
 state_head: 476a7a4615f9460d460065a0416392700528b272
 progress:
   total_phases: 4
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 ## Current Position
 
-Phase: 09 — RESEARCH COMPLETE
+Phase: 09 — UI-SPEC DRAFT
 Plan: 0 of TBD
-Status: Research complete — ready for planning
+Status: UI-SPEC draft — ready for checker
 Total Plans in Phase: TBD
-Last activity: 2026-09-04 — Phase 09 RESEARCH.md written
+Last activity: 2026-09-04 — Phase 09 UI-SPEC.md written
 
 ## Performance Metrics
 
@@ -187,10 +187,10 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-04T18:47:56.656Z
-Stopped at: Phase 9 research complete
-Resume file: /home/artem/Documents/wallet/.planning/phases/09-people-debts-crud-nav/09-RESEARCH.md
+Last session: 2026-09-04T22:20:00.000Z
+Stopped at: Phase 9 UI-SPEC draft ready for checker
+Resume file: /home/artem/Documents/wallet/.planning/phases/09-people-debts-crud-nav/09-UI-SPEC.md
 
 ## Operator Next Steps
 
-- Run `/gsd-plan-phase 9` (research ready)
+- Run UI-SPEC checker, then `/gsd-plan-phase 9`
