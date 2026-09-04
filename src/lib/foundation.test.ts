@@ -39,7 +39,7 @@ describe("Wave 0 harness (PLAT-01 / 01-W0-01)", () => {
 describe("CONTEXT checkpoints (01-01-01 / 01-03-01)", () => {
   it("locks D-01 Next stack and D-07 money contract in CONTEXT", () => {
     const ctx = readFileSync(
-      ".planning/phases/01-docker-sqlite-foundation/01-CONTEXT.md",
+      ".planning/milestones/v1.0-phases/01-docker-sqlite-foundation/01-CONTEXT.md",
       "utf8",
     );
     expect(ctx).toMatch(/\*\*D-01:\*\*/);
@@ -116,14 +116,18 @@ describe("prisma migrate deploy host gate (PLAT-01 / 01-03-03)", () => {
     try {
       const tables = db
         .prepare(
-          "SELECT name FROM sqlite_master WHERE type='table' AND name IN ('Currency','Account','FxRate','BalanceSnapshot','_prisma_migrations')",
+          "SELECT name FROM sqlite_master WHERE type='table' AND name IN ('Currency','Account','FxRate','BalanceSnapshot','Person','Debt','DebtRepayment','DebtSizeChange','_prisma_migrations')",
         )
         .all() as Array<{ name: string }>;
       expect(tables.map((t) => t.name).sort()).toEqual([
         "Account",
         "BalanceSnapshot",
         "Currency",
+        "Debt",
+        "DebtRepayment",
+        "DebtSizeChange",
         "FxRate",
+        "Person",
         "_prisma_migrations",
       ].sort());
       const applied = db
@@ -145,6 +149,9 @@ describe("prisma migrate deploy host gate (PLAT-01 / 01-03-03)", () => {
       ).toBe(true);
       expect(
         applied.some((r) => r.migration_name.includes("fx_rate")),
+      ).toBe(true);
+      expect(
+        applied.some((r) => r.migration_name.includes("debts_schema")),
       ).toBe(true);
 
       const rub = db
