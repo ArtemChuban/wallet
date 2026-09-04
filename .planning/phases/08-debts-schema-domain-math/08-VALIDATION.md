@@ -38,16 +38,21 @@ created: "2026-09-04"
 
 ## Per-Task Verification Map
 
-| Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
-|---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 08-01-02 | 01 | 1 | DEBT-02, DISOL-01 | T-08-01, T-08-04 | remaining D-04; no NW debt imports | unit | `npx vitest run src/lib/debts.test.ts` | ❌ W0 | ⬜ pending |
-| 08-01-03 | 01 | 1 | DEBT-02 | T-08-02, T-08-03 | FK Restrict/Cascade migrated | smoke | `DATABASE_URL=file:./data/wallet.db npx prisma migrate deploy` | ❌ W0 | ⬜ pending |
-| 08-02-01 | 02 | 2 | DEBT-03, DEBT-02 | T-08-01, T-08-07 | asserts reject illegal money; initial immutable | unit | `npx vitest run src/lib/debts.test.ts` | ❌ W0 | ⬜ pending |
-| 08-02-02 | 02 | 2 | DEBT-02 | T-08-04 | OPEN-only totals + isPartial | unit | `npx vitest run src/lib/debts.test.ts` | ❌ W0 | ⬜ pending |
-| 08-03-01 | 03 | 2 | DEBT-03 | T-08-07 | Zod update-meta has no initial field | unit | file presence + greps | ❌ W0 | ⬜ pending |
-| 08-03-02 | 03 | 2 | DISOL-01, DEBT-03 | T-08-04 | full suite + DISOL scan green | unit | `npm test` | ❌ W0 | ⬜ pending |
+Built from actual PLAN task order (checkpoint / tracer / auto / tdd). Task IDs = `{phase}-{plan}-{task}` 1-indexed within each plan.
+
+| Task ID | Plan | Task name (short) | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
+|---------|------|-------------------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
+| 08-01-01 | 01 | Confirm size-change ledger schema (D-01, D-02) | 1 | DEBT-02 | T-08-01 | Lock two-table size-change model before migrate | checkpoint | human decision (`size-change-two-tables`) | n/a | ⬜ pending |
+| 08-01-02 | 01 | Tracer: schema + remainingMinor + DISOL scan | 1 | DEBT-02, DISOL-01 | T-08-01, T-08-04 | D-04 remaining; status sync; no NW debt imports | unit | `npx vitest run src/lib/debts.test.ts` + schema greps | ❌ W0 | ⬜ pending |
+| 08-01-03 | 01 | Host migrate deploy + foundation allow-list | 1 | DEBT-02 | T-08-02, T-08-03 | Person/Debt/events live; Restrict/Cascade applied | smoke | `DATABASE_URL=file:./data/wallet.db npx prisma migrate deploy` + `npx vitest run src/lib/foundation.test.ts` | ❌ W0 | ⬜ pending |
+| 08-02-01 | 02 | Domain asserts (repay / size / initial / status) | 2 | DEBT-02, DEBT-03 | T-08-01, T-08-07 | Illegal money throws; initialAmountMinor immutable | unit | `npx vitest run src/lib/debts.test.ts` | ❌ W0 | ⬜ pending |
+| 08-02-02 | 02 | computeDebtPrimaryTotals OPEN-only + FX | 2 | DEBT-02 | T-08-04 | OPEN-only; isPartial; primary identity | unit | `npx vitest run src/lib/debts.test.ts` | ❌ W0 | ⬜ pending |
+| 08-03-01 | 03 | Wave 0 red Zod tests for debts validations | 2 | DEBT-03 | T-08-07 | Zod cases; update-meta has no initial field | unit | `test -f src/lib/validations/debts.test.ts` + greps | ❌ W0 | ⬜ pending |
+| 08-03-02 | 03 | Implement validations/debts.ts + full suite | 2 | DEBT-03, DISOL-01 | T-08-04, T-08-07 | Zod shapes green; DISOL scan via full suite | unit | `npx vitest run src/lib/validations/debts.test.ts src/lib/debts.test.ts && npm test` | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
+
+*Docker migrate-on-start:* deferred as equivalent gate — see Plan 01 success criteria / Manual-Only row (entrypoint + host migrate).
 
 ---
 
@@ -66,7 +71,7 @@ created: "2026-09-04"
 
 | Behavior | Requirement | Why Manual | Test Instructions |
 |----------|-------------|------------|-------------------|
-| Prisma migrate deploy on Docker start | schema | Needs running Docker/SQLite volume | `docker compose up` (or project equivalent); confirm migrate applies without error |
+| Prisma migrate deploy on Docker start | schema | Optional smoke only — **deferred** as equivalent to `docker/entrypoint.sh` (`prisma migrate deploy`) + Plan 01 host migrate deploy gate | No required Docker compose smoke this phase; optional: `docker compose up` and confirm migrate applies without error |
 
 ---
 

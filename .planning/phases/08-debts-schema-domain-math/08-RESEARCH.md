@@ -115,7 +115,7 @@ No `.cursor/rules/` directory present in this repo. Follow workspace `AGENTS.md`
 |------------|-----------|----------|
 | Two event tables (locked D-02) | Single `DebtEvent` polymorphic table | Simpler cross-kind `id` order; **rejected by D-02** |
 | `writeOffMinor` field | Size-change down (locked) | Old REQUIREMENTS/ROADMAP text — **do not implement** |
-| Unified event `id` sequence | Separate AUTOINCREMENT + `createdAt` | See Open Question on D-10 |
+| Unified event `id` sequence | Separate AUTOINCREMENT + `createdAt` | D-10 RESOLVED: Phase 8 sums + createdAt; Phase 11 ordering later |
 
 **Installation:**
 
@@ -252,7 +252,7 @@ export function remainingMinor(
 
 **What goes wrong:** Phase 11 series orders by comparing repayment.id vs sizeChange.id — sequences are independent AUTOINCREMENT counters, so “strict insert id order across kinds” is **not well-defined**.  
 **Why it happens:** D-10 assumes comparable ids.  
-**How to avoid (Phase 8):** Remaining/status use **order-independent sums** (sufficient for DEBT-02). Add `createdAt DateTime @default(now())` on both event models for Phase 11. Document Open Question for shared `seq` if true global insert order required.  
+**How to avoid (Phase 8):** Remaining/status use **order-independent sums** (sufficient for DEBT-02). Add `createdAt DateTime @default(now())` on both event models for Phase 11. **RESOLVED:** shared `seq` only if Phase 11 needs true global insert order — not a Phase 8 blocker.  
 **Warning signs:** Phase 8 tasks that merge-sort by `id` across tables for remaining.
 
 ### Pitfall 4: NW leak / credit “debt” name collision
@@ -457,22 +457,20 @@ Also add `debts Debt[]` on `Currency`. Enums map to SQLite `TEXT`. [CITED: prism
 | A1 | Recommended model name `DebtSizeChange` (vs `DebtAdjustment`) | Schema sketch | Rename only; no behavior risk |
 | A2 | Repayment `amountMinor` must be `> 0` (discretion; recommended) | Validation | If 0 allowed, status/remaining edge cases |
 | A3 | Person.`name` `@unique` | Schema | Later merge (PERSON-03) harder; align with Account.name unique |
-| A4 | Cross-table D-10 satisfied in Phase 8 by **sums only**; series ordering deferred with `createdAt` | Pitfall 3 / Open Q | Phase 11 may need shared `seq` migration |
+| A4 | Cross-table D-10 satisfied in Phase 8 by **sums only**; series ordering deferred with `createdAt` | Pitfall 3 / Open Questions (RESOLVED) | Phase 11 may need shared `seq` migration |
 | A5 | Totals helper is pure and takes rates as inputs (no Prisma inside `debts.ts`) | Architecture | If planner puts Prisma in debts.ts, harder to unit test |
 
 **If this table is empty:** — not empty; A1–A5 need planner confirmation where marked discretion.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **D-10 cross-kind insert order**
+1. **D-10 cross-kind insert order** — **RESOLVED**
    - What we know: Two AUTOINCREMENT `id` spaces are not comparable; Phase 8 remaining is sum-based.
-   - What's unclear: Exact Phase 11 ordering key for mixed events on same `asOfDate`.
-   - Recommendation: Add `createdAt` now; Phase 11 sort `(asOfDate ASC, createdAt ASC, kind, id ASC)` or introduce shared `seq` if user insists on true global insert order. Flag for discuss if needed — do not block Phase 8.
+   - Resolution: Phase 8 remaining/status use **order-independent sums only**; both event models get `createdAt DateTime @default(now())` now (planner A4). Exact Phase 11 mixed-event sort key (`(asOfDate ASC, createdAt ASC, kind, id ASC)` or shared `seq`) deferred to Phase 11 — does not block Phase 8.
 
-2. **Whether Zod schemas ship in Phase 8 vs helpers-only**
+2. **Whether Zod schemas ship in Phase 8 vs helpers-only** — **RESOLVED**
    - What we know: UI/actions are Phase 9–10; domain tests can call helpers with BigInt directly.
-   - What's unclear: How much Phase 9 wants ready-made schemas.
-   - Recommendation: Ship thin `validations/debts.ts` (asOfDate + direction enums + positive major) — low cost.
+   - Resolution: Ship thin `src/lib/validations/debts.ts` in **Plan 03** (asOfDate + direction enums + positive majors; shape only — remaining rules stay in `debts.ts` asserts).
 
 ## Environment Availability
 

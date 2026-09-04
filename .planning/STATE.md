@@ -5,7 +5,7 @@ milestone_name: Долги людям
 current_phase: 8
 current_phase_name: Debts schema + domain math
 status: planning
-stopped_at: Phase 8 plans created
+stopped_at: Phase 8 plans revised (checker feedback)
 last_updated: "2026-09-04T16:00:00.000Z"
 last_activity: 2026-09-04
 state_head: 2a38046
@@ -29,8 +29,8 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 Phase: 8 (Debts schema + domain math)
 Plan: 01
-Status: Plans ready — execute next
-Last activity: 2026-09-04 Phase 8 PLAN.md files written (08-01..08-03)
+Status: Plans revised — ready for re-check / execute
+Last activity: 2026-09-04 Phase 8 plan revision (research open Q RESOLVED, validation map, D-18 A6, Docker A7)
 
 ## Performance Metrics
 
@@ -176,10 +176,10 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-04T15:45:00.000Z
-Stopped at: Phase 8 research complete
-Resume file: .planning/phases/08-debts-schema-domain-math/08-RESEARCH.md
+Last session: 2026-09-04T16:00:00.000Z
+Stopped at: Phase 8 plans created (08-01..08-03)
+Resume file: .planning/phases/08-debts-schema-domain-math/08-01-PLAN.md
 
 ## Operator Next Steps
 
-- Continue `/gsd-plan-phase` for Phase 8 (planner consumes 08-RESEARCH.md)
+- Run `/gsd-execute-phase 8` (Wave 1 starts with D-01/D-02 decision checkpoint)
