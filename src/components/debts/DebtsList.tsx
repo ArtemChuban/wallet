@@ -20,6 +20,24 @@ export type PersonListItem = {
 
 const BLOCKED_DELETE_MESSAGE = "Нельзя удалить человека, пока есть долги";
 
+/**
+ * Stub trigger for Plan 03 DebtFormDialog — label/placement match UI-SPEC now.
+ * `personId` reserved for group pre-select (D-12).
+ */
+export function NewDebtButton({
+  personId: _personId,
+  size = "default",
+}: {
+  personId?: number;
+  size?: "default" | "sm";
+}) {
+  return (
+    <Button type="button" size={size}>
+      Новый долг
+    </Button>
+  );
+}
+
 function PersonGroup({ person }: { person: PersonListItem }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
@@ -81,6 +99,13 @@ function PersonGroup({ person }: { person: PersonListItem }) {
         <p className="px-4 pb-3 text-sm text-destructive" role="alert">
           {deleteError}
         </p>
+      ) : null}
+
+      {person.debtCount === 0 ? (
+        <div className="flex flex-col items-start gap-3 border-t border-border bg-muted/30 px-4 py-4">
+          <p className="text-base text-muted-foreground">Нет долгов</p>
+          <NewDebtButton personId={person.id} size="sm" />
+        </div>
       ) : null}
 
       <Dialog

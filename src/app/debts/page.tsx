@@ -1,5 +1,6 @@
 import { DebtsList } from "@/components/debts/DebtsList";
 import { PersonFormDialog } from "@/components/debts/PersonFormDialog";
+import { Button } from "@/components/ui/button";
 import { ensureSqlitePragmas, prisma } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
@@ -27,7 +28,18 @@ export default async function DebtsPage() {
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">
           Долги
         </h1>
-        {people.length > 0 ? <PersonFormDialog mode="create" /> : null}
+        {people.length > 0 ? (
+          <div className="flex flex-wrap items-center gap-2">
+            <PersonFormDialog
+              mode="create"
+              trigger={
+                <Button type="button">Новый человек</Button>
+              }
+            />
+            {/* Stub until Plan 03 DebtFormDialog */}
+            <Button type="button">Новый долг</Button>
+          </div>
+        ) : null}
       </header>
       <DebtsList people={people} />
     </main>
