@@ -6,8 +6,9 @@ import { cn } from "@/lib/utils";
 
 const links = [
   { href: "/", label: "Главная" },
-  { href: "/currencies/rates", label: "Валюты" },
   { href: "/accounts", label: "Счета" },
+  { href: "/debts", label: "Долги" },
+  { href: "/currencies/rates", label: "Валюты" },
 ] as const;
 
 export function Nav() {
