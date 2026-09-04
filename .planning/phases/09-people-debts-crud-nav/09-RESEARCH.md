@@ -420,21 +420,19 @@ Debts empty: same layout with «Нет людей» (D-20).
 
 **If this table is empty:** N/A — assumptions listed above.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Shared DestructiveConfirmStep extraction?**
+1. **Shared DestructiveConfirmStep extraction?** — **RESOLVED**
    - What we know: Discretion allows shared component; D-16 must hold for three call sites (person, debt, snapshot).
-   - What's unclear: Extract now vs copy three times.
-   - Recommendation: Extract small shared client helper if ≥2 call sites in same PR wave; otherwise duplicate then extract.
+   - Resolution: Extract `DestructiveConfirmStep` in **Plan 02** (≥2 call sites across Plans 02–04); Plan 04 reuses it for AccountList snapshot delete when import path is clean.
 
-2. **Compound Zod schema location?**
+2. **Compound Zod schema location?** — **RESOLVED**
    - What we know: `createDebtSchema` needs `personId`.
-   - What's unclear: New exported schema vs action-local branch.
-   - Recommendation: Action-local branch calling existing schemas; add `createDebtWithNewPersonSchema` only if tests need a named export.
+   - Resolution: **Plan 03** uses action-local branch (existing `createPersonSchema` + debt fields minus `personId`); add thin exported `createDebtWithNewPersonSchema` only if tests need a named export.
 
-3. **RateList confirm migration?**
+3. **RateList confirm migration?** — **RESOLVED**
    - What we know: Out of D-17 scope.
-   - Recommendation: Leave; optionally capture as follow-up todo outside Phase 9 plans.
+   - Resolution: Leave RateList unchanged this phase (**Plan 04** / Pitfall 5); optional follow-up todo outside Phase 9 plans.
 
 ## Environment Availability
 
