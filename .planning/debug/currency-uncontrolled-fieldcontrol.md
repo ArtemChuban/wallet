@@ -2,7 +2,7 @@
 status: diagnosed
 trigger: "G-02-1-currency-uncontrolled-fieldcontrol — Editing/updating a currency form triggers Base UI console error: uncontrolled FieldControl default value state change after init (CurrencyFormDialog / CurrencyFormBody / Input)."
 created: 2026-09-03T00:00:00Z
-updated: 2026-09-03T00:05:00Z
+updated: 2026-09-04T12:35:36Z
 symptoms_prefilled: true
 goal: find_root_cause_only
 ---
@@ -13,7 +13,7 @@ hypothesis: "CurrencyFormBody name Input uses uncontrolled defaultValue={currenc
 bug_class: bohrbug
 test: "Trace edit Input props + updateCurrencyName revalidate + dialog close timing; confirm defaultValue is only Input with changing prop."
 expecting: "Stack points at CurrencyFormBody:114; update path revalidates /currencies before useEffect closes dialog."
-next_action: "Return ROOT CAUSE FOUND (diagnose-only); no fix."
+next_action: "Diagnose-only session complete — DEBUG SESSION COMPLETE emitted; no fix by this session."
 known_pattern_candidate: none (no knowledge-base.md)
 
 candidate_causes:
@@ -81,10 +81,22 @@ started: Discovered during UAT phase 02
   found: "Matches dual source of truth / uncontrolled init vs later prop update (stale uncontrolled default)."
   implication: "Pattern supports confirmed hypothesis."
 
+- timestamp: 2026-09-04T14:32:00Z
+  checked: "Resume verify CurrencyFormDialog.tsx + CurrencyFormDialog.test.ts"
+  found: "Tree now uses useState(name)+value/onChange; zero defaultValue; regression test CURR-01/G-02-1 asserts controlled binding. revalidatePath('/currencies') still present in updateCurrencyName."
+  implication: "Diagnosed root cause still correct for UAT failure; codebase already moved to suggested controlled pattern (outside this diagnose-only session)."
+
 ## Resolution
 
 root_cause: "Edit name Input is uncontrolled with defaultValue bound to live currency.name; updateCurrencyName's revalidatePath refreshes CurrencyList while CurrencyFormBody still mounted, so defaultValue changes after Base UI FieldControl init."
-fix: ""
-verification: ""
+fix: "not applied (diagnose-only session)"
+verification: "Out-of-session tree already has controlled Input (useState name + value/onChange) and CURR-01/G-02-1 regression test; this session made no code changes."
 files_changed: []
-oracle_type: ""
+oracle_type: "diagnose_only"
+specialist_hint: react
+
+## Prevention
+
+why_not_caught: "none (no gate existed for uncontrolled defaultValue + revalidate race on edit dialogs)"
+recurrence_guard: "CurrencyFormDialog.test.ts CURR-01/G-02-1 asserts controlled name binding (value/onChange, no defaultValue) — already present outside this session"
+why: "code: defaultValue tied to live prop; data: revalidatePath updates still-open dialog — AND-gate both required for warning"
