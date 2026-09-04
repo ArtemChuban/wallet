@@ -104,7 +104,7 @@ Light theme tokens from `src/app/globals.css` `:root` (shadcn neutral). Use CSS 
 | Destructive | `#C4473A` (`--destructive` oklch(0.577 0.245 27.325)) | Delete entry controls, destructive confirm primary, field `aria-invalid` / error text |
 
 Accent reserved for:
-1. Primary CTA buttons («Новый человек», «Новый долг», dialog «Сохранить» / «Создать»)
+1. Primary CTA buttons («Новый человек», «Новый долг», dialog «Создать человека» / «Создать долг» / «Сохранить имя» / «Сохранить изменения»)
 2. Active nav link underline/foreground emphasis (including «Долги» when pathname under `/debts`)
 3. Focus ring companion (`--ring`) on focused controls
 
@@ -159,13 +159,20 @@ All chrome Russian. Currency codes stay Latin as stored. Direction labels locked
 
 | Action | Label |
 |--------|-------|
-| Submit create/save | Сохранить |
-| Cancel / dismiss | Отмена |
-| Enter delete flow | Удалить |
-| Confirm delete (second step) | Удалить |
+| Submit create person | Создать человека |
+| Submit create debt | Создать долг |
+| Submit rename person | Сохранить имя |
+| Submit edit debt | Сохранить изменения |
+| Dismiss create/edit (discard) | Не сохранять |
+| Enter delete flow (person) | Удалить человека |
+| Enter delete flow (debt) | Удалить долг |
+| Enter delete flow (balance snapshot) | Удалить снимок |
+| Confirm delete (second step, person) | Удалить человека |
+| Confirm delete (second step, debt) | Удалить долг |
+| Confirm delete (second step, balance snapshot) | Удалить снимок |
 | Back from confirm step | Назад |
-| Person rename control (header) | Изменить |
-| Person delete control (header) | Удалить |
+| Person rename control (header) | Изменить имя |
+| Person delete control (header) | Удалить человека |
 
 ### Compact debt row (D-02)
 
