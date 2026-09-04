@@ -1,6 +1,7 @@
 import { RateList } from "@/components/currencies/RateList";
 import { calendarDateToday } from "@/lib/balances";
 import { ensureSqlitePragmas, prisma } from "@/lib/db";
+import { firstHitLocfMap } from "@/lib/locf";
 
 export const dynamic = "force-dynamic";
 
@@ -40,18 +41,10 @@ export default async function RatesPage() {
       }),
     ]);
 
-  const locfByCurrency = new Map<
-    string,
-    { asOfDate: string; rateToPrimaryScaled: bigint }
-  >();
-  for (const rate of ratesLteToday) {
-    if (!locfByCurrency.has(rate.currencyCode)) {
-      locfByCurrency.set(rate.currencyCode, {
-        asOfDate: rate.asOfDate,
-        rateToPrimaryScaled: rate.rateToPrimaryScaled,
-      });
-    }
-  }
+  const locfByCurrency = firstHitLocfMap(
+    ratesLteToday,
+    (rate) => rate.currencyCode,
+  );
 
   const historyByCurrency = new Map<
     string,

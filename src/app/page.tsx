@@ -2,6 +2,7 @@ import { DashboardAccountList } from "@/components/dashboard/DashboardAccountLis
 import { DashboardChartsShell } from "@/components/dashboard/DashboardChartsShell";
 import { calendarDateToday } from "@/lib/balances";
 import { ensureSqlitePragmas, prisma } from "@/lib/db";
+import { firstHitLocfMap } from "@/lib/locf";
 import { formatMinorToMajor } from "@/lib/money";
 import {
   computeNetWorthRows,
@@ -45,31 +46,15 @@ export default async function Home() {
         }),
       ]);
 
-    const locfByAccount = new Map<
-      number,
-      { asOfDate: string; amountMinor: bigint }
-    >();
-    for (const snap of snapshotsLteToday) {
-      if (!locfByAccount.has(snap.accountId)) {
-        locfByAccount.set(snap.accountId, {
-          asOfDate: snap.asOfDate,
-          amountMinor: snap.amountMinor,
-        });
-      }
-    }
+    const locfByAccount = firstHitLocfMap(
+      snapshotsLteToday,
+      (snap) => snap.accountId,
+    );
 
-    const locfByCurrency = new Map<
-      string,
-      { asOfDate: string; rateToPrimaryScaled: bigint }
-    >();
-    for (const rate of ratesLteToday) {
-      if (!locfByCurrency.has(rate.currencyCode)) {
-        locfByCurrency.set(rate.currencyCode, {
-          asOfDate: rate.asOfDate,
-          rateToPrimaryScaled: rate.rateToPrimaryScaled,
-        });
-      }
-    }
+    const locfByCurrency = firstHitLocfMap(
+      ratesLteToday,
+      (rate) => rate.currencyCode,
+    );
 
     const primaryCode = primaryCurrency?.code ?? "RUB";
     const primaryScale = primaryCurrency?.scale ?? 2;
