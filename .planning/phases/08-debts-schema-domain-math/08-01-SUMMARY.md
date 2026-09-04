@@ -119,7 +119,7 @@ status: complete
 2. **Task 2: End-to-end debts schema + remainingMinor tracer + DISOL scan** - `3f8f10d` (feat)
 3. **Task 3: Host prisma migrate deploy + foundation table allow-list** - `d4dcf6b` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `9b7a5f6` (docs: complete plan)
 
 ## Files Created/Modified
 
