@@ -4,11 +4,11 @@ milestone: v1.1
 milestone_name: Долги людям
 current_phase: 08
 status: completed
-stopped_at: Completed 08-03-PLAN.md
-last_updated: "2026-09-04T16:32:02.179Z"
+stopped_at: Phase 9 context gathered
+last_updated: "2026-09-04T18:35:04.550Z"
 last_activity: 2026-09-04
 last_activity_desc: Phase 08 marked complete
-state_head: 4859259a0caba762098b64626c9912de35c428ce
+state_head: 4948b78f18c7b178c8f1911f2d506a09562b77fd
 progress:
   total_phases: 4
   completed_phases: 1
@@ -187,9 +187,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-04T16:22:22.613Z
-Stopped at: Completed 08-03-PLAN.md
-Resume file: None
+Last session: 2026-09-04T18:35:04.508Z
+Stopped at: Phase 9 context gathered
+Resume file: /home/artem/Documents/wallet/.planning/phases/09-people-debts-crud-nav/09-CONTEXT.md
 
 ## Operator Next Steps
 
