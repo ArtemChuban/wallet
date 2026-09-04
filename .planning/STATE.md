@@ -4,16 +4,16 @@ milestone: v1.1
 milestone_name: Долги людям
 current_phase: 09
 current_phase_name: people-debts-crud-nav
-status: planning
-stopped_at: Phase 9 UI-SPEC approved
-last_updated: "2026-09-04T20:21:17.932Z"
+status: planned
+stopped_at: Phase 9 plans created (4 plans)
+last_updated: "2026-09-04T21:20:00.000Z"
 last_activity: 2026-09-04
-last_activity_desc: Phase 09 UI-SPEC copywriting CTAs fixed (Dim 1)
+last_activity_desc: Phase 09 plan-phase complete — 4 PLAN.md files
 state_head: 249a301dd95885bb0561d67db3f3c7ed890cce7e
 progress:
   total_phases: 4
   completed_phases: 1
-  total_plans: 3
+  total_plans: 7
   completed_plans: 3
 ---
 
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 ## Current Position
 
-Phase: 09 — UI-SPEC DRAFT
-Plan: 0 of TBD
-Status: UI-SPEC draft — Dim 1 copywriting revised; ready for checker
-Total Plans in Phase: TBD
-Last activity: 2026-09-04 — Phase 09 UI-SPEC dialog CTAs made noun-specific
+Phase: 09 — people-debts-crud-nav
+Plan: 0 of 4
+Status: Plans ready for execute
+Total Plans in Phase: 4
+Last activity: 2026-09-04 — Phase 09 plans created (09-01..09-04)
 
 ## Performance Metrics
 

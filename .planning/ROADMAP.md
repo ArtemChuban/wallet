@@ -69,7 +69,13 @@ Plans:
   3. User can create/edit a debt (direction, currency, initial, optional due/note) attached to a person
   4. Nav shows «Долги» linking to `/debts` with correct active state
 
-**Plans:** TBD
+**Plans:** 4 plans
+
+Plans:
+- [ ] 09-01-PLAN.md — Tracer: nav «Долги» + /debts + createPerson + empty list
+- [ ] 09-02-PLAN.md — Person rename/delete (PERSON-02) + groups/CTAs + DestructiveConfirmStep
+- [ ] 09-03-PLAN.md — Debt create/edit/delete + remaining rows + compound create
+- [ ] 09-04-PLAN.md — Migrate AccountList snapshot delete to in-dialog confirm (D-17)
 
 ### Phase 10: Repayments + close/write-off
 
@@ -105,7 +111,8 @@ Plans:
 |-------|-----------|----------------|--------|
 | 1–7 | v1.0 | 24/24 | Shipped |
 | 8 | v1.1 | 0/3 | Complete   |
-| 9 | v1.1 | 0/TBD | Not started |
+| 9 | v1.1 | 0/4 | Planned |
+
 | 10 | v1.1 | 0/TBD | Not started |
 | 11 | v1.1 | 0/TBD | Not started |
 
