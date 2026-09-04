@@ -11,7 +11,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 ### People
 
 - [x] **PERSON-01**: User can create, rename, and list people (counterparties)
-- [ ] **PERSON-02**: User can delete a person only when that person has no debts
+- [x] **PERSON-02**: User can delete a person only when that person has no debts
 
 ### Debts
 
@@ -82,7 +82,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | PERSON-01 | Phase 9 | Complete |
-| PERSON-02 | Phase 9 | Pending |
+| PERSON-02 | Phase 9 | Complete |
 | DEBT-01 | Phase 9 | Complete |
 | DEBT-02 | Phase 8 | Complete |
 | DEBT-03 | Phase 8 | Complete |

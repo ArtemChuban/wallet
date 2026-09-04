@@ -69,7 +69,7 @@ Plans:
   3. User can create/edit a debt (direction, currency, initial, optional due/note) attached to a person
   4. Nav shows «Долги» linking to `/debts` with correct active state
 
-**Plans:** 3/4 plans executed
+**Plans:** 4/4 plans executed
 
 Plans:
 **Wave 1**
@@ -83,7 +83,7 @@ Plans:
 **Wave 3** *(blocked on Wave 2 completion)*
 
 - [x] 09-03-PLAN.md — Debt create/edit/delete + remaining rows + compound create
-- [ ] 09-04-PLAN.md — Migrate AccountList snapshot delete to in-dialog confirm (D-17)
+- [x] 09-04-PLAN.md — Migrate AccountList snapshot delete to in-dialog confirm (D-17)
 
 ### Phase 10: Repayments + close/write-off
 

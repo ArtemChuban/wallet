@@ -5,16 +5,16 @@ milestone_name: Долги людям
 current_phase: 09
 current_phase_name: people-debts-crud-nav
 status: planned
-stopped_at: Completed 09-03-PLAN.md
-last_updated: "2026-09-04T21:42:34.385Z"
+stopped_at: Completed 09-04-PLAN.md
+last_updated: "2026-09-04T21:46:32.510Z"
 last_activity: 2026-09-04
 last_activity_desc: Phase 09 plan-phase complete — 4 PLAN.md files
-state_head: 8ae6b976ca3fa5021a2e180ab8a889e1538796df
+state_head: 7f643327ba8ef419cba9f8136f92e2d9414f2abd
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 7
-  completed_plans: 6
+  completed_plans: 7
 ---
 
 # Project State
@@ -93,6 +93,7 @@ Last activity: 2026-09-04 — Phase 09 plans created (09-01..09-04)
 | Phase 09-people-debts-crud-nav P01 | 3min | 3 tasks | 7 files |
 | Phase 09-people-debts-crud-nav P02 | 4min | 3 tasks | 6 files |
 | Phase 09-people-debts-crud-nav P03 | 7min | 3 tasks | 7 files |
+| Phase 09 P04 | 2min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -171,6 +172,8 @@ Recent decisions affecting current work:
 - [Phase 09]: Exported createDebtWithNewPersonSchema for compound D-06 validation and tests
 - [Phase 09]: Single createDebt action branches on personId presence vs new-person name field
 - [Phase 09]: Person mode toggle (Существующий / Новый человек) inside debt create dialog
+- [Phase 09]: Reuse DestructiveConfirmStep for AccountList snapshot delete (D-17)
+- [Phase 09]: AccountList confirm test uses .ts extension to match vitest include pattern
 
 ### Pending Todos
 
@@ -199,8 +202,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-04T21:42:34.324Z
-Stopped at: Completed 09-03-PLAN.md
+Last session: 2026-09-04T21:46:32.449Z
+Stopped at: Completed 09-04-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
