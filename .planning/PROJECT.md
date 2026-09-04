@@ -14,13 +14,18 @@ At any moment, see true net worth (assets minus credit-card debt) in the primary
 
 Local Dockerized net-worth tracker: SQLite → currencies/accounts → dated balances → dated FX → current NW dashboard → historical charts (as-of balance × as-of FX). ~16k LOC TypeScript/TSX. Stack: Next.js 16 App Router, Prisma 7 + SQLite, shadcn/ui, recharts, Vitest (153 tests). Russian-first UI.
 
-## Next Milestone Goals
+## Current Milestone: v1.1 Долги людям
 
-Define via `/gsd-new-milestone`. Likely candidates from Out of Scope / residual debt:
+**Goal:** Учёт долгов «я должен» / «мне должны» в отдельном разделе — люди, долги, частичные погашения с историей и графиком — без влияния на net worth.
 
-- Nav discoverability (Валюты → rates vs list)
-- Transaction history / income-expense (if desired)
-- Auto FX or bank import (still deferred unless promoted)
+**Target features:**
+- Сущность «человек» → несколько долгов на одного
+- Долг: направление, валюта, начальная сумма, опц. due date, опц. заметка; остаток = initial − Σ погашений
+- Погашения только в валюте долга, с as-of датой (бэкдейт разрешён)
+- График: остаток во времени + суммы погашений
+- Закрытие: авто при остатке 0 или досрочно со списанием/прощением остатка
+- Сводка totals «я должен» / «мне должны» в primary (FX as-of)
+- Отдельный nav «Долги»; NW/charts не меняют смысл
 
 ## Requirements
 
@@ -39,23 +44,35 @@ Define via `/gsd-new-milestone`. Likely candidates from Out of Scope / residual 
 
 ### Active
 
-_(none — next milestone defines fresh requirements via `/gsd-new-milestone`)_
+- [ ] User can create and manage people (counterparties) and attach multiple debts to one person
+- [ ] User can create debts with direction (I owe / they owe me), currency, initial amount, optional due date, optional note
+- [ ] Remaining balance = initial − sum of repayments; repayments only in debt currency with as-of date (backdating allowed)
+- [ ] User can record partial repayments with history and see a chart of remaining balance over time plus repayment amounts
+- [ ] Debt auto-closes at remaining 0; user can also close early by writing off / forgiving remaining
+- [ ] Debts section shows totals «I owe» / «they owe me» in primary currency using FX as-of (debts never change net worth)
+- [ ] Separate nav section «Долги» (Russian-first UI)
 
 ### Out of Scope
 
-- Transaction history / income-expense posting — v1 is periodic balance snapshots only
-- Spending analytics, monthly burn, category cash-flow — deferred post-v1
-- Debts to/from people with due dates — deferred
-- Long-term savings goals with target dates — deferred
-- Credit-card payment due date / minimum payment reminders — deferred (mentioned, not v1)
+- Transaction history / income-expense posting — still periodic balance snapshots only
+- Spending analytics, monthly burn, category cash-flow — deferred
+- Long-term savings goals with target dates — deferred (not this milestone)
+- Interest / penalties on personal debts — principal only in v1.1
+- Debt list filters / search — deferred (single list)
+- Repayments in a different currency than the debt — deferred
+- Debts affecting net worth — explicitly excluded; tracking alongside capital only
+- Credit-card payment due date / minimum payment reminders — deferred
 - Bank/CSV import or API sync — deferred; manual only
 - Automatic FX from external APIs — deferred; manual rates only
-- FX between arbitrary non-primary pairs — v1 only primary ↔ other
+- FX between arbitrary non-primary pairs — primary ↔ other only
 - Multi-user / auth / cloud sync — single local user
+- Nav «Валюты» discoverability / account delete (ACCT-04) — residual v1 debt, not this milestone unless promoted later
 
 ## Context
 
 Shipped v1.0: capital visibility across disconnected money places (bank, USDT, cash, credit debt) in one local Docker + SQLite app. UI Russian-first. Residual audit tech debt: some human-only FieldControl/restart smoke checks; nav «Валюты» lands on rates not currency list.
+
+v1.1 adds personal debts (people ↔ money owed) as a parallel domain: same money/FX primitives for primary totals and charts, but debt balances must not flow into `computeNetWorthRows` or NW charts.
 
 ## Constraints
 
@@ -78,6 +95,12 @@ Shipped v1.0: capital visibility across disconnected money places (bank, USDT, c
 | Pure `computeNetWorthRows` for Phase 6 reuse | Charts need same inclusion math | ✓ Good — Phase 5–6 |
 | Shared hybrid LOCF (`pickLatestAsOf` + `firstHitLocfMap` + typed wrappers) | Kill triplicate scanners; keep page batch Maps + series pure | ✓ Good — Phase 7 |
 | Keep Prisma `getBalanceAsOf` / `getRateAsOf` as thin findFirst | LOCF-04; pages stay on batch Maps | ✓ Good — Phase 7 |
+| Person entity → many debts | One counterparty, multiple open/closed debts | — Pending v1.1 |
+| Remaining = initial − Σ repayments | Audit trail of principal + payments | — Pending v1.1 |
+| Repayments same currency + dated as-of | Match balance/FX backdating model; no cross-currency pay | — Pending v1.1 |
+| Debts excluded from NW | Capital stays account-based; debts are side ledger | — Pending v1.1 |
+| Early close = write-off/forgive remaining | Auto-close at 0 insufficient for real settlements | — Pending v1.1 |
+| Primary totals for I-owe / they-owe via FX as-of | Same conversion honesty as NW dashboard | — Pending v1.1 |
 
 ## Evolution
 
@@ -97,4 +120,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-04 after v1.0 milestone*
+*Last updated: 2026-09-04 after starting milestone v1.1 Долги людям*
