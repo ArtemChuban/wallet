@@ -2,6 +2,10 @@
 
 import { useState, useTransition } from "react";
 import { deletePerson } from "@/app/debts/actions";
+import {
+  DebtFormDialog,
+  type DebtRow,
+} from "@/components/debts/DebtFormDialog";
 import { DestructiveConfirmStep } from "@/components/debts/DestructiveConfirmStep";
 import { PersonFormDialog } from "@/components/debts/PersonFormDialog";
 import { Button } from "@/components/ui/button";
@@ -11,34 +15,68 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { formatMinorToMajor } from "@/lib/money";
+
+type CurrencyOption = {
+  code: string;
+  name: string;
+  scale: number;
+};
 
 export type PersonListItem = {
   id: number;
   name: string;
   debtCount: number;
+  debts: DebtRow[];
 };
 
 const BLOCKED_DELETE_MESSAGE = "Нельзя удалить человека, пока есть долги";
 
-/**
- * Stub trigger for Plan 03 DebtFormDialog — label/placement match UI-SPEC now.
- * `personId` reserved for group pre-select (D-12).
- */
-export function NewDebtButton({
-  personId: _personId,
-  size = "default",
-}: {
-  personId?: number;
-  size?: "default" | "sm";
-}) {
+const DIRECTION_LABELS: Record<"I_OWE" | "THEY_OWE", string> = {
+  I_OWE: "Я должен",
+  THEY_OWE: "Мне должны",
+};
+
+function DebtCompactRow({ debt }: { debt: DebtRow }) {
+  const remaining = formatMinorToMajor(
+    BigInt(debt.remainingMinor),
+    debt.currency.scale,
+  );
   return (
-    <Button type="button" size={size}>
-      Новый долг
-    </Button>
+    <li className="flex flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-3">
+      <div className="flex min-w-0 flex-wrap items-baseline gap-2">
+        <span className="text-sm text-muted-foreground">
+          {DIRECTION_LABELS[debt.direction]}
+        </span>
+        <span className="font-mono text-base text-foreground">
+          {remaining}
+        </span>
+        <span className="font-mono text-sm text-muted-foreground">
+          {debt.currencyCode}
+        </span>
+      </div>
+      <DebtFormDialog
+        mode="edit"
+        debt={debt}
+        trigger={
+          <Button type="button" variant="outline" size="sm">
+            Изменить
+          </Button>
+        }
+      />
+    </li>
   );
 }
 
-function PersonGroup({ person }: { person: PersonListItem }) {
+function PersonGroup({
+  person,
+  currencies,
+  peopleOptions,
+}: {
+  person: PersonListItem;
+  currencies: CurrencyOption[];
+  peopleOptions: { id: number; name: string }[];
+}) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -101,12 +139,28 @@ function PersonGroup({ person }: { person: PersonListItem }) {
         </p>
       ) : null}
 
-      {person.debtCount === 0 ? (
+      {person.debts.length === 0 ? (
         <div className="flex flex-col items-start gap-3 border-t border-border bg-muted/30 px-4 py-4">
           <p className="text-base text-muted-foreground">Нет долгов</p>
-          <NewDebtButton personId={person.id} size="sm" />
+          <DebtFormDialog
+            mode="create"
+            currencies={currencies}
+            people={peopleOptions}
+            defaultPersonId={person.id}
+            trigger={
+              <Button type="button" size="sm">
+                Новый долг
+              </Button>
+            }
+          />
         </div>
-      ) : null}
+      ) : (
+        <ul>
+          {person.debts.map((debt) => (
+            <DebtCompactRow key={debt.id} debt={debt} />
+          ))}
+        </ul>
+      )}
 
       <Dialog
         open={confirmOpen}
@@ -131,7 +185,15 @@ function PersonGroup({ person }: { person: PersonListItem }) {
   );
 }
 
-export function DebtsList({ people }: { people: PersonListItem[] }) {
+export function DebtsList({
+  people,
+  currencies,
+}: {
+  people: PersonListItem[];
+  currencies: CurrencyOption[];
+}) {
+  const peopleOptions = people.map((p) => ({ id: p.id, name: p.name }));
+
   if (people.length === 0) {
     return (
       <div className="flex flex-col items-start gap-4 rounded-lg border border-dashed border-border bg-muted/30 px-4 py-8">
@@ -141,7 +203,14 @@ export function DebtsList({ people }: { people: PersonListItem[] }) {
             Добавьте человека или создайте долг, чтобы вести учёт.
           </p>
         </div>
-        <PersonFormDialog mode="create" />
+        <div className="flex flex-wrap gap-2">
+          <PersonFormDialog mode="create" />
+          <DebtFormDialog
+            mode="create"
+            currencies={currencies}
+            people={[]}
+          />
+        </div>
       </div>
     );
   }
@@ -149,7 +218,12 @@ export function DebtsList({ people }: { people: PersonListItem[] }) {
   return (
     <ul className="rounded-lg border border-border bg-background">
       {people.map((person) => (
-        <PersonGroup key={person.id} person={person} />
+        <PersonGroup
+          key={person.id}
+          person={person}
+          currencies={currencies}
+          peopleOptions={peopleOptions}
+        />
       ))}
     </ul>
   );
