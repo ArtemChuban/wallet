@@ -252,7 +252,14 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 **Plans:** 3 plans
 
 Plans:
+**Wave 1**
 
 - [ ] 07-01-PLAN.md — Shared locf.ts + parity tests + rewire accounts/rates/home batch Maps
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 07-02-PLAN.md — historical-series onto shared locf; keep Prisma get*AsOf wrappers
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
 - [ ] 07-03-PLAN.md — Reconcile phases 3–6 VALIDATION.md to validated with suite evidence
