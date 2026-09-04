@@ -1,6 +1,10 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
+  assertInitialImmutable,
+  assertRepaymentAmount,
+  assertSizeDelta,
+  assertStatusSynced,
   currentPrincipalMinor,
   remainingMinor,
   statusForRemaining,
@@ -49,6 +53,69 @@ describe("status sync (D-12, D-13)", () => {
 
   it("throws on negative remaining", () => {
     expect(() => statusForRemaining(-1n)).toThrow(/remaining must never be < 0/);
+  });
+});
+
+describe("assertRepaymentAmount (D-15)", () => {
+  it("accepts amount equal to remainingBefore", () => {
+    expect(() => assertRepaymentAmount(5n, 5n)).not.toThrow();
+  });
+
+  it("rejects amount greater than remainingBefore", () => {
+    expect(() => assertRepaymentAmount(6n, 5n)).toThrow(
+      /repayment exceeds remaining/,
+    );
+  });
+
+  it("rejects zero and negative amounts", () => {
+    expect(() => assertRepaymentAmount(0n, 5n)).toThrow(
+      /repayment amount must be > 0/,
+    );
+    expect(() => assertRepaymentAmount(-1n, 5n)).toThrow(
+      /repayment amount must be > 0/,
+    );
+  });
+});
+
+describe("assertSizeDelta (D-05, D-15)", () => {
+  it("rejects zero delta", () => {
+    expect(() => assertSizeDelta(0n, 10n, 0n)).toThrow(
+      /size delta must not be 0/,
+    );
+  });
+
+  it("rejects size-down that would make principal below sum repayments", () => {
+    expect(() => assertSizeDelta(-3n, 10n, 8n)).toThrow(
+      /size change would make remaining < 0/,
+    );
+  });
+
+  it("accepts size-down exactly to sumRepayments and ups", () => {
+    expect(() => assertSizeDelta(-2n, 10n, 8n)).not.toThrow();
+    expect(() => assertSizeDelta(5n, 10n, 8n)).not.toThrow();
+  });
+});
+
+describe("assertInitialImmutable (DEBT-03 / D-03)", () => {
+  it("rejects proposed new initial after create", () => {
+    expect(() => assertInitialImmutable(10_000n, 9_000n)).toThrow(
+      /initialAmountMinor is immutable/,
+    );
+  });
+
+  it("allows identical proposed initial (no-op check)", () => {
+    expect(() => assertInitialImmutable(10_000n, 10_000n)).not.toThrow();
+  });
+});
+
+describe("assertStatusSynced (D-13)", () => {
+  it("throws when OPEN with remaining 0n", () => {
+    expect(() => assertStatusSynced("OPEN", 0n)).toThrow(/status desync/);
+  });
+
+  it("accepts CLOSED at 0n and OPEN at positive", () => {
+    expect(() => assertStatusSynced("CLOSED", 0n)).not.toThrow();
+    expect(() => assertStatusSynced("OPEN", 1n)).not.toThrow();
   });
 });
 
