@@ -20,10 +20,12 @@ At any moment, see true net worth (assets minus credit-card debt) in the primary
 - ✓ User can set exchange rates primary ↔ other as of a chosen date (manual) — Phase 4
 - ✓ Charts and totals as of a date use the FX rate effective for that date (rate changes apply forward from their date) — Phase 4
 - ✓ User can see current net worth overall and per-account balances (native + primary; credit debt reduces NW; available never an asset) — Phase 5
+- ✓ User can see balance history charts per account and overall (in primary currency and originals where relevant) — Phase 6
+- ✓ Shared LOCF path (`src/lib/locf.ts`) for pages + historical-series; Nyquist VALIDATION closed for phases 3–6 — Phase 7
 
 ### Active
 
-- [ ] User can see balance history charts per account and overall (in primary currency and originals where relevant)
+_(none — v1 roadmap phases complete)_
 
 ### Out of Scope
 
@@ -60,6 +62,8 @@ Today money lives in disconnected places: bank app transactions, USDT crypto, ca
 | Defer spend/cash-flow/debts/goals | Ship capital visibility first | — Pending |
 | `/` is NW dashboard (Капитал); readiness not primary UX | D-01/D-02 — capital at a glance | Shipped Phase 5 |
 | Pure `computeNetWorthRows` for Phase 6 reuse | Charts need same inclusion math | Shipped Phase 5 |
+| Shared hybrid LOCF (`pickLatestAsOf` + `firstHitLocfMap` + typed wrappers) | Kill triplicate scanners; keep page batch Maps + series pure | Shipped Phase 7 |
+| Keep Prisma `getBalanceAsOf` / `getRateAsOf` as thin findFirst | LOCF-04; pages stay on batch Maps | Shipped Phase 7 |
 
 ## Evolution
 
@@ -79,4 +83,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-04 after Phase 6 (v1 roadmap complete)*
+*Last updated: 2026-09-04 after Phase 7 (LOCF consolidation + Nyquist 3–6)*
