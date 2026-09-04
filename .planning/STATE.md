@@ -4,12 +4,12 @@ milestone: v1.1
 milestone_name: Долги людям
 current_phase: 09
 current_phase_name: people-debts-crud-nav
-status: planned
+status: ready_for_verification
 stopped_at: Completed 09-04-PLAN.md
 last_updated: "2026-09-04T21:46:32.510Z"
 last_activity: 2026-09-04
-last_activity_desc: Phase 09 plan-phase complete — 4 PLAN.md files
-state_head: 7f643327ba8ef419cba9f8136f92e2d9414f2abd
+last_activity_desc: Phase 09 plan 04 complete — AccountList D-17 confirm migration
+state_head: 8813b61
 progress:
   total_phases: 4
   completed_phases: 1
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 ## Current Position
 
-Phase: 09 (people-debts-crud-nav) — READY TO EXECUTE
+Phase: 09 (people-debts-crud-nav) — READY FOR VERIFICATION
 Plan: 4 of 4
-Status: Plans ready for execute
+Status: All plans complete — ready for verification
 Total Plans in Phase: 4
-Last activity: 2026-09-04 — Phase 09 plans created (09-01..09-04)
+Last activity: 2026-09-04 — Completed 09-04 AccountList D-17 confirm migration
 
 ## Performance Metrics
 

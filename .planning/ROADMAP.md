@@ -119,7 +119,7 @@ Plans:
 |-------|-----------|----------------|--------|
 | 1–7 | v1.0 | 24/24 | Shipped |
 | 8 | v1.1 | 0/3 | Complete   |
-| 9 | v1.1 | 0/4 | In Progress|
+| 9 | v1.1 | 4/4 | Ready for verification|
 
 | 10 | v1.1 | 0/TBD | Not started |
 | 11 | v1.1 | 0/TBD | Not started |
