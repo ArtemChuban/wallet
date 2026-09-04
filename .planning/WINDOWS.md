@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 5
+open_count: 2
 waived_count: 0
-fixed_count: 0
+fixed_count: 3
 total_count: 5
-last_updated: 2026-09-04T21:31:27.301Z
+last_updated: 2026-09-04T21:42:32.871Z
 ---
 
 # Broken Windows Ledger
@@ -16,9 +16,9 @@ last_updated: 2026-09-04T21:31:27.301Z
 | id | phase | kind | file | line | description | status | reason | recorded_at | resolved_at |
 |----|-------|------|------|------|-------------|--------|--------|-------------|-------------|
 | 1 | 08 | deviation | src/lib/foundation.test.ts |  | Rule 3: foundation CONTEXT path updated to v1.0 milestones archive | open |  | 2026-09-04T16:11:09.544Z |  |
-| 2 | 09 | stub | src/components/debts/DebtsList.tsx |  | NewDebtButton «Новый долг» stub — Plan 03 DebtFormDialog | open |  | 2026-09-04T21:31:26.915Z |  |
-| 3 | 09 | stub | src/app/debts/page.tsx |  | Header «Новый долг» Button stub — Plan 03 DebtFormDialog | open |  | 2026-09-04T21:31:27.042Z |  |
-| 4 | 09 | stub | src/components/debts/DebtsList.tsx |  | Nested debt rows not rendered when debtCount>0 — Plan 03 | open |  | 2026-09-04T21:31:27.170Z |  |
+| 2 | 09 | stub | src/components/debts/DebtsList.tsx |  | NewDebtButton «Новый долг» stub — Plan 03 DebtFormDialog | fixed |  | 2026-09-04T21:31:26.915Z | 2026-09-04T21:42:32.578Z |
+| 3 | 09 | stub | src/app/debts/page.tsx |  | Header «Новый долг» Button stub — Plan 03 DebtFormDialog | fixed |  | 2026-09-04T21:31:27.042Z | 2026-09-04T21:42:32.724Z |
+| 4 | 09 | stub | src/components/debts/DebtsList.tsx |  | Nested debt rows not rendered when debtCount>0 — Plan 03 | fixed |  | 2026-09-04T21:31:27.170Z | 2026-09-04T21:42:32.871Z |
 | 5 | 09 | deviation | src/app/debts/page.tsx |  | Rule 2: debtCount from page for PERSON-02 client gate | open |  | 2026-09-04T21:31:27.301Z |  |
 
 ````json
@@ -42,10 +42,10 @@ last_updated: 2026-09-04T21:31:27.301Z
     "file": "src/components/debts/DebtsList.tsx",
     "line": null,
     "description": "NewDebtButton «Новый долг» stub — Plan 03 DebtFormDialog",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-09-04T21:31:26.915Z",
-    "resolved_at": null
+    "resolved_at": "2026-09-04T21:42:32.578Z"
   },
   {
     "id": 3,
@@ -54,10 +54,10 @@ last_updated: 2026-09-04T21:31:27.301Z
     "file": "src/app/debts/page.tsx",
     "line": null,
     "description": "Header «Новый долг» Button stub — Plan 03 DebtFormDialog",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-09-04T21:31:27.042Z",
-    "resolved_at": null
+    "resolved_at": "2026-09-04T21:42:32.724Z"
   },
   {
     "id": 4,
@@ -66,10 +66,10 @@ last_updated: 2026-09-04T21:31:27.301Z
     "file": "src/components/debts/DebtsList.tsx",
     "line": null,
     "description": "Nested debt rows not rendered when debtCount>0 — Plan 03",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-09-04T21:31:27.170Z",
-    "resolved_at": null
+    "resolved_at": "2026-09-04T21:42:32.871Z"
   },
   {
     "id": 5,

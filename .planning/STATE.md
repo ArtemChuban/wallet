@@ -5,16 +5,16 @@ milestone_name: Долги людям
 current_phase: 09
 current_phase_name: people-debts-crud-nav
 status: planned
-stopped_at: Completed 09-02-PLAN.md
-last_updated: "2026-09-04T21:32:04.272Z"
+stopped_at: Completed 09-03-PLAN.md
+last_updated: "2026-09-04T21:42:34.385Z"
 last_activity: 2026-09-04
 last_activity_desc: Phase 09 plan-phase complete — 4 PLAN.md files
-state_head: a5cab43d967443669ead35e37acd88df7df09922
+state_head: 8ae6b976ca3fa5021a2e180ab8a889e1538796df
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 7
-  completed_plans: 5
+  completed_plans: 6
 ---
 
 # Project State
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 ## Current Position
 
 Phase: 09 (people-debts-crud-nav) — READY TO EXECUTE
-Plan: 3 of 4
+Plan: 4 of 4
 Status: Plans ready for execute
 Total Plans in Phase: 4
 Last activity: 2026-09-04 — Phase 09 plans created (09-01..09-04)
@@ -92,6 +92,7 @@ Last activity: 2026-09-04 — Phase 09 plans created (09-01..09-04)
 | Phase 08 P03 | 2min | 2 tasks | 2 files |
 | Phase 09-people-debts-crud-nav P01 | 3min | 3 tasks | 7 files |
 | Phase 09-people-debts-crud-nav P02 | 4min | 3 tasks | 6 files |
+| Phase 09-people-debts-crud-nav P03 | 7min | 3 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -167,6 +168,9 @@ Recent decisions affecting current work:
 - [Phase 09]: Client skips confirm when debtCount>0 and shows PERSON-02 blocked copy immediately (D-07) — Matches D-07: debts present → blocked error; none → destructive confirm
 - [Phase 09]: P2003 race fallback: «Не удалось удалить. Попробуйте снова.» — Belt for count-then-delete race per plan assumptions
 - [Phase 09]: NewDebtButton / header «Новый долг» stub until Plan 03 DebtFormDialog — D-21/D-22 labels now; form wiring is Plan 03
+- [Phase 09]: Exported createDebtWithNewPersonSchema for compound D-06 validation and tests
+- [Phase 09]: Single createDebt action branches on personId presence vs new-person name field
+- [Phase 09]: Person mode toggle (Существующий / Новый человек) inside debt create dialog
 
 ### Pending Todos
 
@@ -195,8 +199,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-04T21:31:41.811Z
-Stopped at: Completed 09-02-PLAN.md
+Last session: 2026-09-04T21:42:34.324Z
+Stopped at: Completed 09-03-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
