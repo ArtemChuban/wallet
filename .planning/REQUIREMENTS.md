@@ -16,7 +16,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 ### Debts
 
 - [ ] **DEBT-01**: User can create and edit a debt with direction (I owe / they owe me), currency, initial amount, optional due date, optional note
-- [ ] **DEBT-02**: Remaining balance = initial − sum of repayments − write-off
+- [x] **DEBT-02**: Remaining balance = initial − sum of repayments − write-off
 - [ ] **DEBT-03**: Initial amount cannot change after the first repayment
 - [ ] **DEBT-04**: Debt auto-closes when remaining reaches 0
 - [ ] **DEBT-05**: User can close early by writing off / forgiving remaining
@@ -36,7 +36,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 ### Nav / isolation
 
 - [ ] **DNAV-01**: Separate nav section «Долги»
-- [ ] **DISOL-01**: Debts never change net worth or NW charts
+- [x] **DISOL-01**: Debts never change net worth or NW charts
 
 ## Future Requirements
 
@@ -84,7 +84,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PERSON-01 | Phase 9 | Pending |
 | PERSON-02 | Phase 9 | Pending |
 | DEBT-01 | Phase 9 | Pending |
-| DEBT-02 | Phase 8 | Pending |
+| DEBT-02 | Phase 8 | Complete |
 | DEBT-03 | Phase 8 | Pending |
 | DEBT-04 | Phase 10 | Pending |
 | DEBT-05 | Phase 10 | Pending |
@@ -95,9 +95,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DCHART-02 | Phase 11 | Pending |
 | DTOTAL-01 | Phase 11 | Pending |
 | DNAV-01 | Phase 9 | Pending |
-| DISOL-01 | Phase 8 + 11 | Pending |
+| DISOL-01 | Phase 8 + 11 | Complete |
 
 **Coverage:**
+
 - v1.1 requirements: 15 total
 - Mapped to phases: 15
 - Unmapped: 0

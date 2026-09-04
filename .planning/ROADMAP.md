@@ -45,12 +45,12 @@ Full detail: [milestones/v1.0-ROADMAP.md](./milestones/v1.0-ROADMAP.md)
   3. initialAmountMinor not edited after create; adjustments via size-change events (D-03)
   4. No debt imports exist in `net-worth.ts`, `historical-series.ts`, or `/` page
 
-**Plans:** 3 plans
+**Plans:** 1/3 plans executed
 
 Plans:
 **Wave 1**
 
-- [ ] 08-01-PLAN.md — Decision gate + schema/migration tracer + remainingMinor + DISOL scan + migrate deploy
+- [x] 08-01-PLAN.md — Decision gate + schema/migration tracer + remainingMinor + DISOL scan + migrate deploy
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -104,7 +104,7 @@ Plans:
 | Phase | Milestone | Plans complete | Status |
 |-------|-----------|----------------|--------|
 | 1–7 | v1.0 | 24/24 | Shipped |
-| 8 | v1.1 | 0/3 | Planned |
+| 8 | v1.1 | 0/3 | In Progress|
 | 9 | v1.1 | 0/TBD | Not started |
 | 10 | v1.1 | 0/TBD | Not started |
 | 11 | v1.1 | 0/TBD | Not started |
