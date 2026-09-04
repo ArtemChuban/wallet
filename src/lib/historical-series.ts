@@ -2,6 +2,7 @@ import {
   type RangePreset,
   windowStartForPreset,
 } from "@/lib/dates";
+import { locfAmountAsOf, locfRateAsOf } from "@/lib/locf";
 import {
   convertOtherMinorToPrimaryMinor,
   creditDebtMinor,
@@ -62,38 +63,6 @@ export type BuildNetWorthSeriesInput = {
   preset: RangePreset;
   today: string;
 };
-
-function locfAmountAsOf(
-  snapshots: SeriesSnapshot[],
-  accountId: number,
-  asOfDate: string,
-): bigint | null {
-  let best: SeriesSnapshot | null = null;
-  for (const snap of snapshots) {
-    if (snap.accountId !== accountId) continue;
-    if (snap.asOfDate > asOfDate) continue;
-    if (!best || snap.asOfDate > best.asOfDate) {
-      best = snap;
-    }
-  }
-  return best?.amountMinor ?? null;
-}
-
-function locfRateAsOf(
-  rates: SeriesRate[],
-  currencyCode: string,
-  asOfDate: string,
-): bigint | null {
-  let best: SeriesRate | null = null;
-  for (const rate of rates) {
-    if (rate.currencyCode !== currencyCode) continue;
-    if (rate.asOfDate > asOfDate) continue;
-    if (!best || rate.asOfDate > best.asOfDate) {
-      best = rate;
-    }
-  }
-  return best?.rateToPrimaryScaled ?? null;
-}
 
 /**
  * Sparse event∪today NW series: sample dates = balance events ∪ FX events for
