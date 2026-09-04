@@ -249,12 +249,12 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 **Goal:** Consolidate triplicate LOCF into one shared path with unchanged semantics, and close Nyquist for phases 3–6 by reconciling VALIDATION.md drafts to validated with evidence — no new user-facing features.
 **Requirements**: LOCF-01, LOCF-02, LOCF-03, LOCF-04, LOCF-05, NYQ-03, NYQ-04, NYQ-05, NYQ-06
 **Depends on:** Phase 6
-**Plans:** 3 plans
+**Plans:** 1/3 plans executed
 
 Plans:
 **Wave 1**
 
-- [ ] 07-01-PLAN.md — Shared locf.ts + parity tests + rewire accounts/rates/home batch Maps
+- [x] 07-01-PLAN.md — Shared locf.ts + parity tests + rewire accounts/rates/home batch Maps
 
 **Wave 2** *(blocked on Wave 1 completion)*
 

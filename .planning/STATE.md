@@ -1,18 +1,18 @@
 ---
 gsd_state_version: 1.0
 current_phase: 07
-current_phase_name: address-tech-debt-locf-consolidation-nyquist-3-6
-status: planning
-stopped_at: Phase 7 plans revised (checker feedback)
-last_updated: "2026-09-04T09:46:43.118Z"
+current_phase_name: "Address tech debt: LOCF consolidation + Nyquist 3–6"
+status: executing
+stopped_at: Completed 07-01-PLAN.md
+last_updated: "2026-09-04T09:59:48.721Z"
 last_activity: 2026-09-04
-last_activity_desc: Phase 7 plan revision — Open Questions RESOLVED, 07-01 key_links + LOCF-05 clarify
-state_head: 677983d552de653c46801bea9060e2dd48de3a49
+last_activity_desc: Phase 07 execution started
+state_head: 5415717adc9aa883a1751bedf5a728a6126d49b8
 progress:
   total_phases: 7
   completed_phases: 5
   total_plans: 24
-  completed_plans: 21
+  completed_plans: 22
   percent: 71
 ---
 
@@ -23,16 +23,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-03)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 7 — Address tech debt: LOCF consolidation + Nyquist 3–6
+**Current focus:** Phase 07 — Address tech debt: LOCF consolidation + Nyquist 3–6
 
 ## Current Position
 
-Phase: 07 (address-tech-debt-locf-consolidation-nyquist-3-6) — READY TO EXECUTE
-Plan: 01–03 planned
-Status: Phase 7 plans revised for checker — execute next
-Last activity: 2026-09-04 — checker revision (Open Questions RESOLVED, 07-01 key_links + LOCF-05)
+Phase: 07 (Address tech debt: LOCF consolidation + Nyquist 3–6) — EXECUTING
+Plan: 2 of 3
+Status: Ready to execute
+Last activity: 2026-09-04 — Phase 07 execution started
 
-Progress: [████████░░] 86%
+Progress: [███████░░░] 71%
 
 ## Performance Metrics
 
@@ -83,6 +83,7 @@ Progress: [████████░░] 86%
 | Phase 06-historical-charts P01 | 14min | 3 tasks | 11 files |
 | Phase 06-historical-charts P02 | 5min | 3 tasks | 6 files |
 | Phase 06 P03 | 1min | 3 tasks | 11 files |
+| Phase 07 P01 | 2 min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -140,6 +141,8 @@ Recent decisions affecting current work:
 - [Phase 06]: Credit stack from creditDebtMinor+available LOCF, not NW contribution
 - [Phase 06]: Human-verify 06-03 Task 3 PASSED: approved RU UI charts on /
 - [Phase 06]: Post-checkpoint: client-safe money/dates, db:seed, NW stacked by account
+- [Phase 07]: Hybrid LOCF API: pickLatestAsOf + firstHitLocfMap + typed wrappers — RESEARCH Q2 / D-01 discretion; minimal drift from page batch + series pure
+- [Phase 07]: firstHitLocfMap stores full row; pages read amount/rate fields — Preserves existing Map value shape without mapping adapters
 
 ### Pending Todos
 
@@ -168,6 +171,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-04
-Stopped at: Phase 7 plans created
-Resume file: .planning/phases/07-address-tech-debt-locf-consolidation-nyquist-3-6/07-01-PLAN.md
+Last session: 2026-09-04T09:59:48.582Z
+Stopped at: Completed 07-01-PLAN.md
+Resume file: None
