@@ -39,8 +39,10 @@ import { parseMajorToMinor } from "@/lib/money";
 import {
   createDebt,
   createPerson,
+  deleteDebt,
   deletePerson,
   renamePerson,
+  updateDebtMeta,
 } from "./actions";
 
 describe("createPerson (PERSON-01)", () => {
@@ -309,5 +311,82 @@ describe("createDebt (DEBT-01)", () => {
     expect(prisma.debt.create).not.toHaveBeenCalled();
     expect(revalidatePath).toHaveBeenCalledWith("/debts");
     expect(revalidatePath).not.toHaveBeenCalledWith("/");
+  });
+});
+
+describe("updateDebtMeta immutability (DEBT-01 / D-09)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+    vi.mocked(prisma.debt.update).mockResolvedValue({} as never);
+  });
+
+  it("writes only direction/dueDate/note — ignores smuggled initial/person/currency", async () => {
+    const formData = new FormData();
+    formData.set("debtId", "9");
+    formData.set("direction", "THEY_OWE");
+    formData.set("dueDate", "2027-01-15");
+    formData.set("note", "обновлено");
+    formData.set("initialAmountMajor", "99999");
+    formData.set("initialAmountMinor", "99999");
+    formData.set("personId", "42");
+    formData.set("currencyCode", "USD");
+
+    const result = await updateDebtMeta({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(ensureSqlitePragmas).toHaveBeenCalled();
+    expect(prisma.debt.update).toHaveBeenCalledTimes(1);
+    expect(prisma.debt.update).toHaveBeenCalledWith({
+      where: { id: 9 },
+      data: {
+        direction: "THEY_OWE",
+        dueDate: "2027-01-15",
+        note: "обновлено",
+      },
+    });
+    const data = vi.mocked(prisma.debt.update).mock.calls[0]![0]!.data;
+    expect(Object.keys(data as object).sort()).toEqual(
+      ["direction", "dueDate", "note"].sort(),
+    );
+    expect(revalidatePath).toHaveBeenCalledWith("/debts");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/");
+  });
+});
+
+describe("deleteDebt (DEBT-01 / D-13)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+    vi.mocked(prisma.debt.delete).mockResolvedValue({} as never);
+  });
+
+  it("deletes debt by id and revalidates /debts", async () => {
+    const formData = new FormData();
+    formData.set("debtId", "11");
+
+    const result = await deleteDebt(formData);
+
+    expect(result.success).toBe(true);
+    expect(ensureSqlitePragmas).toHaveBeenCalled();
+    expect(prisma.debt.delete).toHaveBeenCalledWith({
+      where: { id: 11 },
+    });
+    expect(revalidatePath).toHaveBeenCalledWith("/debts");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/");
+  });
+
+  it("rejects invalid debtId without calling delete", async () => {
+    const formData = new FormData();
+    formData.set("debtId", "abc");
+
+    const result = await deleteDebt(formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBe(
+      "Не удалось удалить. Попробуйте снова.",
+    );
+    expect(prisma.debt.delete).not.toHaveBeenCalled();
+    expect(revalidatePath).not.toHaveBeenCalled();
   });
 });
