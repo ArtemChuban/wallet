@@ -13,15 +13,35 @@ vi.mock("@/lib/db", () => ({
     },
     debt: {
       count: vi.fn(),
+      create: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
+    },
+    currency: {
+      findUnique: vi.fn(),
     },
   },
   ensureSqlitePragmas: vi.fn(),
 }));
 
+vi.mock("@/lib/money", () => ({
+  parseMajorToMinor: vi.fn((major: string) => {
+    const n = Number(major);
+    if (!Number.isFinite(n)) throw new Error("bad major");
+    return BigInt(Math.round(n * 100));
+  }),
+}));
+
 import { Prisma } from "@/generated/prisma/client";
 import { revalidatePath } from "next/cache";
 import { ensureSqlitePragmas, prisma } from "@/lib/db";
-import { createPerson, deletePerson, renamePerson } from "./actions";
+import { parseMajorToMinor } from "@/lib/money";
+import {
+  createDebt,
+  createPerson,
+  deletePerson,
+  renamePerson,
+} from "./actions";
 
 describe("createPerson (PERSON-01)", () => {
   beforeEach(() => {
@@ -189,5 +209,105 @@ describe("deletePerson (PERSON-02)", () => {
       "Не удалось удалить. Попробуйте снова.",
     );
     expect(revalidatePath).not.toHaveBeenCalled();
+  });
+});
+
+describe("createDebt (DEBT-01)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+    vi.mocked(prisma.currency.findUnique).mockResolvedValue({
+      code: "RUB",
+      name: "Рубль",
+      scale: 2,
+      isPrimary: true,
+    } as never);
+    vi.mocked(prisma.debt.create).mockResolvedValue({} as never);
+    vi.mocked(prisma.person.create).mockResolvedValue({} as never);
+    vi.mocked(parseMajorToMinor).mockImplementation((major: string) => {
+      const n = Number(major);
+      if (!Number.isFinite(n)) throw new Error("bad major");
+      return BigInt(Math.round(n * 100));
+    });
+  });
+
+  it("creates debt for existing person with parsed minors and revalidates /debts", async () => {
+    const formData = new FormData();
+    formData.set("personId", "5");
+    formData.set("direction", "I_OWE");
+    formData.set("currencyCode", "RUB");
+    formData.set("initialAmountMajor", "100.50");
+    formData.set("dueDate", "2026-12-01");
+    formData.set("note", "за обед");
+
+    const result = await createDebt({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(ensureSqlitePragmas).toHaveBeenCalled();
+    expect(prisma.currency.findUnique).toHaveBeenCalledWith({
+      where: { code: "RUB" },
+    });
+    expect(parseMajorToMinor).toHaveBeenCalledWith("100.50", 2);
+    expect(prisma.debt.create).toHaveBeenCalledWith({
+      data: {
+        personId: 5,
+        direction: "I_OWE",
+        currencyCode: "RUB",
+        initialAmountMinor: 10050n,
+        dueDate: "2026-12-01",
+        note: "за обед",
+        status: "OPEN",
+      },
+    });
+    expect(revalidatePath).toHaveBeenCalledWith("/debts");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/");
+  });
+
+  it("rejects non-positive initial amount with Russian validation", async () => {
+    const formData = new FormData();
+    formData.set("personId", "5");
+    formData.set("direction", "THEY_OWE");
+    formData.set("currencyCode", "RUB");
+    formData.set("initialAmountMajor", "0");
+
+    const result = await createDebt({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.errors?.initialAmountMajor).toEqual([
+      "Введите сумму больше 0",
+    ]);
+    expect(prisma.debt.create).not.toHaveBeenCalled();
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  it("creates person + debt atomically via nested write (D-06)", async () => {
+    const formData = new FormData();
+    formData.set("name", "  Мария  ");
+    formData.set("direction", "THEY_OWE");
+    formData.set("currencyCode", "RUB");
+    formData.set("initialAmountMajor", "250");
+    formData.set("note", "займ");
+
+    const result = await createDebt({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.person.create).toHaveBeenCalledWith({
+      data: {
+        name: "Мария",
+        debts: {
+          create: {
+            direction: "THEY_OWE",
+            currencyCode: "RUB",
+            initialAmountMinor: 25000n,
+            dueDate: undefined,
+            note: "займ",
+            status: "OPEN",
+          },
+        },
+      },
+    });
+    expect(prisma.debt.create).not.toHaveBeenCalled();
+    expect(revalidatePath).toHaveBeenCalledWith("/debts");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/");
   });
 });

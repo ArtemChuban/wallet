@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   createDebtSchema,
+  createDebtWithNewPersonSchema,
   createPersonSchema,
   createRepaymentSchema,
   createSizeChangeSchema,
@@ -89,6 +90,39 @@ describe("createDebtSchema (DEBT-03)", () => {
       initialAmountMajor: "10",
     });
     expect(result.success).toBe(false);
+  });
+});
+
+describe("createDebtWithNewPersonSchema (D-06)", () => {
+  it("accepts person name + debt fields without personId", () => {
+    const result = createDebtWithNewPersonSchema.safeParse({
+      name: "  Анна  ",
+      direction: "I_OWE",
+      currencyCode: "RUB",
+      initialAmountMajor: "10",
+      dueDate: "2026-10-01",
+      note: "тест",
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.name).toBe("Анна");
+      expect(result.data.direction).toBe("I_OWE");
+      expect(result.data).not.toHaveProperty("personId");
+    }
+  });
+
+  it("rejects non-positive initial with Russian message", () => {
+    const result = createDebtWithNewPersonSchema.safeParse({
+      name: "Анна",
+      direction: "I_OWE",
+      currencyCode: "RUB",
+      initialAmountMajor: "0",
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const messages = result.error.issues.map((i) => i.message);
+      expect(messages).toContain("Введите сумму больше 0");
+    }
   });
 });
 
