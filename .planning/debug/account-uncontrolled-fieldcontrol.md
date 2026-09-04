@@ -2,7 +2,7 @@
 status: diagnosed
 trigger: "G-02-2-account-uncontrolled-fieldcontrol — Editing an account form triggers Base UI console error: uncontrolled FieldControl default value state change after init (AccountFormDialog / AccountFormBody / Input)."
 created: 2026-09-03T00:01:00Z
-updated: 2026-09-03T00:08:00Z
+updated: 2026-09-04T12:30:11Z
 symptoms_prefilled: true
 goal: find_root_cause_only
 ---
@@ -13,7 +13,7 @@ hypothesis: "AccountFormBody name Input uses uncontrolled defaultValue={account?
 bug_class: bohrbug
 test: "Trace edit Input props + updateAccountName revalidate + dialog close timing; confirm defaultValue is only Input with changing prop on edit path."
 expecting: "Stack points at AccountFormBody:139; update path revalidates /accounts before useEffect closes dialog."
-next_action: "Return ROOT CAUSE FOUND (diagnose-only); no fix."
+next_action: "Diagnosis complete (diagnose-only); fix deferred to /gsd-plan-phase --gaps or manual."
 known_pattern_candidate: "currency-uncontrolled-fieldcontrol (G-02-1) — same uncontrolled defaultValue + revalidatePath while dialog mounted"
 
 candidate_causes:
@@ -88,7 +88,19 @@ started: Discovered during UAT phase 02
 ## Resolution
 
 root_cause: "Edit name Input is uncontrolled with defaultValue bound to live account.name; updateAccountName's revalidatePath refreshes AccountList while AccountFormBody still mounted, so defaultValue changes after Base UI FieldControl init."
-fix: ""
+fix: "not applied (diagnose-only)"
 verification: ""
 files_changed: []
 oracle_type: ""
+
+## Specialist Review
+
+specialist_hint: react
+skill: typescript-expert
+result: "skipped — typescript-expert skill not installed in this environment; same class as G-02-1 (currency-uncontrolled-fieldcontrol)."
+suggested_fix_direction: "Make name Input controlled (value + onChange) or freeze initial defaultValue / remount via key so revalidatePath cannot mutate FieldControl default after init; close dialog before list refresh, or avoid binding defaultValue to live server prop."
+
+## Prevention
+
+why_not_caught: "none (no gate existed for Base UI uncontrolled FieldControl defaultValue console warning; SBFL skipped — no automated failing test)"
+guard: "After G-02-1/G-02-2: ban defaultValue bound to live server props in edit dialogs; prefer controlled fields or stable key/initial snapshot; optional lint/test for console FieldControl warning on edit+revalidate path"
