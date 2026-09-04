@@ -373,15 +373,15 @@ it("before first row both paths yield null", () => {
 
 **If wrong on A2:** planner schedules four `/gsd-validate-phase` invocations (or one plan with four phase targets) instead of docs-only reconcile.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Should VALIDATION task IDs stay historical (03-W0-01…) or be rewritten to current files only?**
    - What we know: Phase 2 kept historical IDs and marked ✅ green.
    - What's unclear: How strict audit-milestone is about stale ❌ W0 labels.
-   - Recommendation: Keep IDs; flip File Exists + Status; check Wave 0 boxes; append Validation Audit section.
+   - RESOLVED: Keep historical VALIDATION task IDs; flip File Exists + Status; check Wave 0 boxes; append Validation Audit section (plans implement this).
 
 2. **Optional re-export of `locfAmountAsOf` / `locfRateAsOf` names for readability?**
-   - Recommendation: Yes — thin typed wrappers over generic pick for call-site clarity in `historical-series.ts`.
+   - RESOLVED: Yes — export thin typed wrappers `locfAmountAsOf` / `locfRateAsOf` over generic pick for call-site clarity in `historical-series.ts` (plans implement this).
 
 ## Environment Availability
 
