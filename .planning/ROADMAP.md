@@ -69,7 +69,7 @@ Plans:
   3. User can create/edit a debt (direction, currency, initial, optional due/note) attached to a person
   4. Nav shows «Долги» linking to `/debts` with correct active state
 
-**Plans:** 1/4 plans executed
+**Plans:** 2/4 plans executed
 
 Plans:
 **Wave 1**
@@ -78,7 +78,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 09-02-PLAN.md — Person rename/delete (PERSON-02) + groups/CTAs + DestructiveConfirmStep
+- [x] 09-02-PLAN.md — Person rename/delete (PERSON-02) + groups/CTAs + DestructiveConfirmStep
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
