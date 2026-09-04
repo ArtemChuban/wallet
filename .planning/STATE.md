@@ -2,19 +2,19 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Долги людям
-current_phase: "09"
+current_phase: 09
+current_phase_name: people-debts-crud-nav
 status: planning
-stopped_at: Phase 9 UI-SPEC revised (copywriting CTAs) — ready for checker
-last_updated: "2026-09-04T22:25:00.000Z"
+stopped_at: Phase 9 UI-SPEC approved
+last_updated: "2026-09-04T20:21:17.932Z"
 last_activity: 2026-09-04
 last_activity_desc: Phase 09 UI-SPEC copywriting CTAs fixed (Dim 1)
-state_head: 476a7a4615f9460d460065a0416392700528b272
+state_head: 249a301dd95885bb0561d67db3f3c7ed890cce7e
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 3
   completed_plans: 3
-current_phase_name: people-debts-crud-nav
 ---
 
 # Project State
@@ -187,8 +187,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-04T22:20:00.000Z
-Stopped at: Phase 9 UI-SPEC draft ready for checker
+Last session: 2026-09-04T20:21:17.881Z
+Stopped at: Phase 9 UI-SPEC approved
 Resume file: /home/artem/Documents/wallet/.planning/phases/09-people-debts-crud-nav/09-UI-SPEC.md
 
 ## Operator Next Steps
