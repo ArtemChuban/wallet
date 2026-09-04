@@ -5,11 +5,11 @@ milestone_name: Долги людям
 current_phase: 09
 current_phase_name: people-debts-crud-nav
 status: audit_gaps_found
-stopped_at: "Completed v1.1-MILESTONE-AUDIT.md (gaps_found: 8/15 reqs, phases 10–11 missing)"
-last_updated: "2026-09-04T22:54:58Z"
+stopped_at: Phase 10 context gathered
+last_updated: "2026-09-04T23:40:33.510Z"
 last_activity: 2026-09-05
-last_activity_desc: Milestone audit gaps_found — 7/15 reqs; continue phases 10–11
-state_head: b49c3d82fcc57d5b8abef2e4ed934ee76b32c254
+last_activity_desc: /gsd-audit-milestone re-run — same 8 unsatisfied reqs; Nyquist 08+09 compliant
+state_head: 06f4d05b6b7839fbf581d53d82e623d905bd4789
 progress:
   total_phases: 4
   completed_phases: 2
@@ -32,7 +32,7 @@ Phase: 09 (people-debts-crud-nav) — audited; milestone gaps_found
 Plan: 4 of 4
 Status: audit_gaps_found (phases 10–11 pending)
 Total Plans in Phase: 4
-Last activity: 2026-09-05 — /gsd-audit-milestone (7/15 reqs; P08↔P09 wired)
+Last activity: 2026-09-05 — /gsd-audit-milestone re-run (7/15; Nyquist 08+09 OK)
 
 ## Performance Metrics
 
@@ -202,11 +202,12 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-04T21:46:32.449Z
-Stopped at: Completed 09-04-PLAN.md
-Resume file: None
+Last session: 2026-09-04T23:40:33.403Z
+Stopped at: Phase 10 context gathered
+Resume file: .planning/phases/10-repayments-close-write-off/10-CONTEXT.md
 
 ## Operator Next Steps
 
 - `/gsd-discuss-phase 10` — repayments + close/write-off
+- Then Phase 11 — charts + primary totals
 - Re-audit after Phase 11 before `/gsd-complete-milestone`
