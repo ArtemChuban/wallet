@@ -5,14 +5,14 @@ milestone_name: Долги людям
 current_phase: 8
 current_phase_name: Debts schema + domain math
 status: planning
-stopped_at: Phase 8 research complete
-last_updated: "2026-09-04T15:45:00.000Z"
+stopped_at: Phase 8 plans created
+last_updated: "2026-09-04T16:00:00.000Z"
 last_activity: 2026-09-04
 state_head: 2a38046
 progress:
   total_phases: 4
   completed_phases: 0
-  total_plans: 0
+  total_plans: 3
   completed_plans: 0
 ---
 
@@ -28,9 +28,9 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 ## Current Position
 
 Phase: 8 (Debts schema + domain math)
-Plan: —
-Status: Research complete — ready to plan
-Last activity: 2026-09-04 Phase 8 RESEARCH.md written
+Plan: 01
+Status: Plans ready — execute next
+Last activity: 2026-09-04 Phase 8 PLAN.md files written (08-01..08-03)
 
 ## Performance Metrics
 

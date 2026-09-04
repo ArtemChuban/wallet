@@ -40,9 +40,12 @@ created: "2026-09-04"
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 08-01-01 | 01 | 1 | DEBT-02 | T-08-01 | remaining never negative; over-repay rejected | unit | `npx vitest run src/lib/debts.test.ts` | ❌ W0 | ⬜ pending |
-| 08-01-02 | 01 | 1 | DEBT-03 | T-08-01 | initialAmountMinor not mutated; size-change path only | unit | `npx vitest run src/lib/debts.test.ts` | ❌ W0 | ⬜ pending |
-| 08-02-01 | 02 | 2 | DISOL-01 | T-08-04 | no debt imports in NW/series/`/` | unit | `npx vitest run src/lib/debts.test.ts` | ❌ W0 | ⬜ pending |
+| 08-01-02 | 01 | 1 | DEBT-02, DISOL-01 | T-08-01, T-08-04 | remaining D-04; no NW debt imports | unit | `npx vitest run src/lib/debts.test.ts` | ❌ W0 | ⬜ pending |
+| 08-01-03 | 01 | 1 | DEBT-02 | T-08-02, T-08-03 | FK Restrict/Cascade migrated | smoke | `DATABASE_URL=file:./data/wallet.db npx prisma migrate deploy` | ❌ W0 | ⬜ pending |
+| 08-02-01 | 02 | 2 | DEBT-03, DEBT-02 | T-08-01, T-08-07 | asserts reject illegal money; initial immutable | unit | `npx vitest run src/lib/debts.test.ts` | ❌ W0 | ⬜ pending |
+| 08-02-02 | 02 | 2 | DEBT-02 | T-08-04 | OPEN-only totals + isPartial | unit | `npx vitest run src/lib/debts.test.ts` | ❌ W0 | ⬜ pending |
+| 08-03-01 | 03 | 2 | DEBT-03 | T-08-07 | Zod update-meta has no initial field | unit | file presence + greps | ❌ W0 | ⬜ pending |
+| 08-03-02 | 03 | 2 | DISOL-01, DEBT-03 | T-08-04 | full suite + DISOL scan green | unit | `npm test` | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -52,6 +55,7 @@ created: "2026-09-04"
 
 - [ ] `src/lib/debts.test.ts` — stubs/coverage for DEBT-02/03, status, rejects, totals, DISOL-01
 - [ ] `src/lib/debts.ts` — implementation under test
+- [ ] `src/lib/validations/debts.test.ts` — Zod Wave 0 (Plan 03)
 - [ ] Migration under `prisma/migrations/` for Person/Debt/DebtRepayment/DebtSizeChange
 
 *Existing infrastructure covers framework (Vitest already installed).*

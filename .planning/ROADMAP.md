@@ -38,11 +38,16 @@ Full detail: [milestones/v1.0-ROADMAP.md](./milestones/v1.0-ROADMAP.md)
 **Depends on:** v1.0 complete (Currency, FxRate, money helpers)
 **Requirements:** DEBT-02, DEBT-03, DISOL-01
 **Success Criteria:**
-  1. Prisma models Person, Debt, DebtRepayment migrate cleanly on Docker start
-  2. Pure helpers compute remaining = initial − Σ repayments − writeOff and reject over-repayment
-  3. Initial-amount immutability after first repayment is enforced in domain/validation helpers
+  1. Prisma models Person, Debt, DebtRepayment, DebtSizeChange migrate cleanly on Docker start
+  2. Pure helpers: remaining = initial + Σ delta − Σ repayments; reject over-repayment (CONTEXT D-04; not writeOff field)
+  3. initialAmountMinor not edited after create; adjustments via size-change events (D-03)
   4. No debt imports exist in `net-worth.ts`, `historical-series.ts`, or `/` page
-**Plans:** TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 08-01-PLAN.md — Decision gate + schema/migration tracer + remainingMinor + DISOL scan + migrate deploy
+- [ ] 08-02-PLAN.md — Domain asserts (DEBT-03) + computeDebtPrimaryTotals (D-16–D-19)
+- [ ] 08-03-PLAN.md — Zod validations/debts + full suite green
 
 ### Phase 9: People + debts CRUD + nav
 **Goal:** User can manage people and debts in a dedicated «Долги» section (without repayments UI yet).
@@ -82,7 +87,7 @@ Full detail: [milestones/v1.0-ROADMAP.md](./milestones/v1.0-ROADMAP.md)
 | Phase | Milestone | Plans complete | Status |
 |-------|-----------|----------------|--------|
 | 1–7 | v1.0 | 24/24 | Shipped |
-| 8 | v1.1 | 0/TBD | Not started |
+| 8 | v1.1 | 0/3 | Planned |
 | 9 | v1.1 | 0/TBD | Not started |
 | 10 | v1.1 | 0/TBD | Not started |
 | 11 | v1.1 | 0/TBD | Not started |
