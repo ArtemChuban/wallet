@@ -1,15 +1,21 @@
 ---
-status: diagnosed
+status: testing
 phase: 10-repayments-close-write-off
 source: [10-VERIFICATION.md]
 started: 2026-09-05T12:35:00Z
-updated: 2026-09-05T13:32:00Z
+updated: 2026-09-05T18:32:00Z
 driver: orca-cli
 ---
 
 ## Current Test
 
-[testing complete]
+number: 5
+name: Re-UAT concurrency smoke after G-10-5
+expected: |
+  Two tabs on same debt — delete event in one; repay/size/forgive in other.
+  Successes: Debt.status ≡ remainingMinor.
+  Stale failure: «Долг или запись не найдены. Обновите страницу.» (not opaque «Не удалось сохранить…»).
+awaiting: user response
 
 ## Tests
 
@@ -34,10 +40,13 @@ result: pass
 observed: Confirm copy + CLOSED + CTA hidden at zero.
 
 ### 5. Optional concurrency smoke
-expected: Two tabs delete+create on same debt — no corrupt ledger; Debt.status matches remaining after each success.
-result: issue
+expected: Two tabs delete+create on same debt — no corrupt ledger; Debt.status matches remaining after each success; stale failure shows «Долг или запись не найдены. Обновите страницу.» (not opaque catch-all).
+result: pending
+prior_result: issue
 reported: "Не удалось сохранить. Проверьте поля и попробуйте снова. Вот такая ошибка, когда попытался списать часть долга после удаления в другой вкладке"
 severity: major
+fix_applied: "10-04 G-10-5: isRecordNotFound/P2025 + *_NOT_FOUND → refresh RU + revalidatePath(/debts); forgive assertSizeDelta mapped; vitest 7× G-10-5 green"
+awaiting: live two-tab re-smoke after fix
 
 ### 6. Create-debt Select with long person name
 expected: «Новый долг» dialog stays within max width; person/direction/currency Select triggers truncate long labels and do not overflow the dialog chrome.
@@ -59,8 +68,8 @@ result_after_fix: pass
 
 total: 7
 passed: 6
-issues: 1
-pending: 0
+issues: 0
+pending: 1
 skipped: 0
 blocked: 0
 
@@ -68,16 +77,16 @@ blocked: 0
 
 - gap_id: G-10-5
   truth: "Two tabs delete+create on same debt — no corrupt ledger; after each successful write Debt.status matches remainingMinor; failed writes show actionable Russian error (not opaque catch-all)"
-  status: failed
-  reason: "User reported: Не удалось сохранить. Проверьте поля и попробуйте снова. when trying to write off/repay part of debt after delete in another tab"
+  status: code_fixed_awaiting_reuat
+  reason: "Prior opaque catch-all on stale write; 10-04 mapped P2025/missing-record to refresh RU + revalidate; vitest locked. Live two-tab re-smoke still required."
   severity: major
   test: 5
-  root_cause: "createRepayment/createSizeChange/forgiveRemaining catch-alls map only a subset of domain errors; Prisma not-found and other throws become opaque «Не удалось сохранить…». Stale DebtDetailDialog can submit after peer-tab delete without refresh guidance."
+  root_cause: "createRepayment/createSizeChange/forgiveRemaining catch-alls mapped only a subset of domain errors; Prisma not-found became opaque «Не удалось сохранить…»."
   artifacts:
     - path: "src/app/debts/actions.ts"
-      issue: "catch-all message hides P2025 / unmapped throws on concurrent stale writes"
+      issue: "was: catch-all hid P2025; now: isRecordNotFound + staleRecordRefreshState"
     - path: "src/components/debts/DebtDetailDialog.tsx"
-      issue: "open detail keeps stale remaining/events across peer revalidatePath"
+      issue: "open detail may keep stale remaining/events; dialog chrome out of 10-04 scope (follow-up)"
   missing:
     - "Map Prisma P2025/not-found (and forgive assertSizeDelta fallthrough) to actionable RU + revalidatePath"
     - "Vitest: peer delete debt → createRepayment returns mapped message; peer delete repayment → create still succeeds"
