@@ -4,16 +4,16 @@ milestone: v1.1
 milestone_name: Долги людям
 current_phase: 10
 current_phase_name: Repayments + close/write-off
-status: verifying
-stopped_at: Completed 10-03-PLAN.md
-last_updated: "2026-09-05T12:26:31.155Z"
+status: planning
+stopped_at: Created 10-04-PLAN.md (gap G-10-5)
+last_updated: "2026-09-05T13:30:00.000Z"
 last_activity: 2026-09-05
-last_activity_desc: Phase 10 execution started
-state_head: 25fe40a27224e8e6ad37bfb1830523ba6ed774ef
+last_activity_desc: Gap-closure plan G-10-5 (staleness P2025 mapping)
+state_head: 0a54112
 progress:
   total_phases: 4
   completed_phases: 2
-  total_plans: 10
+  total_plans: 11
   completed_plans: 10
 ---
 
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 ## Current Position
 
-Phase: 10 (Repayments + close/write-off) — EXECUTING
-Plan: 3 of 3
-Status: Phase complete — ready for verification
-Total Plans in Phase: 3
-Last activity: 2026-09-05 — Phase 10 execution started
+Phase: 10 (Repayments + close/write-off) — GAP CLOSURE
+Plan: 4 of 4 (gap G-10-5 pending execute)
+Status: Gap-closure plan ready — execute 10-04
+Total Plans in Phase: 4
+Last activity: 2026-09-05 — Created 10-04-PLAN.md for G-10-5
 
 ## Performance Metrics
 
@@ -221,6 +221,6 @@ Resume file: None
 
 ## Operator Next Steps
 
-- `/gsd-execute-phase 10` — repayments + close/write-off (3 plans)
+- `/gsd-execute-phase 10 --gaps-only` — close G-10-5 (10-04-PLAN.md)
+- Then re-UAT concurrency smoke / verify-work
 - Then Phase 11 — charts + primary totals
-- Re-audit after Phase 11 before `/gsd-complete-milestone`
