@@ -97,7 +97,7 @@ Plans:
   3. Debt closed at zero reopens when a deletion leaves remaining > 0
   4. Debt auto-closes at remaining 0; user can close early with recorded write-off/forgive
 
-**Plans:** 4/4 plans executed (3 executed + 1 gap closure)
+**Plans:** 5 plans (3 executed + 2 gap closure; 4 executed, 05 pending)
 
 Plans:
 **Wave 1**
@@ -115,6 +115,10 @@ Plans:
 **Wave 4** *(gap closure G-10-5)*
 
 - [x] 10-04-PLAN.md — Map P2025/staleness to RU refresh + revalidate; vitest peer-delete/create
+
+**Wave 5** *(gap closure G-10-8)*
+
+- [ ] 10-05-PLAN.md — Forgive client: deltaMajor + keep confirm + tab actionError; vitest opaque never wins
 
 ### Phase 11: Charts + primary totals
 

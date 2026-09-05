@@ -4,16 +4,16 @@ milestone: v1.1
 milestone_name: Долги людям
 current_phase: 10
 current_phase_name: Repayments + close/write-off
-status: awaiting_human
-stopped_at: Completed 10-04-PLAN.md
-last_updated: "2026-09-05T18:32:54.236Z"
+status: planning
+stopped_at: Planned 10-05-PLAN.md (G-10-8 gap closure)
+last_updated: "2026-09-05T18:55:00.000Z"
 last_activity: 2026-09-05
-last_activity_desc: Phase 10 gap 10-04 done; human re-UAT concurrency pending
+last_activity_desc: Phase 10 gap 10-05 planned for G-10-8 forgive client opaque
 state_head: b0fba2a943a230b1bc9f02d1b0b8f6c0f4a2d9e1
 progress:
   total_phases: 4
   completed_phases: 2
-  total_plans: 11
+  total_plans: 12
   completed_plans: 11
 ---
 
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 ## Current Position
 
-Phase: 10 (Repayments + close/write-off) — EXECUTING
-Plan: 4 of 4
-Status: awaiting_human
-Total Plans in Phase: 4
-Last activity: 2026-09-05 — Completed 10-04-PLAN.md
+Phase: 10 (Repayments + close/write-off) — READY TO EXECUTE
+Plan: 5 of 5
+Status: ready_to_execute
+Total Plans in Phase: 5
+Last activity: 2026-09-05 — Planned 10-05-PLAN.md (G-10-8)
 
 ## Performance Metrics
 
@@ -218,8 +218,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-05T18:25:29.474Z
-Stopped at: Completed 10-04-PLAN.md
+Last session: 2026-09-05T18:55:00.000Z
+Stopped at: Planned 10-05-PLAN.md (G-10-8)
 Resume file: None
 
 ## Quick Tasks Completed
@@ -230,5 +230,6 @@ Resume file: None
 
 ## Operator Next Steps
 
-- `/gsd-verify-work 10` — re-UAT concurrency smoke (G-10-5 closable)
+- `/gsd-execute-phase 10` — run 10-05 (G-10-8 forgive client opaque)
+- Then `/gsd-verify-work 10` — re-UAT concurrency smoke (forgive + repay/size)
 - Then Phase 11 — charts + primary totals
