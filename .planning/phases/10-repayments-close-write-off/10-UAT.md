@@ -36,7 +36,7 @@ observed: Confirm «Будет списан остаток 950 RUB. Долг з�
 ### 5. Optional concurrency smoke
 expected: Two tabs delete+create on same debt — no corrupt ledger; Debt.status matches remaining after each success.
 result: skipped
-reason: Optional multi-tab race; needs parallel writers — deferred per OPERATOR.md (ask human only for true parallel).
+reason: Optional multi-tab race; needs parallel writers — awaiting operator decision (pass-as-N/A vs human two-tab smoke).
 
 ## Summary
 
