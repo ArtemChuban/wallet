@@ -4,17 +4,17 @@ milestone: v1.1
 milestone_name: Долги людям
 current_phase: 10
 current_phase_name: Repayments + close/write-off
-status: planning
-stopped_at: DebtDetailDialog tabs shipped; G-10-5 execute pending
-last_updated: "2026-09-05T18:04:06.000Z"
+status: executing
+stopped_at: Completed 10-04-PLAN.md
+last_updated: "2026-09-05T18:25:29.555Z"
 last_activity: 2026-09-05
-last_activity_desc: DebtDetailDialog tabs (Погашение|Изменение|Простить|История)
-state_head: 0a54112
+last_activity_desc: Phase 10 execution started
+state_head: 99c4c9086f15acbfa1f1bed6560103bcc37592a1
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 11
-  completed_plans: 10
+  completed_plans: 11
 ---
 
 # Project State
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 ## Current Position
 
-Phase: 10 (Repayments + close/write-off) — GAP CLOSURE
-Plan: 4 of 4 (gap G-10-5 pending execute)
-Status: Gap-closure plan ready — execute 10-04
+Phase: 10 (Repayments + close/write-off) — EXECUTING
+Plan: 2 of 4
+Status: Ready to execute
 Total Plans in Phase: 4
-Last activity: 2026-09-05 — DebtDetailDialog tabs layout shipped (Orca smoke OK)
+Last activity: 2026-09-05 — Phase 10 execution started
 
 ## Performance Metrics
 
@@ -97,6 +97,7 @@ Last activity: 2026-09-05 — DebtDetailDialog tabs layout shipped (Orca smoke O
 | Phase 10 P01 | 3min | 3 tasks | 6 files |
 | Phase 10-repayments-close-write-off P02 | 5min | 3 tasks | 8 files |
 | Phase 10 P03 | 3min | 3 tasks | 5 files |
+| Phase 10-repayments-close-write-off P04 | 2 min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -183,6 +184,8 @@ Recent decisions affecting current work:
 - [Phase 10]: CLOSED debts use per-person collapsed Закрытые (N) via debt.status
 - [Phase 10]: no-forgive-label / no-isForgive: user declined separate Списание label; forgive is UX+server delta only
 - [Phase 10]: Intentional override of CONTEXT D-07 label distinction (Изменение суммы for all size-changes)
+- [Phase 10]: Shared staleRecordRefreshState for P2025 and app missing-record throws — Same user recovery path for Prisma not-found and REPAYMENT_NOT_FOUND / SIZE_CHANGE_NOT_FOUND
+- [Phase 10]: forgiveRemaining wraps assertSizeDelta like createSizeChange; maps codes + raw messages — H4: never leave assertSizeDelta fallthrough to opaque save catch-all
 
 ### Pending Todos
 
@@ -215,8 +218,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-05T12:26:31.057Z
-Stopped at: Completed 10-03-PLAN.md
+Last session: 2026-09-05T18:25:29.474Z
+Stopped at: Completed 10-04-PLAN.md
 Resume file: None
 
 ## Quick Tasks Completed
