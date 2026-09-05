@@ -97,12 +97,12 @@ Plans:
   3. Debt closed at zero reopens when a deletion leaves remaining > 0
   4. Debt auto-closes at remaining 0; user can close early with recorded write-off/forgive
 
-**Plans:** 3 plans
+**Plans:** 1/3 plans executed
 
 Plans:
 **Wave 1**
 
-- [ ] 10-01-PLAN.md — Tracer: createRepayment + DebtDetailDialog + auto-close at zero
+- [x] 10-01-PLAN.md — Tracer: createRepayment + DebtDetailDialog + auto-close at zero
 
 **Wave 2** *(blocked on Wave 1 completion)*
 

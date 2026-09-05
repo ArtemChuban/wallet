@@ -3,18 +3,18 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Долги людям
 current_phase: 10
-current_phase_name: repayments-close-write-off
-status: ready_to_execute
-stopped_at: Phase 10 plans created — ready for execute-phase
-last_updated: "2026-09-05T08:29:31.040Z"
+current_phase_name: Repayments + close/write-off
+status: executing
+stopped_at: Completed 10-01-PLAN.md
+last_updated: "2026-09-05T12:05:46.892Z"
 last_activity: 2026-09-05
-last_activity_desc: Phase 10 PLAN.md files written (3 plans, waves 1–3)
-state_head: 150725f189966e6f160035f229adf490070bf6f1
+last_activity_desc: Phase 10 execution started
+state_head: 883c825b6bcd9f9c856d728e62f9abd9b712f52c
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 10
-  completed_plans: 7
+  completed_plans: 8
 ---
 
 # Project State
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 ## Current Position
 
-Phase: 10 (repayments-close-write-off) — READY TO EXECUTE
-Plan: 0 of 3
-Status: ready_to_execute
+Phase: 10 (Repayments + close/write-off) — EXECUTING
+Plan: 2 of 3
+Status: Ready to execute
 Total Plans in Phase: 3
-Last activity: 2026-09-05 — Phase 10 plans committed (10-01..10-03)
+Last activity: 2026-09-05 — Phase 10 execution started
 
 ## Performance Metrics
 
@@ -94,6 +94,7 @@ Last activity: 2026-09-05 — Phase 10 plans committed (10-01..10-03)
 | Phase 09-people-debts-crud-nav P02 | 4min | 3 tasks | 6 files |
 | Phase 09-people-debts-crud-nav P03 | 7min | 3 tasks | 7 files |
 | Phase 09 P04 | 2min | 2 tasks | 2 files |
+| Phase 10 P01 | 3min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -174,6 +175,8 @@ Recent decisions affecting current work:
 - [Phase 09]: Person mode toggle (Существующий / Новый человек) inside debt create dialog
 - [Phase 09]: Reuse DestructiveConfirmStep for AccountList snapshot delete (D-17)
 - [Phase 09]: AccountList confirm test uses .ts extension to match vitest include pattern
+- [Phase 10]: Over-repay maps to Russian amountMajor «Сумма больше остатка долга»
+- [Phase 10]: History chrome placeholder until Plan 02; DebtRow.status from stored Debt.status
 
 ### Pending Todos
 
@@ -202,9 +205,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-05
-Stopped at: Phase 10 plans ready
-Resume file: .planning/phases/10-repayments-close-write-off/10-01-PLAN.md
+Last session: 2026-09-05T12:05:46.798Z
+Stopped at: Completed 10-01-PLAN.md
+Resume file: None
 
 ## Operator Next Steps
 

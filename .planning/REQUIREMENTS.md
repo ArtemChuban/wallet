@@ -18,12 +18,12 @@ Requirements for this milestone. Each maps to roadmap phases.
 - [x] **DEBT-01**: User can create and edit a debt with direction (I owe / they owe me), currency, initial amount, optional due date, optional note
 - [x] **DEBT-02**: Remaining balance = initial − sum of repayments − write-off
 - [x] **DEBT-03**: Initial amount cannot change after the first repayment
-- [ ] **DEBT-04**: Debt auto-closes when remaining reaches 0
+- [x] **DEBT-04**: Debt auto-closes when remaining reaches 0
 - [ ] **DEBT-05**: User can close early by writing off / forgiving remaining
 
 ### Repayments
 
-- [ ] **REPAY-01**: User can record a partial repayment in the debt’s currency with an as-of date (backdating allowed)
+- [x] **REPAY-01**: User can record a partial repayment in the debt’s currency with an as-of date (backdating allowed)
 - [ ] **REPAY-02**: User can see repayment history for a debt
 - [ ] **REPAY-03**: User can delete a repayment; remaining recalculates; debt reopens if it was closed at zero and remaining > 0
 
@@ -86,9 +86,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DEBT-01 | Phase 9 | Complete |
 | DEBT-02 | Phase 8 | Complete |
 | DEBT-03 | Phase 8 | Complete |
-| DEBT-04 | Phase 10 | Pending |
+| DEBT-04 | Phase 10 | Complete |
 | DEBT-05 | Phase 10 | Pending |
-| REPAY-01 | Phase 10 | Pending |
+| REPAY-01 | Phase 10 | Complete |
 | REPAY-02 | Phase 10 | Pending |
 | REPAY-03 | Phase 10 | Pending |
 | DCHART-01 | Phase 11 | Pending |
