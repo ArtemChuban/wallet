@@ -16,18 +16,18 @@
     {
       "number": "10",
       "name": "Repayments + close/write-off",
-      "status": "in_progress"
+      "status": "complete"
     },
     {
       "number": "11",
       "name": "Charts + primary totals",
-      "status": "pending"
+      "status": "in_progress"
     }
   ],
   "next": {
-    "command": "/gsd-progress --next",
+    "command": "/gsd:progress --next",
     "label": "Advance to the next step",
-    "reason": "Phase 10 of 4 · executing"
+    "reason": "Phase 11 of 4 · executing"
   },
-  "updated_at": "2026-09-05T18:25:28.550Z"
+  "updated_at": "2026-09-05T20:31:40.459Z"
 }

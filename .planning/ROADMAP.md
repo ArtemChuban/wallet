@@ -28,7 +28,7 @@ Full detail: [milestones/v1.0-ROADMAP.md](./milestones/v1.0-ROADMAP.md)
 
 - [x] **Phase 8: Debts schema + domain math** — Person/Debt/DebtRepayment models; remaining, write-off, primary totals helpers + tests; NW untouched (completed 2026-09-04)
 - [ ] **Phase 9: People + debts CRUD + nav** — `/debts` list, person/debt dialogs, «Долги» nav, RU empty states
-- [ ] **Phase 10: Repayments + close/write-off** — Dated repayments, history, delete/reopen, auto-close, early forgive
+- [x] **Phase 10: Repayments + close/write-off** — Dated repayments, history, delete/reopen, auto-close, early forgive (completed 2026-09-05)
 - [ ] **Phase 11: Charts + primary totals** — Remaining + repayment charts; I-owe/they-owe primary hero with FX partial banner
 
 ## Phase Details
@@ -97,7 +97,7 @@ Plans:
   3. Debt closed at zero reopens when a deletion leaves remaining > 0
   4. Debt auto-closes at remaining 0; user can close early with recorded write-off/forgive
 
-**Plans:** 5 plans (3 executed + 2 gap closure; 4 executed, 05 pending)
+**Plans:** 4/4 plans complete
 
 Plans:
 **Wave 1**

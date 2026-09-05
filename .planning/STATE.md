@@ -2,18 +2,18 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Долги людям
-current_phase: 10
-current_phase_name: Repayments + close/write-off
-status: awaiting_human
-stopped_at: UAT complete — G-10-8 user-waived
-last_updated: "2026-09-05T20:30:06.197Z"
+current_phase: 11
+current_phase_name: Charts + primary totals
+status: ready
+stopped_at: Phase 10 complete — next Phase 11
+last_updated: "2026-09-05T20:31:40.444Z"
 last_activity: 2026-09-05
-last_activity_desc: UAT complete; G-10-8 waived by user; 10-05 cancelled
-state_head: e2ad66b316ae8c4a123f3aa5731ef3e8c1041f81
+last_activity_desc: Phase 10 complete; G-10-8 waived; ready Phase 11
+state_head: 28c43fee8c8191246a5da77df01868bf67714406
 progress:
   total_phases: 4
-  completed_phases: 2
-  total_plans: 12
+  completed_phases: 3
+  total_plans: 11
   completed_plans: 11
 ---
 
@@ -24,22 +24,22 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 10 — Repayments + close/write-off
+**Current focus:** Phase 11 — Charts + primary totals
 
 ## Current Position
 
-Phase: 10 (Repayments + close/write-off) — UAT COMPLETE (G-10-8 deferred)
-Plan: 4 of 4 executed (+ 10-05 cancelled)
-Status: UAT complete — concurrency polish deferred by user
-Total Plans in Phase: 4 executed (10-05 cancelled)
-Last activity: 2026-09-05 — User waived G-10-8; UAT closed
+Phase: 11 (Charts + primary totals) — READY TO PLAN
+Plan: —
+Status: Phase 10 complete (G-10-8 deferred by user)
+Total Plans in Phase: —
+Last activity: 2026-09-05 — Closed Phase 10; next is Phase 11
 
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 24
+- Total plans completed: 28
 - Average duration: —
 - Total execution time: 0 hours
 
@@ -54,6 +54,7 @@ Last activity: 2026-09-05 — User waived G-10-8; UAT closed
 | 5 | 3 | - | - |
 | 06 | 3 | - | - |
 | 07 | 3 | - | - |
+| 10 | 4 | - | - |
 
 **Recent Trend:**
 
@@ -220,7 +221,7 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-09-05T18:55:00.000Z
-Stopped at: Planned 10-05-PLAN.md (G-10-8)
+Stopped at: Phase 10 complete, ready to plan Phase 9
 Resume file: None
 
 ## Quick Tasks Completed
