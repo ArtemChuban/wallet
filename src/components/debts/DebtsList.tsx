@@ -139,7 +139,7 @@ function PersonGroup({
   return (
     <li className="border-b border-border last:border-b-0">
       <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
-        <p className="min-w-0 flex-1 break-words text-base font-medium text-foreground">
+        <p className="min-w-0 flex-1 break-all text-base font-medium text-foreground">
           {person.name}
         </p>
         <div className="flex shrink-0 flex-wrap items-center gap-2">
