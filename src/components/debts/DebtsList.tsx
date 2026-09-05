@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { deletePerson } from "@/app/debts/actions";
+import { DebtDetailDialog } from "@/components/debts/DebtDetailDialog";
 import {
   DebtFormDialog,
   type DebtRow,
@@ -38,31 +39,55 @@ const DIRECTION_LABELS: Record<"I_OWE" | "THEY_OWE", string> = {
 };
 
 function DebtCompactRow({ debt }: { debt: DebtRow }) {
+  const [detailOpen, setDetailOpen] = useState(false);
   const remaining = formatMinorToMajor(
     BigInt(debt.remainingMinor),
     debt.currency.scale,
   );
   return (
-    <li className="flex flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-3">
-      <div className="flex min-w-0 flex-wrap items-baseline gap-2">
-        <span className="text-sm text-muted-foreground">
-          {DIRECTION_LABELS[debt.direction]}
-        </span>
-        <span className="font-mono text-base text-foreground">
-          {remaining}
-        </span>
-        <span className="font-mono text-sm text-muted-foreground">
-          {debt.currencyCode}
-        </span>
+    <li>
+      <div
+        role="button"
+        tabIndex={0}
+        className="flex cursor-pointer flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-3"
+        onClick={() => setDetailOpen(true)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setDetailOpen(true);
+          }
+        }}
+      >
+        <div className="flex min-w-0 flex-wrap items-baseline gap-2">
+          <span className="text-sm text-muted-foreground">
+            {DIRECTION_LABELS[debt.direction]}
+          </span>
+          <span className="font-mono text-base text-foreground">
+            {remaining}
+          </span>
+          <span className="font-mono text-sm text-muted-foreground">
+            {debt.currencyCode}
+          </span>
+        </div>
+        <div
+          onClick={(e) => e.stopPropagation()}
+          onKeyDown={(e) => e.stopPropagation()}
+        >
+          <DebtFormDialog
+            mode="edit"
+            debt={debt}
+            trigger={
+              <Button type="button" variant="outline" size="sm">
+                Изменить
+              </Button>
+            }
+          />
+        </div>
       </div>
-      <DebtFormDialog
-        mode="edit"
+      <DebtDetailDialog
         debt={debt}
-        trigger={
-          <Button type="button" variant="outline" size="sm">
-            Изменить
-          </Button>
-        }
+        open={detailOpen}
+        onOpenChange={setDetailOpen}
       />
     </li>
   );

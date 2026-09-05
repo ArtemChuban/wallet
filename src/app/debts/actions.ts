@@ -2,12 +2,19 @@
 
 import { revalidatePath } from "next/cache";
 import { Prisma } from "@/generated/prisma/client";
+import { calendarDateToday } from "@/lib/balances";
+import {
+  assertRepaymentAmount,
+  remainingMinor,
+  statusForRemaining,
+} from "@/lib/debts";
 import { ensureSqlitePragmas, prisma } from "@/lib/db";
 import { parseMajorToMinor } from "@/lib/money";
 import {
   createDebtSchema,
   createDebtWithNewPersonSchema,
   createPersonSchema,
+  createRepaymentSchema,
   renamePersonSchema,
   updateDebtMetaSchema,
 } from "@/lib/validations/debts";
@@ -28,6 +35,8 @@ export type DebtActionState = {
     direction?: string[];
     currencyCode?: string[];
     initialAmountMajor?: string[];
+    amountMajor?: string[];
+    asOfDate?: string[];
     dueDate?: string[];
     note?: string[];
     debtId?: string[];
@@ -398,4 +407,132 @@ export async function deleteDebt(
 
   revalidatePath("/debts");
   return { success: true, message: "Удалено" };
+}
+
+/**
+ * Record same-currency repayment; sync Debt.status from remaining (REPAY-01 / DEBT-04).
+ * revalidatePath("/debts") only — never dashboard root (DISOL-01 / T-10-04).
+ */
+export async function createRepayment(
+  _prev: DebtActionState,
+  formData: FormData,
+): Promise<DebtActionState> {
+  const validated = createRepaymentSchema.safeParse({
+    debtId: formData.get("debtId"),
+    amountMajor: formData.get("amountMajor"),
+    asOfDate: formData.get("asOfDate"),
+    note: formData.get("note") ?? undefined,
+  });
+
+  if (!validated.success) {
+    return { errors: validated.error.flatten().fieldErrors };
+  }
+
+  const { debtId, amountMajor, asOfDate, note } = validated.data;
+  const today = calendarDateToday();
+  if (asOfDate > today) {
+    return {
+      errors: { asOfDate: ["Дата не может быть в будущем"] },
+    };
+  }
+
+  try {
+    await ensureSqlitePragmas();
+    await prisma.$transaction(async (tx) => {
+      const debt = await tx.debt.findUniqueOrThrow({
+        where: { id: debtId },
+        include: {
+          repayments: { select: { amountMinor: true } },
+          sizeChanges: { select: { deltaMinor: true } },
+          currency: { select: { scale: true } },
+        },
+      });
+
+      if (fracDigitCount(amountMajor) > debt.currency.scale) {
+        throw new Error("too many fractional digits");
+      }
+
+      let amountMinor: bigint;
+      try {
+        amountMinor = parseMajorToMinor(amountMajor, debt.currency.scale);
+      } catch (err) {
+        if (
+          err instanceof Error &&
+          err.message === "too many fractional digits"
+        ) {
+          throw err;
+        }
+        throw new Error("bad amount");
+      }
+
+      const remainingBefore = remainingMinor(
+        debt.initialAmountMinor,
+        debt.sizeChanges.map((s) => s.deltaMinor),
+        debt.repayments.map((r) => r.amountMinor),
+      );
+
+      try {
+        assertRepaymentAmount(amountMinor, remainingBefore);
+      } catch (err) {
+        if (
+          err instanceof Error &&
+          err.message === "repayment exceeds remaining"
+        ) {
+          throw new Error("OVER_REPAY");
+        }
+        if (
+          err instanceof Error &&
+          err.message === "repayment amount must be > 0"
+        ) {
+          throw new Error("AMOUNT_NOT_POSITIVE");
+        }
+        throw err;
+      }
+
+      await tx.debtRepayment.create({
+        data: {
+          debtId,
+          asOfDate,
+          amountMinor,
+          note,
+        },
+      });
+
+      const remainingAfter = remainingBefore - amountMinor;
+      await tx.debt.update({
+        where: { id: debtId },
+        data: { status: statusForRemaining(remainingAfter) },
+      });
+    });
+  } catch (error) {
+    if (error instanceof Error && error.message === "OVER_REPAY") {
+      return {
+        errors: { amountMajor: ["Сумма больше остатка долга"] },
+      };
+    }
+    if (error instanceof Error && error.message === "AMOUNT_NOT_POSITIVE") {
+      return {
+        errors: { amountMajor: ["Введите сумму больше 0"] },
+      };
+    }
+    if (
+      error instanceof Error &&
+      error.message === "too many fractional digits"
+    ) {
+      return {
+        errors: {
+          amountMajor: ["Некорректная сумма"],
+        },
+      };
+    }
+    if (error instanceof Error && error.message === "bad amount") {
+      return { errors: { amountMajor: ["Некорректная сумма"] } };
+    }
+    return {
+      message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/debts");
+  return { success: true, message: "Сохранено" };
 }

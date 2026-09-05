@@ -55,6 +55,8 @@ export type DebtRow = {
   initialAmountMinor: string;
   /** Serialized remainingMinor from RSC. */
   remainingMinor: string;
+  /** Persisted Debt.status after sync writes (OPEN | CLOSED). */
+  status?: "OPEN" | "CLOSED";
   dueDate: string | null;
   note: string | null;
   currency: { code: string; name: string; scale: number };

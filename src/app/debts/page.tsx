@@ -45,6 +45,7 @@ export default async function DebtsPage() {
         currencyCode: d.currencyCode,
         initialAmountMinor: d.initialAmountMinor.toString(),
         remainingMinor: remaining.toString(),
+        status: d.status,
         dueDate: d.dueDate,
         note: d.note,
         currency: d.currency,
