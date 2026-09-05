@@ -107,7 +107,7 @@ status: complete
 2. **Task 2: deleteRepayment action + mixed timeline + delete confirm** - `3a59048` (feat)
 3. **Task 3: Per-person collapsed «Закрытые (N)» subsection** - `e1a1aed` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `5c9cbcf` (docs: complete plan)
 
 ## Files Created/Modified
 
