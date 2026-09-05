@@ -539,14 +539,16 @@ export function DebtDetailDialog({
         if (next) setFormKey((k) => k + 1);
       }}
     >
-      <DialogContent className="sm:max-w-md">
-        {open ? (
-          <DebtDetailBody
-            key={formKey}
-            debt={debt}
-            onSuccess={() => onOpenChange(false)}
-          />
-        ) : null}
+      <DialogContent className="flex max-h-[min(90dvh,calc(100vh-2rem))] w-full flex-col gap-0 overflow-hidden p-0 sm:max-w-md">
+        <div className="min-h-0 flex-1 overflow-y-auto p-4">
+          {open ? (
+            <DebtDetailBody
+              key={formKey}
+              debt={debt}
+              onSuccess={() => onOpenChange(false)}
+            />
+          ) : null}
+        </div>
       </DialogContent>
     </Dialog>
   );
