@@ -166,7 +166,13 @@ A local, single-user personal finance site for tracking net worth across account
 
 ## Conventions
 
-Conventions not yet established. Will populate as patterns emerge during development.
+Agent-driven UAT is mandatory. Full rules: `.planning/OPERATOR.md`.
+
+- Start app: `npm run dev`
+- Drive UI: Orca built-in browser (`orca-ide` on Linux host / `orca` inside Orca)
+- Ask human only for subjective judgment, true parallel races, or hard blockers
+- Config: `workflow.uat_driver=orca-cli`, `workflow.uat_operator_doc=.planning/OPERATOR.md`
+- Never `window.confirm` for destructive actions — in-dialog second step (PROJECT.md)
 <!-- GSD:conventions-end -->
 
 <!-- GSD:architecture-start source:ARCHITECTURE.md -->

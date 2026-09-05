@@ -7,3 +7,12 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+<!-- BEGIN:wallet-operator -->
+
+# Operator prefs (GSD)
+
+Before `/gsd-verify-work` or any UAT: read `.planning/OPERATOR.md`.
+Agent drives app (`npm run dev`) + Orca browser (`orca-ide` / `orca`). Ask human only for subjective judgment, true parallel races, or hard blockers.
+
+<!-- END:wallet-operator -->

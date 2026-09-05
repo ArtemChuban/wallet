@@ -76,6 +76,8 @@ v1.1 adds personal debts (people ↔ money owed) as a parallel domain: same mone
 
 **UI constitution — destructive actions:** Never use `window.confirm` (or equivalent browser confirm) for deletes or other irreversible actions. Always use an in-app second step inside the dialog/flow (explicit «точно удалить?» / equivalent) with Russian copy that states what will be lost. Applies app-wide from Phase 9 onward (debts, people, balance snapshots, and any future destructive UX).
 
+**Operator preferences:** See `.planning/OPERATOR.md` (agent-driven UAT via `npm run dev` + Orca browser; ask human only for subjective / parallel / blocked cases). Binding for all agents on `/gsd-verify-work`.
+
 ## Constraints
 
 - **Runtime**: Dockerized web app — must run as a local container
@@ -104,6 +106,7 @@ v1.1 adds personal debts (people ↔ money owed) as a parallel domain: same mone
 | Early close = write-off/forgive remaining | Auto-close at 0 insufficient for real settlements | — Pending v1.1 |
 | Primary totals for I-owe / they-owe via FX as-of | Same conversion honesty as NW dashboard | — Pending v1.1 |
 | Destructive confirm = in-dialog second step, never `window.confirm` | Accidental deletes; consistent RU UX; honest cascade copy | Locked Phase 9 — app-wide constitution |
+| Agent-driven UAT (Orca browser + `npm run dev`); human only for subjective/parallel/blocked | Avoid repetitive conversational UAT; same for Cursor / Claude Code / Codex | Locked — see `.planning/OPERATOR.md` |
 
 ## Evolution
 

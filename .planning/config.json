@@ -30,6 +30,8 @@
     "ai_integration_phase": true,
     "api_coverage_gate": true,
     "human_verify_mode": "end-of-phase",
+    "uat_driver": "orca-cli",
+    "uat_operator_doc": ".planning/OPERATOR.md",
     "context_guard_mode": "warn",
     "text_mode": false,
     "research_before_questions": false,
