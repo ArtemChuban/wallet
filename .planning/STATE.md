@@ -223,4 +223,5 @@ Resume file: None
 
 - `/gsd-execute-phase 10 --gaps-only` — close G-10-5 (10-04-PLAN.md)
 - Then re-UAT concurrency smoke / verify-work
+- UI follow-up (locked): DebtDetailDialog **tabs** (variant 1) — todo `2026-09-05-debt-detail-dialog-tabs-layout.md`; mock `phases/10-repayments-close-write-off/debt-detail-variants-mock.html`
 - Then Phase 11 — charts + primary totals

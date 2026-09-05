@@ -107,6 +107,7 @@ v1.1 adds personal debts (people ↔ money owed) as a parallel domain: same mone
 | Primary totals for I-owe / they-owe via FX as-of | Same conversion honesty as NW dashboard | — Pending v1.1 |
 | Destructive confirm = in-dialog second step, never `window.confirm` | Accidental deletes; consistent RU UX; honest cascade copy | Locked Phase 9 — app-wide constitution |
 | Agent-driven UAT (Orca browser + `npm run dev`); human only for subjective/parallel/blocked | Avoid repetitive conversational UAT; same for Cursor / Claude Code / Codex | Locked — see `.planning/OPERATOR.md` |
+| DebtDetailDialog = tabs (Погашение / Изменение / Простить / История), not stacked forms | User approved mock variant 1 over primary-CTA; reduces modal overload | Locked 2026-09-05 — mock `/tmp/wallet-debt-detail-variants.html`; implement as UI follow-up |
 
 ## Evolution
 
