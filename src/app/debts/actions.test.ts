@@ -16,12 +16,21 @@ vi.mock("@/lib/db", () => ({
       create: vi.fn(),
       update: vi.fn(),
       delete: vi.fn(),
+      findUniqueOrThrow: vi.fn(),
+    },
+    debtRepayment: {
+      create: vi.fn(),
     },
     currency: {
       findUnique: vi.fn(),
     },
+    $transaction: vi.fn(),
   },
   ensureSqlitePragmas: vi.fn(),
+}));
+
+vi.mock("@/lib/balances", () => ({
+  calendarDateToday: vi.fn(() => "2026-09-03"),
 }));
 
 vi.mock("@/lib/money", () => ({
@@ -34,11 +43,13 @@ vi.mock("@/lib/money", () => ({
 
 import { Prisma } from "@/generated/prisma/client";
 import { revalidatePath } from "next/cache";
+import { calendarDateToday } from "@/lib/balances";
 import { ensureSqlitePragmas, prisma } from "@/lib/db";
 import { parseMajorToMinor } from "@/lib/money";
 import {
   createDebt,
   createPerson,
+  createRepayment,
   deleteDebt,
   deletePerson,
   renamePerson,
@@ -387,6 +398,127 @@ describe("deleteDebt (DEBT-01 / D-13)", () => {
       "Не удалось удалить. Попробуйте снова.",
     );
     expect(prisma.debt.delete).not.toHaveBeenCalled();
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+});
+
+describe("createRepayment (REPAY-01 / DEBT-04)", () => {
+  const openDebtLedger = {
+    id: 9,
+    initialAmountMinor: 10000n,
+    repayments: [] as { amountMinor: bigint }[],
+    sizeChanges: [] as { deltaMinor: bigint }[],
+    currency: { scale: 2 },
+    status: "OPEN" as const,
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+    vi.mocked(calendarDateToday).mockReturnValue("2026-09-03");
+    vi.mocked(parseMajorToMinor).mockImplementation((major: string) => {
+      const n = Number(major);
+      if (!Number.isFinite(n)) throw new Error("bad major");
+      return BigInt(Math.round(n * 100));
+    });
+    vi.mocked(prisma.debt.findUniqueOrThrow).mockResolvedValue(
+      openDebtLedger as never,
+    );
+    vi.mocked(prisma.debtRepayment.create).mockResolvedValue({} as never);
+    vi.mocked(prisma.debt.update).mockResolvedValue({} as never);
+    vi.mocked(prisma.$transaction).mockImplementation(async (fn) => {
+      if (typeof fn !== "function") {
+        throw new Error("expected interactive $transaction callback");
+      }
+      return fn(prisma);
+    });
+  });
+
+  it("creates partial repayment, keeps OPEN, revalidates /debts only", async () => {
+    const formData = new FormData();
+    formData.set("debtId", "9");
+    formData.set("amountMajor", "30.00");
+    formData.set("asOfDate", "2026-09-01");
+    formData.set("note", "часть");
+
+    const result = await createRepayment({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(ensureSqlitePragmas).toHaveBeenCalled();
+    expect(prisma.$transaction).toHaveBeenCalled();
+    expect(parseMajorToMinor).toHaveBeenCalledWith("30.00", 2);
+    expect(prisma.debtRepayment.create).toHaveBeenCalledWith({
+      data: {
+        debtId: 9,
+        asOfDate: "2026-09-01",
+        amountMinor: 3000n,
+        note: "часть",
+      },
+    });
+    expect(prisma.debt.update).toHaveBeenCalledWith({
+      where: { id: 9 },
+      data: { status: "OPEN" },
+    });
+    expect(revalidatePath).toHaveBeenCalledWith("/debts");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/");
+  });
+
+  it("sets status CLOSED when repayment equals remaining", async () => {
+    const formData = new FormData();
+    formData.set("debtId", "9");
+    formData.set("amountMajor", "100.00");
+    formData.set("asOfDate", "2026-09-01");
+
+    const result = await createRepayment({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.debtRepayment.create).toHaveBeenCalledWith({
+      data: {
+        debtId: 9,
+        asOfDate: "2026-09-01",
+        amountMinor: 10000n,
+        note: undefined,
+      },
+    });
+    expect(prisma.debt.update).toHaveBeenCalledWith({
+      where: { id: 9 },
+      data: { status: "CLOSED" },
+    });
+    expect(revalidatePath).toHaveBeenCalledWith("/debts");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/");
+  });
+
+  it("rejects over-repayment without writing (T-10-01)", async () => {
+    const formData = new FormData();
+    formData.set("debtId", "9");
+    formData.set("amountMajor", "150.00");
+    formData.set("asOfDate", "2026-09-01");
+
+    const result = await createRepayment({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.errors?.amountMajor).toEqual([
+      "Сумма больше остатка долга",
+    ]);
+    expect(prisma.debtRepayment.create).not.toHaveBeenCalled();
+    expect(prisma.debt.update).not.toHaveBeenCalled();
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  it("rejects future asOfDate with Russian message", async () => {
+    const formData = new FormData();
+    formData.set("debtId", "9");
+    formData.set("amountMajor", "10.00");
+    formData.set("asOfDate", "2026-09-10");
+
+    const result = await createRepayment({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.errors?.asOfDate).toEqual([
+      "Дата не может быть в будущем",
+    ]);
+    expect(prisma.$transaction).not.toHaveBeenCalled();
+    expect(prisma.debtRepayment.create).not.toHaveBeenCalled();
     expect(revalidatePath).not.toHaveBeenCalled();
   });
 });
