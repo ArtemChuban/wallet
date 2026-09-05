@@ -66,6 +66,21 @@ function isForeignKeyViolation(error: unknown): boolean {
   );
 }
 
+function isRecordNotFound(error: unknown): boolean {
+  return (
+    error instanceof Prisma.PrismaClientKnownRequestError &&
+    error.code === "P2025"
+  );
+}
+
+const STALE_RECORD_REFRESH_MESSAGE =
+  "Долг или запись не найдены. Обновите страницу.";
+
+function staleRecordRefreshState(): DebtActionState {
+  revalidatePath("/debts");
+  return { message: STALE_RECORD_REFRESH_MESSAGE };
+}
+
 /** Count fractional digits in a major decimal string (0 if none). */
 function fracDigitCount(major: string): number {
   const m = /^[+-]?\d+(?:\.(\d+))?$/.exec(major.trim());
@@ -534,6 +549,9 @@ export async function createRepayment(
     }
     if (error instanceof Error && error.message === "bad amount") {
       return { errors: { amountMajor: ["Некорректная сумма"] } };
+    }
+    if (isRecordNotFound(error)) {
+      return staleRecordRefreshState();
     }
     return {
       message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
