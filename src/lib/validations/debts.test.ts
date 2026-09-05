@@ -7,6 +7,7 @@ import {
   createSizeChangeSchema,
   deleteRepaymentSchema,
   deleteSizeChangeSchema,
+  forgiveRemainingSchema,
   renamePersonSchema,
   updateDebtMetaSchema,
 } from "./debts";
@@ -275,6 +276,31 @@ describe("deleteSizeChangeSchema (REPAY-03 / T-10-03)", () => {
     const result = deleteSizeChangeSchema.safeParse({
       id: 1,
       extra: true,
+    });
+    expect(result.success).toBe(false);
+  });
+});
+
+describe("forgiveRemainingSchema (DEBT-05 / T-10-02)", () => {
+  it("accepts debtId, asOfDate, optional note — no delta", () => {
+    const result = forgiveRemainingSchema.safeParse({
+      debtId: "3",
+      asOfDate: "2026-09-01",
+      note: "прощение",
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.debtId).toBe(3);
+      expect(result.data.asOfDate).toBe("2026-09-01");
+      expect(result.data.note).toBe("прощение");
+    }
+  });
+
+  it("rejects smuggled deltaMajor via .strict() (T-10-02)", () => {
+    const result = forgiveRemainingSchema.safeParse({
+      debtId: 1,
+      asOfDate: "2026-09-01",
+      deltaMajor: "-999",
     });
     expect(result.success).toBe(false);
   });

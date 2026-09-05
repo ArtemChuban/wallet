@@ -5,6 +5,8 @@ import { Prisma } from "@/generated/prisma/client";
 import { calendarDateToday } from "@/lib/balances";
 import {
   assertRepaymentAmount,
+  assertSizeDelta,
+  currentPrincipalMinor,
   remainingMinor,
   statusForRemaining,
 } from "@/lib/debts";
@@ -15,7 +17,10 @@ import {
   createDebtWithNewPersonSchema,
   createPersonSchema,
   createRepaymentSchema,
+  createSizeChangeSchema,
   deleteRepaymentSchema,
+  deleteSizeChangeSchema,
+  forgiveRemainingSchema,
   renamePersonSchema,
   updateDebtMetaSchema,
 } from "@/lib/validations/debts";
@@ -37,6 +42,7 @@ export type DebtActionState = {
     currencyCode?: string[];
     initialAmountMajor?: string[];
     amountMajor?: string[];
+    deltaMajor?: string[];
     asOfDate?: string[];
     dueDate?: string[];
     note?: string[];
@@ -593,6 +599,294 @@ export async function deleteRepayment(
     });
   } catch (error) {
     if (error instanceof Error && error.message === "REPAYMENT_NOT_FOUND") {
+      return {
+        message: "Не удалось удалить. Попробуйте снова.",
+      };
+    }
+    return {
+      message: "Не удалось удалить. Попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/debts");
+  return { success: true, message: "Удалено" };
+}
+
+/**
+ * Manual size-change (signed delta); sync Debt.status from remaining (DEBT-05 / D-08).
+ * revalidatePath("/debts") only — never dashboard root (DISOL-01 / T-10-04).
+ */
+export async function createSizeChange(
+  _prev: DebtActionState,
+  formData: FormData,
+): Promise<DebtActionState> {
+  const validated = createSizeChangeSchema.safeParse({
+    debtId: formData.get("debtId"),
+    deltaMajor: formData.get("deltaMajor"),
+    asOfDate: formData.get("asOfDate"),
+    note: formData.get("note") ?? undefined,
+  });
+
+  if (!validated.success) {
+    return { errors: validated.error.flatten().fieldErrors };
+  }
+
+  const { debtId, deltaMajor, asOfDate, note } = validated.data;
+  const today = calendarDateToday();
+  if (asOfDate > today) {
+    return {
+      errors: { asOfDate: ["Дата не может быть в будущем"] },
+    };
+  }
+
+  try {
+    await ensureSqlitePragmas();
+    await prisma.$transaction(async (tx) => {
+      const debt = await tx.debt.findUniqueOrThrow({
+        where: { id: debtId },
+        include: {
+          repayments: { select: { amountMinor: true } },
+          sizeChanges: { select: { deltaMinor: true } },
+          currency: { select: { scale: true } },
+        },
+      });
+
+      if (fracDigitCount(deltaMajor) > debt.currency.scale) {
+        throw new Error("too many fractional digits");
+      }
+
+      let deltaMinor: bigint;
+      try {
+        deltaMinor = parseMajorToMinor(deltaMajor, debt.currency.scale);
+      } catch (err) {
+        if (
+          err instanceof Error &&
+          err.message === "too many fractional digits"
+        ) {
+          throw err;
+        }
+        throw new Error("bad amount");
+      }
+
+      const sizeDeltas = debt.sizeChanges.map((s) => s.deltaMinor);
+      const repaymentAmounts = debt.repayments.map((r) => r.amountMinor);
+      const principal = currentPrincipalMinor(
+        debt.initialAmountMinor,
+        sizeDeltas,
+      );
+      const sumRepayments = repaymentAmounts.reduce((sum, a) => sum + a, 0n);
+
+      try {
+        assertSizeDelta(deltaMinor, principal, sumRepayments);
+      } catch (err) {
+        if (
+          err instanceof Error &&
+          err.message === "size change would make remaining < 0"
+        ) {
+          throw new Error("OVER_FLOOR");
+        }
+        if (
+          err instanceof Error &&
+          err.message === "size delta must not be 0"
+        ) {
+          throw new Error("DELTA_ZERO");
+        }
+        throw err;
+      }
+
+      await tx.debtSizeChange.create({
+        data: {
+          debtId,
+          asOfDate,
+          deltaMinor,
+          note,
+        },
+      });
+
+      const remainingAfter = remainingMinor(
+        debt.initialAmountMinor,
+        [...sizeDeltas, deltaMinor],
+        repaymentAmounts,
+      );
+      await tx.debt.update({
+        where: { id: debtId },
+        data: { status: statusForRemaining(remainingAfter) },
+      });
+    });
+  } catch (error) {
+    if (error instanceof Error && error.message === "OVER_FLOOR") {
+      return {
+        errors: {
+          deltaMajor: ["Изменение сделало бы остаток отрицательным"],
+        },
+      };
+    }
+    if (error instanceof Error && error.message === "DELTA_ZERO") {
+      return {
+        errors: { deltaMajor: ["Изменение не может быть нулевым"] },
+      };
+    }
+    if (
+      error instanceof Error &&
+      error.message === "too many fractional digits"
+    ) {
+      return {
+        errors: { deltaMajor: ["Некорректная сумма"] },
+      };
+    }
+    if (error instanceof Error && error.message === "bad amount") {
+      return { errors: { deltaMajor: ["Некорректная сумма"] } };
+    }
+    return {
+      message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/debts");
+  return { success: true, message: "Сохранено" };
+}
+
+/**
+ * Early close: server sets deltaMinor = −remaining (DEBT-05 / T-10-02).
+ * Client deltaMajor ignored/absent. revalidatePath("/debts") only.
+ */
+export async function forgiveRemaining(
+  _prev: DebtActionState,
+  formData: FormData,
+): Promise<DebtActionState> {
+  const validated = forgiveRemainingSchema.safeParse({
+    debtId: formData.get("debtId"),
+    asOfDate: formData.get("asOfDate"),
+    note: formData.get("note") ?? undefined,
+  });
+
+  if (!validated.success) {
+    return { errors: validated.error.flatten().fieldErrors };
+  }
+
+  const { debtId, asOfDate, note } = validated.data;
+  const today = calendarDateToday();
+  if (asOfDate > today) {
+    return {
+      errors: { asOfDate: ["Дата не может быть в будущем"] },
+    };
+  }
+
+  try {
+    await ensureSqlitePragmas();
+    await prisma.$transaction(async (tx) => {
+      const debt = await tx.debt.findUniqueOrThrow({
+        where: { id: debtId },
+        include: {
+          repayments: { select: { amountMinor: true } },
+          sizeChanges: { select: { deltaMinor: true } },
+        },
+      });
+
+      const sizeDeltas = debt.sizeChanges.map((s) => s.deltaMinor);
+      const repaymentAmounts = debt.repayments.map((r) => r.amountMinor);
+      const remainingBefore = remainingMinor(
+        debt.initialAmountMinor,
+        sizeDeltas,
+        repaymentAmounts,
+      );
+
+      if (remainingBefore === 0n) {
+        throw new Error("NOTHING_TO_FORGIVE");
+      }
+
+      const deltaMinor = -remainingBefore;
+      const principal = currentPrincipalMinor(
+        debt.initialAmountMinor,
+        sizeDeltas,
+      );
+      const sumRepayments = repaymentAmounts.reduce((sum, a) => sum + a, 0n);
+      assertSizeDelta(deltaMinor, principal, sumRepayments);
+
+      await tx.debtSizeChange.create({
+        data: {
+          debtId,
+          asOfDate,
+          deltaMinor,
+          note,
+        },
+      });
+
+      await tx.debt.update({
+        where: { id: debtId },
+        data: { status: "CLOSED" },
+      });
+    });
+  } catch (error) {
+    if (error instanceof Error && error.message === "NOTHING_TO_FORGIVE") {
+      return {
+        message: "Нечего прощать — остаток уже 0",
+      };
+    }
+    return {
+      message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/debts");
+  return { success: true, message: "Сохранено" };
+}
+
+/**
+ * Delete size-change by id; recompute remaining + status (reopen OPEN when > 0).
+ * revalidatePath("/debts") only on success (D-06 / T-10-03 / T-10-04).
+ */
+export async function deleteSizeChange(
+  formData: FormData,
+): Promise<DebtActionState> {
+  const validated = deleteSizeChangeSchema.safeParse({
+    id: formData.get("id"),
+  });
+
+  if (!validated.success) {
+    return {
+      message: "Не удалось удалить. Попробуйте снова.",
+    };
+  }
+
+  const { id } = validated.data;
+
+  try {
+    await ensureSqlitePragmas();
+    await prisma.$transaction(async (tx) => {
+      const sizeChange = await tx.debtSizeChange.findUnique({
+        where: { id },
+        select: { id: true, debtId: true },
+      });
+      if (!sizeChange) {
+        throw new Error("SIZE_CHANGE_NOT_FOUND");
+      }
+
+      await tx.debtSizeChange.delete({
+        where: { id: sizeChange.id },
+      });
+
+      const debt = await tx.debt.findUniqueOrThrow({
+        where: { id: sizeChange.debtId },
+        include: {
+          repayments: { select: { amountMinor: true } },
+          sizeChanges: { select: { deltaMinor: true } },
+        },
+      });
+
+      const remaining = remainingMinor(
+        debt.initialAmountMinor,
+        debt.sizeChanges.map((s) => s.deltaMinor),
+        debt.repayments.map((r) => r.amountMinor),
+      );
+
+      await tx.debt.update({
+        where: { id: debt.id },
+        data: { status: statusForRemaining(remaining) },
+      });
+    });
+  } catch (error) {
+    if (error instanceof Error && error.message === "SIZE_CHANGE_NOT_FOUND") {
       return {
         message: "Не удалось удалить. Попробуйте снова.",
       };

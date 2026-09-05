@@ -172,6 +172,18 @@ export const deleteSizeChangeSchema = z
   })
   .strict();
 
+/**
+ * Early forgive / write-off: no client delta (T-10-02).
+ * Server sets deltaMinor = −remainingBefore.
+ */
+export const forgiveRemainingSchema = z
+  .object({
+    debtId: z.coerce.number().int().positive(),
+    asOfDate: asOfDateSchema,
+    note: optionalNoteSchema,
+  })
+  .strict();
+
 export type CreatePersonInput = z.infer<typeof createPersonSchema>;
 export type RenamePersonInput = z.infer<typeof renamePersonSchema>;
 export type CreateDebtInput = z.infer<typeof createDebtSchema>;
@@ -183,3 +195,4 @@ export type CreateRepaymentInput = z.infer<typeof createRepaymentSchema>;
 export type CreateSizeChangeInput = z.infer<typeof createSizeChangeSchema>;
 export type DeleteRepaymentInput = z.infer<typeof deleteRepaymentSchema>;
 export type DeleteSizeChangeInput = z.infer<typeof deleteSizeChangeSchema>;
+export type ForgiveRemainingInput = z.infer<typeof forgiveRemainingSchema>;

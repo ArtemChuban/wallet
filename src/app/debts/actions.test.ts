@@ -23,6 +23,11 @@ vi.mock("@/lib/db", () => ({
       delete: vi.fn(),
       findUnique: vi.fn(),
     },
+    debtSizeChange: {
+      create: vi.fn(),
+      delete: vi.fn(),
+      findUnique: vi.fn(),
+    },
     currency: {
       findUnique: vi.fn(),
     },
@@ -52,9 +57,12 @@ import {
   createDebt,
   createPerson,
   createRepayment,
+  createSizeChange,
   deleteDebt,
   deletePerson,
   deleteRepayment,
+  deleteSizeChange,
+  forgiveRemaining,
   renamePerson,
   updateDebtMeta,
 } from "./actions";
@@ -592,6 +600,246 @@ describe("deleteRepayment (REPAY-03 / DEBT-04)", () => {
     formData.set("id", "abc");
 
     const result = await deleteRepayment(formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBe(
+      "Не удалось удалить. Попробуйте снова.",
+    );
+    expect(prisma.$transaction).not.toHaveBeenCalled();
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+});
+
+describe("createSizeChange (DEBT-05 / D-08)", () => {
+  const openDebtLedger = {
+    id: 9,
+    initialAmountMinor: 10000n,
+    repayments: [] as { amountMinor: bigint }[],
+    sizeChanges: [] as { deltaMinor: bigint }[],
+    currency: { scale: 2 },
+    status: "OPEN" as const,
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+    vi.mocked(calendarDateToday).mockReturnValue("2026-09-03");
+    vi.mocked(parseMajorToMinor).mockImplementation((major: string) => {
+      const n = Number(major);
+      if (!Number.isFinite(n)) throw new Error("bad major");
+      return BigInt(Math.round(n * 100));
+    });
+    vi.mocked(prisma.debt.findUniqueOrThrow).mockResolvedValue(
+      openDebtLedger as never,
+    );
+    vi.mocked(prisma.debtSizeChange.create).mockResolvedValue({} as never);
+    vi.mocked(prisma.debt.update).mockResolvedValue({} as never);
+    vi.mocked(prisma.$transaction).mockImplementation(async (fn) => {
+      if (typeof fn !== "function") {
+        throw new Error("expected interactive $transaction callback");
+      }
+      return fn(prisma);
+    });
+  });
+
+  it("creates up delta, keeps OPEN, revalidates /debts only", async () => {
+    const formData = new FormData();
+    formData.set("debtId", "9");
+    formData.set("deltaMajor", "25.00");
+    formData.set("asOfDate", "2026-09-01");
+    formData.set("note", "доп");
+
+    const result = await createSizeChange({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.debtSizeChange.create).toHaveBeenCalledWith({
+      data: {
+        debtId: 9,
+        asOfDate: "2026-09-01",
+        deltaMinor: 2500n,
+        note: "доп",
+      },
+    });
+    expect(prisma.debt.update).toHaveBeenCalledWith({
+      where: { id: 9 },
+      data: { status: "OPEN" },
+    });
+    expect(revalidatePath).toHaveBeenCalledWith("/debts");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/");
+  });
+
+  it("rejects over-floor down without writing (T-10-01)", async () => {
+    vi.mocked(prisma.debt.findUniqueOrThrow).mockResolvedValue({
+      ...openDebtLedger,
+      repayments: [{ amountMinor: 8000n }],
+    } as never);
+
+    const formData = new FormData();
+    formData.set("debtId", "9");
+    formData.set("deltaMajor", "-50.00");
+    formData.set("asOfDate", "2026-09-01");
+
+    const result = await createSizeChange({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.errors?.deltaMajor).toEqual([
+      "Изменение сделало бы остаток отрицательным",
+    ]);
+    expect(prisma.debtSizeChange.create).not.toHaveBeenCalled();
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  it("rejects future asOfDate", async () => {
+    const formData = new FormData();
+    formData.set("debtId", "9");
+    formData.set("deltaMajor", "10.00");
+    formData.set("asOfDate", "2026-09-10");
+
+    const result = await createSizeChange({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.errors?.asOfDate).toEqual([
+      "Дата не может быть в будущем",
+    ]);
+    expect(prisma.$transaction).not.toHaveBeenCalled();
+  });
+});
+
+describe("forgiveRemaining (DEBT-05 / T-10-02)", () => {
+  const openDebtLedger = {
+    id: 9,
+    initialAmountMinor: 10000n,
+    repayments: [] as { amountMinor: bigint }[],
+    sizeChanges: [] as { deltaMinor: bigint }[],
+    status: "OPEN" as const,
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+    vi.mocked(calendarDateToday).mockReturnValue("2026-09-03");
+    vi.mocked(prisma.debt.findUniqueOrThrow).mockResolvedValue(
+      openDebtLedger as never,
+    );
+    vi.mocked(prisma.debtSizeChange.create).mockResolvedValue({} as never);
+    vi.mocked(prisma.debt.update).mockResolvedValue({} as never);
+    vi.mocked(prisma.$transaction).mockImplementation(async (fn) => {
+      if (typeof fn !== "function") {
+        throw new Error("expected interactive $transaction callback");
+      }
+      return fn(prisma);
+    });
+  });
+
+  it("writes −remaining size-change, sets CLOSED, ignores smuggled delta (T-10-02)", async () => {
+    const formData = new FormData();
+    formData.set("debtId", "9");
+    formData.set("asOfDate", "2026-09-01");
+    formData.set("note", "прощение");
+    formData.set("deltaMajor", "-1.00");
+
+    const result = await forgiveRemaining({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.debtSizeChange.create).toHaveBeenCalledWith({
+      data: {
+        debtId: 9,
+        asOfDate: "2026-09-01",
+        deltaMinor: -10000n,
+        note: "прощение",
+      },
+    });
+    expect(prisma.debt.update).toHaveBeenCalledWith({
+      where: { id: 9 },
+      data: { status: "CLOSED" },
+    });
+    expect(revalidatePath).toHaveBeenCalledWith("/debts");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/");
+  });
+
+  it("rejects remaining 0 without writing", async () => {
+    vi.mocked(prisma.debt.findUniqueOrThrow).mockResolvedValue({
+      ...openDebtLedger,
+      repayments: [{ amountMinor: 10000n }],
+    } as never);
+
+    const formData = new FormData();
+    formData.set("debtId", "9");
+    formData.set("asOfDate", "2026-09-01");
+
+    const result = await forgiveRemaining({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBe("Нечего прощать — остаток уже 0");
+    expect(prisma.debtSizeChange.create).not.toHaveBeenCalled();
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  it("rejects future asOfDate", async () => {
+    const formData = new FormData();
+    formData.set("debtId", "9");
+    formData.set("asOfDate", "2026-09-10");
+
+    const result = await forgiveRemaining({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.errors?.asOfDate).toEqual([
+      "Дата не может быть в будущем",
+    ]);
+    expect(prisma.$transaction).not.toHaveBeenCalled();
+  });
+});
+
+describe("deleteSizeChange (D-06 / DEBT-05)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+    vi.mocked(prisma.$transaction).mockImplementation(async (fn) => {
+      if (typeof fn !== "function") {
+        throw new Error("expected interactive $transaction callback");
+      }
+      return fn(prisma);
+    });
+  });
+
+  it("reopens OPEN after deleting forgive size-change and revalidates /debts only", async () => {
+    vi.mocked(prisma.debtSizeChange.findUnique).mockResolvedValue({
+      id: 7,
+      debtId: 9,
+      deltaMinor: -10000n,
+    } as never);
+    vi.mocked(prisma.debtSizeChange.delete).mockResolvedValue({} as never);
+    vi.mocked(prisma.debt.findUniqueOrThrow).mockResolvedValue({
+      id: 9,
+      initialAmountMinor: 10000n,
+      repayments: [] as { amountMinor: bigint }[],
+      sizeChanges: [] as { deltaMinor: bigint }[],
+      status: "CLOSED",
+    } as never);
+    vi.mocked(prisma.debt.update).mockResolvedValue({} as never);
+
+    const formData = new FormData();
+    formData.set("id", "7");
+
+    const result = await deleteSizeChange(formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.debtSizeChange.delete).toHaveBeenCalledWith({
+      where: { id: 7 },
+    });
+    expect(prisma.debt.update).toHaveBeenCalledWith({
+      where: { id: 9 },
+      data: { status: "OPEN" },
+    });
+    expect(revalidatePath).toHaveBeenCalledWith("/debts");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/");
+  });
+
+  it("rejects invalid id without delete or revalidate", async () => {
+    const formData = new FormData();
+    formData.set("id", "abc");
+
+    const result = await deleteSizeChange(formData);
 
     expect(result.success).toBeUndefined();
     expect(result.message).toBe(
