@@ -112,7 +112,7 @@ Each task was committed atomically:
 3. **Task 2 RED:** `8dbb6d7` (test) — staleness + peer-delete failing tests
 4. **Task 2 GREEN:** `99c4c90` (feat) — expand mapping across create/delete/forgive
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `d0d9efb` (docs: complete plan); `65e9286` (docs: STATE/ROADMAP fix)
 
 _Note: TDD tasks used test → feat commit pairs_
 
