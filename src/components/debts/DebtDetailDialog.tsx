@@ -107,6 +107,15 @@ function buildTimeline(debt: DebtRow): TimelineItem[] {
   return items;
 }
 
+type DetailTab = "repay" | "size" | "forgive" | "history";
+
+const DETAIL_TABS: { id: DetailTab; label: string }[] = [
+  { id: "repay", label: "Погашение" },
+  { id: "size", label: "Изменение" },
+  { id: "forgive", label: "Простить" },
+  { id: "history", label: "История" },
+];
+
 function DebtDetailBody({
   debt,
   onSuccess,
@@ -114,6 +123,7 @@ function DebtDetailBody({
   debt: DebtRow;
   onSuccess: () => void;
 }) {
+  const [tab, setTab] = useState<DetailTab>("repay");
   const [repayDate, setRepayDate] = useState(() => calendarDateToday());
   const [sizeDate, setSizeDate] = useState(() => calendarDateToday());
   const [forgiveDate, setForgiveDate] = useState(() => calendarDateToday());
@@ -144,6 +154,12 @@ function DebtDetailBody({
       onSuccess();
     }
   }, [repayState, sizeState, onSuccess]);
+
+  useEffect(() => {
+    if (!showForgive && tab === "forgive") {
+      setTab("repay");
+    }
+  }, [showForgive, tab]);
 
   function handleConfirm() {
     if (confirm == null) return;
@@ -269,10 +285,16 @@ function DebtDetailBody({
     );
   }
 
+  const visibleTabs = DETAIL_TABS.filter(
+    (t) => t.id !== "forgive" || showForgive,
+  );
+
   return (
-    <div className="grid gap-6">
+    <div className="grid gap-4">
       <DialogHeader>
-        <DialogTitle>Долг — {debt.person.name}</DialogTitle>
+        <DialogTitle className="pr-8 break-all">
+          Долг — {debt.person.name}
+        </DialogTitle>
         <DialogDescription>
           {DIRECTION_LABELS[debt.direction]} · {remainingLabel}{" "}
           {debt.currencyCode} · {STATUS_LABELS[debt.status ?? "OPEN"]}
@@ -291,132 +313,166 @@ function DebtDetailBody({
         />
       </div>
 
-      <form action={repayAction} className="grid gap-4">
-        <input type="hidden" name="debtId" value={debt.id} />
-        <h3 className="text-sm font-medium text-foreground">Погашение</h3>
-        <div className="grid gap-2">
-          <Label htmlFor={`repay-amount-${debt.id}`}>Сумма</Label>
-          <Input
-            id={`repay-amount-${debt.id}`}
-            name="amountMajor"
-            type="text"
-            inputMode="decimal"
-            required
-            disabled={repayPending}
-            aria-invalid={Boolean(repayState.errors?.amountMajor)}
-          />
-          {repayState.errors?.amountMajor ? (
-            <p className="text-sm text-destructive" role="alert">
-              {repayState.errors.amountMajor[0]}
-            </p>
-          ) : null}
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor={`repay-date-${debt.id}`}>Дата</Label>
-          <Input
-            id={`repay-date-${debt.id}`}
-            name="asOfDate"
-            type="date"
-            required
-            value={repayDate}
-            onChange={(e) => setRepayDate(e.target.value)}
-            disabled={repayPending}
-            aria-invalid={Boolean(repayState.errors?.asOfDate)}
-          />
-          {repayState.errors?.asOfDate ? (
-            <p className="text-sm text-destructive" role="alert">
-              {repayState.errors.asOfDate[0]}
-            </p>
-          ) : null}
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor={`repay-note-${debt.id}`}>Заметка</Label>
-          <Input
-            id={`repay-note-${debt.id}`}
-            name="note"
-            type="text"
-            disabled={repayPending}
-          />
-        </div>
-        {repayState.message && !repayState.success ? (
-          <p className="text-sm text-destructive" role="alert">
-            {repayState.message}
-          </p>
-        ) : null}
-        <div className="flex justify-end">
-          <Button type="submit" disabled={repayPending}>
-            {repayPending ? "Сохранение…" : "Записать погашение"}
+      <div
+        role="tablist"
+        aria-label="Действия по долгу"
+        className="flex flex-wrap gap-2"
+      >
+        {visibleTabs.map((t) => (
+          <Button
+            key={t.id}
+            type="button"
+            role="tab"
+            aria-selected={tab === t.id}
+            size="sm"
+            variant={tab === t.id ? "default" : "outline"}
+            onClick={() => setTab(t.id)}
+          >
+            {t.label}
+            {t.id === "history" && timeline.length > 0
+              ? ` (${timeline.length})`
+              : null}
           </Button>
-        </div>
-      </form>
+        ))}
+      </div>
 
-      <form action={sizeAction} className="grid gap-4 border-t border-border pt-4">
-        <input type="hidden" name="debtId" value={debt.id} />
-        <h3 className="text-sm font-medium text-foreground">
-          Изменение суммы
-        </h3>
-        <div className="grid gap-2">
-          <Label htmlFor={`size-delta-${debt.id}`}>Дельта</Label>
-          <Input
-            id={`size-delta-${debt.id}`}
-            name="deltaMajor"
-            type="text"
-            inputMode="decimal"
-            required
-            disabled={sizePending}
-            placeholder="+100 или -50"
-            aria-invalid={Boolean(sizeState.errors?.deltaMajor)}
-          />
-          {sizeState.errors?.deltaMajor ? (
+      {tab === "repay" ? (
+        <form
+          action={repayAction}
+          className="grid gap-4"
+          role="tabpanel"
+          aria-label="Погашение"
+        >
+          <input type="hidden" name="debtId" value={debt.id} />
+          <div className="grid gap-2">
+            <Label htmlFor={`repay-amount-${debt.id}`}>Сумма</Label>
+            <Input
+              id={`repay-amount-${debt.id}`}
+              name="amountMajor"
+              type="text"
+              inputMode="decimal"
+              required
+              disabled={repayPending}
+              aria-invalid={Boolean(repayState.errors?.amountMajor)}
+            />
+            {repayState.errors?.amountMajor ? (
+              <p className="text-sm text-destructive" role="alert">
+                {repayState.errors.amountMajor[0]}
+              </p>
+            ) : null}
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor={`repay-date-${debt.id}`}>Дата</Label>
+            <Input
+              id={`repay-date-${debt.id}`}
+              name="asOfDate"
+              type="date"
+              required
+              value={repayDate}
+              onChange={(e) => setRepayDate(e.target.value)}
+              disabled={repayPending}
+              aria-invalid={Boolean(repayState.errors?.asOfDate)}
+            />
+            {repayState.errors?.asOfDate ? (
+              <p className="text-sm text-destructive" role="alert">
+                {repayState.errors.asOfDate[0]}
+              </p>
+            ) : null}
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor={`repay-note-${debt.id}`}>Заметка</Label>
+            <Input
+              id={`repay-note-${debt.id}`}
+              name="note"
+              type="text"
+              disabled={repayPending}
+            />
+          </div>
+          {repayState.message && !repayState.success ? (
             <p className="text-sm text-destructive" role="alert">
-              {sizeState.errors.deltaMajor[0]}
+              {repayState.message}
             </p>
           ) : null}
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor={`size-date-${debt.id}`}>Дата</Label>
-          <Input
-            id={`size-date-${debt.id}`}
-            name="asOfDate"
-            type="date"
-            required
-            value={sizeDate}
-            onChange={(e) => setSizeDate(e.target.value)}
-            disabled={sizePending}
-            aria-invalid={Boolean(sizeState.errors?.asOfDate)}
-          />
-          {sizeState.errors?.asOfDate ? (
+          <div className="flex justify-end">
+            <Button type="submit" disabled={repayPending}>
+              {repayPending ? "Сохранение…" : "Записать погашение"}
+            </Button>
+          </div>
+        </form>
+      ) : null}
+
+      {tab === "size" ? (
+        <form
+          action={sizeAction}
+          className="grid gap-4"
+          role="tabpanel"
+          aria-label="Изменение суммы"
+        >
+          <input type="hidden" name="debtId" value={debt.id} />
+          <div className="grid gap-2">
+            <Label htmlFor={`size-delta-${debt.id}`}>Дельта</Label>
+            <Input
+              id={`size-delta-${debt.id}`}
+              name="deltaMajor"
+              type="text"
+              inputMode="decimal"
+              required
+              disabled={sizePending}
+              placeholder="+100 или -50"
+              aria-invalid={Boolean(sizeState.errors?.deltaMajor)}
+            />
+            {sizeState.errors?.deltaMajor ? (
+              <p className="text-sm text-destructive" role="alert">
+                {sizeState.errors.deltaMajor[0]}
+              </p>
+            ) : null}
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor={`size-date-${debt.id}`}>Дата</Label>
+            <Input
+              id={`size-date-${debt.id}`}
+              name="asOfDate"
+              type="date"
+              required
+              value={sizeDate}
+              onChange={(e) => setSizeDate(e.target.value)}
+              disabled={sizePending}
+              aria-invalid={Boolean(sizeState.errors?.asOfDate)}
+            />
+            {sizeState.errors?.asOfDate ? (
+              <p className="text-sm text-destructive" role="alert">
+                {sizeState.errors.asOfDate[0]}
+              </p>
+            ) : null}
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor={`size-note-${debt.id}`}>Заметка</Label>
+            <Input
+              id={`size-note-${debt.id}`}
+              name="note"
+              type="text"
+              disabled={sizePending}
+            />
+          </div>
+          {sizeState.message && !sizeState.success ? (
             <p className="text-sm text-destructive" role="alert">
-              {sizeState.errors.asOfDate[0]}
+              {sizeState.message}
             </p>
           ) : null}
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor={`size-note-${debt.id}`}>Заметка</Label>
-          <Input
-            id={`size-note-${debt.id}`}
-            name="note"
-            type="text"
-            disabled={sizePending}
-          />
-        </div>
-        {sizeState.message && !sizeState.success ? (
-          <p className="text-sm text-destructive" role="alert">
-            {sizeState.message}
-          </p>
-        ) : null}
-        <div className="flex justify-end">
-          <Button type="submit" disabled={sizePending}>
-            {sizePending ? "Сохранение…" : "Записать изменение"}
-          </Button>
-        </div>
-      </form>
+          <div className="flex justify-end">
+            <Button type="submit" disabled={sizePending}>
+              {sizePending ? "Сохранение…" : "Записать изменение"}
+            </Button>
+          </div>
+        </form>
+      ) : null}
 
-      {showForgive ? (
-        <div className="grid gap-4 border-t border-border pt-4">
-          <h3 className="text-sm font-medium text-foreground">
-            Простить остаток
-          </h3>
+      {tab === "forgive" && showForgive ? (
+        <div
+          className="grid gap-4"
+          role="tabpanel"
+          aria-label="Простить остаток"
+        >
           <p className="text-sm text-muted-foreground">
             Спишет остаток {remainingLabel} {debt.currencyCode} и закроет долг.
           </p>
@@ -461,55 +517,58 @@ function DebtDetailBody({
         </div>
       ) : null}
 
-      <div className="grid gap-2 border-t border-border pt-4">
-        <h3 className="text-sm font-medium text-foreground">История</h3>
-        {timeline.length === 0 ? (
-          <p className="text-sm text-muted-foreground">Пока нет событий</p>
-        ) : (
-          <ul className="grid gap-3">
-            {timeline.map((item) => (
-              <li
-                key={`${item.kind}-${item.id}`}
-                className="flex flex-wrap items-start justify-between gap-2 text-sm"
-              >
-                <div className="grid gap-0.5">
-                  <span className="font-medium text-foreground">
-                    {item.typeLabel}
-                  </span>
-                  <span className="text-muted-foreground">
-                    {item.asOfDate} · {item.amountLabel} {debt.currencyCode}
-                  </span>
-                  {item.note ? (
-                    <span className="text-muted-foreground">{item.note}</span>
-                  ) : null}
-                </div>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="text-destructive"
-                  disabled={isActing}
-                  onClick={() => {
-                    setActionError(null);
-                    setConfirm(
-                      item.kind === "repayment"
-                        ? { kind: "delete-repayment", id: item.id }
-                        : { kind: "delete-sizeChange", id: item.id },
-                    );
-                  }}
+      {tab === "history" ? (
+        <div className="grid gap-2" role="tabpanel" aria-label="История">
+          {timeline.length === 0 ? (
+            <p className="text-sm text-muted-foreground">Пока нет событий</p>
+          ) : (
+            <ul className="grid gap-3">
+              {timeline.map((item) => (
+                <li
+                  key={`${item.kind}-${item.id}`}
+                  className="flex flex-wrap items-start justify-between gap-2 text-sm"
                 >
-                  Удалить
-                </Button>
-              </li>
-            ))}
-          </ul>
-        )}
-        {actionError ? (
-          <p className="text-sm text-destructive" role="alert">
-            {actionError}
-          </p>
-        ) : null}
-      </div>
+                  <div className="grid min-w-0 gap-0.5">
+                    <span className="font-medium text-foreground">
+                      {item.typeLabel}
+                    </span>
+                    <span className="text-muted-foreground">
+                      {item.asOfDate} · {item.amountLabel} {debt.currencyCode}
+                    </span>
+                    {item.note ? (
+                      <span className="break-words text-muted-foreground">
+                        {item.note}
+                      </span>
+                    ) : null}
+                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="shrink-0 text-destructive"
+                    disabled={isActing}
+                    onClick={() => {
+                      setActionError(null);
+                      setConfirm(
+                        item.kind === "repayment"
+                          ? { kind: "delete-repayment", id: item.id }
+                          : { kind: "delete-sizeChange", id: item.id },
+                      );
+                    }}
+                  >
+                    Удалить
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          )}
+          {actionError ? (
+            <p className="text-sm text-destructive" role="alert">
+              {actionError}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
 
       <DialogFooter>
         <DialogClose render={<Button type="button" variant="outline" />}>

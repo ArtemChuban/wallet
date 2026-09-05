@@ -5,10 +5,10 @@ milestone_name: Долги людям
 current_phase: 10
 current_phase_name: Repayments + close/write-off
 status: planning
-stopped_at: Revised 10-04-PLAN.md (checker nyquist/pattern)
-last_updated: "2026-09-05T13:26:00.000Z"
+stopped_at: DebtDetailDialog tabs shipped; G-10-5 execute pending
+last_updated: "2026-09-05T18:04:06.000Z"
 last_activity: 2026-09-05
-last_activity_desc: Revised 10-04 for Nyquist fails_when + VALIDATION rows
+last_activity_desc: DebtDetailDialog tabs (Погашение|Изменение|Простить|История)
 state_head: 0a54112
 progress:
   total_phases: 4
@@ -32,7 +32,7 @@ Phase: 10 (Repayments + close/write-off) — GAP CLOSURE
 Plan: 4 of 4 (gap G-10-5 pending execute)
 Status: Gap-closure plan ready — execute 10-04
 Total Plans in Phase: 4
-Last activity: 2026-09-05 — Revised 10-04-PLAN.md (Nyquist verify + VALIDATION rows)
+Last activity: 2026-09-05 — DebtDetailDialog tabs layout shipped (Orca smoke OK)
 
 ## Performance Metrics
 
@@ -219,9 +219,14 @@ Last session: 2026-09-05T12:26:31.057Z
 Stopped at: Completed 10-03-PLAN.md
 Resume file: None
 
+## Quick Tasks Completed
+
+| Date | Task | Result |
+|------|------|--------|
+| 2026-09-05 | DebtDetailDialog tabs (variant 1) | Shipped; Orca: tablist + one panel; История без формы |
+
 ## Operator Next Steps
 
 - `/gsd-execute-phase 10 --gaps-only` — close G-10-5 (10-04-PLAN.md)
 - Then re-UAT concurrency smoke / verify-work
-- UI follow-up (locked): DebtDetailDialog **tabs** (variant 1) — todo `2026-09-05-debt-detail-dialog-tabs-layout.md`; mock `phases/10-repayments-close-write-off/debt-detail-variants-mock.html`
 - Then Phase 11 — charts + primary totals
