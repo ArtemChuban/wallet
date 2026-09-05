@@ -9,13 +9,7 @@ driver: orca-cli
 
 ## Current Test
 
-number: 5
-name: Re-UAT concurrency smoke after G-10-5
-expected: |
-  Two tabs on same debt — delete event in one; repay/size/forgive in other.
-  Successes: Debt.status ≡ remainingMinor.
-  Stale failure: «Долг или запись не найдены. Обновите страницу.» (not opaque «Не удалось сохранить…»).
-awaiting: user response
+[testing complete — diagnosing]
 
 ## Tests
 
@@ -41,12 +35,12 @@ observed: Confirm copy + CLOSED + CTA hidden at zero.
 
 ### 5. Optional concurrency smoke
 expected: Two tabs delete+create on same debt — no corrupt ledger; Debt.status matches remaining after each success; stale failure shows «Долг или запись не найдены. Обновите страницу.» (not opaque catch-all).
-result: pending
+result: issue
 prior_result: issue
-reported: "Не удалось сохранить. Проверьте поля и попробуйте снова. Вот такая ошибка, когда попытался списать часть долга после удаления в другой вкладке"
+reported: "Не удалось сохранить. Проверьте поля и попробуйте снова."
 severity: major
-fix_applied: "10-04 G-10-5: isRecordNotFound/P2025 + *_NOT_FOUND → refresh RU + revalidatePath(/debts); forgive assertSizeDelta mapped; vitest 7× G-10-5 green"
-awaiting: live two-tab re-smoke after fix
+retest_after: "10-04 G-10-5"
+observed: "Same opaque catch-all after peer-tab delete + stale write (2026-09-05 re-UAT)"
 
 ### 6. Create-debt Select with long person name
 expected: «Новый долг» dialog stays within max width; person/direction/currency Select triggers truncate long labels and do not overflow the dialog chrome.
@@ -68,8 +62,8 @@ result_after_fix: pass
 
 total: 7
 passed: 6
-issues: 0
-pending: 1
+issues: 1
+pending: 0
 skipped: 0
 blocked: 0
 
@@ -77,16 +71,25 @@ blocked: 0
 
 - gap_id: G-10-5
   truth: "Two tabs delete+create on same debt — no corrupt ledger; after each successful write Debt.status matches remainingMinor; failed writes show actionable Russian error (not opaque catch-all)"
-  status: code_fixed_awaiting_reuat
-  reason: "Prior opaque catch-all on stale write; 10-04 mapped P2025/missing-record to refresh RU + revalidate; vitest locked. Live two-tab re-smoke still required."
+  status: resolved
+  reason: "10-04 shipped server P2025 mapping + vitest; re-UAT still opaque → tracked as G-10-8 regression/client gap"
   severity: major
   test: 5
-  root_cause: "createRepayment/createSizeChange/forgiveRemaining catch-alls mapped only a subset of domain errors; Prisma not-found became opaque «Не удалось сохранить…»."
+  plan: 10-04
+
+- gap_id: G-10-8
+  truth: "After peer-tab delete, stale repay/size/forgive shows «Долг или запись не найдены. Обновите страницу.» (never opaque «Не удалось сохранить…»)"
+  status: diagnosed
+  reason: "Re-UAT 2026-09-05: still «Не удалось сохранить. Проверьте поля и попробуйте снова.» after 10-04"
+  severity: major
+  test: 5
+  root_cause: "Forgive UI (WR-01+CR-01): ignores errors.deltaMajor → client opaque fallback (same string as server catch-all); clears confirm on failure; forgive tab never shows actionError. Peer history-event delete rarely P2025 so 10-04 server map idle for common smoke. Server P2025 map itself OK for missing debt."
+  debug: ".planning/debug/concurrent-stale-opaque-after-g105.md"
   artifacts:
-    - path: "src/app/debts/actions.ts"
-      issue: "was: catch-all hid P2025; now: isRecordNotFound + staleRecordRefreshState"
     - path: "src/components/debts/DebtDetailDialog.tsx"
-      issue: "open detail may keep stale remaining/events; dialog chrome out of 10-04 scope (follow-up)"
+      issue: "forgive handleConfirm: no deltaMajor; setConfirm(null); forgive tab omits actionError"
+    - path: "src/app/debts/actions.ts"
+      issue: "forgive OVER_FLOOR only errors.deltaMajor; non-P2025 still opaque catch-all"
   missing:
     - "Map Prisma P2025/not-found (and forgive assertSizeDelta fallthrough) to actionable RU + revalidatePath"
     - "Vitest: peer delete debt → createRepayment returns mapped message; peer delete repayment → create still succeeds"
