@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import { deletePerson } from "@/app/debts/actions";
 import { DebtDetailDialog } from "@/components/debts/DebtDetailDialog";
 import {
@@ -105,6 +106,10 @@ function PersonGroup({
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [closedOpen, setClosedOpen] = useState(false);
+
+  const openDebts = person.debts.filter((d) => d.status !== "CLOSED");
+  const closedDebts = person.debts.filter((d) => d.status === "CLOSED");
 
   function handleDeleteClick() {
     setDeleteError(null);
@@ -181,9 +186,33 @@ function PersonGroup({
         </div>
       ) : (
         <ul>
-          {person.debts.map((debt) => (
+          {openDebts.map((debt) => (
             <DebtCompactRow key={debt.id} debt={debt} />
           ))}
+          {closedDebts.length > 0 ? (
+            <li>
+              <button
+                type="button"
+                className="flex w-full items-center gap-2 border-t border-border px-4 py-3 text-left text-sm text-muted-foreground hover:bg-muted/30"
+                aria-expanded={closedOpen}
+                onClick={() => setClosedOpen((v) => !v)}
+              >
+                {closedOpen ? (
+                  <ChevronDown className="size-4 shrink-0" aria-hidden />
+                ) : (
+                  <ChevronRight className="size-4 shrink-0" aria-hidden />
+                )}
+                <span>Закрытые ({closedDebts.length})</span>
+              </button>
+              {closedOpen ? (
+                <ul>
+                  {closedDebts.map((debt) => (
+                    <DebtCompactRow key={debt.id} debt={debt} />
+                  ))}
+                </ul>
+              ) : null}
+            </li>
+          ) : null}
         </ul>
       )}
 
