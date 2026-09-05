@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 ## Current Position
 
 Phase: 10 (Repayments + close/write-off) — EXECUTING
-Plan: 2 of 4
-Status: Ready to execute
+Plan: 4 of 4
+Status: Phase plans complete — ready for verify-work
 Total Plans in Phase: 4
-Last activity: 2026-09-05 — Phase 10 execution started
+Last activity: 2026-09-05 — Completed 10-04-PLAN.md
 
 ## Performance Metrics
 
@@ -230,6 +230,5 @@ Resume file: None
 
 ## Operator Next Steps
 
-- `/gsd-execute-phase 10 --gaps-only` — close G-10-5 (10-04-PLAN.md)
-- Then re-UAT concurrency smoke / verify-work
+- `/gsd-verify-work 10` — re-UAT concurrency smoke (G-10-5 closable)
 - Then Phase 11 — charts + primary totals

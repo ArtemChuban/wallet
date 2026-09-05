@@ -138,7 +138,7 @@ Plans:
 | 8 | v1.1 | 0/3 | Complete   |
 | 9 | v1.1 | 4/4 | Ready for verification|
 
-| 10 | v1.1 | 0/3 | Planned |
+| 10 | v1.1 | 4/4 | Complete — ready for verification |
 | 11 | v1.1 | 0/TBD | Not started |
 
 ---
