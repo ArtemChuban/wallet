@@ -158,6 +158,20 @@ export const createSizeChangeSchema = z
     }
   });
 
+/** Delete a single DebtRepayment by id (REPAY-03). */
+export const deleteRepaymentSchema = z
+  .object({
+    id: z.coerce.number().int().positive(),
+  })
+  .strict();
+
+/** Delete a single DebtSizeChange by id (Plan 03 / REPAY-03). */
+export const deleteSizeChangeSchema = z
+  .object({
+    id: z.coerce.number().int().positive(),
+  })
+  .strict();
+
 export type CreatePersonInput = z.infer<typeof createPersonSchema>;
 export type RenamePersonInput = z.infer<typeof renamePersonSchema>;
 export type CreateDebtInput = z.infer<typeof createDebtSchema>;
@@ -167,3 +181,5 @@ export type CreateDebtWithNewPersonInput = z.infer<
 export type UpdateDebtMetaInput = z.infer<typeof updateDebtMetaSchema>;
 export type CreateRepaymentInput = z.infer<typeof createRepaymentSchema>;
 export type CreateSizeChangeInput = z.infer<typeof createSizeChangeSchema>;
+export type DeleteRepaymentInput = z.infer<typeof deleteRepaymentSchema>;
+export type DeleteSizeChangeInput = z.infer<typeof deleteSizeChangeSchema>;

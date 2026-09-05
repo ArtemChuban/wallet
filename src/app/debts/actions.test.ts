@@ -20,6 +20,8 @@ vi.mock("@/lib/db", () => ({
     },
     debtRepayment: {
       create: vi.fn(),
+      delete: vi.fn(),
+      findUnique: vi.fn(),
     },
     currency: {
       findUnique: vi.fn(),
@@ -52,6 +54,7 @@ import {
   createRepayment,
   deleteDebt,
   deletePerson,
+  deleteRepayment,
   renamePerson,
   updateDebtMeta,
 } from "./actions";
@@ -519,6 +522,82 @@ describe("createRepayment (REPAY-01 / DEBT-04)", () => {
     ]);
     expect(prisma.$transaction).not.toHaveBeenCalled();
     expect(prisma.debtRepayment.create).not.toHaveBeenCalled();
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+});
+
+describe("deleteRepayment (REPAY-03 / DEBT-04)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+    vi.mocked(prisma.$transaction).mockImplementation(async (fn) => {
+      if (typeof fn !== "function") {
+        throw new Error("expected interactive $transaction callback");
+      }
+      return fn(prisma);
+    });
+  });
+
+  it("reopens OPEN when remaining > 0 after delete and revalidates /debts only", async () => {
+    vi.mocked(prisma.debtRepayment.findUnique).mockResolvedValue({
+      id: 42,
+      debtId: 9,
+      amountMinor: 10000n,
+    } as never);
+    vi.mocked(prisma.debtRepayment.delete).mockResolvedValue({} as never);
+    vi.mocked(prisma.debt.findUniqueOrThrow).mockResolvedValue({
+      id: 9,
+      initialAmountMinor: 10000n,
+      repayments: [] as { amountMinor: bigint }[],
+      sizeChanges: [] as { deltaMinor: bigint }[],
+      status: "CLOSED",
+    } as never);
+    vi.mocked(prisma.debt.update).mockResolvedValue({} as never);
+
+    const formData = new FormData();
+    formData.set("id", "42");
+
+    const result = await deleteRepayment(formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.debtRepayment.delete).toHaveBeenCalledWith({
+      where: { id: 42 },
+    });
+    expect(prisma.debt.update).toHaveBeenCalledWith({
+      where: { id: 9 },
+      data: { status: "OPEN" },
+    });
+    expect(revalidatePath).toHaveBeenCalledWith("/debts");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/");
+  });
+
+  it("returns Russian message on missing id without revalidate", async () => {
+    vi.mocked(prisma.debtRepayment.findUnique).mockResolvedValue(null);
+
+    const formData = new FormData();
+    formData.set("id", "999");
+
+    const result = await deleteRepayment(formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBe(
+      "Не удалось удалить. Попробуйте снова.",
+    );
+    expect(prisma.debtRepayment.delete).not.toHaveBeenCalled();
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  it("rejects invalid id without calling delete or revalidate", async () => {
+    const formData = new FormData();
+    formData.set("id", "abc");
+
+    const result = await deleteRepayment(formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBe(
+      "Не удалось удалить. Попробуйте снова.",
+    );
+    expect(prisma.$transaction).not.toHaveBeenCalled();
     expect(revalidatePath).not.toHaveBeenCalled();
   });
 });

@@ -5,6 +5,8 @@ import {
   createPersonSchema,
   createRepaymentSchema,
   createSizeChangeSchema,
+  deleteRepaymentSchema,
+  deleteSizeChangeSchema,
   renamePersonSchema,
   updateDebtMetaSchema,
 } from "./debts";
@@ -233,5 +235,47 @@ describe("createSizeChangeSchema", () => {
       const messages = result.error.issues.map((i) => i.message);
       expect(messages).toContain("Укажите дату");
     }
+  });
+});
+
+describe("deleteRepaymentSchema (REPAY-03 / T-10-03)", () => {
+  it("coerces positive int id", () => {
+    const result = deleteRepaymentSchema.safeParse({ id: "12" });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.id).toBe(12);
+    }
+  });
+
+  it("rejects non-positive id", () => {
+    for (const id of [0, -1, "0", "-3"] as const) {
+      expect(deleteRepaymentSchema.safeParse({ id }).success).toBe(false);
+    }
+  });
+
+  it("rejects smuggled keys via .strict()", () => {
+    const result = deleteRepaymentSchema.safeParse({
+      id: 1,
+      debtId: 99,
+    });
+    expect(result.success).toBe(false);
+  });
+});
+
+describe("deleteSizeChangeSchema (REPAY-03 / T-10-03)", () => {
+  it("coerces positive int id", () => {
+    const result = deleteSizeChangeSchema.safeParse({ id: "8" });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.id).toBe(8);
+    }
+  });
+
+  it("rejects smuggled keys via .strict()", () => {
+    const result = deleteSizeChangeSchema.safeParse({
+      id: 1,
+      extra: true,
+    });
+    expect(result.success).toBe(false);
   });
 });
