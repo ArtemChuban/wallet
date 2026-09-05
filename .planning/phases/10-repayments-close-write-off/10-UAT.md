@@ -3,7 +3,7 @@ status: diagnosed
 phase: 10-repayments-close-write-off
 source: [10-VERIFICATION.md]
 started: 2026-09-05T12:35:00Z
-updated: 2026-09-05T13:25:00Z
+updated: 2026-09-05T13:32:00Z
 driver: orca-cli
 ---
 
@@ -39,10 +39,18 @@ result: issue
 reported: "Не удалось сохранить. Проверьте поля и попробуйте снова. Вот такая ошибка, когда попытался списать часть долга после удаления в другой вкладке"
 severity: major
 
+### 6. Create-debt Select with long person name
+expected: «Новый долг» dialog stays within max width; person/direction/currency Select triggers truncate long labels and do not overflow the dialog chrome.
+result: issue
+reported: "Также съехала разметка при создании долга и выбранном человеке с длинным именем" (+ screenshot)
+severity: cosmetic
+fix_applied: "select.tsx w-full min-w-0 truncate; DebtFormDialog overflow-hidden + min-w-0 form; Orca measure triggerW<dialogW"
+result_after_fix: pass
+
 ## Summary
 
-total: 5
-passed: 4
+total: 6
+passed: 5
 issues: 1
 pending: 0
 skipped: 0
@@ -66,3 +74,20 @@ blocked: 0
     - "Map Prisma P2025/not-found (and forgive assertSizeDelta fallthrough) to actionable RU + revalidatePath"
     - "Vitest: peer delete debt → createRepayment returns mapped message; peer delete repayment → create still succeeds"
   debug_session: ".planning/debug/concurrent-stale-write-opaque-error.md"
+
+- gap_id: G-10-6
+  truth: "Новый долг dialog Select triggers stay within dialog width with long person names (truncate, no overflow)"
+  status: resolved
+  reason: "User reported layout break with long person name in create-debt Select"
+  severity: cosmetic
+  test: 6
+  root_cause: "SelectTrigger defaulted to w-fit + whitespace-nowrap; long SelectValue forced dialog min-content wider than max-w"
+  artifacts:
+    - path: "src/components/ui/select.tsx"
+      issue: "w-fit / nowrap / missing min-w-0 on trigger and value"
+    - path: "src/components/debts/DebtFormDialog.tsx"
+      issue: "form/dialog lacked min-w-0 / overflow-hidden belt"
+  missing: []
+  resolved_by: inline UAT fix (select.tsx + DebtFormDialog)
+  resolved_at: 2026-09-05
+  debug_session: ""

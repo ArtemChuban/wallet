@@ -220,7 +220,7 @@ function DebtFormBody({
   }
 
   return (
-    <form action={formAction} className="grid gap-4">
+    <form action={formAction} className="grid min-w-0 gap-4">
       <DialogHeader>
         <DialogTitle>{title}</DialogTitle>
         <DialogDescription>{description}</DialogDescription>
@@ -264,7 +264,7 @@ function DebtFormBody({
                 disabled={isPending || people.length === 0}
               >
                 <SelectTrigger
-                  className="w-full"
+                  className="w-full min-w-0"
                   aria-invalid={Boolean(state.errors?.personId)}
                 >
                   <SelectValue>
@@ -531,7 +531,7 @@ export function DebtFormDialog(props: DebtFormDialogProps) {
       }}
     >
       <DialogTrigger render={trigger ?? defaultTrigger} />
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="overflow-hidden sm:max-w-md">
         {open ? (
           <DebtFormBody
             key={formKey}
