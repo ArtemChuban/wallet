@@ -8,7 +8,10 @@ import {
 } from "react";
 import {
   createRepayment,
+  createSizeChange,
   deleteRepayment,
+  deleteSizeChange,
+  forgiveRemaining,
   type DebtActionState,
 } from "@/app/debts/actions";
 import {
@@ -46,6 +49,9 @@ const STATUS_LABELS: Record<"OPEN" | "CLOSED", string> = {
 const REPAYMENT_DELETE_CONFIRM =
   "Удалить погашение? Остаток долга и статус пересчитаются. Это нельзя отменить.";
 
+const SIZE_CHANGE_DELETE_CONFIRM =
+  "Удалить изменение суммы? Остаток долга и статус пересчитаются. Это нельзя отменить.";
+
 type TimelineKind = "repayment" | "sizeChange";
 
 type TimelineItem = {
@@ -56,6 +62,15 @@ type TimelineItem = {
   note: string | null;
   typeLabel: string;
 };
+
+type ConfirmStep =
+  | { kind: "delete-repayment"; id: number }
+  | { kind: "delete-sizeChange"; id: number }
+  | {
+      kind: "forgive";
+      asOfDate: string;
+      note: string;
+    };
 
 function buildTimeline(debt: DebtRow): TimelineItem[] {
   const scale = debt.currency.scale;
@@ -77,6 +92,7 @@ function buildTimeline(debt: DebtRow): TimelineItem[] {
       asOfDate: s.asOfDate,
       amountLabel: formatMinorToMajor(BigInt(s.deltaMinor), scale),
       note: s.note,
+      // User override: no distinct forgive label — same as manual size-change
       typeLabel: "Изменение суммы",
     })),
   ];
@@ -98,63 +114,155 @@ function DebtDetailBody({
   debt: DebtRow;
   onSuccess: () => void;
 }) {
-  const [asOfDate, setAsOfDate] = useState(() => calendarDateToday());
-  const [state, formAction, isPending] = useActionState(
+  const [repayDate, setRepayDate] = useState(() => calendarDateToday());
+  const [sizeDate, setSizeDate] = useState(() => calendarDateToday());
+  const [forgiveDate, setForgiveDate] = useState(() => calendarDateToday());
+  const [forgiveNote, setForgiveNote] = useState("");
+  const [confirm, setConfirm] = useState<ConfirmStep | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [isActing, startActionTransition] = useTransition();
+
+  const [repayState, repayAction, repayPending] = useActionState(
     createRepayment,
     initialState,
   );
-  const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
-  const [isDeleting, startDeleteTransition] = useTransition();
-
-  const timeline = buildTimeline(debt);
-  useEffect(() => {
-    if (state?.success) {
-      onSuccess();
-    }
-  }, [state, onSuccess]);
-
-  const remaining = formatMinorToMajor(
-    BigInt(debt.remainingMinor),
-    debt.currency.scale,
+  const [sizeState, sizeAction, sizePending] = useActionState(
+    createSizeChange,
+    initialState,
   );
 
-  function handleConfirmDelete() {
-    if (confirmDeleteId == null) return;
-    setDeleteError(null);
-    startDeleteTransition(async () => {
+  const timeline = buildTimeline(debt);
+  const remainingMinor = BigInt(debt.remainingMinor);
+  const remainingLabel = formatMinorToMajor(
+    remainingMinor,
+    debt.currency.scale,
+  );
+  const showForgive = remainingMinor !== 0n;
+
+  useEffect(() => {
+    if (repayState?.success || sizeState?.success) {
+      onSuccess();
+    }
+  }, [repayState, sizeState, onSuccess]);
+
+  function handleConfirm() {
+    if (confirm == null) return;
+    setActionError(null);
+    startActionTransition(async () => {
+      if (confirm.kind === "delete-repayment") {
+        const formData = new FormData();
+        formData.set("id", String(confirm.id));
+        const result = await deleteRepayment(formData);
+        if (!result.success) {
+          setActionError(
+            result.message ?? "Не удалось удалить. Попробуйте снова.",
+          );
+          setConfirm(null);
+          return;
+        }
+        onSuccess();
+        return;
+      }
+      if (confirm.kind === "delete-sizeChange") {
+        const formData = new FormData();
+        formData.set("id", String(confirm.id));
+        const result = await deleteSizeChange(formData);
+        if (!result.success) {
+          setActionError(
+            result.message ?? "Не удалось удалить. Попробуйте снова.",
+          );
+          setConfirm(null);
+          return;
+        }
+        onSuccess();
+        return;
+      }
       const formData = new FormData();
-      formData.set("id", String(confirmDeleteId));
-      const result = await deleteRepayment(formData);
+      formData.set("debtId", String(debt.id));
+      formData.set("asOfDate", confirm.asOfDate);
+      if (confirm.note.trim()) {
+        formData.set("note", confirm.note.trim());
+      }
+      const result = await forgiveRemaining({}, formData);
       if (!result.success) {
-        setDeleteError(
-          result.message ?? "Не удалось удалить. Попробуйте снова.",
+        setActionError(
+          result.errors?.asOfDate?.[0] ??
+            result.message ??
+            "Не удалось сохранить. Проверьте поля и попробуйте снова.",
         );
-        setConfirmDeleteId(null);
+        setConfirm(null);
         return;
       }
       onSuccess();
     });
   }
 
-  if (confirmDeleteId != null) {
+  if (confirm?.kind === "delete-repayment") {
     return (
       <div className="grid gap-4">
         <DialogHeader>
           <DialogTitle>Удалить погашение</DialogTitle>
         </DialogHeader>
-        {deleteError ? (
+        {actionError ? (
           <p className="text-sm text-destructive" role="alert">
-            {deleteError}
+            {actionError}
           </p>
         ) : null}
         <DestructiveConfirmStep
           message={REPAYMENT_DELETE_CONFIRM}
           confirmLabel="Удалить погашение"
-          pending={isDeleting}
-          onConfirm={handleConfirmDelete}
+          pending={isActing}
+          onConfirm={handleConfirm}
           onBack={() => {
-            if (!isDeleting) setConfirmDeleteId(null);
+            if (!isActing) setConfirm(null);
+          }}
+        />
+      </div>
+    );
+  }
+
+  if (confirm?.kind === "delete-sizeChange") {
+    return (
+      <div className="grid gap-4">
+        <DialogHeader>
+          <DialogTitle>Удалить изменение суммы</DialogTitle>
+        </DialogHeader>
+        {actionError ? (
+          <p className="text-sm text-destructive" role="alert">
+            {actionError}
+          </p>
+        ) : null}
+        <DestructiveConfirmStep
+          message={SIZE_CHANGE_DELETE_CONFIRM}
+          confirmLabel="Удалить изменение"
+          pending={isActing}
+          onConfirm={handleConfirm}
+          onBack={() => {
+            if (!isActing) setConfirm(null);
+          }}
+        />
+      </div>
+    );
+  }
+
+  if (confirm?.kind === "forgive") {
+    return (
+      <div className="grid gap-4">
+        <DialogHeader>
+          <DialogTitle>Простить остаток</DialogTitle>
+        </DialogHeader>
+        {actionError ? (
+          <p className="text-sm text-destructive" role="alert">
+            {actionError}
+          </p>
+        ) : null}
+        <DestructiveConfirmStep
+          message={`Будет списан остаток ${remainingLabel} ${debt.currencyCode}. Долг закроется. Это нельзя отменить.`}
+          confirmLabel="Простить остаток"
+          pending={isActing}
+          onConfirm={handleConfirm}
+          onBack={() => {
+            if (!isActing) setConfirm(null);
           }}
         />
       </div>
@@ -166,8 +274,8 @@ function DebtDetailBody({
       <DialogHeader>
         <DialogTitle>Долг — {debt.person.name}</DialogTitle>
         <DialogDescription>
-          {DIRECTION_LABELS[debt.direction]} · {remaining} {debt.currencyCode} ·{" "}
-          {STATUS_LABELS[debt.status ?? "OPEN"]}
+          {DIRECTION_LABELS[debt.direction]} · {remainingLabel}{" "}
+          {debt.currencyCode} · {STATUS_LABELS[debt.status ?? "OPEN"]}
         </DialogDescription>
       </DialogHeader>
 
@@ -183,7 +291,7 @@ function DebtDetailBody({
         />
       </div>
 
-      <form action={formAction} className="grid gap-4">
+      <form action={repayAction} className="grid gap-4">
         <input type="hidden" name="debtId" value={debt.id} />
         <h3 className="text-sm font-medium text-foreground">Погашение</h3>
         <div className="grid gap-2">
@@ -194,12 +302,12 @@ function DebtDetailBody({
             type="text"
             inputMode="decimal"
             required
-            disabled={isPending}
-            aria-invalid={Boolean(state.errors?.amountMajor)}
+            disabled={repayPending}
+            aria-invalid={Boolean(repayState.errors?.amountMajor)}
           />
-          {state.errors?.amountMajor ? (
+          {repayState.errors?.amountMajor ? (
             <p className="text-sm text-destructive" role="alert">
-              {state.errors.amountMajor[0]}
+              {repayState.errors.amountMajor[0]}
             </p>
           ) : null}
         </div>
@@ -210,14 +318,14 @@ function DebtDetailBody({
             name="asOfDate"
             type="date"
             required
-            value={asOfDate}
-            onChange={(e) => setAsOfDate(e.target.value)}
-            disabled={isPending}
-            aria-invalid={Boolean(state.errors?.asOfDate)}
+            value={repayDate}
+            onChange={(e) => setRepayDate(e.target.value)}
+            disabled={repayPending}
+            aria-invalid={Boolean(repayState.errors?.asOfDate)}
           />
-          {state.errors?.asOfDate ? (
+          {repayState.errors?.asOfDate ? (
             <p className="text-sm text-destructive" role="alert">
-              {state.errors.asOfDate[0]}
+              {repayState.errors.asOfDate[0]}
             </p>
           ) : null}
         </div>
@@ -227,25 +335,131 @@ function DebtDetailBody({
             id={`repay-note-${debt.id}`}
             name="note"
             type="text"
-            disabled={isPending}
+            disabled={repayPending}
           />
         </div>
-        {state.message && !state.success ? (
+        {repayState.message && !repayState.success ? (
           <p className="text-sm text-destructive" role="alert">
-            {state.message}
+            {repayState.message}
           </p>
         ) : null}
-        <DialogFooter className="flex-col gap-2 sm:flex-col">
-          <div className="flex w-full flex-wrap justify-end gap-2">
-            <DialogClose render={<Button type="button" variant="outline" />}>
-              Закрыть
-            </DialogClose>
-            <Button type="submit" disabled={isPending}>
-              {isPending ? "Сохранение…" : "Записать погашение"}
+        <div className="flex justify-end">
+          <Button type="submit" disabled={repayPending}>
+            {repayPending ? "Сохранение…" : "Записать погашение"}
+          </Button>
+        </div>
+      </form>
+
+      <form action={sizeAction} className="grid gap-4 border-t border-border pt-4">
+        <input type="hidden" name="debtId" value={debt.id} />
+        <h3 className="text-sm font-medium text-foreground">
+          Изменение суммы
+        </h3>
+        <div className="grid gap-2">
+          <Label htmlFor={`size-delta-${debt.id}`}>Дельта</Label>
+          <Input
+            id={`size-delta-${debt.id}`}
+            name="deltaMajor"
+            type="text"
+            inputMode="decimal"
+            required
+            disabled={sizePending}
+            placeholder="+100 или -50"
+            aria-invalid={Boolean(sizeState.errors?.deltaMajor)}
+          />
+          {sizeState.errors?.deltaMajor ? (
+            <p className="text-sm text-destructive" role="alert">
+              {sizeState.errors.deltaMajor[0]}
+            </p>
+          ) : null}
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor={`size-date-${debt.id}`}>Дата</Label>
+          <Input
+            id={`size-date-${debt.id}`}
+            name="asOfDate"
+            type="date"
+            required
+            value={sizeDate}
+            onChange={(e) => setSizeDate(e.target.value)}
+            disabled={sizePending}
+            aria-invalid={Boolean(sizeState.errors?.asOfDate)}
+          />
+          {sizeState.errors?.asOfDate ? (
+            <p className="text-sm text-destructive" role="alert">
+              {sizeState.errors.asOfDate[0]}
+            </p>
+          ) : null}
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor={`size-note-${debt.id}`}>Заметка</Label>
+          <Input
+            id={`size-note-${debt.id}`}
+            name="note"
+            type="text"
+            disabled={sizePending}
+          />
+        </div>
+        {sizeState.message && !sizeState.success ? (
+          <p className="text-sm text-destructive" role="alert">
+            {sizeState.message}
+          </p>
+        ) : null}
+        <div className="flex justify-end">
+          <Button type="submit" disabled={sizePending}>
+            {sizePending ? "Сохранение…" : "Записать изменение"}
+          </Button>
+        </div>
+      </form>
+
+      {showForgive ? (
+        <div className="grid gap-4 border-t border-border pt-4">
+          <h3 className="text-sm font-medium text-foreground">
+            Простить остаток
+          </h3>
+          <p className="text-sm text-muted-foreground">
+            Спишет остаток {remainingLabel} {debt.currencyCode} и закроет долг.
+          </p>
+          <div className="grid gap-2">
+            <Label htmlFor={`forgive-date-${debt.id}`}>Дата</Label>
+            <Input
+              id={`forgive-date-${debt.id}`}
+              type="date"
+              required
+              value={forgiveDate}
+              onChange={(e) => setForgiveDate(e.target.value)}
+              disabled={isActing}
+            />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor={`forgive-note-${debt.id}`}>Заметка</Label>
+            <Input
+              id={`forgive-note-${debt.id}`}
+              type="text"
+              value={forgiveNote}
+              onChange={(e) => setForgiveNote(e.target.value)}
+              disabled={isActing}
+            />
+          </div>
+          <div className="flex justify-end">
+            <Button
+              type="button"
+              variant="destructive"
+              disabled={isActing || !forgiveDate}
+              onClick={() => {
+                setActionError(null);
+                setConfirm({
+                  kind: "forgive",
+                  asOfDate: forgiveDate,
+                  note: forgiveNote,
+                });
+              }}
+            >
+              Простить остаток
             </Button>
           </div>
-        </DialogFooter>
-      </form>
+        </div>
+      ) : null}
 
       <div className="grid gap-2 border-t border-border pt-4">
         <h3 className="text-sm font-medium text-foreground">История</h3>
@@ -269,31 +483,39 @@ function DebtDetailBody({
                     <span className="text-muted-foreground">{item.note}</span>
                   ) : null}
                 </div>
-                {item.kind === "repayment" ? (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="text-destructive"
-                    disabled={isDeleting}
-                    onClick={() => {
-                      setDeleteError(null);
-                      setConfirmDeleteId(item.id);
-                    }}
-                  >
-                    Удалить
-                  </Button>
-                ) : null}
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="text-destructive"
+                  disabled={isActing}
+                  onClick={() => {
+                    setActionError(null);
+                    setConfirm(
+                      item.kind === "repayment"
+                        ? { kind: "delete-repayment", id: item.id }
+                        : { kind: "delete-sizeChange", id: item.id },
+                    );
+                  }}
+                >
+                  Удалить
+                </Button>
               </li>
             ))}
           </ul>
         )}
-        {deleteError ? (
+        {actionError ? (
           <p className="text-sm text-destructive" role="alert">
-            {deleteError}
+            {actionError}
           </p>
         ) : null}
       </div>
+
+      <DialogFooter>
+        <DialogClose render={<Button type="button" variant="outline" />}>
+          Закрыть
+        </DialogClose>
+      </DialogFooter>
     </div>
   );
 }
