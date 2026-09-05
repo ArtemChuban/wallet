@@ -186,7 +186,11 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-None yet.
+- Add timezone selection to settings (general, minor)
+- Integrate local AI agent via subprocess — Claude Code CLI / Cursor agent (general, minor)
+- Merge debit, crypto, and cash account types into one type (database, minor)
+- Improve credit account type — limit, grace period, statement-date forecasting (general, major)
+- Add salary/income tracking with plan vs actual and forecast (general, major)
 
 ### Blockers/Concerns
 
