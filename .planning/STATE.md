@@ -4,16 +4,16 @@ milestone: v1.1
 milestone_name: Долги людям
 current_phase: 10
 current_phase_name: repayments-close-write-off
-status: research_complete
-stopped_at: Phase 10 research complete — ready for planning
-last_updated: "2026-09-05T00:00:00.000Z"
+status: ready_to_execute
+stopped_at: Phase 10 plans created — ready for execute-phase
+last_updated: "2026-09-05T10:20:00.000Z"
 last_activity: 2026-09-05
-last_activity_desc: Phase 10 RESEARCH.md written — repayments/close/write-off
+last_activity_desc: Phase 10 PLAN.md files written (3 plans, waves 1–3)
 state_head: b93a35d
 progress:
   total_phases: 4
   completed_phases: 2
-  total_plans: 7
+  total_plans: 10
   completed_plans: 7
 ---
 
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 ## Current Position
 
-Phase: 10 (repayments-close-write-off) — research complete
-Plan: 0 of TBD
-Status: research_complete (ready for `/gsd-plan-phase` planning)
-Total Plans in Phase: 0
-Last activity: 2026-09-05 — Phase 10 RESEARCH.md committed
+Phase: 10 (repayments-close-write-off) — plans ready
+Plan: 0 of 3
+Status: ready_to_execute
+Total Plans in Phase: 3
+Last activity: 2026-09-05 — Phase 10 plans committed (10-01..10-03)
 
 ## Performance Metrics
 
@@ -208,6 +208,6 @@ Resume file: .planning/phases/10-repayments-close-write-off/10-CONTEXT.md
 
 ## Operator Next Steps
 
-- `/gsd-discuss-phase 10` — repayments + close/write-off
+- `/gsd-execute-phase 10` — repayments + close/write-off (3 plans)
 - Then Phase 11 — charts + primary totals
 - Re-audit after Phase 11 before `/gsd-complete-milestone`

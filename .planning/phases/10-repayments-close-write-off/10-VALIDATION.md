@@ -40,12 +40,15 @@ created: "2026-09-05"
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 10-01-01 | 01 | 0 | REPAY-01 | T-10-01 | Over-repay rejected by assert | unit | `npx vitest run src/app/debts/actions.test.ts` | ❌ W0 | ⬜ pending |
-| 10-01-02 | 01 | 1 | REPAY-01, DEBT-04 | T-10-01 | createRepayment + CLOSED at zero | unit | `npx vitest run src/app/debts/actions.test.ts` | ❌ W0 | ⬜ pending |
-| 10-02-01 | 02 | 1 | REPAY-03 | T-10-03 | deleteRecalc + reopen OPEN | unit | `npx vitest run src/app/debts/actions.test.ts` | ❌ W0 | ⬜ pending |
-| 10-02-02 | 02 | 2 | DEBT-05 | T-10-02 | forgive server-side −remaining | unit | `npx vitest run src/app/debts/actions.test.ts` | ❌ W0 | ⬜ pending |
-| 10-03-01 | 03 | 2 | REPAY-02 | — | Mixed timeline + labels | unit/smoke | grep + vitest | ❌ | ⬜ pending |
-| 10-03-02 | 03 | 3 | D-11..D-13 | — | CLOSED subsection UX | smoke | grep DebtsList | ❌ | ⬜ pending |
+| 10-01-01 | 01 | 1 | REPAY-01 | T-10-01 | Over-repay rejected by assert | unit | `npx vitest run src/app/debts/actions.test.ts; test $? -ne 0` | ✅ | ⬜ pending |
+| 10-01-02 | 01 | 1 | REPAY-01, DEBT-04 | T-10-01, T-10-04 | createRepayment + CLOSED at zero + detail Dialog | unit | `npx vitest run src/app/debts/actions.test.ts && grep -q createRepayment src/app/debts/actions.ts` | ✅ | ⬜ pending |
+| 10-01-03 | 01 | 1 | DISOL-01 | T-10-04 | DISOL + suite green | unit | `npx vitest run src/lib/debts.test.ts && npx vitest run src/app/debts/actions.test.ts` | ✅ | ⬜ pending |
+| 10-02-01 | 02 | 2 | REPAY-03 | T-10-03 | delete schemas + red reopen tests | unit | `npx vitest run src/lib/validations/debts.test.ts` | ✅ | ⬜ pending |
+| 10-02-02 | 02 | 2 | REPAY-02, REPAY-03 | T-10-03 | deleteRepayment + timeline + confirm | unit | `npx vitest run src/app/debts/actions.test.ts src/lib/validations/debts.test.ts` | ✅ | ⬜ pending |
+| 10-02-03 | 02 | 2 | D-11..D-13 | — | CLOSED subsection UX | smoke | `grep -q 'Закрытые' src/components/debts/DebtsList.tsx` | ✅ | ⬜ pending |
+| 10-03-01 | 03 | 3 | DEBT-05 | — | Human lock isForgive persistence | checkpoint | decision `isForgive-boolean` | n/a | ⬜ pending |
+| 10-03-02 | 03 | 3 | DEBT-05 | T-10-02 | migrate + forgive/size-change actions | unit+migrate | `DATABASE_URL=file:./data/wallet.db npx prisma migrate deploy` + vitest actions | ❌ W0 | ⬜ pending |
+| 10-03-03 | 03 | 3 | DEBT-05 / D-07..D-10 | T-10-02 | Forgive UI + «Списание» labels | unit/smoke | vitest + grep Простить/Списание | ❌ | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 

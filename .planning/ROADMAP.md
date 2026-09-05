@@ -97,7 +97,20 @@ Plans:
   3. Debt closed at zero reopens when a deletion leaves remaining > 0
   4. Debt auto-closes at remaining 0; user can close early with recorded write-off/forgive
 
-**Plans:** TBD
+**Plans:** 3 plans
+
+Plans:
+**Wave 1**
+
+- [ ] 10-01-PLAN.md — Tracer: createRepayment + DebtDetailDialog + auto-close at zero
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 10-02-PLAN.md — Mixed history + delete/reopen + «Закрытые (N)» subsection
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
+- [ ] 10-03-PLAN.md — isForgive decision/migrate + size-change/forgive UX
 
 ### Phase 11: Charts + primary totals
 
@@ -121,7 +134,7 @@ Plans:
 | 8 | v1.1 | 0/3 | Complete   |
 | 9 | v1.1 | 4/4 | Ready for verification|
 
-| 10 | v1.1 | 0/TBD | Not started |
+| 10 | v1.1 | 0/3 | Planned |
 | 11 | v1.1 | 0/TBD | Not started |
 
 ---
