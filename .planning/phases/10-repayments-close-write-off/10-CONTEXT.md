@@ -37,7 +37,7 @@ Does **not** deliver: remaining/repayment charts or primary totals hero (Phase 1
 - **D-13:** CLOSED debts keep **full detail access**: add repayment / size-change / forgive, delete events, open «Изменить» meta, delete debt. Status always recomputes from remaining (Phase 8 D-14).
 
 ### Claude's Discretion
-- Exact Dialog layout density for detail (form above vs below history).
+- ~~Exact Dialog layout density for detail (form above vs below history).~~ **Superseded 2026-09-05:** user locked **tabs** — «Погашение» | «Изменение» | «Простить» | «История» (mock variant 1). See PROJECT.md Key Decisions + todo `debt-detail-dialog-tabs-layout`.
 - Exact RU microcopy for confirm steps and empty history, as long as D-07 labels and D-09 confirm intent hold.
 - How to distinguish «Списание» rows from manual size-changes in persistence (e.g. note convention vs optional reason enum) — prefer minimal schema change; must not break Phase 8 ledger (no `writeOffMinor`, no WRITE_OFF repayment type).
 - Whether «Простить остаток» is hidden when remaining is already 0.
