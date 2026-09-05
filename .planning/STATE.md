@@ -5,16 +5,16 @@ milestone_name: Долги людям
 current_phase: 10
 current_phase_name: Repayments + close/write-off
 status: executing
-stopped_at: Completed 10-01-PLAN.md
-last_updated: "2026-09-05T12:05:46.892Z"
+stopped_at: Completed 10-02-PLAN.md
+last_updated: "2026-09-05T12:12:46.930Z"
 last_activity: 2026-09-05
 last_activity_desc: Phase 10 execution started
-state_head: 883c825b6bcd9f9c856d728e62f9abd9b712f52c
+state_head: e1a1aed0d7c8521a6ea46247e4d5caa15342a3e7
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 10
-  completed_plans: 8
+  completed_plans: 9
 ---
 
 # Project State
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 ## Current Position
 
 Phase: 10 (Repayments + close/write-off) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 Status: Ready to execute
 Total Plans in Phase: 3
 Last activity: 2026-09-05 — Phase 10 execution started
@@ -95,6 +95,7 @@ Last activity: 2026-09-05 — Phase 10 execution started
 | Phase 09-people-debts-crud-nav P03 | 7min | 3 tasks | 7 files |
 | Phase 09 P04 | 2min | 2 tasks | 2 files |
 | Phase 10 P01 | 3min | 3 tasks | 6 files |
+| Phase 10-repayments-close-write-off P02 | 5min | 3 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -177,6 +178,8 @@ Recent decisions affecting current work:
 - [Phase 09]: AccountList confirm test uses .ts extension to match vitest include pattern
 - [Phase 10]: Over-repay maps to Russian amountMajor «Сумма больше остатка долга»
 - [Phase 10]: History chrome placeholder until Plan 02; DebtRow.status from stored Debt.status
+- [Phase 10]: Size-change delete UI and Списание label deferred to Plan 03; deleteSizeChangeSchema stub landed in 10-02
+- [Phase 10]: CLOSED debts use per-person collapsed Закрытые (N) via debt.status
 
 ### Pending Todos
 
@@ -205,8 +208,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-05T12:05:46.798Z
-Stopped at: Completed 10-01-PLAN.md
+Last session: 2026-09-05T12:12:46.860Z
+Stopped at: Completed 10-02-PLAN.md
 Resume file: None
 
 ## Operator Next Steps

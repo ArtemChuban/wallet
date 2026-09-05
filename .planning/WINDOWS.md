@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 3
+open_count: 6
 waived_count: 0
 fixed_count: 3
-total_count: 6
-last_updated: 2026-09-05T12:05:45.643Z
+total_count: 9
+last_updated: 2026-09-05T12:12:38.149Z
 ---
 
 # Broken Windows Ledger
@@ -21,6 +21,9 @@ last_updated: 2026-09-05T12:05:45.643Z
 | 4 | 09 | stub | src/components/debts/DebtsList.tsx |  | Nested debt rows not rendered when debtCount>0 — Plan 03 | fixed |  | 2026-09-04T21:31:27.170Z | 2026-09-04T21:42:32.871Z |
 | 5 | 09 | deviation | src/app/debts/page.tsx |  | Rule 2: debtCount from page for PERSON-02 client gate | open |  | 2026-09-04T21:31:27.301Z |  |
 | 6 | 10 | stub | src/components/debts/DebtDetailDialog.tsx |  | History placeholder «Пока нет событий» until Plan 02 timeline | open |  | 2026-09-05T12:05:45.643Z |  |
+| 7 | 10 | stub | src/lib/validations/debts.ts |  | deleteSizeChangeSchema only; action in Plan 03 | open |  | 2026-09-05T12:12:37.785Z |  |
+| 8 | 10 | stub | src/components/debts/DebtDetailDialog.tsx |  | size-change rows lack delete UI until Plan 03 | open |  | 2026-09-05T12:12:37.927Z |  |
+| 9 | 10 | stub | src/components/debts/DebtDetailDialog.tsx |  | Списание label waits Plan 03 isForgive | open |  | 2026-09-05T12:12:38.149Z |  |
 
 ````json
 [
@@ -94,6 +97,42 @@ last_updated: 2026-09-05T12:05:45.643Z
     "status": "open",
     "reason": "",
     "recorded_at": "2026-09-05T12:05:45.643Z",
+    "resolved_at": null
+  },
+  {
+    "id": 7,
+    "kind": "stub",
+    "phase": "10",
+    "file": "src/lib/validations/debts.ts",
+    "line": null,
+    "description": "deleteSizeChangeSchema only; action in Plan 03",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-05T12:12:37.785Z",
+    "resolved_at": null
+  },
+  {
+    "id": 8,
+    "kind": "stub",
+    "phase": "10",
+    "file": "src/components/debts/DebtDetailDialog.tsx",
+    "line": null,
+    "description": "size-change rows lack delete UI until Plan 03",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-05T12:12:37.927Z",
+    "resolved_at": null
+  },
+  {
+    "id": 9,
+    "kind": "stub",
+    "phase": "10",
+    "file": "src/components/debts/DebtDetailDialog.tsx",
+    "line": null,
+    "description": "Списание label waits Plan 03 isForgive",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-05T12:12:38.149Z",
     "resolved_at": null
   }
 ]

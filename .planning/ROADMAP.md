@@ -97,7 +97,7 @@ Plans:
   3. Debt closed at zero reopens when a deletion leaves remaining > 0
   4. Debt auto-closes at remaining 0; user can close early with recorded write-off/forgive
 
-**Plans:** 1/3 plans executed
+**Plans:** 2/3 plans executed
 
 Plans:
 **Wave 1**
@@ -106,7 +106,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 10-02-PLAN.md — Mixed history + delete/reopen + «Закрытые (N)» subsection
+- [x] 10-02-PLAN.md — Mixed history + delete/reopen + «Закрытые (N)» subsection
 
 **Wave 3** *(blocked on Wave 2 completion)*
 

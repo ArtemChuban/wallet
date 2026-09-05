@@ -24,8 +24,8 @@ Requirements for this milestone. Each maps to roadmap phases.
 ### Repayments
 
 - [x] **REPAY-01**: User can record a partial repayment in the debt’s currency with an as-of date (backdating allowed)
-- [ ] **REPAY-02**: User can see repayment history for a debt
-- [ ] **REPAY-03**: User can delete a repayment; remaining recalculates; debt reopens if it was closed at zero and remaining > 0
+- [x] **REPAY-02**: User can see repayment history for a debt
+- [x] **REPAY-03**: User can delete a repayment; remaining recalculates; debt reopens if it was closed at zero and remaining > 0
 
 ### Charts & totals
 
@@ -89,8 +89,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DEBT-04 | Phase 10 | Complete |
 | DEBT-05 | Phase 10 | Pending |
 | REPAY-01 | Phase 10 | Complete |
-| REPAY-02 | Phase 10 | Pending |
-| REPAY-03 | Phase 10 | Pending |
+| REPAY-02 | Phase 10 | Complete |
+| REPAY-03 | Phase 10 | Complete |
 | DCHART-01 | Phase 11 | Pending |
 | DCHART-02 | Phase 11 | Pending |
 | DTOTAL-01 | Phase 11 | Pending |
