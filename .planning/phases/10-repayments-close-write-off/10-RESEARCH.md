@@ -405,17 +405,19 @@ const remaining = remainingMinor(
 
 **If empty table:** N/A — assumptions listed above need planner/discretion lock only where noted.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Forgive persistence field**
    - What we know: Need durable «Списание» vs «Изменение суммы» (D-07); schema has only `note` today.
    - What's unclear: Boolean column vs note sentinel (user deferred to Claude).
    - Recommendation: Migration add `isForgive Boolean @default(false)`; forgive action sets `true`; manual size-change leaves `false`.
+   - RESOLVED: Plan 03 `checkpoint:decision` (blocking-human) recommends `isForgive Boolean @default(false)` — not a note sentinel. Execute waits for human confirm before migrate.
 
 2. **Stored vs computed status on list**
    - What we know: Writes must sync status; page currently ignores `d.status`.
    - What's unclear: Whether to heal desynced rows on read.
    - Recommendation: Persist on write; on page compute remaining and optionally `assertStatusSynced` in dev/tests; list CLOSED by `status === "CLOSED"` **or** `remaining === 0n` after sync — prefer stored status once writes land.
+   - RESOLVED: Prefer stored `Debt.status` after every event write syncs via `statusForRemaining` (Plan 01). List CLOSED subsection uses stored status; no read-time heal required in Phase 10.
 
 ## Environment Availability
 
