@@ -616,10 +616,11 @@ export async function deleteRepayment(
       });
     });
   } catch (error) {
-    if (error instanceof Error && error.message === "REPAYMENT_NOT_FOUND") {
-      return {
-        message: "Не удалось удалить. Попробуйте снова.",
-      };
+    if (
+      error instanceof Error &&
+      (error.message === "REPAYMENT_NOT_FOUND" || isRecordNotFound(error))
+    ) {
+      return staleRecordRefreshState();
     }
     return {
       message: "Не удалось удалить. Попробуйте снова.",
@@ -755,6 +756,9 @@ export async function createSizeChange(
     if (error instanceof Error && error.message === "bad amount") {
       return { errors: { deltaMajor: ["Некорректная сумма"] } };
     }
+    if (isRecordNotFound(error)) {
+      return staleRecordRefreshState();
+    }
     return {
       message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
     };
@@ -819,7 +823,23 @@ export async function forgiveRemaining(
         sizeDeltas,
       );
       const sumRepayments = repaymentAmounts.reduce((sum, a) => sum + a, 0n);
-      assertSizeDelta(deltaMinor, principal, sumRepayments);
+      try {
+        assertSizeDelta(deltaMinor, principal, sumRepayments);
+      } catch (err) {
+        if (
+          err instanceof Error &&
+          err.message === "size change would make remaining < 0"
+        ) {
+          throw new Error("OVER_FLOOR");
+        }
+        if (
+          err instanceof Error &&
+          err.message === "size delta must not be 0"
+        ) {
+          throw new Error("DELTA_ZERO");
+        }
+        throw err;
+      }
 
       await tx.debtSizeChange.create({
         data: {
@@ -840,6 +860,29 @@ export async function forgiveRemaining(
       return {
         message: "Нечего прощать — остаток уже 0",
       };
+    }
+    if (
+      error instanceof Error &&
+      (error.message === "OVER_FLOOR" ||
+        error.message === "size change would make remaining < 0")
+    ) {
+      return {
+        errors: {
+          deltaMajor: ["Изменение сделало бы остаток отрицательным"],
+        },
+      };
+    }
+    if (
+      error instanceof Error &&
+      (error.message === "DELTA_ZERO" ||
+        error.message === "size delta must not be 0")
+    ) {
+      return {
+        errors: { deltaMajor: ["Изменение не может быть нулевым"] },
+      };
+    }
+    if (isRecordNotFound(error)) {
+      return staleRecordRefreshState();
     }
     return {
       message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
@@ -904,10 +947,11 @@ export async function deleteSizeChange(
       });
     });
   } catch (error) {
-    if (error instanceof Error && error.message === "SIZE_CHANGE_NOT_FOUND") {
-      return {
-        message: "Не удалось удалить. Попробуйте снова.",
-      };
+    if (
+      error instanceof Error &&
+      (error.message === "SIZE_CHANGE_NOT_FOUND" || isRecordNotFound(error))
+    ) {
+      return staleRecordRefreshState();
     }
     return {
       message: "Не удалось удалить. Попробуйте снова.",
