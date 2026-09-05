@@ -1,10 +1,10 @@
 ---
 phase: 10-repayments-close-write-off
-verified: 2026-09-05T18:30:23Z
-status: human_needed
-score: 22/23 must-haves verified
-behavior_unverified: 1
-overrides_applied: 2
+verified: 2026-09-05T20:30:00Z
+status: passed
+score: 23/23 must-haves verified
+behavior_unverified: 0
+overrides_applied: 3
 overrides:
   - must_have: "Timeline labels «Списание» for isForgive size-changes vs «Изменение суммы» for manual (D-07)"
     reason: "User declined separate «Списание» timeline label; all DebtSizeChange rows use «Изменение суммы». DEBT-05 mechanics (forgiveRemaining → size-change −remaining + CLOSED) remain shipped."
@@ -14,37 +14,36 @@ overrides:
     reason: "User declined isForgive Boolean migration; early close is forgiveRemaining UX + server-computed DebtSizeChange only. No writeOffMinor / WRITE_OFF type."
     accepted_by: "user"
     accepted_at: "2026-09-05T12:22:00Z"
+  - must_have: "Concurrent delete+create on same debt serializes via SQLite; status always matches remaining after each successful transaction (REPAY-03 concurrency backstop)"
+    reason: "User waived G-10-8 live opaque stale-tab UX («и так нормально»). Server P2025 map + vitest remain; forgive-client polish deferred (10-05 cancelled). Ledger correctness accepted without perfect error copy."
+    accepted_by: "user"
+    accepted_at: "2026-09-05T20:30:00Z"
 re_verification:
   previous_status: human_needed
-  previous_score: 17/18
+  previous_score: 22/23
   gaps_closed:
     - "G-10-5: P2025 / record-missing map to «Долг или запись не найдены. Обновите страницу.» + revalidatePath(\"/debts\")"
     - "G-10-5: forgiveRemaining assertSizeDelta OVER_FLOOR / DELTA_ZERO mapped to actionable RU"
     - "G-10-5: vitest peer-delete-then-create + P2025 ≠ opaque catch-all"
   gaps_remaining: []
   regressions: []
+  user_waived:
+    - "G-10-8 forgive-client opaque UX — UAT test 5 skipped; 10-05 cancelled"
 gaps: []
-behavior_unverified_items:
-  - truth: "Concurrent delete+create on same debt serializes via SQLite; status always matches remaining after each successful transaction (REPAY-03 concurrency backstop)"
-    test: "Two browser tabs: delete repayment/event in one, write repay/size/forgive in the other"
-    expected: "Successful writes keep Debt.status ≡ remainingMinor; failed stale writes show refresh RU (not «Не удалось сохранить…»)"
-    why_human: "PLAN verification: backstop — vitest covers mapped P2025 + sequential delete→create mocks, not real multi-tab races"
-human_verification:
-  - test: "Re-UAT concurrency smoke (10-UAT test 5) after G-10-5: two tabs delete+create / stale write on same debt"
-    expected: "Ledger consistent after successes; stale failure shows «Долг или запись не найдены. Обновите страницу.» (not opaque save catch-all); list refreshes via /debts revalidate"
-    why_human: "UAT previously failed on opaque catch-all; code+vitest closed G-10-5 — need live two-tab confirm before phase pass"
+behavior_unverified_items: []
+human_verification: []
 decision_coverage:
   honored: 13
   total: 13
   not_honored: []
-  note: "Gate reported all CONTEXT decisions honored. D-07 «Списание» / isForgive waived by user override — not a gap."
+  note: "Gate reported all CONTEXT decisions honored. D-07 «Списание» / isForgive waived by user override — not a gap. Concurrency backstop UX waived 2026-09-05."
 ---
 
 # Phase 10: Repayments + close/write-off Verification Report
 
 **Phase Goal:** Partial dated repayments with history/delete, auto-close at zero, early write-off close.
 **Verified:** 2026-09-05T18:30:23Z
-**Status:** human_needed
+**Status:** passed (3 user overrides: D-07 label, isForgive column, G-10-8 concurrency UX)
 **Re-verification:** Yes — after G-10-5 gap closure (10-04)
 
 ## Goal Achievement
