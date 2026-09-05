@@ -5,10 +5,10 @@ milestone_name: Долги людям
 current_phase: 10
 current_phase_name: Repayments + close/write-off
 status: planning
-stopped_at: Created 10-04-PLAN.md (gap G-10-5)
-last_updated: "2026-09-05T13:30:00.000Z"
+stopped_at: Revised 10-04-PLAN.md (checker nyquist/pattern)
+last_updated: "2026-09-05T13:26:00.000Z"
 last_activity: 2026-09-05
-last_activity_desc: Gap-closure plan G-10-5 (staleness P2025 mapping)
+last_activity_desc: Revised 10-04 for Nyquist fails_when + VALIDATION rows
 state_head: 0a54112
 progress:
   total_phases: 4
@@ -32,7 +32,7 @@ Phase: 10 (Repayments + close/write-off) — GAP CLOSURE
 Plan: 4 of 4 (gap G-10-5 pending execute)
 Status: Gap-closure plan ready — execute 10-04
 Total Plans in Phase: 4
-Last activity: 2026-09-05 — Created 10-04-PLAN.md for G-10-5
+Last activity: 2026-09-05 — Revised 10-04-PLAN.md (Nyquist verify + VALIDATION rows)
 
 ## Performance Metrics
 

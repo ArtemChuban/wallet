@@ -49,6 +49,8 @@ created: "2026-09-05"
 | 10-03-01 | 03 | 3 | DEBT-05 | — | Human lock isForgive persistence | checkpoint | decision `isForgive-boolean` | n/a | ⬜ pending |
 | 10-03-02 | 03 | 3 | DEBT-05 | T-10-02 | migrate + forgive/size-change actions | unit+migrate | `DATABASE_URL=file:./data/wallet.db npx prisma migrate deploy` + vitest actions | ❌ W0 | ⬜ pending |
 | 10-03-03 | 03 | 3 | DEBT-05 / D-07..D-10 | T-10-02 | Forgive UI + «Списание» labels | unit/smoke | vitest + grep Простить/Списание | ❌ | ⬜ pending |
+| 10-04-01 | 04 | 4 | REPAY-01 / G-10-5 | T-10-G5-01 | createRepayment P2025 → refresh RU + revalidate /debts | unit | `grep -q 'maps P2025 not-found to refresh' src/app/debts/actions.test.ts && npx vitest run src/app/debts/actions.test.ts -t "maps P2025 not-found to refresh"` | ✅ | ⬜ pending |
+| 10-04-02 | 04 | 4 | REPAY-03, DEBT-05 / G-10-5 | T-10-G5-02 | All event actions map staleness; peer-delete then create still succeeds | unit | `npx vitest run src/app/debts/actions.test.ts` | ✅ | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
