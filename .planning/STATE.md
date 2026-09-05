@@ -202,9 +202,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-04T23:40:33.403Z
-Stopped at: Phase 10 context gathered
-Resume file: .planning/phases/10-repayments-close-write-off/10-CONTEXT.md
+Last session: 2026-09-05
+Stopped at: Phase 10 plans ready
+Resume file: .planning/phases/10-repayments-close-write-off/10-01-PLAN.md
 
 ## Operator Next Steps
 
