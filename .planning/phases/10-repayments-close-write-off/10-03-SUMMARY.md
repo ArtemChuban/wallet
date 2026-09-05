@@ -112,7 +112,7 @@ status: complete
 2. **Task 2: forgive/size-change actions (no isForgive)** — `fecec64` (feat)
 3. **Task 3: Detail UI size-change + forgive** — `25fe40a` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `6e66fb5` (docs: complete plan)
 
 ## Files Created/Modified
 
