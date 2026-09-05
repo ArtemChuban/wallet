@@ -606,7 +606,7 @@ describe("deleteRepayment (REPAY-03 / DEBT-04)", () => {
     expect(revalidatePath).not.toHaveBeenCalledWith("/");
   });
 
-  it("returns Russian message on missing id without revalidate", async () => {
+  it("returns refresh RU on missing id and revalidates /debts (G-10-5)", async () => {
     vi.mocked(prisma.debtRepayment.findUnique).mockResolvedValue(null);
 
     const formData = new FormData();
@@ -616,10 +616,11 @@ describe("deleteRepayment (REPAY-03 / DEBT-04)", () => {
 
     expect(result.success).toBeUndefined();
     expect(result.message).toBe(
-      "Не удалось удалить. Попробуйте снова.",
+      "Долг или запись не найдены. Обновите страницу.",
     );
     expect(prisma.debtRepayment.delete).not.toHaveBeenCalled();
-    expect(revalidatePath).not.toHaveBeenCalled();
+    expect(revalidatePath).toHaveBeenCalledWith("/debts");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/");
   });
 
   it("rejects invalid id without calling delete or revalidate", async () => {
@@ -634,6 +635,55 @@ describe("deleteRepayment (REPAY-03 / DEBT-04)", () => {
     );
     expect(prisma.$transaction).not.toHaveBeenCalled();
     expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  it("then createRepayment on same debt still succeeds (G-10-5)", async () => {
+    vi.mocked(prisma.debtRepayment.findUnique).mockResolvedValue({
+      id: 42,
+      debtId: 9,
+      amountMinor: 3000n,
+    } as never);
+    vi.mocked(prisma.debtRepayment.delete).mockResolvedValue({} as never);
+    vi.mocked(prisma.debt.findUniqueOrThrow)
+      .mockResolvedValueOnce({
+        id: 9,
+        initialAmountMinor: 10000n,
+        repayments: [] as { amountMinor: bigint }[],
+        sizeChanges: [] as { deltaMinor: bigint }[],
+        status: "OPEN",
+      } as never)
+      .mockResolvedValueOnce({
+        id: 9,
+        initialAmountMinor: 10000n,
+        repayments: [] as { amountMinor: bigint }[],
+        sizeChanges: [] as { deltaMinor: bigint }[],
+        currency: { scale: 2 },
+        status: "OPEN",
+      } as never);
+    vi.mocked(prisma.debt.update).mockResolvedValue({} as never);
+    vi.mocked(prisma.debtRepayment.create).mockResolvedValue({} as never);
+    vi.mocked(calendarDateToday).mockReturnValue("2026-09-03");
+    vi.mocked(parseMajorToMinor).mockImplementation((major: string) => {
+      const n = Number(major);
+      if (!Number.isFinite(n)) throw new Error("bad major");
+      return BigInt(Math.round(n * 100));
+    });
+
+    const deleteFd = new FormData();
+    deleteFd.set("id", "42");
+    const deleted = await deleteRepayment(deleteFd);
+    expect(deleted.success).toBe(true);
+
+    const createFd = new FormData();
+    createFd.set("debtId", "9");
+    createFd.set("amountMajor", "20.00");
+    createFd.set("asOfDate", "2026-09-01");
+    const created = await createRepayment({}, createFd);
+
+    expect(created.success).toBe(true);
+    expect(prisma.debtRepayment.create).toHaveBeenCalled();
+    expect(revalidatePath).toHaveBeenCalledWith("/debts");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/");
   });
 });
 
@@ -730,6 +780,33 @@ describe("createSizeChange (DEBT-05 / D-08)", () => {
     ]);
     expect(prisma.$transaction).not.toHaveBeenCalled();
   });
+
+  it("maps P2025 not-found to refresh RU and revalidates /debts (G-10-5)", async () => {
+    vi.mocked(prisma.debt.findUniqueOrThrow).mockRejectedValue(
+      new Prisma.PrismaClientKnownRequestError("Record to find does not exist", {
+        code: "P2025",
+        clientVersion: "test",
+      }),
+    );
+
+    const formData = new FormData();
+    formData.set("debtId", "9");
+    formData.set("deltaMajor", "10.00");
+    formData.set("asOfDate", "2026-09-01");
+
+    const result = await createSizeChange({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBe(
+      "Долг или запись не найдены. Обновите страницу.",
+    );
+    expect(result.message).not.toBe(
+      "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    );
+    expect(prisma.debtSizeChange.create).not.toHaveBeenCalled();
+    expect(revalidatePath).toHaveBeenCalledWith("/debts");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/");
+  });
 });
 
 describe("forgiveRemaining (DEBT-05 / T-10-02)", () => {
@@ -815,6 +892,52 @@ describe("forgiveRemaining (DEBT-05 / T-10-02)", () => {
     ]);
     expect(prisma.$transaction).not.toHaveBeenCalled();
   });
+
+  it("maps assertSizeDelta OVER_FLOOR to actionable Russian (G-10-5)", async () => {
+    vi.mocked(prisma.$transaction).mockRejectedValue(new Error("OVER_FLOOR"));
+
+    const formData = new FormData();
+    formData.set("debtId", "9");
+    formData.set("asOfDate", "2026-09-01");
+
+    const result = await forgiveRemaining({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.errors?.deltaMajor).toEqual([
+      "Изменение сделало бы остаток отрицательным",
+    ]);
+    expect(result.message).not.toBe(
+      "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    );
+    expect(prisma.debtSizeChange.create).not.toHaveBeenCalled();
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  it("maps P2025 not-found to refresh RU and revalidates /debts (G-10-5)", async () => {
+    vi.mocked(prisma.debt.findUniqueOrThrow).mockRejectedValue(
+      new Prisma.PrismaClientKnownRequestError("Record to find does not exist", {
+        code: "P2025",
+        clientVersion: "test",
+      }),
+    );
+
+    const formData = new FormData();
+    formData.set("debtId", "9");
+    formData.set("asOfDate", "2026-09-01");
+
+    const result = await forgiveRemaining({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBe(
+      "Долг или запись не найдены. Обновите страницу.",
+    );
+    expect(result.message).not.toBe(
+      "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    );
+    expect(prisma.debtSizeChange.create).not.toHaveBeenCalled();
+    expect(revalidatePath).toHaveBeenCalledWith("/debts");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/");
+  });
 });
 
 describe("deleteSizeChange (D-06 / DEBT-05)", () => {
@@ -874,5 +997,22 @@ describe("deleteSizeChange (D-06 / DEBT-05)", () => {
     );
     expect(prisma.$transaction).not.toHaveBeenCalled();
     expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  it("returns refresh RU on missing id and revalidates /debts (G-10-5)", async () => {
+    vi.mocked(prisma.debtSizeChange.findUnique).mockResolvedValue(null);
+
+    const formData = new FormData();
+    formData.set("id", "999");
+
+    const result = await deleteSizeChange(formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBe(
+      "Долг или запись не найдены. Обновите страницу.",
+    );
+    expect(prisma.debtSizeChange.delete).not.toHaveBeenCalled();
+    expect(revalidatePath).toHaveBeenCalledWith("/debts");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/");
   });
 });
