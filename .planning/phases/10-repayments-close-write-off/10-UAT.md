@@ -114,3 +114,11 @@ blocked: 0
   resolved_by: inline UAT fix (DebtDetailDialog scroll shell)
   resolved_at: 2026-09-05
   debug_session: ""
+
+## Deferred Follow-Ups
+
+- test: 7
+  idea: "DebtDetailDialog redesign — tabs variant 1 (Погашение / Изменение / Простить / История); user approved mock 2026-09-05"
+  deferred_at: 2026-09-05
+  todo: ".planning/todos/pending/2026-09-05-debt-detail-dialog-tabs-layout.md"
+  mock: ".planning/phases/10-repayments-close-write-off/debt-detail-variants-mock.html"
