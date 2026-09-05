@@ -105,7 +105,7 @@ status: complete
 2. **Task 2: End-to-end create repayment tracer** - `883c825` (feat)
 3. **Task 3: Keep DISOL + debts action suite green** - verification only (no code commit)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `a6663ba` (docs: complete plan)
 
 ## Files Created/Modified
 

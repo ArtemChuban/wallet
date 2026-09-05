@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 2
+open_count: 3
 waived_count: 0
 fixed_count: 3
-total_count: 5
-last_updated: 2026-09-04T21:42:32.871Z
+total_count: 6
+last_updated: 2026-09-05T12:05:45.643Z
 ---
 
 # Broken Windows Ledger
@@ -20,6 +20,7 @@ last_updated: 2026-09-04T21:42:32.871Z
 | 3 | 09 | stub | src/app/debts/page.tsx |  | Header «Новый долг» Button stub — Plan 03 DebtFormDialog | fixed |  | 2026-09-04T21:31:27.042Z | 2026-09-04T21:42:32.724Z |
 | 4 | 09 | stub | src/components/debts/DebtsList.tsx |  | Nested debt rows not rendered when debtCount>0 — Plan 03 | fixed |  | 2026-09-04T21:31:27.170Z | 2026-09-04T21:42:32.871Z |
 | 5 | 09 | deviation | src/app/debts/page.tsx |  | Rule 2: debtCount from page for PERSON-02 client gate | open |  | 2026-09-04T21:31:27.301Z |  |
+| 6 | 10 | stub | src/components/debts/DebtDetailDialog.tsx |  | History placeholder «Пока нет событий» until Plan 02 timeline | open |  | 2026-09-05T12:05:45.643Z |  |
 
 ````json
 [
@@ -81,6 +82,18 @@ last_updated: 2026-09-04T21:42:32.871Z
     "status": "open",
     "reason": "",
     "recorded_at": "2026-09-04T21:31:27.301Z",
+    "resolved_at": null
+  },
+  {
+    "id": 6,
+    "kind": "stub",
+    "phase": "10",
+    "file": "src/components/debts/DebtDetailDialog.tsx",
+    "line": null,
+    "description": "History placeholder «Пока нет событий» until Plan 02 timeline",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-05T12:05:45.643Z",
     "resolved_at": null
   }
 ]
