@@ -116,9 +116,9 @@ Plans:
 
 - [x] 10-04-PLAN.md — Map P2025/staleness to RU refresh + revalidate; vitest peer-delete/create
 
-**Wave 5** *(gap closure G-10-8)*
+**Wave 5** *(gap closure G-10-8 — cancelled / deferred)*
 
-- [ ] 10-05-PLAN.md — Forgive client: deltaMajor + keep confirm + tab actionError; vitest opaque never wins
+- [~] 10-05-PLAN.md — Forgive client opaque UX — user waived 2026-09-05; deferred follow-up (plan kept, not executed)
 
 ### Phase 11: Charts + primary totals
 

@@ -207,3 +207,7 @@ No blocking code gaps. G-10-5 closed in `actions.ts` + vitest (10-04). Phase goa
 
 _Verified: 2026-09-05T18:30:23Z_
 _Verifier: Claude (gsd-verifier)_
+
+## Operator note (2026-09-05)
+
+G-10-8 forgive-client opaque UX: **user waived** («и так нормально»). UAT test 5 skipped; 10-05-PLAN cancelled/deferred. Concurrency backstop remains insufficient_spec / accepted for phase close.

@@ -4,12 +4,12 @@ milestone: v1.1
 milestone_name: Долги людям
 current_phase: 10
 current_phase_name: Repayments + close/write-off
-status: planning
-stopped_at: Planned 10-05-PLAN.md (G-10-8 gap closure)
-last_updated: "2026-09-05T18:55:00.000Z"
+status: awaiting_human
+stopped_at: UAT complete — G-10-8 user-waived
+last_updated: "2026-09-05T20:30:06.197Z"
 last_activity: 2026-09-05
-last_activity_desc: Phase 10 gap 10-05 planned for G-10-8 forgive client opaque
-state_head: b0fba2a943a230b1bc9f02d1b0b8f6c0f4a2d9e1
+last_activity_desc: UAT complete; G-10-8 waived by user; 10-05 cancelled
+state_head: e2ad66b316ae8c4a123f3aa5731ef3e8c1041f81
 progress:
   total_phases: 4
   completed_phases: 2
@@ -28,11 +28,12 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 ## Current Position
 
-Phase: 10 (Repayments + close/write-off) — READY TO EXECUTE
-Plan: 5 of 5
-Status: ready_to_execute
-Total Plans in Phase: 5
-Last activity: 2026-09-05 — Planned 10-05-PLAN.md (G-10-8)
+Phase: 10 (Repayments + close/write-off) — UAT COMPLETE (G-10-8 deferred)
+Plan: 4 of 4 executed (+ 10-05 cancelled)
+Status: UAT complete — concurrency polish deferred by user
+Total Plans in Phase: 4 executed (10-05 cancelled)
+Last activity: 2026-09-05 — User waived G-10-8; UAT closed
+
 
 ## Performance Metrics
 

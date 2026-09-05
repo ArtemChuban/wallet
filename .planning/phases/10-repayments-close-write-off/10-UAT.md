@@ -1,15 +1,15 @@
 ---
-status: testing
+status: complete
 phase: 10-repayments-close-write-off
 source: [10-VERIFICATION.md]
 started: 2026-09-05T12:35:00Z
-updated: 2026-09-05T18:32:00Z
+updated: 2026-09-05T20:30:00Z
 driver: orca-cli
 ---
 
 ## Current Test
 
-[testing complete — diagnosing]
+[testing complete]
 
 ## Tests
 
@@ -35,16 +35,14 @@ observed: Confirm copy + CLOSED + CTA hidden at zero.
 
 ### 5. Optional concurrency smoke
 expected: Two tabs delete+create on same debt — no corrupt ledger; Debt.status matches remaining after each success; stale failure shows «Долг или запись не найдены. Обновите страницу.» (not opaque catch-all).
-result: issue
-prior_result: issue
-reported: "Не удалось сохранить. Проверьте поля и попробуйте снова."
+result: skipped
+reason: "User accepted current opaque stale-tab error as OK (2026-09-05); G-10-8 deferred — ledger OK, UX polish optional"
 severity: major
-retest_after: "10-04 G-10-5"
-observed: "Same opaque catch-all after peer-tab delete + stale write (2026-09-05 re-UAT)"
 
 ### 6. Create-debt Select with long person name
 expected: «Новый долг» dialog stays within max width; person/direction/currency Select triggers truncate long labels and do not overflow the dialog chrome.
-result: issue
+result: pass
+prior_result: issue
 reported: "Также съехала разметка при создании долга и выбранном человеке с длинным именем" (+ screenshot)
 severity: cosmetic
 fix_applied: "select.tsx w-full min-w-0 truncate; DebtFormDialog overflow-hidden + min-w-0 form; Orca measure triggerW<dialogW"
@@ -52,7 +50,8 @@ result_after_fix: pass
 
 ### 7. Debt detail dialog fits viewport
 expected: DebtDetailDialog (row click) stays within viewport; long form content scrolls inside the dialog.
-result: issue
+result: pass
+prior_result: issue
 reported: "А при нажатии на сам долг для работы с ним модалка слишком высокая и не влазиет в экран" (+ screenshot)
 severity: major
 fix_applied: "DebtDetailDialog max-h min(90dvh) + overflow-y-auto body; Orca fits=true canScroll=true"
@@ -62,9 +61,9 @@ result_after_fix: pass
 
 total: 7
 passed: 6
-issues: 1
+issues: 0
 pending: 0
-skipped: 0
+skipped: 1
 blocked: 0
 
 ## Gaps
@@ -72,28 +71,10 @@ blocked: 0
 - gap_id: G-10-5
   truth: "Two tabs delete+create on same debt — no corrupt ledger; after each successful write Debt.status matches remainingMinor; failed writes show actionable Russian error (not opaque catch-all)"
   status: resolved
-  reason: "10-04 shipped server P2025 mapping + vitest; re-UAT still opaque → tracked as G-10-8 regression/client gap"
+  reason: "10-04 shipped server P2025 mapping + vitest; client opaque UX deferred as G-10-8 (user accepted)"
   severity: major
   test: 5
   plan: 10-04
-
-- gap_id: G-10-8
-  truth: "After peer-tab delete, stale repay/size/forgive shows «Долг или запись не найдены. Обновите страницу.» (never opaque «Не удалось сохранить…»)"
-  status: diagnosed
-  reason: "Re-UAT 2026-09-05: still «Не удалось сохранить. Проверьте поля и попробуйте снова.» after 10-04"
-  severity: major
-  test: 5
-  root_cause: "Forgive UI (WR-01+CR-01): ignores errors.deltaMajor → client opaque fallback (same string as server catch-all); clears confirm on failure; forgive tab never shows actionError. Peer history-event delete rarely P2025 so 10-04 server map idle for common smoke. Server P2025 map itself OK for missing debt."
-  debug: ".planning/debug/concurrent-stale-opaque-after-g105.md"
-  artifacts:
-    - path: "src/components/debts/DebtDetailDialog.tsx"
-      issue: "forgive handleConfirm: no deltaMajor; setConfirm(null); forgive tab omits actionError"
-    - path: "src/app/debts/actions.ts"
-      issue: "forgive OVER_FLOOR only errors.deltaMajor; non-P2025 still opaque catch-all"
-  missing:
-    - "Map Prisma P2025/not-found (and forgive assertSizeDelta fallthrough) to actionable RU + revalidatePath"
-    - "Vitest: peer delete debt → createRepayment returns mapped message; peer delete repayment → create still succeeds"
-  debug_session: ".planning/debug/concurrent-stale-write-opaque-error.md"
 
 - gap_id: G-10-6
   truth: "Новый долг dialog Select triggers stay within dialog width with long person names (truncate, no overflow)"
@@ -128,6 +109,13 @@ blocked: 0
   debug_session: ""
 
 ## Deferred Follow-Ups
+
+- test: 5
+  idea: "G-10-8 forgive client: show deltaMajor / refresh RU; keep confirm on failure; forgive-tab actionError (10-05-PLAN.md drafted, not executed — user waived)"
+  deferred_at: 2026-09-05
+  gap_id: G-10-8
+  plan: ".planning/phases/10-repayments-close-write-off/10-05-PLAN.md"
+  debug: ".planning/debug/concurrent-stale-opaque-after-g105.md"
 
 - test: 7
   idea: "DebtDetailDialog redesign — tabs variant 1 (Погашение / Изменение / Простить / История); user approved mock 2026-09-05"
