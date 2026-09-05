@@ -15,6 +15,7 @@ import {
   createDebtWithNewPersonSchema,
   createPersonSchema,
   createRepaymentSchema,
+  deleteRepaymentSchema,
   renamePersonSchema,
   updateDebtMetaSchema,
 } from "@/lib/validations/debts";
@@ -535,4 +536,72 @@ export async function createRepayment(
 
   revalidatePath("/debts");
   return { success: true, message: "Сохранено" };
+}
+
+/**
+ * Delete repayment by id; recompute remaining + status (reopen OPEN when > 0).
+ * revalidatePath("/debts") only on success (REPAY-03 / T-10-03 / T-10-04).
+ */
+export async function deleteRepayment(
+  formData: FormData,
+): Promise<DebtActionState> {
+  const validated = deleteRepaymentSchema.safeParse({
+    id: formData.get("id"),
+  });
+
+  if (!validated.success) {
+    return {
+      message: "Не удалось удалить. Попробуйте снова.",
+    };
+  }
+
+  const { id } = validated.data;
+
+  try {
+    await ensureSqlitePragmas();
+    await prisma.$transaction(async (tx) => {
+      const repayment = await tx.debtRepayment.findUnique({
+        where: { id },
+        select: { id: true, debtId: true },
+      });
+      if (!repayment) {
+        throw new Error("REPAYMENT_NOT_FOUND");
+      }
+
+      await tx.debtRepayment.delete({
+        where: { id: repayment.id },
+      });
+
+      const debt = await tx.debt.findUniqueOrThrow({
+        where: { id: repayment.debtId },
+        include: {
+          repayments: { select: { amountMinor: true } },
+          sizeChanges: { select: { deltaMinor: true } },
+        },
+      });
+
+      const remaining = remainingMinor(
+        debt.initialAmountMinor,
+        debt.sizeChanges.map((s) => s.deltaMinor),
+        debt.repayments.map((r) => r.amountMinor),
+      );
+
+      await tx.debt.update({
+        where: { id: debt.id },
+        data: { status: statusForRemaining(remaining) },
+      });
+    });
+  } catch (error) {
+    if (error instanceof Error && error.message === "REPAYMENT_NOT_FOUND") {
+      return {
+        message: "Не удалось удалить. Попробуйте снова.",
+      };
+    }
+    return {
+      message: "Не удалось удалить. Попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/debts");
+  return { success: true, message: "Удалено" };
 }

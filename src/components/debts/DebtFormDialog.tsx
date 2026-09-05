@@ -47,6 +47,22 @@ type PersonOption = {
   name: string;
 };
 
+export type DebtRepaymentEvent = {
+  id: number;
+  asOfDate: string;
+  /** Serialized BigInt string from RSC. */
+  amountMinor: string;
+  note: string | null;
+};
+
+export type DebtSizeChangeEvent = {
+  id: number;
+  asOfDate: string;
+  /** Serialized BigInt string from RSC. */
+  deltaMinor: string;
+  note: string | null;
+};
+
 export type DebtRow = {
   id: number;
   direction: "I_OWE" | "THEY_OWE";
@@ -61,6 +77,9 @@ export type DebtRow = {
   note: string | null;
   currency: { code: string; name: string; scale: number };
   person: { id: number; name: string };
+  /** Optional event rows for detail timeline (Plan 02). */
+  repayments?: DebtRepaymentEvent[];
+  sizeChanges?: DebtSizeChangeEvent[];
 };
 
 type DebtFormDialogProps =

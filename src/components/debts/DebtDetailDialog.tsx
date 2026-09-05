@@ -1,14 +1,21 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import {
+  useActionState,
+  useEffect,
+  useState,
+  useTransition,
+} from "react";
 import {
   createRepayment,
+  deleteRepayment,
   type DebtActionState,
 } from "@/app/debts/actions";
 import {
   DebtFormDialog,
   type DebtRow,
 } from "@/components/debts/DebtFormDialog";
+import { DestructiveConfirmStep } from "@/components/debts/DestructiveConfirmStep";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -36,6 +43,54 @@ const STATUS_LABELS: Record<"OPEN" | "CLOSED", string> = {
   CLOSED: "Закрыт",
 };
 
+const REPAYMENT_DELETE_CONFIRM =
+  "Удалить погашение? Остаток долга и статус пересчитаются. Это нельзя отменить.";
+
+type TimelineKind = "repayment" | "sizeChange";
+
+type TimelineItem = {
+  kind: TimelineKind;
+  id: number;
+  asOfDate: string;
+  amountLabel: string;
+  note: string | null;
+  typeLabel: string;
+};
+
+function buildTimeline(debt: DebtRow): TimelineItem[] {
+  const scale = debt.currency.scale;
+  const repayments = debt.repayments ?? [];
+  const sizeChanges = debt.sizeChanges ?? [];
+
+  const items: TimelineItem[] = [
+    ...repayments.map((r) => ({
+      kind: "repayment" as const,
+      id: r.id,
+      asOfDate: r.asOfDate,
+      amountLabel: formatMinorToMajor(BigInt(r.amountMinor), scale),
+      note: r.note,
+      typeLabel: "Погашение",
+    })),
+    ...sizeChanges.map((s) => ({
+      kind: "sizeChange" as const,
+      id: s.id,
+      asOfDate: s.asOfDate,
+      amountLabel: formatMinorToMajor(BigInt(s.deltaMinor), scale),
+      note: s.note,
+      typeLabel: "Изменение суммы",
+    })),
+  ];
+
+  items.sort((a, b) => {
+    if (a.asOfDate !== b.asOfDate) {
+      return a.asOfDate < b.asOfDate ? 1 : -1;
+    }
+    return b.id - a.id;
+  });
+
+  return items;
+}
+
 function DebtDetailBody({
   debt,
   onSuccess,
@@ -48,7 +103,11 @@ function DebtDetailBody({
     createRepayment,
     initialState,
   );
+  const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [isDeleting, startDeleteTransition] = useTransition();
 
+  const timeline = buildTimeline(debt);
   useEffect(() => {
     if (state?.success) {
       onSuccess();
@@ -59,6 +118,48 @@ function DebtDetailBody({
     BigInt(debt.remainingMinor),
     debt.currency.scale,
   );
+
+  function handleConfirmDelete() {
+    if (confirmDeleteId == null) return;
+    setDeleteError(null);
+    startDeleteTransition(async () => {
+      const formData = new FormData();
+      formData.set("id", String(confirmDeleteId));
+      const result = await deleteRepayment(formData);
+      if (!result.success) {
+        setDeleteError(
+          result.message ?? "Не удалось удалить. Попробуйте снова.",
+        );
+        setConfirmDeleteId(null);
+        return;
+      }
+      onSuccess();
+    });
+  }
+
+  if (confirmDeleteId != null) {
+    return (
+      <div className="grid gap-4">
+        <DialogHeader>
+          <DialogTitle>Удалить погашение</DialogTitle>
+        </DialogHeader>
+        {deleteError ? (
+          <p className="text-sm text-destructive" role="alert">
+            {deleteError}
+          </p>
+        ) : null}
+        <DestructiveConfirmStep
+          message={REPAYMENT_DELETE_CONFIRM}
+          confirmLabel="Удалить погашение"
+          pending={isDeleting}
+          onConfirm={handleConfirmDelete}
+          onBack={() => {
+            if (!isDeleting) setConfirmDeleteId(null);
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="grid gap-6">
@@ -148,7 +249,50 @@ function DebtDetailBody({
 
       <div className="grid gap-2 border-t border-border pt-4">
         <h3 className="text-sm font-medium text-foreground">История</h3>
-        <p className="text-sm text-muted-foreground">Пока нет событий</p>
+        {timeline.length === 0 ? (
+          <p className="text-sm text-muted-foreground">Пока нет событий</p>
+        ) : (
+          <ul className="grid gap-3">
+            {timeline.map((item) => (
+              <li
+                key={`${item.kind}-${item.id}`}
+                className="flex flex-wrap items-start justify-between gap-2 text-sm"
+              >
+                <div className="grid gap-0.5">
+                  <span className="font-medium text-foreground">
+                    {item.typeLabel}
+                  </span>
+                  <span className="text-muted-foreground">
+                    {item.asOfDate} · {item.amountLabel} {debt.currencyCode}
+                  </span>
+                  {item.note ? (
+                    <span className="text-muted-foreground">{item.note}</span>
+                  ) : null}
+                </div>
+                {item.kind === "repayment" ? (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="text-destructive"
+                    disabled={isDeleting}
+                    onClick={() => {
+                      setDeleteError(null);
+                      setConfirmDeleteId(item.id);
+                    }}
+                  >
+                    Удалить
+                  </Button>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        )}
+        {deleteError ? (
+          <p className="text-sm text-destructive" role="alert">
+            {deleteError}
+          </p>
+        ) : null}
       </div>
     </div>
   );

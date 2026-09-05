@@ -17,8 +17,22 @@ export default async function DebtsPage() {
           orderBy: { id: "desc" },
           include: {
             currency: { select: { code: true, name: true, scale: true } },
-            repayments: { select: { amountMinor: true } },
-            sizeChanges: { select: { deltaMinor: true } },
+            repayments: {
+              select: {
+                id: true,
+                asOfDate: true,
+                amountMinor: true,
+                note: true,
+              },
+            },
+            sizeChanges: {
+              select: {
+                id: true,
+                asOfDate: true,
+                deltaMinor: true,
+                note: true,
+              },
+            },
           },
         },
       },
@@ -50,6 +64,18 @@ export default async function DebtsPage() {
         note: d.note,
         currency: d.currency,
         person: { id: p.id, name: p.name },
+        repayments: d.repayments.map((r) => ({
+          id: r.id,
+          asOfDate: r.asOfDate,
+          amountMinor: r.amountMinor.toString(),
+          note: r.note,
+        })),
+        sizeChanges: d.sizeChanges.map((s) => ({
+          id: s.id,
+          asOfDate: s.asOfDate,
+          deltaMinor: s.deltaMinor.toString(),
+          note: s.note,
+        })),
       };
     }),
   }));
