@@ -19,7 +19,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 - [x] **DEBT-02**: Remaining balance = initial − sum of repayments − write-off
 - [x] **DEBT-03**: Initial amount cannot change after the first repayment
 - [x] **DEBT-04**: Debt auto-closes when remaining reaches 0
-- [ ] **DEBT-05**: User can close early by writing off / forgiving remaining
+- [x] **DEBT-05**: User can close early by writing off / forgiving remaining
 
 ### Repayments
 
@@ -87,7 +87,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DEBT-02 | Phase 8 | Complete |
 | DEBT-03 | Phase 8 | Complete |
 | DEBT-04 | Phase 10 | Complete |
-| DEBT-05 | Phase 10 | Pending |
+| DEBT-05 | Phase 10 | Complete |
 | REPAY-01 | Phase 10 | Complete |
 | REPAY-02 | Phase 10 | Complete |
 | REPAY-03 | Phase 10 | Complete |
