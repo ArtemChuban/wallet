@@ -4,12 +4,12 @@ milestone: v1.1
 milestone_name: Долги людям
 current_phase: 10
 current_phase_name: Repayments + close/write-off
-status: executing
+status: awaiting_human
 stopped_at: Completed 10-04-PLAN.md
-last_updated: "2026-09-05T18:25:29.555Z"
+last_updated: "2026-09-05T18:32:54.236Z"
 last_activity: 2026-09-05
-last_activity_desc: Phase 10 execution started
-state_head: 99c4c9086f15acbfa1f1bed6560103bcc37592a1
+last_activity_desc: Phase 10 gap 10-04 done; human re-UAT concurrency pending
+state_head: b0fba2a943a230b1bc9f02d1b0b8f6c0f4a2d9e1
 progress:
   total_phases: 4
   completed_phases: 2
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 Phase: 10 (Repayments + close/write-off) — EXECUTING
 Plan: 4 of 4
-Status: Phase plans complete — ready for verify-work
+Status: awaiting_human
 Total Plans in Phase: 4
 Last activity: 2026-09-05 — Completed 10-04-PLAN.md
 
