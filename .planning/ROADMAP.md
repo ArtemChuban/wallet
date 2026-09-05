@@ -97,7 +97,7 @@ Plans:
   3. Debt closed at zero reopens when a deletion leaves remaining > 0
   4. Debt auto-closes at remaining 0; user can close early with recorded write-off/forgive
 
-**Plans:** 3/3 plans executed
+**Plans:** 4 plans (3 executed + 1 gap closure)
 
 Plans:
 **Wave 1**
@@ -111,6 +111,10 @@ Plans:
 **Wave 3** *(blocked on Wave 2 completion)*
 
 - [x] 10-03-PLAN.md — isForgive decision/migrate + size-change/forgive UX
+
+**Wave 4** *(gap closure G-10-5)*
+
+- [ ] 10-04-PLAN.md — Map P2025/staleness to RU refresh + revalidate; vitest peer-delete/create
 
 ### Phase 11: Charts + primary totals
 
