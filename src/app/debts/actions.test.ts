@@ -532,6 +532,33 @@ describe("createRepayment (REPAY-01 / DEBT-04)", () => {
     expect(prisma.debtRepayment.create).not.toHaveBeenCalled();
     expect(revalidatePath).not.toHaveBeenCalled();
   });
+
+  it("maps P2025 not-found to refresh RU and revalidates /debts (G-10-5)", async () => {
+    vi.mocked(prisma.debt.findUniqueOrThrow).mockRejectedValue(
+      new Prisma.PrismaClientKnownRequestError("Record to find does not exist", {
+        code: "P2025",
+        clientVersion: "test",
+      }),
+    );
+
+    const formData = new FormData();
+    formData.set("debtId", "9");
+    formData.set("amountMajor", "10.00");
+    formData.set("asOfDate", "2026-09-01");
+
+    const result = await createRepayment({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBe(
+      "Долг или запись не найдены. Обновите страницу.",
+    );
+    expect(result.message).not.toBe(
+      "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    );
+    expect(prisma.debtRepayment.create).not.toHaveBeenCalled();
+    expect(revalidatePath).toHaveBeenCalledWith("/debts");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/");
+  });
 });
 
 describe("deleteRepayment (REPAY-03 / DEBT-04)", () => {
