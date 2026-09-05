@@ -54,5 +54,8 @@ src/generated/
 # GSD runtime / dispatch isolation sentinel
 .gsd/
 
+# GSD ephemeral session lock
+.planning/milestone.lock
+
 # GSD research fetch cache
 .planning/research/.cache/
