@@ -47,10 +47,18 @@ severity: cosmetic
 fix_applied: "select.tsx w-full min-w-0 truncate; DebtFormDialog overflow-hidden + min-w-0 form; Orca measure triggerW<dialogW"
 result_after_fix: pass
 
+### 7. Debt detail dialog fits viewport
+expected: DebtDetailDialog (row click) stays within viewport; long form content scrolls inside the dialog.
+result: issue
+reported: "А при нажатии на сам долг для работы с ним модалка слишком высокая и не влазиет в экран" (+ screenshot)
+severity: major
+fix_applied: "DebtDetailDialog max-h min(90dvh) + overflow-y-auto body; Orca fits=true canScroll=true"
+result_after_fix: pass
+
 ## Summary
 
-total: 6
-passed: 5
+total: 7
+passed: 6
 issues: 1
 pending: 0
 skipped: 0
@@ -89,5 +97,20 @@ blocked: 0
       issue: "form/dialog lacked min-w-0 / overflow-hidden belt"
   missing: []
   resolved_by: inline UAT fix (select.tsx + DebtFormDialog)
+  resolved_at: 2026-09-05
+  debug_session: ""
+
+- gap_id: G-10-7
+  truth: "DebtDetailDialog stays within viewport; content scrolls inside dialog"
+  status: resolved
+  reason: "User reported detail modal too tall / does not fit screen"
+  severity: major
+  test: 7
+  root_cause: "DialogContent had no max-height; stacked repay/size/forgive forms exceeded viewport"
+  artifacts:
+    - path: "src/components/debts/DebtDetailDialog.tsx"
+      issue: "missing max-h + overflow-y-auto on detail dialog"
+  missing: []
+  resolved_by: inline UAT fix (DebtDetailDialog scroll shell)
   resolved_at: 2026-09-05
   debug_session: ""
