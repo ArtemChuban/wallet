@@ -3,18 +3,18 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Долги людям
 current_phase: 11
-current_phase_name: charts-primary-totals
-status: ready
-stopped_at: Phase 11 plan revision after checker — ready to execute
-last_updated: "2026-09-06T14:56:12.317Z"
+current_phase_name: Charts + primary totals
+status: executing
+stopped_at: Completed 11-01-PLAN.md
+last_updated: "2026-09-06T16:16:42.418Z"
 last_activity: 2026-09-06
-last_activity_desc: Phase 11 checker revision (RESEARCH Q1–Q4 RESOLVED; PATTERNS + 11-01 scope note)
-state_head: e61b56958a3c004151852bf05497a577779d1dd4
+last_activity_desc: Phase 11 execution started
+state_head: a914ceebdf91da52cc87021ba655b4fa30690082
 progress:
   total_phases: 4
   completed_phases: 3
   total_plans: 15
-  completed_plans: 11
+  completed_plans: 12
 ---
 
 # Project State
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 ## Current Position
 
-Phase: 11 (charts-primary-totals) — READY TO EXECUTE
-Plan: 11-01 (of 4)
-Status: Plans created (4 plans, 2 waves)
+Phase: 11 (Charts + primary totals) — EXECUTING
+Plan: 2 of 4
+Status: Ready to execute
 Total Plans in Phase: 4
-Last activity: 2026-09-06 — Phase 11 checker revision (open questions resolved; patterns + tracer scope note); next `/gsd-execute-phase 11`
+Last activity: 2026-09-06 — Phase 11 execution started
 
 ## Performance Metrics
 
@@ -99,6 +99,7 @@ Last activity: 2026-09-06 — Phase 11 checker revision (open questions resolved
 | Phase 10-repayments-close-write-off P02 | 5min | 3 tasks | 8 files |
 | Phase 10 P03 | 3min | 3 tasks | 5 files |
 | Phase 10-repayments-close-write-off P04 | 2 min | 2 tasks | 2 files |
+| Phase 11 P01 | 5min | 3 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -187,6 +188,8 @@ Recent decisions affecting current work:
 - [Phase 10]: Intentional override of CONTEXT D-07 label distinction (Изменение суммы for all size-changes)
 - [Phase 10]: Shared staleRecordRefreshState for P2025 and app missing-record throws — Same user recovery path for Prisma not-found and REPAYMENT_NOT_FOUND / SIZE_CHANGE_NOT_FOUND
 - [Phase 10]: forgiveRemaining wraps assertSizeDelta like createSizeChange; maps codes + raw messages — H4: never leave assertSizeDelta fallthrough to opaque save catch-all
+- [Phase 11]: openedAsOf-moscow-backfill: required Debt.openedAsOf; migration backfills from createdAt as Europe/Moscow (+3h) calendar date — Human checkpoint Task 1; matches CONTEXT D-08 and avoids UTC off-by-one near midnight
+- [Phase 11]: Stack series keys repaidMajor/remainingMajor; kind tertiary repayment before sizeChange — RESEARCH A3/A4/A5; end-of-day collapse one point per asOfDate
 
 ### Pending Todos
 
@@ -219,9 +222,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-06T16:50:00.000Z
-Stopped at: Phase 11 plans created (11-01..11-04)
-Resume file: /home/artem/Documents/wallet/.planning/phases/11-charts-primary-totals/11-01-PLAN.md
+Last session: 2026-09-06T16:16:42.319Z
+Stopped at: Completed 11-01-PLAN.md
+Resume file: None
 
 ## Quick Tasks Completed
 

@@ -132,12 +132,12 @@ Plans:
   3. `/debts` shows «я должен» / «мне должны» totals in primary with partial banner when FX missing
   4. Капитал (`/`) net-worth figures unchanged when debts exist (isolation still holds)
 
-**Plans:** 4 plans
+**Plans:** 1/4 plans executed
 
 Plans:
 **Wave 1**
 
-- [ ] 11-01-PLAN.md — openedAsOf gate + Wave 0 + tracer stack chart in История
+- [x] 11-01-PLAN.md — openedAsOf gate + Wave 0 + tracer stack chart in История
 
 **Wave 2** *(blocked on Wave 1 completion)*
 

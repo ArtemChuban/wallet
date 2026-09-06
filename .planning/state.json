@@ -11,7 +11,7 @@
     {
       "number": "9",
       "name": "People + debts CRUD + nav",
-      "status": "pending"
+      "status": "complete"
     },
     {
       "number": "10",
@@ -25,9 +25,9 @@
     }
   ],
   "next": {
-    "command": "/gsd:progress --next",
+    "command": "/gsd-progress --next",
     "label": "Advance to the next step",
     "reason": "Phase 11 of 4 · executing"
   },
-  "updated_at": "2026-09-05T20:31:40.459Z"
+  "updated_at": "2026-09-06T16:16:41.312Z"
 }
