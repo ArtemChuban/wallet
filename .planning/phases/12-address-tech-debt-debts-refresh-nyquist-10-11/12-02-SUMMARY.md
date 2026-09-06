@@ -102,7 +102,7 @@ status: complete
 1. **Task 1: Move DestructiveConfirmStep to components/ui** - `e6454d7` (feat)
 2. **Task 2: Strengthen AccountList path test** - `9b99fe5` (test)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `138e8f3` (docs: complete plan)
 
 ## Files Created/Modified
 
