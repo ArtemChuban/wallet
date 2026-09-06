@@ -8,6 +8,7 @@ import {
   assertSizeDelta,
   currentPrincipalMinor,
   remainingMinor,
+  remainingMinorAsOf,
   statusForRemaining,
 } from "@/lib/debts";
 import { ensureSqlitePragmas, prisma } from "@/lib/db";
@@ -471,8 +472,8 @@ export async function createRepayment(
       const debt = await tx.debt.findUniqueOrThrow({
         where: { id: debtId },
         include: {
-          repayments: { select: { amountMinor: true } },
-          sizeChanges: { select: { deltaMinor: true } },
+          repayments: { select: { amountMinor: true, asOfDate: true } },
+          sizeChanges: { select: { deltaMinor: true, asOfDate: true } },
           currency: { select: { scale: true } },
         },
       });
@@ -516,6 +517,17 @@ export async function createRepayment(
           throw new Error("AMOUNT_NOT_POSITIVE");
         }
         throw err;
+      }
+
+      // Chronological remaining at asOfDate must stay ≥ 0 (chart / D-15).
+      const chronoAfter = remainingMinorAsOf(
+        debt.initialAmountMinor,
+        debt.sizeChanges,
+        [...debt.repayments, { asOfDate, amountMinor }],
+        asOfDate,
+      );
+      if (chronoAfter < 0n) {
+        throw new Error("OVER_REPAY");
       }
 
       await tx.debtRepayment.create({
@@ -671,8 +683,8 @@ export async function createSizeChange(
       const debt = await tx.debt.findUniqueOrThrow({
         where: { id: debtId },
         include: {
-          repayments: { select: { amountMinor: true } },
-          sizeChanges: { select: { deltaMinor: true } },
+          repayments: { select: { amountMinor: true, asOfDate: true } },
+          sizeChanges: { select: { deltaMinor: true, asOfDate: true } },
           currency: { select: { scale: true } },
         },
       });
@@ -718,6 +730,16 @@ export async function createSizeChange(
           throw new Error("DELTA_ZERO");
         }
         throw err;
+      }
+
+      const chronoAfter = remainingMinorAsOf(
+        debt.initialAmountMinor,
+        [...debt.sizeChanges, { asOfDate, deltaMinor }],
+        debt.repayments,
+        asOfDate,
+      );
+      if (chronoAfter < 0n) {
+        throw new Error("OVER_FLOOR");
       }
 
       await tx.debtSizeChange.create({
@@ -807,8 +829,8 @@ export async function forgiveRemaining(
       const debt = await tx.debt.findUniqueOrThrow({
         where: { id: debtId },
         include: {
-          repayments: { select: { amountMinor: true } },
-          sizeChanges: { select: { deltaMinor: true } },
+          repayments: { select: { amountMinor: true, asOfDate: true } },
+          sizeChanges: { select: { deltaMinor: true, asOfDate: true } },
         },
       });
 
@@ -846,6 +868,16 @@ export async function forgiveRemaining(
           throw new Error("DELTA_ZERO");
         }
         throw err;
+      }
+
+      const chronoAfter = remainingMinorAsOf(
+        debt.initialAmountMinor,
+        [...debt.sizeChanges, { asOfDate, deltaMinor }],
+        debt.repayments,
+        asOfDate,
+      );
+      if (chronoAfter < 0n) {
+        throw new Error("OVER_FLOOR");
       }
 
       await tx.debtSizeChange.create({

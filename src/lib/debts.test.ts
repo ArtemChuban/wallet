@@ -422,7 +422,7 @@ describe("buildDebtPrincipalStackSeries", () => {
     });
     const onDay = points.filter((p) => p.asOfDate === "2026-08-15");
     expect(onDay).toHaveLength(1);
-    // repayment before sizeChange (kind tertiary); end-of-day: repaid=15, remaining=105
+    // Prefix sums: repaid=15, remaining=105 (order-independent)
     expect(onDay[0]).toEqual({
       asOfDate: "2026-08-15",
       repaidMajor: 15,
@@ -431,8 +431,32 @@ describe("buildDebtPrincipalStackSeries", () => {
     expect(onDay[0]!.repaidMajor + onDay[0]!.remainingMajor).toBe(120);
   });
 
-  it("orders events by asOfDate then id then kind (repayment before sizeChange)", () => {
-    // Same asOfDate + same id across tables: repayment must apply before sizeChange
+  it("uses chronological prefix (size after repay date does not inflate that day)", () => {
+    // CR-01: open 100 → size +100 on Aug 20 → repay 50 dated Aug 10
+    const points = buildDebtPrincipalStackSeries({
+      openedAsOf: "2026-08-01",
+      initialAmountMinor: 10_000n,
+      repayments: [
+        { id: 1, asOfDate: "2026-08-10", amountMinor: 5_000n },
+      ],
+      sizeChanges: [
+        { id: 1, asOfDate: "2026-08-20", deltaMinor: 10_000n },
+      ],
+      today: "2026-09-06",
+      scale,
+    });
+    expect(points).toEqual([
+      { asOfDate: "2026-08-01", repaidMajor: 0, remainingMajor: 100 },
+      { asOfDate: "2026-08-10", repaidMajor: 50, remainingMajor: 50 },
+      { asOfDate: "2026-08-20", repaidMajor: 50, remainingMajor: 150 },
+      { asOfDate: "2026-09-06", repaidMajor: 50, remainingMajor: 150 },
+    ]);
+    for (const p of points) {
+      expect(p.remainingMajor).toBeGreaterThanOrEqual(0);
+    }
+  });
+
+  it("end-of-day totals are order-independent for same asOfDate", () => {
     const points = buildDebtPrincipalStackSeries({
       openedAsOf: "2026-08-01",
       initialAmountMinor: 10_000n,
@@ -446,9 +470,6 @@ describe("buildDebtPrincipalStackSeries", () => {
       scale,
     });
     const day = points.find((p) => p.asOfDate === "2026-08-15")!;
-    // If repayment first: remaining goes 0 then +50 → remaining 50, repaid 100
-    // If sizeChange first: principal 150, repay 100 → remaining 50, repaid 100 (same end)
-    // Distinguish via intermediate: repayment-first allows full repay of 10000 before up.
     expect(day).toEqual({
       asOfDate: "2026-08-15",
       repaidMajor: 100,

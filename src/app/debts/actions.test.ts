@@ -560,6 +560,35 @@ describe("createRepayment (REPAY-01 / DEBT-04)", () => {
     expect(revalidatePath).not.toHaveBeenCalled();
   });
 
+  it("rejects backdated repay that makes chronological remaining < 0 (CR-01)", async () => {
+    // Write-order remaining includes later size-up; chrono at asOfDate does not.
+    vi.mocked(prisma.debt.findUniqueOrThrow).mockResolvedValue({
+      id: 9,
+      initialAmountMinor: 10000n,
+      openedAsOf: "2026-08-01",
+      repayments: [] as { amountMinor: bigint; asOfDate: string }[],
+      sizeChanges: [
+        { deltaMinor: 10000n, asOfDate: "2026-08-20" },
+      ],
+      currency: { scale: 2 },
+      status: "OPEN" as const,
+    } as never);
+
+    const formData = new FormData();
+    formData.set("debtId", "9");
+    formData.set("amountMajor", "150.00");
+    formData.set("asOfDate", "2026-08-10");
+
+    const result = await createRepayment({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.errors?.amountMajor).toEqual([
+      "Сумма больше остатка долга",
+    ]);
+    expect(prisma.debtRepayment.create).not.toHaveBeenCalled();
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
   it("maps P2025 not-found to refresh RU and revalidates /debts (G-10-5)", async () => {
     vi.mocked(prisma.debt.findUniqueOrThrow).mockRejectedValue(
       new Prisma.PrismaClientKnownRequestError("Record to find does not exist", {

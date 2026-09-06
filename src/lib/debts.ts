@@ -29,6 +29,27 @@ export function remainingMinor(
 }
 
 /**
+ * Chronological remaining as of date D: initial + Σ sizeDeltas(asOfDate ≤ D) − Σ repayments(asOfDate ≤ D).
+ * Order-independent prefix (chart + write guards); not write-order ledger totals.
+ */
+export function remainingMinorAsOf(
+  initialAmountMinor: bigint,
+  sizeChanges: readonly { asOfDate: string; deltaMinor: bigint }[],
+  repayments: readonly { asOfDate: string; amountMinor: bigint }[],
+  asOfDate: string,
+): bigint {
+  return remainingMinor(
+    initialAmountMinor,
+    sizeChanges
+      .filter((s) => s.asOfDate <= asOfDate)
+      .map((s) => s.deltaMinor),
+    repayments
+      .filter((r) => r.asOfDate <= asOfDate)
+      .map((r) => r.amountMinor),
+  );
+}
+
+/**
  * Status synced from remaining (D-11–D-13): CLOSED iff remaining === 0n, else OPEN.
  * Negative remaining is a hard invariant violation (D-15) — callers assert before apply.
  */
@@ -215,18 +236,11 @@ export type DebtStackSizeChange = {
   deltaMinor: bigint;
 };
 
-type StackEvent =
-  | { kind: "repayment"; id: number; asOfDate: string; amountMinor: bigint }
-  | { kind: "sizeChange"; id: number; asOfDate: string; deltaMinor: bigint };
-
-const KIND_ORDER: Record<StackEvent["kind"], number> = {
-  repayment: 0,
-  sizeChange: 1,
-};
-
 /**
  * Native principal stack series for debt detail chart (D-04 / D-06 / D-07).
  * One point per distinct asOfDate; flat open→events→today. No FX.
+ * End-of-day totals are chronological prefix sums (not write-order replay).
+ * Events dated before openedAsOf are skipped (axis starts at open).
  */
 export function buildDebtPrincipalStackSeries(input: {
   openedAsOf: string;
@@ -245,76 +259,39 @@ export function buildDebtPrincipalStackSeries(input: {
     scale,
   } = input;
 
-  const events: StackEvent[] = [
-    ...repayments.map(
-      (r): StackEvent => ({
-        kind: "repayment",
-        id: r.id,
-        asOfDate: r.asOfDate,
-        amountMinor: r.amountMinor,
-      }),
-    ),
-    ...sizeChanges.map(
-      (s): StackEvent => ({
-        kind: "sizeChange",
-        id: s.id,
-        asOfDate: s.asOfDate,
-        deltaMinor: s.deltaMinor,
-      }),
-    ),
-  ];
+  const reps = repayments.filter((r) => r.asOfDate >= openedAsOf);
+  const sizes = sizeChanges.filter((s) => s.asOfDate >= openedAsOf);
 
-  events.sort((a, b) => {
-    if (a.asOfDate !== b.asOfDate) {
-      return a.asOfDate < b.asOfDate ? -1 : 1;
-    }
-    if (a.id !== b.id) return a.id - b.id;
-    return KIND_ORDER[a.kind] - KIND_ORDER[b.kind];
-  });
+  const dateSet = new Set<string>([openedAsOf]);
+  for (const r of reps) dateSet.add(r.asOfDate);
+  for (const s of sizes) dateSet.add(s.asOfDate);
+  const dates = [...dateSet].sort();
 
-  let repaid = 0n;
-  let remaining = initialAmountMinor;
-
-  const points: DebtPrincipalStackPoint[] = [];
-
-  function emit(asOfDate: string) {
-    points.push({
+  const points: DebtPrincipalStackPoint[] = dates.map((asOfDate) => {
+    const repaid = reps
+      .filter((r) => r.asOfDate <= asOfDate)
+      .reduce((sum, r) => sum + r.amountMinor, 0n);
+    const remaining = remainingMinorAsOf(
+      initialAmountMinor,
+      sizes,
+      reps,
+      asOfDate,
+    );
+    return {
       asOfDate,
       repaidMajor: minorToMajorNumber(repaid, scale),
       remainingMajor: minorToMajorNumber(remaining, scale),
-    });
-  }
-
-  emit(openedAsOf);
-
-  let i = 0;
-  while (i < events.length) {
-    const date = events[i]!.asOfDate;
-    while (i < events.length && events[i]!.asOfDate === date) {
-      const ev = events[i]!;
-      if (ev.kind === "repayment") {
-        repaid += ev.amountMinor;
-        remaining -= ev.amountMinor;
-      } else {
-        remaining += ev.deltaMinor;
-      }
-      i += 1;
-    }
-    if (date === openedAsOf) {
-      // Replace seed with end-of-day state on open date
-      points[points.length - 1] = {
-        asOfDate: date,
-        repaidMajor: minorToMajorNumber(repaid, scale),
-        remainingMajor: minorToMajorNumber(remaining, scale),
-      };
-    } else {
-      emit(date);
-    }
-  }
+    };
+  });
 
   const lastDate = points[points.length - 1]!.asOfDate;
   if (lastDate < today) {
-    emit(today);
+    const last = points[points.length - 1]!;
+    points.push({
+      asOfDate: today,
+      repaidMajor: last.repaidMajor,
+      remainingMajor: last.remainingMajor,
+    });
   }
 
   return points;
