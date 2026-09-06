@@ -437,27 +437,31 @@ Add excluded account list under helper copy using `rows.filter(r => !r.includedI
 | A5 | Stack series keys `repaidMajor` / `remainingMajor` | Pattern 1 | Cosmetic only |
 | A6 | Chart component under `src/components/debts/` | Structure | Cosmetic |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Same-day multi-event point emission**
    - What we know: D-04 says step on events; Phase 8 allows multiple events per day; Recharts dislikes duplicate categories.
    - What's unclear: per-event vs end-of-day emission.
    - Recommendation: end-of-day one point (A3); document in plan assumptions.
+   - **RESOLVED:** A3 — emit one chart point per distinct `asOfDate` after applying that day's events in D-07 order (end-of-day collapse). Locked in 11-01 plan assumptions.
 
 2. **Cross-table id ordering tertiary key**
    - What we know: D-07 says asOfDate then id; ids are per-table.
    - What's unclear: repayment vs sizeChange when ids equal.
    - Recommendation: add `kind` tertiary; with A3, display unaffected.
+   - **RESOLVED:** A4 — tertiary sort key `kind` with repayment before sizeChange when `(asOfDate, id)` collide across tables. Locked in 11-01 plan assumptions.
 
 3. **Excluded debt list identity**
    - What we know: totals rows expose `debtId`, `excludeReason`, `remainingNativeMinor` — not person name/currency.
    - What's unclear: exact row label.
    - Recommendation: join person name + `currencyCode` on page when rendering excluded list (discretion RU wording).
+   - **RESOLVED:** Join person name + `currencyCode` on `/debts` page when rendering excluded rows (discretion RU wording OK if currency visible). Locked in 11-03 assumptions.
 
 4. **Hero when there are zero people/debts**
    - What we know: D-12 says always show including 0/0.
    - What's unclear: show before empty-state CTA or with it.
    - Recommendation: show hero whenever page loads (even empty DB) with `0` primary amounts; keep empty list CTA below.
+   - **RESOLVED:** Hero always shown on page load with `0` / `0` primary amounts even when people/debts empty; empty-list CTA stays below (D-12). Locked in 11-03.
 
 ## Environment Availability
 

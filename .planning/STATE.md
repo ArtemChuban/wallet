@@ -5,10 +5,10 @@ milestone_name: Долги людям
 current_phase: 11
 current_phase_name: Charts + primary totals
 status: ready
-stopped_at: Phase 11 plans created — ready to execute
-last_updated: "2026-09-06T16:50:00.000Z"
+stopped_at: Phase 11 plan revision after checker — ready to execute
+last_updated: "2026-09-06T16:55:00.000Z"
 last_activity: 2026-09-06
-last_activity_desc: Phase 11 PLAN.md set written (4 plans, 2 waves)
+last_activity_desc: Phase 11 checker revision (RESEARCH Q1–Q4 RESOLVED; PATTERNS + 11-01 scope note)
 state_head: 73fd9f3d3995496eafb5be38e170a40689c1757f
 progress:
   total_phases: 4
