@@ -243,6 +243,6 @@ Resume file: None
 
 ## Operator Next Steps
 
-- `/gsd-validate-phase 11` — Nyquist VALIDATION.md still `draft` / not compliant
-- `/gsd-ui-review 11` — optional visual audit after frontend phase
-- After validate clears: phase transition marks 11 complete → next milestone/phase
+- `/gsd-complete-milestone v1.1` — archive v1.1 (all phases + UAT complete)
+- `/gsd-validate-phase 11` — optional; Nyquist VALIDATION.md still `draft`
+- `/gsd-ui-review 11` — optional visual audit
