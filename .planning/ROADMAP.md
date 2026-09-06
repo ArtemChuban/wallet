@@ -175,7 +175,7 @@ Plans:
 | 9 | v1.1 | 4/4 | Complete |
 | 10 | v1.1 | 4/4 | Complete |
 | 11 | v1.1 | 4/4 | Complete |
-| 12 | v1.1 | 0/3 | In Progress|
+| 12 | v1.1 | 3/3 | Verified |
 
 ---
 *Roadmap created: 2026-09-04 for milestone v1.1*
