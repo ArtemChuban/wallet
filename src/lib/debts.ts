@@ -108,6 +108,10 @@ export function assertSizeDelta(
 /**
  * Reject mutation of create-time principal (DEBT-03 / D-03).
  * Size-change events are the only adjustment path after create.
+ *
+ * Runtime enforcement: `updateDebtMetaSchema` omits initial fields + `.strict()`
+ * (`src/lib/validations/debts.ts`). This helper is the unit-test contract for that
+ * invariant — not called from Server Actions (no proposed initial on update path).
  */
 export function assertInitialImmutable(
   storedInitialMinor: bigint,
