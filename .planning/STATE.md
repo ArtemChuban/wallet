@@ -4,11 +4,11 @@ milestone: v1.1
 milestone_name: Долги людям
 current_phase: 12
 current_phase_name: "Address tech debt: debts refresh + Nyquist 10–11"
-status: Plans ready — execute next
-stopped_at: Phase 12 planned (3 plans) — execute next
+status: Plans revised — execute next
+stopped_at: Phase 12 plans revised (checker feedback) — execute next
 last_updated: "2026-09-06T22:00:00.000Z"
 last_activity: 2026-09-06
-last_activity_desc: Phase 12 PLAN.md files written (12-01..12-03)
+last_activity_desc: Phase 12 plans revised for checker (12-02 import graph, 12-03 Nyquist verifies, RESEARCH RESOLVED)
 state_head: bb098382ce2890ff3d3b8fe14576698715e82d7c
 progress:
   total_phases: 5
@@ -233,8 +233,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-06T21:38:00.472Z
-Stopped at: Phase 12 research complete — plan next
+Last session: 2026-09-06T22:00:00.000Z
+Stopped at: Phase 12 planned (3 plans) — execute next
 Resume file: none
 
 ## Quick Tasks Completed
@@ -245,5 +245,5 @@ Resume file: none
 
 ## Operator Next Steps
 
-- `/gsd-plan-phase 12` — break down audit tech debt (RESEARCH.md ready)
-- See `.planning/v1.1-MILESTONE-AUDIT.md` tech_debt section
+- `/gsd-execute-phase 12` — Wave 1: 12-01 tracer refresh+assert; then 12-02 UI home; 12-03 Nyquist
+- Plans: `.planning/phases/12-address-tech-debt-debts-refresh-nyquist-10-11/12-0{1,2,3}-PLAN.md`

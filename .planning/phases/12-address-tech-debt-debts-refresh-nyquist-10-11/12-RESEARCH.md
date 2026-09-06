@@ -375,21 +375,24 @@ Exported actions that revalidate `/debts` on success: `createPerson`, `renamePer
 | A2 | Interactive `/gsd-validate-phase` user gate can be satisfied by evidence-first docs reconcile without always spawning auditor | Nyquist | Planner may need four formal validate-phase runs if hooks require auditor |
 | A3 | Relocating confirm to `src/components/ui/` is preferred over docs-only | UI home | Team may prefer document-in-place; either closes TD-UIHOME-01 |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Wire `assertInitialImmutable` into any action?**
+1. **Wire `assertInitialImmutable` into any action?** — RESOLVED
    - What we know: No action accepts proposed initial on update; Zod `.strict()` rejects smuggled fields.
    - What's unclear: Whether planner wants dead-code wire for symmetry.
    - Recommendation: **Document** (JSDoc + comment pointing at `updateDebtMetaSchema`); keep tests. Do not fake-call with identical values in update path.
+   - Plan choice: Plan 12-01 Task 3 documents via JSDoc only (TD-ASSERT-01); no action wire.
 
-2. **Soft vs hard fail on status desync at page render?**
+2. **Soft vs hard fail on status desync at page render?** — RESOLVED
    - What we know: `assertStatusSynced` throws Error.
    - What's unclear: Prefer error boundary vs coerce `statusForRemaining(remaining)` for display.
    - Recommendation: **Hard assert** (throw) — desync is invariant violation; fix writes, don’t paper over.
+   - Plan choice: Plan 12-01 tracer wires hard `assertStatusSynced` on page (TD-STATUS-01); no coerce.
 
-3. **Must `/gsd-validate-phase` run interactively for 10 and 11?**
+3. **Must `/gsd-validate-phase` run interactively for 10 and 11?** — RESOLVED
    - What we know: Phase 07 closed 3–6 docs-only with suite green; workflow State A allows reconcile; auditor only for MISSING.
    - Recommendation: Evidence-first reconcile in Phase 12 plans; optional validate-phase only if gap analysis finds MISSING.
+   - Plan choice: Plan 12-03 evidence-first flip; auditor only if named path truly MISSING.
 
 ## Environment Availability
 
