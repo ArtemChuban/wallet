@@ -79,7 +79,25 @@ export default async function Home() {
 
     const { rows, totalPrimaryMinor, isPartial } = computeNetWorthRows(inputs);
     const rowById = new Map(rows.map((row) => [row.accountId, row]));
+    const accountById = new Map(accounts.map((account) => [account.id, account]));
     const heroAmount = formatMinorToMajor(totalPrimaryMinor, primaryScale);
+
+    const excludedAccounts = rows
+      .filter((row) => !row.includedInTotal)
+      .map((row) => {
+        const account = accountById.get(row.accountId);
+        return {
+          accountId: row.accountId,
+          name: account?.name ?? "—",
+          currencyCode: account?.currencyCode ?? "—",
+          reason:
+            row.excludeReason === "no_fx"
+              ? "нет курса"
+              : row.excludeReason === "no_balance"
+                ? "нет баланса"
+                : row.excludeReason,
+        };
+      });
 
     const listRows = accounts.map((account) => {
       const row = rowById.get(account.id);
@@ -146,6 +164,23 @@ export default async function Home() {
               курса валюты. Задайте балансы на странице «Счета» и курсы на
               «Курсы».
             </p>
+            {excludedAccounts.length > 0 ? (
+              <ul className="mt-2 grid gap-1">
+                {excludedAccounts.map((row) => (
+                  <li
+                    key={row.accountId}
+                    className="flex flex-wrap items-baseline gap-2 text-sm text-foreground"
+                  >
+                    <span>{row.name}</span>
+                    <span className="font-mono text-muted-foreground">
+                      {row.currencyCode}
+                    </span>
+                    <span className="text-muted-foreground">·</span>
+                    <span className="text-muted-foreground">{row.reason}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
           </div>
         ) : null}
         {hasAccounts ? (
