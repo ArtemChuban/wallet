@@ -71,19 +71,17 @@ function DebtStackTooltip({
       <div className="grid gap-1.5">
         {rows.map((item, index) => {
           const key = String(item.dataKey ?? "");
-          const name =
-            key === "repaidMajor"
-              ? "Погашено"
-              : key === "remainingMajor"
-                ? "Остаток"
-                : key;
+          const configLabel =
+            key in chartConfig
+              ? chartConfig[key as keyof typeof chartConfig].label
+              : key;
           return (
             <div key={index} className="flex w-full items-center gap-2">
               <div
                 className="h-2.5 w-2.5 shrink-0 rounded-[2px]"
                 style={{ backgroundColor: item.color }}
               />
-              <span className="flex-1 text-muted-foreground">{name}</span>
+              <span className="flex-1 text-muted-foreground">{configLabel}</span>
               <span className="font-mono font-medium text-foreground tabular-nums">
                 {typeof item.value === "number"
                   ? formatChartNumber(item.value)

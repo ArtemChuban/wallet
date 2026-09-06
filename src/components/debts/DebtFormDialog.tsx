@@ -34,8 +34,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { calendarDateToday, formatAsOfDisplay } from "@/lib/dates";
 import { formatMinorToMajor } from "@/lib/money";
-import { calendarDateToday } from "@/lib/dates";
 
 type CurrencyOption = {
   code: string;
@@ -444,7 +444,14 @@ function DebtFormBody({
             </p>
           ) : null}
         </div>
-      ) : null}
+      ) : (
+        <div className="grid gap-2">
+          <Label>Дата</Label>
+          <p className="font-mono text-sm text-muted-foreground">
+            {debt?.openedAsOf ? formatAsOfDisplay(debt.openedAsOf) : "—"}
+          </p>
+        </div>
+      )}
 
       <div className="grid gap-2">
         <Label htmlFor="debt-due">Срок (необязательно)</Label>
