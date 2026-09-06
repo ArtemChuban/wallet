@@ -476,4 +476,28 @@ describe("buildDebtPrincipalStackSeries", () => {
       remainingMajor: 50,
     });
   });
+
+  it("skips events before openedAsOf so X-axis stays monotonic (CR-02)", () => {
+    const points = buildDebtPrincipalStackSeries({
+      openedAsOf: "2026-09-01",
+      initialAmountMinor: 10_000n,
+      repayments: [
+        { id: 1, asOfDate: "2026-08-01", amountMinor: 1_000n },
+        { id: 2, asOfDate: "2026-09-05", amountMinor: 2_000n },
+      ],
+      sizeChanges: [],
+      today: "2026-09-06",
+      scale,
+    });
+    const dates = points.map((p) => p.asOfDate);
+    expect(dates).toEqual(["2026-09-01", "2026-09-05", "2026-09-06"]);
+    for (let i = 1; i < dates.length; i++) {
+      expect(dates[i]! >= dates[i - 1]!).toBe(true);
+    }
+    expect(points[0]).toEqual({
+      asOfDate: "2026-09-01",
+      repaidMajor: 0,
+      remainingMajor: 100,
+    });
+  });
 });

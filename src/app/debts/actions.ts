@@ -478,6 +478,10 @@ export async function createRepayment(
         },
       });
 
+      if (asOfDate < debt.openedAsOf) {
+        throw new Error("BEFORE_OPEN");
+      }
+
       if (fracDigitCount(amountMajor) > debt.currency.scale) {
         throw new Error("too many fractional digits");
       }
@@ -546,6 +550,13 @@ export async function createRepayment(
       });
     });
   } catch (error) {
+    if (error instanceof Error && error.message === "BEFORE_OPEN") {
+      return {
+        errors: {
+          asOfDate: ["Дата не может быть раньше даты открытия"],
+        },
+      };
+    }
     if (error instanceof Error && error.message === "OVER_REPAY") {
       return {
         errors: { amountMajor: ["Сумма больше остатка долга"] },
@@ -689,6 +700,10 @@ export async function createSizeChange(
         },
       });
 
+      if (asOfDate < debt.openedAsOf) {
+        throw new Error("BEFORE_OPEN");
+      }
+
       if (fracDigitCount(deltaMajor) > debt.currency.scale) {
         throw new Error("too many fractional digits");
       }
@@ -762,6 +777,13 @@ export async function createSizeChange(
       });
     });
   } catch (error) {
+    if (error instanceof Error && error.message === "BEFORE_OPEN") {
+      return {
+        errors: {
+          asOfDate: ["Дата не может быть раньше даты открытия"],
+        },
+      };
+    }
     if (error instanceof Error && error.message === "OVER_FLOOR") {
       return {
         errors: {
@@ -834,6 +856,10 @@ export async function forgiveRemaining(
         },
       });
 
+      if (asOfDate < debt.openedAsOf) {
+        throw new Error("BEFORE_OPEN");
+      }
+
       const sizeDeltas = debt.sizeChanges.map((s) => s.deltaMinor);
       const repaymentAmounts = debt.repayments.map((r) => r.amountMinor);
       const remainingBefore = remainingMinor(
@@ -895,6 +921,13 @@ export async function forgiveRemaining(
       });
     });
   } catch (error) {
+    if (error instanceof Error && error.message === "BEFORE_OPEN") {
+      return {
+        errors: {
+          asOfDate: ["Дата не может быть раньше даты открытия"],
+        },
+      };
+    }
     if (error instanceof Error && error.message === "NOTHING_TO_FORGIVE") {
       return {
         message: "Нечего прощать — остаток уже 0",

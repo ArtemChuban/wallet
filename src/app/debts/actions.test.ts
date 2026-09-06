@@ -444,8 +444,9 @@ describe("createRepayment (REPAY-01 / DEBT-04)", () => {
   const openDebtLedger = {
     id: 9,
     initialAmountMinor: 10000n,
-    repayments: [] as { amountMinor: bigint }[],
-    sizeChanges: [] as { deltaMinor: bigint }[],
+    openedAsOf: "2026-08-01",
+    repayments: [] as { amountMinor: bigint; asOfDate: string }[],
+    sizeChanges: [] as { deltaMinor: bigint; asOfDate: string }[],
     currency: { scale: 2 },
     status: "OPEN" as const,
   };
@@ -584,6 +585,22 @@ describe("createRepayment (REPAY-01 / DEBT-04)", () => {
     expect(result.success).toBeUndefined();
     expect(result.errors?.amountMajor).toEqual([
       "Сумма больше остатка долга",
+    ]);
+    expect(prisma.debtRepayment.create).not.toHaveBeenCalled();
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  it("rejects asOfDate before openedAsOf (CR-02)", async () => {
+    const formData = new FormData();
+    formData.set("debtId", "9");
+    formData.set("amountMajor", "10.00");
+    formData.set("asOfDate", "2026-07-01");
+
+    const result = await createRepayment({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.errors?.asOfDate).toEqual([
+      "Дата не может быть раньше даты открытия",
     ]);
     expect(prisma.debtRepayment.create).not.toHaveBeenCalled();
     expect(revalidatePath).not.toHaveBeenCalled();
@@ -747,8 +764,9 @@ describe("createSizeChange (DEBT-05 / D-08)", () => {
   const openDebtLedger = {
     id: 9,
     initialAmountMinor: 10000n,
-    repayments: [] as { amountMinor: bigint }[],
-    sizeChanges: [] as { deltaMinor: bigint }[],
+    openedAsOf: "2026-08-01",
+    repayments: [] as { amountMinor: bigint; asOfDate: string }[],
+    sizeChanges: [] as { deltaMinor: bigint; asOfDate: string }[],
     currency: { scale: 2 },
     status: "OPEN" as const,
   };
@@ -804,7 +822,7 @@ describe("createSizeChange (DEBT-05 / D-08)", () => {
   it("rejects over-floor down without writing (T-10-01)", async () => {
     vi.mocked(prisma.debt.findUniqueOrThrow).mockResolvedValue({
       ...openDebtLedger,
-      repayments: [{ amountMinor: 8000n }],
+      repayments: [{ amountMinor: 8000n, asOfDate: "2026-08-15" }],
     } as never);
 
     const formData = new FormData();
@@ -835,6 +853,21 @@ describe("createSizeChange (DEBT-05 / D-08)", () => {
       "Дата не может быть в будущем",
     ]);
     expect(prisma.$transaction).not.toHaveBeenCalled();
+  });
+
+  it("rejects asOfDate before openedAsOf (CR-02)", async () => {
+    const formData = new FormData();
+    formData.set("debtId", "9");
+    formData.set("deltaMajor", "10.00");
+    formData.set("asOfDate", "2026-07-15");
+
+    const result = await createSizeChange({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.errors?.asOfDate).toEqual([
+      "Дата не может быть раньше даты открытия",
+    ]);
+    expect(prisma.debtSizeChange.create).not.toHaveBeenCalled();
   });
 
   it("maps P2025 not-found to refresh RU and revalidates /debts (G-10-5)", async () => {
@@ -869,8 +902,9 @@ describe("forgiveRemaining (DEBT-05 / T-10-02)", () => {
   const openDebtLedger = {
     id: 9,
     initialAmountMinor: 10000n,
-    repayments: [] as { amountMinor: bigint }[],
-    sizeChanges: [] as { deltaMinor: bigint }[],
+    openedAsOf: "2026-08-01",
+    repayments: [] as { amountMinor: bigint; asOfDate: string }[],
+    sizeChanges: [] as { deltaMinor: bigint; asOfDate: string }[],
     status: "OPEN" as const,
   };
 
@@ -920,7 +954,7 @@ describe("forgiveRemaining (DEBT-05 / T-10-02)", () => {
   it("rejects remaining 0 without writing", async () => {
     vi.mocked(prisma.debt.findUniqueOrThrow).mockResolvedValue({
       ...openDebtLedger,
-      repayments: [{ amountMinor: 10000n }],
+      repayments: [{ amountMinor: 10000n, asOfDate: "2026-08-15" }],
     } as never);
 
     const formData = new FormData();
@@ -947,6 +981,20 @@ describe("forgiveRemaining (DEBT-05 / T-10-02)", () => {
       "Дата не может быть в будущем",
     ]);
     expect(prisma.$transaction).not.toHaveBeenCalled();
+  });
+
+  it("rejects asOfDate before openedAsOf (CR-02)", async () => {
+    const formData = new FormData();
+    formData.set("debtId", "9");
+    formData.set("asOfDate", "2026-07-01");
+
+    const result = await forgiveRemaining({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.errors?.asOfDate).toEqual([
+      "Дата не может быть раньше даты открытия",
+    ]);
+    expect(prisma.debtSizeChange.create).not.toHaveBeenCalled();
   });
 
   it("maps assertSizeDelta OVER_FLOOR to actionable Russian (G-10-5)", async () => {
