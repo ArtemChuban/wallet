@@ -49,6 +49,7 @@ describe("createDebtSchema (DEBT-03)", () => {
       direction: "I_OWE",
       currencyCode: "RUB",
       initialAmountMajor: "1000.50",
+      openedAsOf: "2026-09-01",
       dueDate: "2026-12-01",
       note: "за обед",
     });
@@ -58,6 +59,7 @@ describe("createDebtSchema (DEBT-03)", () => {
       expect(result.data.direction).toBe("I_OWE");
       expect(result.data.currencyCode).toBe("RUB");
       expect(result.data.initialAmountMajor).toBe("1000.50");
+      expect(result.data.openedAsOf).toBe("2026-09-01");
       expect(result.data.dueDate).toBe("2026-12-01");
       expect(result.data.note).toBe("за обед");
     }
@@ -69,8 +71,30 @@ describe("createDebtSchema (DEBT-03)", () => {
       direction: "THEY_OWE",
       currencyCode: "USD",
       initialAmountMajor: "50",
+      openedAsOf: "2026-09-06",
     });
     expect(result.success).toBe(true);
+  });
+
+  it("requires openedAsOf YYYY-MM-DD (D-08)", () => {
+    const missing = createDebtSchema.safeParse({
+      personId: 1,
+      direction: "I_OWE",
+      currencyCode: "RUB",
+      initialAmountMajor: "10",
+    });
+    expect(missing.success).toBe(false);
+
+    for (const openedAsOf of ["2026/09/01", "09-01-2026", ""] as const) {
+      const bad = createDebtSchema.safeParse({
+        personId: 1,
+        direction: "I_OWE",
+        currencyCode: "RUB",
+        initialAmountMajor: "10",
+        openedAsOf,
+      });
+      expect(bad.success).toBe(false);
+    }
   });
 
   it("rejects non-positive initial major", () => {
@@ -80,6 +104,7 @@ describe("createDebtSchema (DEBT-03)", () => {
         direction: "I_OWE",
         currencyCode: "RUB",
         initialAmountMajor,
+        openedAsOf: "2026-09-01",
       });
       expect(result.success).toBe(false);
     }
@@ -91,6 +116,7 @@ describe("createDebtSchema (DEBT-03)", () => {
       direction: "WE_OWE",
       currencyCode: "RUB",
       initialAmountMajor: "10",
+      openedAsOf: "2026-09-01",
     });
     expect(result.success).toBe(false);
   });
@@ -103,6 +129,7 @@ describe("createDebtWithNewPersonSchema (D-06)", () => {
       direction: "I_OWE",
       currencyCode: "RUB",
       initialAmountMajor: "10",
+      openedAsOf: "2026-09-01",
       dueDate: "2026-10-01",
       note: "тест",
     });
@@ -110,8 +137,19 @@ describe("createDebtWithNewPersonSchema (D-06)", () => {
     if (result.success) {
       expect(result.data.name).toBe("Анна");
       expect(result.data.direction).toBe("I_OWE");
+      expect(result.data.openedAsOf).toBe("2026-09-01");
       expect(result.data).not.toHaveProperty("personId");
     }
+  });
+
+  it("requires openedAsOf (D-08)", () => {
+    const result = createDebtWithNewPersonSchema.safeParse({
+      name: "Анна",
+      direction: "I_OWE",
+      currencyCode: "RUB",
+      initialAmountMajor: "10",
+    });
+    expect(result.success).toBe(false);
   });
 
   it("rejects non-positive initial with Russian message", () => {
@@ -120,6 +158,7 @@ describe("createDebtWithNewPersonSchema (D-06)", () => {
       direction: "I_OWE",
       currencyCode: "RUB",
       initialAmountMajor: "0",
+      openedAsOf: "2026-09-01",
     });
     expect(result.success).toBe(false);
     if (!result.success) {
@@ -151,10 +190,22 @@ describe("updateDebtMetaSchema (DEBT-03 / D-03)", () => {
     expect(shape).not.toHaveProperty("initialAmount");
   });
 
+  it("has no openedAsOf property (D-09)", () => {
+    expect(updateDebtMetaSchema.shape).not.toHaveProperty("openedAsOf");
+  });
+
   it("rejects unknown initial-amount keys via .strict()", () => {
     const result = updateDebtMetaSchema.safeParse({
       debtId: 1,
       initialAmountMajor: "999",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects smuggled openedAsOf via .strict() (D-09)", () => {
+    const result = updateDebtMetaSchema.safeParse({
+      debtId: 1,
+      openedAsOf: "2026-01-01",
     });
     expect(result.success).toBe(false);
   });

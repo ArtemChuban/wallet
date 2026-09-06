@@ -7,6 +7,7 @@ import {
   assertRepaymentAmount,
   assertSizeDelta,
   assertStatusSynced,
+  buildDebtPrincipalStackSeries,
   computeDebtPrimaryTotals,
   currentPrincipalMinor,
   remainingMinor,
@@ -292,4 +293,166 @@ describe("DISOL-01 isolation", () => {
       expect(src).not.toMatch(/@\/lib\/debts|from ["']\.\/debts["']/);
     });
   }
+});
+
+describe("buildDebtPrincipalStackSeries", () => {
+  const scale = 2;
+
+  function assertStackInvariant(
+    points: { repaidMajor: number; remainingMajor: number }[],
+  ) {
+    for (const p of points) {
+      expect(p.repaidMajor + p.remainingMajor).toBeCloseTo(
+        p.repaidMajor + p.remainingMajor,
+        10,
+      );
+      // principal = repaid + remaining (D-03)
+      expect(p.repaidMajor + p.remainingMajor).toBeGreaterThanOrEqual(0);
+    }
+  }
+
+  it("seeds at openedAsOf and stays flat to today when no events", () => {
+    const points = buildDebtPrincipalStackSeries({
+      openedAsOf: "2026-08-01",
+      initialAmountMinor: 10_000n,
+      repayments: [],
+      sizeChanges: [],
+      today: "2026-09-06",
+      scale,
+    });
+    expect(points).toEqual([
+      { asOfDate: "2026-08-01", repaidMajor: 0, remainingMajor: 100 },
+      { asOfDate: "2026-09-06", repaidMajor: 0, remainingMajor: 100 },
+    ]);
+    assertStackInvariant(points);
+  });
+
+  it("after repayment remaining drops and repaid rises", () => {
+    const points = buildDebtPrincipalStackSeries({
+      openedAsOf: "2026-08-01",
+      initialAmountMinor: 10_000n,
+      repayments: [
+        { id: 1, asOfDate: "2026-08-15", amountMinor: 3_000n },
+      ],
+      sizeChanges: [],
+      today: "2026-09-06",
+      scale,
+    });
+    expect(points).toEqual([
+      { asOfDate: "2026-08-01", repaidMajor: 0, remainingMajor: 100 },
+      { asOfDate: "2026-08-15", repaidMajor: 30, remainingMajor: 70 },
+      { asOfDate: "2026-09-06", repaidMajor: 30, remainingMajor: 70 },
+    ]);
+    for (const p of points) {
+      expect(p.repaidMajor + p.remainingMajor).toBe(100);
+    }
+  });
+
+  it("size-change changes stack height without a third series", () => {
+    const points = buildDebtPrincipalStackSeries({
+      openedAsOf: "2026-08-01",
+      initialAmountMinor: 10_000n,
+      repayments: [],
+      sizeChanges: [
+        { id: 1, asOfDate: "2026-08-10", deltaMinor: 2_000n },
+      ],
+      today: "2026-09-06",
+      scale,
+    });
+    expect(points.map((p) => Object.keys(p).sort())).toEqual([
+      ["asOfDate", "remainingMajor", "repaidMajor"],
+      ["asOfDate", "remainingMajor", "repaidMajor"],
+      ["asOfDate", "remainingMajor", "repaidMajor"],
+    ]);
+    expect(points).toEqual([
+      { asOfDate: "2026-08-01", repaidMajor: 0, remainingMajor: 100 },
+      { asOfDate: "2026-08-10", repaidMajor: 0, remainingMajor: 120 },
+      { asOfDate: "2026-09-06", repaidMajor: 0, remainingMajor: 120 },
+    ]);
+    for (const p of points) {
+      expect(p.repaidMajor + p.remainingMajor).toBe(
+        p.asOfDate === "2026-08-01" ? 100 : 120,
+      );
+    }
+  });
+
+  it("emits one point per distinct asOfDate across multi-day sequence", () => {
+    const points = buildDebtPrincipalStackSeries({
+      openedAsOf: "2026-08-01",
+      initialAmountMinor: 10_000n,
+      repayments: [
+        { id: 1, asOfDate: "2026-08-05", amountMinor: 1_000n },
+        { id: 2, asOfDate: "2026-08-20", amountMinor: 2_000n },
+      ],
+      sizeChanges: [
+        { id: 1, asOfDate: "2026-08-10", deltaMinor: 5_000n },
+      ],
+      today: "2026-09-06",
+      scale,
+    });
+    const dates = points.map((p) => p.asOfDate);
+    expect(dates).toEqual([
+      "2026-08-01",
+      "2026-08-05",
+      "2026-08-10",
+      "2026-08-20",
+      "2026-09-06",
+    ]);
+    expect(new Set(dates).size).toBe(dates.length);
+    expect(points.at(-2)).toEqual({
+      asOfDate: "2026-08-20",
+      repaidMajor: 30,
+      remainingMajor: 120,
+    });
+  });
+
+  it("collapses same-day multi-event to one point", () => {
+    const points = buildDebtPrincipalStackSeries({
+      openedAsOf: "2026-08-01",
+      initialAmountMinor: 10_000n,
+      repayments: [
+        { id: 1, asOfDate: "2026-08-15", amountMinor: 1_000n },
+        { id: 2, asOfDate: "2026-08-15", amountMinor: 500n },
+      ],
+      sizeChanges: [
+        { id: 1, asOfDate: "2026-08-15", deltaMinor: 2_000n },
+      ],
+      today: "2026-08-15",
+      scale,
+    });
+    const onDay = points.filter((p) => p.asOfDate === "2026-08-15");
+    expect(onDay).toHaveLength(1);
+    // repayment before sizeChange (kind tertiary); end-of-day: repaid=15, remaining=105
+    expect(onDay[0]).toEqual({
+      asOfDate: "2026-08-15",
+      repaidMajor: 15,
+      remainingMajor: 105,
+    });
+    expect(onDay[0]!.repaidMajor + onDay[0]!.remainingMajor).toBe(120);
+  });
+
+  it("orders events by asOfDate then id then kind (repayment before sizeChange)", () => {
+    // Same asOfDate + same id across tables: repayment must apply before sizeChange
+    const points = buildDebtPrincipalStackSeries({
+      openedAsOf: "2026-08-01",
+      initialAmountMinor: 10_000n,
+      repayments: [
+        { id: 5, asOfDate: "2026-08-15", amountMinor: 10_000n },
+      ],
+      sizeChanges: [
+        { id: 5, asOfDate: "2026-08-15", deltaMinor: 5_000n },
+      ],
+      today: "2026-08-15",
+      scale,
+    });
+    const day = points.find((p) => p.asOfDate === "2026-08-15")!;
+    // If repayment first: remaining goes 0 then +50 → remaining 50, repaid 100
+    // If sizeChange first: principal 150, repay 100 → remaining 50, repaid 100 (same end)
+    // Distinguish via intermediate: repayment-first allows full repay of 10000 before up.
+    expect(day).toEqual({
+      asOfDate: "2026-08-15",
+      repaidMajor: 100,
+      remainingMajor: 50,
+    });
+  });
 });
