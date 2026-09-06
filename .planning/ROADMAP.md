@@ -132,7 +132,18 @@ Plans:
   3. `/debts` shows «я должен» / «мне должны» totals in primary with partial banner when FX missing
   4. Капитал (`/`) net-worth figures unchanged when debts exist (isolation still holds)
 
-**Plans:** TBD
+**Plans:** 4 plans
+
+Plans:
+**Wave 1**
+
+- [ ] 11-01-PLAN.md — openedAsOf gate + Wave 0 + tracer stack chart in История
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
+- [ ] 11-02-PLAN.md — D-09 immutability + chart empty-history polish
+- [ ] 11-03-PLAN.md — /debts primary hero + partial excluded-debt list
+- [ ] 11-04-PLAN.md — Капитал excluded-account list + DISOL scan
 
 ## Progress
 
@@ -143,7 +154,7 @@ Plans:
 | 9 | v1.1 | 4/4 | Ready for verification|
 
 | 10 | v1.1 | 4/4 | Complete — ready for verification |
-| 11 | v1.1 | 0/TBD | Not started |
+| 11 | v1.1 | 0/4 | Planned |
 
 ---
 *Roadmap created: 2026-09-04 for milestone v1.1*

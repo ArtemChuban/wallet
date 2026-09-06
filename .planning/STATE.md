@@ -5,10 +5,10 @@ milestone_name: Долги людям
 current_phase: 11
 current_phase_name: Charts + primary totals
 status: ready
-stopped_at: Phase 11 research complete
-last_updated: "2026-09-06T14:34:00.000Z"
+stopped_at: Phase 11 plans created — ready to execute
+last_updated: "2026-09-06T16:50:00.000Z"
 last_activity: 2026-09-06
-last_activity_desc: Phase 11 RESEARCH.md written; ready to plan
+last_activity_desc: Phase 11 PLAN.md set written (4 plans, 2 waves)
 state_head: 73fd9f3d3995496eafb5be38e170a40689c1757f
 progress:
   total_phases: 4
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 ## Current Position
 
-Phase: 11 (Charts + primary totals) — READY TO PLAN
-Plan: —
-Status: Phase 10 complete (G-10-8 deferred by user)
-Total Plans in Phase: —
-Last activity: 2026-09-06 — Phase 11 research complete; next `/gsd-plan-phase` planning
+Phase: 11 (Charts + primary totals) — READY TO EXECUTE
+Plan: 11-01 (of 4)
+Status: Plans created (4 plans, 2 waves)
+Total Plans in Phase: 4
+Last activity: 2026-09-06 — Phase 11 plans written; next `/gsd-execute-phase 11`
 
 ## Performance Metrics
 
@@ -219,9 +219,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-06T14:34:00.000Z
-Stopped at: Phase 11 research complete
-Resume file: /home/artem/Documents/wallet/.planning/phases/11-charts-primary-totals/11-RESEARCH.md
+Last session: 2026-09-06T16:50:00.000Z
+Stopped at: Phase 11 plans created (11-01..11-04)
+Resume file: /home/artem/Documents/wallet/.planning/phases/11-charts-primary-totals/11-01-PLAN.md
 
 ## Quick Tasks Completed
 
@@ -231,6 +231,5 @@ Resume file: /home/artem/Documents/wallet/.planning/phases/11-charts-primary-tot
 
 ## Operator Next Steps
 
-- `/gsd-execute-phase 10` — run 10-05 (G-10-8 forgive client opaque)
-- Then `/gsd-verify-work 10` — re-UAT concurrency smoke (forgive + repay/size)
-- Then Phase 11 — charts + primary totals
+- `/gsd-execute-phase 11` — Wave 1 opens with D-08 openedAsOf checkpoint (blocking-human), then tracer chart slice
+- After Wave 1: Wave 2 runs 11-02 / 11-03 / 11-04 in parallel
