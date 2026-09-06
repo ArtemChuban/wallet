@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { deletePerson } from "@/app/debts/actions";
 import { DebtDetailDialog } from "@/components/debts/DebtDetailDialog";
@@ -107,6 +108,7 @@ function PersonGroup({
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const [closedOpen, setClosedOpen] = useState(false);
+  const router = useRouter();
 
   const openDebts = person.debts.filter((d) => d.status !== "CLOSED");
   const closedDebts = person.debts.filter((d) => d.status === "CLOSED");
@@ -133,6 +135,7 @@ function PersonGroup({
         return;
       }
       setConfirmOpen(false);
+      router.refresh();
     });
   }
 

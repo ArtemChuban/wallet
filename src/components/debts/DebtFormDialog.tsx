@@ -7,6 +7,7 @@ import {
   useTransition,
   type ReactElement,
 } from "react";
+import { useRouter } from "next/navigation";
 import {
   createDebt,
   deleteDebt,
@@ -539,6 +540,7 @@ function DebtFormBody({
 
 export function DebtFormDialog(props: DebtFormDialogProps) {
   const { mode, trigger } = props;
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [formKey, setFormKey] = useState(0);
 
@@ -580,7 +582,10 @@ export function DebtFormDialog(props: DebtFormDialogProps) {
             defaultPersonId={
               mode === "create" ? props.defaultPersonId : undefined
             }
-            onSuccess={() => setOpen(false)}
+            onSuccess={() => {
+              router.refresh();
+              setOpen(false);
+            }}
           />
         ) : null}
       </DialogContent>

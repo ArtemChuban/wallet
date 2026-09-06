@@ -6,6 +6,7 @@ import {
   useState,
   type ReactElement,
 } from "react";
+import { useRouter } from "next/navigation";
 import {
   createPerson,
   renamePerson,
@@ -123,6 +124,7 @@ function PersonFormBody({
 
 export function PersonFormDialog(props: PersonFormDialogProps) {
   const { mode, trigger } = props;
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [formKey, setFormKey] = useState(0);
 
@@ -150,7 +152,10 @@ export function PersonFormDialog(props: PersonFormDialogProps) {
             key={formKey}
             mode={mode}
             person={mode === "edit" ? props.person : undefined}
-            onSuccess={() => setOpen(false)}
+            onSuccess={() => {
+              router.refresh();
+              setOpen(false);
+            }}
           />
         ) : null}
       </DialogContent>
