@@ -19,5 +19,9 @@ describe("AccountList snapshot delete confirm (D-17 / PERSON-02)", () => {
 
   it("reuses DestructiveConfirmStep for in-dialog second step", () => {
     expect(listSrc).toMatch(/DestructiveConfirmStep/);
+    expect(listSrc).toMatch(/@\/components\/ui\/destructive-confirm-step/);
+    expect(listSrc).not.toMatch(
+      /@\/components\/debts\/DestructiveConfirmStep/,
+    );
   });
 });
