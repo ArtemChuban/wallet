@@ -96,7 +96,7 @@ Each task was committed atomically:
 1. **Task 1: End-to-end /debts LOCF → computeDebtPrimaryTotals → hero 0/0** - `ebcc637` (feat)
 2. **Task 2: Partial banner + excluded debt list on /debts** - `c268e56` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `6a07109` (docs: complete plan)
 
 ## Files Created/Modified
 - `src/components/debts/DebtsPrimaryTotalsHero.tsx` - Two-column hero + optional partial excluded list
