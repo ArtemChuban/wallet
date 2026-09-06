@@ -3,17 +3,17 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Долги людям
 current_phase: 11
-current_phase_name: Charts + primary totals
+current_phase_name: charts-primary-totals
 status: ready
 stopped_at: Phase 11 plan revision after checker — ready to execute
-last_updated: "2026-09-06T16:55:00.000Z"
+last_updated: "2026-09-06T14:56:12.317Z"
 last_activity: 2026-09-06
 last_activity_desc: Phase 11 checker revision (RESEARCH Q1–Q4 RESOLVED; PATTERNS + 11-01 scope note)
-state_head: 73fd9f3d3995496eafb5be38e170a40689c1757f
+state_head: e61b56958a3c004151852bf05497a577779d1dd4
 progress:
   total_phases: 4
   completed_phases: 3
-  total_plans: 11
+  total_plans: 15
   completed_plans: 11
 ---
 
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 ## Current Position
 
-Phase: 11 (Charts + primary totals) — READY TO EXECUTE
+Phase: 11 (charts-primary-totals) — READY TO EXECUTE
 Plan: 11-01 (of 4)
 Status: Plans created (4 plans, 2 waves)
 Total Plans in Phase: 4
-Last activity: 2026-09-06 — Phase 11 plans written; next `/gsd-execute-phase 11`
+Last activity: 2026-09-06 — Phase 11 checker revision (open questions resolved; patterns + tracer scope note); next `/gsd-execute-phase 11`
 
 ## Performance Metrics
 
