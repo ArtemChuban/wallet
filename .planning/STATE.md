@@ -4,16 +4,16 @@ milestone: v1.1
 milestone_name: Долги людям
 current_phase: 12
 current_phase_name: "Address tech debt: debts refresh + Nyquist 10–11"
-status: Research complete — ready to plan
-stopped_at: Phase 12 research complete — plan next
-last_updated: "2026-09-06T21:44:00.000Z"
+status: Plans ready — execute next
+stopped_at: Phase 12 planned (3 plans) — execute next
+last_updated: "2026-09-06T22:00:00.000Z"
 last_activity: 2026-09-06
-last_activity_desc: Phase 12 RESEARCH.md written
+last_activity_desc: Phase 12 PLAN.md files written (12-01..12-03)
 state_head: bb098382ce2890ff3d3b8fe14576698715e82d7c
 progress:
   total_phases: 5
   completed_phases: 4
-  total_plans: 15
+  total_plans: 18
   completed_plans: 15
 ---
 
@@ -24,15 +24,15 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-06 after Phase 11)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 12 tech debt — research done; `/gsd-plan-phase 12`
+**Current focus:** Phase 12 tech debt — plans ready; `/gsd-execute-phase 12`
 
 ## Current Position
 
 Phase: 12 — Address tech debt: debts refresh + Nyquist 10–11
-Plan: Not started
-Status: Research complete — ready to plan
-Total Plans in Phase: 0
-Last activity: 2026-09-06 — Phase 12 RESEARCH.md written
+Plan: 12-01 (Wave 1) ready
+Status: Plans ready — execute next
+Total Plans in Phase: 3
+Last activity: 2026-09-06 — Phase 12 PLAN.md files written (12-01..12-03)
 
 ## Performance Metrics
 

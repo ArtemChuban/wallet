@@ -3,7 +3,7 @@
 ## Milestones
 
 - ✅ **v1.0 MVP** — Phases 1–7 (shipped 2026-09-04)
-- 🚧 **v1.1 Долги людям** — Phases 8–11 (in planning)
+- 🚧 **v1.1 Долги людям** — Phases 8–12
 
 ## Overview
 
@@ -30,6 +30,7 @@ Full detail: [milestones/v1.0-ROADMAP.md](./milestones/v1.0-ROADMAP.md)
 - [x] **Phase 9: People + debts CRUD + nav** — `/debts` list, person/debt dialogs, «Долги» nav, RU empty states
 - [x] **Phase 10: Repayments + close/write-off** — Dated repayments, history, delete/reopen, auto-close, early forgive (completed 2026-09-05)
 - [x] **Phase 11: Charts + primary totals** — Remaining + repayment charts; I-owe/they-owe primary hero with FX partial banner (completed 2026-09-06)
+- [ ] **Phase 12: Address tech debt: debts refresh + Nyquist 10–11** — Post-audit cleanup from v1.1-MILESTONE-AUDIT (3 plans)
 
 ## Phase Details
 
@@ -145,6 +146,26 @@ Plans:
 - [x] 11-03-PLAN.md — /debts primary hero + partial excluded-debt list
 - [x] 11-04-PLAN.md — Капитал excluded-account list + DISOL scan
 
+### Phase 12: Address tech debt: debts refresh + Nyquist 10–11
+
+**Goal:** Close v1.1 audit tech debt — debts list refresh after mutations, Nyquist validate phases 10–11, small maintainability leftovers from audit.
+**Requirements:** TD-REFRESH-01, TD-STATUS-01, TD-ASSERT-01, TD-UIHOME-01, NYQ-10, NYQ-11, NYQ-12
+**Depends on:** Phase 11
+**Plans:** 3 plans
+
+Plans:
+**Wave 1**
+
+- [ ] 12-01-PLAN.md — Tracer: router.refresh + assertStatusSynced + assertInitialImmutable docs
+
+**Wave 2** *(blocked on Wave 1)*
+
+- [ ] 12-02-PLAN.md — Move DestructiveConfirmStep to components/ui
+
+**Wave 3** *(blocked on Wave 2)*
+
+- [ ] 12-03-PLAN.md — Evidence-first Nyquist close for phases 10–11 + 12
+
 ## Progress
 
 | Phase | Milestone | Plans complete | Status |
@@ -154,7 +175,8 @@ Plans:
 | 9 | v1.1 | 4/4 | Complete |
 | 10 | v1.1 | 4/4 | Complete |
 | 11 | v1.1 | 4/4 | Complete |
+| 12 | v1.1 | 0/3 | Planned |
 
 ---
 *Roadmap created: 2026-09-04 for milestone v1.1*
-*Updated: 2026-09-06 — Phase 11 complete; v1.1 ready to archive*
+*Updated: 2026-09-06 — Phase 12 added (tech debt cleanup after audit)*
