@@ -1,47 +1,82 @@
 import { DebtFormDialog } from "@/components/debts/DebtFormDialog";
 import { DebtsList } from "@/components/debts/DebtsList";
+import { DebtsPrimaryTotalsHero } from "@/components/debts/DebtsPrimaryTotalsHero";
 import { PersonFormDialog } from "@/components/debts/PersonFormDialog";
 import { Button } from "@/components/ui/button";
-import { remainingMinor } from "@/lib/debts";
+import { calendarDateToday } from "@/lib/dates";
+import {
+  computeDebtPrimaryTotals,
+  remainingMinor,
+  type DebtPrimaryTotalsInput,
+} from "@/lib/debts";
 import { ensureSqlitePragmas, prisma } from "@/lib/db";
+import { firstHitLocfMap } from "@/lib/locf";
+import { formatMinorToMajor } from "@/lib/money";
 
 export const dynamic = "force-dynamic";
 
 export default async function DebtsPage() {
   await ensureSqlitePragmas();
-  const [peopleRaw, currencies] = await Promise.all([
-    prisma.person.findMany({
-      orderBy: { name: "asc" },
-      include: {
-        debts: {
-          orderBy: { id: "desc" },
-          include: {
-            currency: { select: { code: true, name: true, scale: true } },
-            repayments: {
-              select: {
-                id: true,
-                asOfDate: true,
-                amountMinor: true,
-                note: true,
+  const today = calendarDateToday("Europe/Moscow");
+
+  const [peopleRaw, currencies, primaryCurrency, ratesLteToday] =
+    await Promise.all([
+      prisma.person.findMany({
+        orderBy: { name: "asc" },
+        include: {
+          debts: {
+            orderBy: { id: "desc" },
+            include: {
+              currency: {
+                select: { code: true, name: true, scale: true, isPrimary: true },
               },
-            },
-            sizeChanges: {
-              select: {
-                id: true,
-                asOfDate: true,
-                deltaMinor: true,
-                note: true,
+              repayments: {
+                select: {
+                  id: true,
+                  asOfDate: true,
+                  amountMinor: true,
+                  note: true,
+                },
+              },
+              sizeChanges: {
+                select: {
+                  id: true,
+                  asOfDate: true,
+                  deltaMinor: true,
+                  note: true,
+                },
               },
             },
           },
         },
-      },
-    }),
-    prisma.currency.findMany({
-      orderBy: { code: "asc" },
-      select: { code: true, name: true, scale: true },
-    }),
-  ]);
+      }),
+      prisma.currency.findMany({
+        orderBy: { code: "asc" },
+        select: { code: true, name: true, scale: true },
+      }),
+      prisma.currency.findFirst({
+        where: { isPrimary: true },
+        select: { code: true, scale: true },
+      }),
+      prisma.fxRate.findMany({
+        where: { asOfDate: { lte: today } },
+        orderBy: { asOfDate: "desc" },
+        select: {
+          currencyCode: true,
+          asOfDate: true,
+          rateToPrimaryScaled: true,
+        },
+      }),
+    ]);
+
+  const primaryCode = primaryCurrency?.code ?? "RUB";
+  const primaryScale = primaryCurrency?.scale ?? 2;
+  const locfByCurrency = firstHitLocfMap(
+    ratesLteToday,
+    (rate) => rate.currencyCode,
+  );
+
+  const totalsInputs: DebtPrimaryTotalsInput[] = [];
 
   const people = peopleRaw.map((p) => ({
     id: p.id,
@@ -53,6 +88,19 @@ export default async function DebtsPage() {
         d.sizeChanges.map((s) => s.deltaMinor),
         d.repayments.map((r) => r.amountMinor),
       );
+      const rate = locfByCurrency.get(d.currencyCode) ?? null;
+      totalsInputs.push({
+        id: d.id,
+        direction: d.direction,
+        status: d.status,
+        remainingMinor: remaining,
+        currencyScale: d.currency.scale,
+        isPrimaryCurrency: d.currency.isPrimary,
+        rateToPrimaryScaled: d.currency.isPrimary
+          ? null
+          : (rate?.rateToPrimaryScaled ?? null),
+        primaryScale,
+      });
       return {
         id: d.id,
         direction: d.direction,
@@ -63,7 +111,11 @@ export default async function DebtsPage() {
         status: d.status,
         dueDate: d.dueDate,
         note: d.note,
-        currency: d.currency,
+        currency: {
+          code: d.currency.code,
+          name: d.currency.name,
+          scale: d.currency.scale,
+        },
         person: { id: p.id, name: p.name },
         repayments: d.repayments.map((r) => ({
           id: r.id,
@@ -80,6 +132,11 @@ export default async function DebtsPage() {
       };
     }),
   }));
+
+  const { iOwePrimaryMinor, theyOwePrimaryMinor } =
+    computeDebtPrimaryTotals(totalsInputs);
+  const iOweDisplay = formatMinorToMajor(iOwePrimaryMinor, primaryScale);
+  const theyOweDisplay = formatMinorToMajor(theyOwePrimaryMinor, primaryScale);
 
   const peopleOptions = people.map((p) => ({ id: p.id, name: p.name }));
 
@@ -105,6 +162,11 @@ export default async function DebtsPage() {
           </div>
         ) : null}
       </header>
+      <DebtsPrimaryTotalsHero
+        iOweDisplay={iOweDisplay}
+        theyOweDisplay={theyOweDisplay}
+        primaryCode={primaryCode}
+      />
       <DebtsList people={people} currencies={currencies} />
     </main>
   );
