@@ -126,7 +126,7 @@ status: complete
 2. **Task 2: Expand router.refresh to Form, Person, DebtsList delete** - `3f4152c` (feat)
 3. **Task 3: Document assertInitialImmutable as Zod test contract** - `fa61cc4` (docs)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `07dedc5` (docs: complete plan)
 
 ## Files Created/Modified
 
