@@ -76,8 +76,6 @@ export default async function DebtsPage() {
     (rate) => rate.currencyCode,
   );
 
-  const totalsInputs: DebtPrimaryTotalsInput[] = [];
-
   const people = peopleRaw.map((p) => ({
     id: p.id,
     name: p.name,
@@ -88,19 +86,6 @@ export default async function DebtsPage() {
         d.sizeChanges.map((s) => s.deltaMinor),
         d.repayments.map((r) => r.amountMinor),
       );
-      const rate = locfByCurrency.get(d.currencyCode) ?? null;
-      totalsInputs.push({
-        id: d.id,
-        direction: d.direction,
-        status: d.status,
-        remainingMinor: remaining,
-        currencyScale: d.currency.scale,
-        isPrimaryCurrency: d.currency.isPrimary,
-        rateToPrimaryScaled: d.currency.isPrimary
-          ? null
-          : (rate?.rateToPrimaryScaled ?? null),
-        primaryScale,
-      });
       return {
         id: d.id,
         direction: d.direction,
@@ -132,6 +117,29 @@ export default async function DebtsPage() {
       };
     }),
   }));
+
+  const totalsInputs: DebtPrimaryTotalsInput[] = peopleRaw.flatMap((p) =>
+    p.debts.map((d) => {
+      const remaining = remainingMinor(
+        d.initialAmountMinor,
+        d.sizeChanges.map((s) => s.deltaMinor),
+        d.repayments.map((r) => r.amountMinor),
+      );
+      const rate = locfByCurrency.get(d.currencyCode) ?? null;
+      return {
+        id: d.id,
+        direction: d.direction,
+        status: d.status,
+        remainingMinor: remaining,
+        currencyScale: d.currency.scale,
+        isPrimaryCurrency: d.currency.isPrimary,
+        rateToPrimaryScaled: d.currency.isPrimary
+          ? null
+          : (rate?.rateToPrimaryScaled ?? null),
+        primaryScale,
+      };
+    }),
+  );
 
   const { rows, iOwePrimaryMinor, theyOwePrimaryMinor, isPartial } =
     computeDebtPrimaryTotals(totalsInputs);
