@@ -132,7 +132,7 @@ Plans:
   3. `/debts` shows «я должен» / «мне должны» totals in primary with partial banner when FX missing
   4. Капитал (`/`) net-worth figures unchanged when debts exist (isolation still holds)
 
-**Plans:** 1/4 plans executed
+**Plans:** 2/4 plans executed
 
 Plans:
 **Wave 1**
@@ -141,7 +141,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 11-02-PLAN.md — D-09 immutability + chart empty-history polish
+- [x] 11-02-PLAN.md — D-09 immutability + chart empty-history polish
 - [ ] 11-03-PLAN.md — /debts primary hero + partial excluded-debt list
 - [ ] 11-04-PLAN.md — Капитал excluded-account list + DISOL scan
 
