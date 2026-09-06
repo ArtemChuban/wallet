@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A local, single-user personal finance site for tracking net worth across accounts (fiat debit, fiat credit, crypto USDT, cash). Runs in Docker with SQLite on the host; no cloud accounts. v1 ships account balances, multi-currency conversion to a primary currency, historical net-worth charts with shared LOCF semantics — not budgeting or transaction categorization.
+A local, single-user personal finance site for tracking net worth across accounts (fiat debit, fiat credit, crypto USDT, cash) plus a parallel «Долги» side ledger (people, debts, repayments, native principal charts, primary totals). Runs in Docker with SQLite on the host; no cloud accounts. Not budgeting or transaction categorization.
 
 ## Core Value
 
@@ -10,9 +10,9 @@ At any moment, see true net worth (assets minus credit-card debt) in the primary
 
 ## Current State
 
-**Shipped:** v1.0 MVP (2026-09-04)
+**Shipped:** v1.0 MVP (2026-09-04); v1.1 Долги людям phases 8–11 complete (awaiting milestone archive)
 
-Local Dockerized net-worth tracker: SQLite → currencies/accounts → dated balances → dated FX → current NW dashboard → historical charts (as-of balance × as-of FX). ~16k LOC TypeScript/TSX. Stack: Next.js 16 App Router, Prisma 7 + SQLite, shadcn/ui, recharts, Vitest (153 tests). Russian-first UI.
+Local Dockerized net-worth tracker + personal-debts side ledger: SQLite → currencies/accounts → dated balances → dated FX → NW dashboard/charts → `/debts` people/debts/repayments with native stack chart and primary I-owe/they-owe totals. Stack: Next.js 16 App Router, Prisma 7 + SQLite, shadcn/ui, recharts, Vitest. Russian-first UI. Debts never change NW (DISOL-01).
 
 ## Current Milestone: v1.1 Долги людям
 
@@ -42,15 +42,19 @@ Local Dockerized net-worth tracker: SQLite → currencies/accounts → dated bal
 - ✓ User can see balance history charts per account and overall (in primary currency and originals where relevant) — v1.0
 - ✓ Shared LOCF path (`src/lib/locf.ts`) for pages + historical-series; Nyquist VALIDATION closed for phases 3–6 — v1.0
 
+### Validated (v1.1)
+
+- ✓ User can create and manage people (counterparties) and attach multiple debts to one person — Phase 9
+- ✓ User can create debts with direction (I owe / they owe me), currency, initial amount, optional due date, optional note — Phase 9
+- ✓ Remaining balance = initial + Σ size-change − Σ repayments; repayments only in debt currency with as-of date — Phases 8–10
+- ✓ User can record partial repayments with history and see native principal stack (Погашено + Остаток) in «История» — Phases 10–11
+- ✓ Debt auto-closes at remaining 0; user can also close early by writing off / forgiving remaining — Phase 10
+- ✓ Debts section shows totals «я должен» / «мне должны» in primary with FX partial honesty; debts never change NW — Phases 8+11
+- ✓ Separate nav section «Долги» (Russian-first UI) — Phase 9
+
 ### Active
 
-- [ ] User can create and manage people (counterparties) and attach multiple debts to one person
-- [ ] User can create debts with direction (I owe / they owe me), currency, initial amount, optional due date, optional note
-- [ ] Remaining balance = initial − sum of repayments; repayments only in debt currency with as-of date (backdating allowed)
-- [ ] User can record partial repayments with history and see a chart of remaining balance over time plus repayment amounts
-- [ ] Debt auto-closes at remaining 0; user can also close early by writing off / forgiving remaining
-- [ ] Debts section shows totals «I owe» / «they owe me» in primary currency using FX as-of (debts never change net worth)
-- [ ] Separate nav section «Долги» (Russian-first UI)
+(none for v1.1 — milestone phases complete)
 
 ### Out of Scope
 
@@ -99,12 +103,14 @@ v1.1 adds personal debts (people ↔ money owed) as a parallel domain: same mone
 | Pure `computeNetWorthRows` for Phase 6 reuse | Charts need same inclusion math | ✓ Good — Phase 5–6 |
 | Shared hybrid LOCF (`pickLatestAsOf` + `firstHitLocfMap` + typed wrappers) | Kill triplicate scanners; keep page batch Maps + series pure | ✓ Good — Phase 7 |
 | Keep Prisma `getBalanceAsOf` / `getRateAsOf` as thin findFirst | LOCF-04; pages stay on batch Maps | ✓ Good — Phase 7 |
-| Person entity → many debts | One counterparty, multiple open/closed debts | — Pending v1.1 |
-| Remaining = initial − Σ repayments | Audit trail of principal + payments | — Pending v1.1 |
-| Repayments same currency + dated as-of | Match balance/FX backdating model; no cross-currency pay | — Pending v1.1 |
-| Debts excluded from NW | Capital stays account-based; debts are side ledger | — Pending v1.1 |
-| Early close = write-off/forgive remaining | Auto-close at 0 insufficient for real settlements | — Pending v1.1 |
-| Primary totals for I-owe / they-owe via FX as-of | Same conversion honesty as NW dashboard | — Pending v1.1 |
+| Person entity → many debts | One counterparty, multiple open/closed debts | ✓ Good — Phase 9 |
+| Remaining = initial + Σ delta − Σ repayments | Audit trail; size-change events not writeOff field | ✓ Good — Phase 8 |
+| Repayments same currency + dated as-of | Match balance/FX backdating model; no cross-currency pay | ✓ Good — Phase 10 |
+| Debts excluded from NW | Capital stays account-based; debts are side ledger | ✓ Good — Phases 8+11 DISOL |
+| Early close = write-off/forgive remaining | Auto-close at 0 insufficient for real settlements | ✓ Good — Phase 10 |
+| Primary totals for I-owe / they-owe via FX as-of | Same conversion honesty as NW dashboard | ✓ Good — Phase 11 |
+| One stacked principal chart (repaid+remaining) in История | Product lock vs separate charts; D-03 | ✓ Good — Phase 11 |
+| Debt.openedAsOf required + immutable after create | Series start date; Moscow calendar backfill | ✓ Good — Phase 11 |
 | Destructive confirm = in-dialog second step, never `window.confirm` | Accidental deletes; consistent RU UX; honest cascade copy | Locked Phase 9 — app-wide constitution |
 | Agent-driven UAT (Orca browser + `npm run dev`); human only for subjective/parallel/blocked | Avoid repetitive conversational UAT; same for Cursor / Claude Code / Codex | Locked — see `.planning/OPERATOR.md` |
 | DebtDetailDialog = tabs (Погашение / Изменение / Простить / История), not stacked forms | User approved mock variant 1 over primary-CTA; reduces modal overload | Locked 2026-09-05 — mock `/tmp/wallet-debt-detail-variants.html`; implement as UI follow-up |
@@ -127,4 +133,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-04 after starting milestone v1.1 Долги людям*
+*Last updated: 2026-09-06 after Phase 11*

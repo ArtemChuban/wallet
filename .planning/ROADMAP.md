@@ -29,7 +29,7 @@ Full detail: [milestones/v1.0-ROADMAP.md](./milestones/v1.0-ROADMAP.md)
 - [x] **Phase 8: Debts schema + domain math** — Person/Debt/DebtRepayment models; remaining, write-off, primary totals helpers + tests; NW untouched (completed 2026-09-04)
 - [x] **Phase 9: People + debts CRUD + nav** — `/debts` list, person/debt dialogs, «Долги» nav, RU empty states
 - [x] **Phase 10: Repayments + close/write-off** — Dated repayments, history, delete/reopen, auto-close, early forgive (completed 2026-09-05)
-- [ ] **Phase 11: Charts + primary totals** — Remaining + repayment charts; I-owe/they-owe primary hero with FX partial banner
+- [x] **Phase 11: Charts + primary totals** — Remaining + repayment charts; I-owe/they-owe primary hero with FX partial banner (completed 2026-09-06)
 
 ## Phase Details
 
@@ -132,7 +132,7 @@ Plans:
   3. `/debts` shows «я должен» / «мне должны» totals in primary with partial banner when FX missing
   4. Капитал (`/`) net-worth figures unchanged when debts exist (isolation still holds)
 
-**Plans:** 4/4 plans executed
+**Plans:** 4/4 plans complete
 
 Plans:
 **Wave 1**
@@ -150,11 +150,11 @@ Plans:
 | Phase | Milestone | Plans complete | Status |
 |-------|-----------|----------------|--------|
 | 1–7 | v1.0 | 24/24 | Shipped |
-| 8 | v1.1 | 0/3 | Complete   |
-| 9 | v1.1 | 4/4 | Ready for verification|
-
-| 10 | v1.1 | 4/4 | Complete — ready for verification |
-| 11 | v1.1 | 2/4 | In Progress |
+| 8 | v1.1 | 3/3 | Complete |
+| 9 | v1.1 | 4/4 | Complete |
+| 10 | v1.1 | 4/4 | Complete |
+| 11 | v1.1 | 4/4 | Complete |
 
 ---
 *Roadmap created: 2026-09-04 for milestone v1.1*
+*Updated: 2026-09-06 — Phase 11 complete; v1.1 ready to archive*
