@@ -2,15 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Долги людям
-current_phase: 11
-status: completed
-stopped_at: Phase 11 complete — all phases complete
-last_updated: "2026-09-06T20:36:45.519Z"
+current_phase: 12
+current_phase_name: "Address tech debt: debts refresh + Nyquist 10–11"
+status: Research complete — ready to plan
+stopped_at: Phase 12 research complete — plan next
+last_updated: "2026-09-06T21:44:00.000Z"
 last_activity: 2026-09-06
-last_activity_desc: Phase 11 complete
-state_head: aca6aa83c791c2617e5e889a3bd639458044f4dc
+last_activity_desc: Phase 12 RESEARCH.md written
+state_head: bb098382ce2890ff3d3b8fe14576698715e82d7c
 progress:
-  total_phases: 4
+  total_phases: 5
   completed_phases: 4
   total_plans: 15
   completed_plans: 15
@@ -23,15 +24,15 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-06 after Phase 11)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** v1.1 complete — archive milestone / start next
+**Current focus:** Phase 12 tech debt — research done; `/gsd-plan-phase 12`
 
 ## Current Position
 
-Phase: 11
+Phase: 12 — Address tech debt: debts refresh + Nyquist 10–11
 Plan: Not started
-Status: All phases complete
-Total Plans in Phase: 4
-Last activity: 2026-09-06 — Phase 11 complete
+Status: Research complete — ready to plan
+Total Plans in Phase: 0
+Last activity: 2026-09-06 — Phase 12 RESEARCH.md written
 
 ## Performance Metrics
 
@@ -217,6 +218,7 @@ Recent decisions affecting current work:
 ### Roadmap Evolution
 
 - Phase 7 added: Address tech debt: LOCF consolidation + Nyquist 3–6
+- Phase 12 added: Address tech debt: debts refresh + Nyquist 10–11
 
 ## Deferred Items
 
@@ -231,9 +233,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-06T20:37:00Z
-Stopped at: Phase 11 complete — v1.1 all phases done; ready `/gsd-complete-milestone v1.1`
-Resume file: None
+Last session: 2026-09-06T21:38:00.472Z
+Stopped at: Phase 12 research complete — plan next
+Resume file: none
 
 ## Quick Tasks Completed
 
@@ -243,6 +245,5 @@ Resume file: None
 
 ## Operator Next Steps
 
-- `/gsd-complete-milestone v1.1` — archive v1.1 (all phases + UAT complete)
-- `/gsd-validate-phase 11` — optional; Nyquist VALIDATION.md still `draft`
-- `/gsd-ui-review 11` — optional visual audit
+- `/gsd-plan-phase 12` — break down audit tech debt (RESEARCH.md ready)
+- See `.planning/v1.1-MILESTONE-AUDIT.md` tech_debt section
