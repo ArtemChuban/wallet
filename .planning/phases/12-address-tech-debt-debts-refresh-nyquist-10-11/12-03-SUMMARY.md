@@ -109,7 +109,7 @@ Each task was committed atomically:
 1. **Task 1: Reconcile Phase 10 and 11 VALIDATION.md to validated** - `f0a3b24` (docs)
 2. **Task 2: Reconcile Phase 12 VALIDATION.md after TD evidence** - `3aea581` (docs)
 
-**Plan metadata:** (pending docs commit for SUMMARY)
+**Plan metadata:** `66e19cd` (docs: complete plan)
 
 ## Files Created/Modified
 - `.planning/phases/10-repayments-close-write-off/10-VALIDATION.md` — NYQ-10 validated + audit
