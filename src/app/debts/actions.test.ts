@@ -379,6 +379,28 @@ describe("updateDebtMeta immutability (DEBT-01 / D-09)", () => {
     expect(revalidatePath).toHaveBeenCalledWith("/debts");
     expect(revalidatePath).not.toHaveBeenCalledWith("/");
   });
+
+  it("never passes smuggled openedAsOf to prisma.debt.update (D-09 / T-11-02)", async () => {
+    const formData = new FormData();
+    formData.set("debtId", "9");
+    formData.set("direction", "I_OWE");
+    formData.set("dueDate", "2027-06-01");
+    formData.set("note", "meta");
+    formData.set("openedAsOf", "2020-01-01");
+
+    const result = await updateDebtMeta({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.debt.update).toHaveBeenCalledTimes(1);
+    const data = vi.mocked(prisma.debt.update).mock.calls[0]![0]!.data as Record<
+      string,
+      unknown
+    >;
+    expect(data).not.toHaveProperty("openedAsOf");
+    expect(Object.keys(data).sort()).toEqual(
+      ["direction", "dueDate", "note"].sort(),
+    );
+  });
 });
 
 describe("deleteDebt (DEBT-01 / D-13)", () => {
