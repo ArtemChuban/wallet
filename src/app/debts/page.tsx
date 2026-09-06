@@ -5,6 +5,7 @@ import { PersonFormDialog } from "@/components/debts/PersonFormDialog";
 import { Button } from "@/components/ui/button";
 import { calendarDateToday } from "@/lib/dates";
 import {
+  assertStatusSynced,
   computeDebtPrimaryTotals,
   remainingMinor,
   type DebtPrimaryTotalsInput,
@@ -86,6 +87,7 @@ export default async function DebtsPage() {
         d.sizeChanges.map((s) => s.deltaMinor),
         d.repayments.map((r) => r.amountMinor),
       );
+      assertStatusSynced(d.status, remaining);
       return {
         id: d.id,
         direction: d.direction,
@@ -125,6 +127,7 @@ export default async function DebtsPage() {
         d.sizeChanges.map((s) => s.deltaMinor),
         d.repayments.map((r) => r.amountMinor),
       );
+      assertStatusSynced(d.status, remaining);
       const rate = locfByCurrency.get(d.currencyCode) ?? null;
       return {
         id: d.id,

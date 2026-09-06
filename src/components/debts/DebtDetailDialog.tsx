@@ -6,6 +6,7 @@ import {
   useState,
   useTransition,
 } from "react";
+import { useRouter } from "next/navigation";
 import {
   createRepayment,
   createSizeChange,
@@ -597,6 +598,7 @@ export function DebtDetailDialog({
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
+  const router = useRouter();
   const [formKey, setFormKey] = useState(0);
 
   return (
@@ -613,7 +615,10 @@ export function DebtDetailDialog({
             <DebtDetailBody
               key={formKey}
               debt={debt}
-              onSuccess={() => onOpenChange(false)}
+              onSuccess={() => {
+                router.refresh();
+                onOpenChange(false);
+              }}
             />
           ) : null}
         </div>
