@@ -48,6 +48,49 @@
 
 ---
 
+## Milestone: v1.1 — Долги людям
+
+**Shipped:** 2026-09-07
+**Phases:** 5 | **Plans:** 18 | **Tasks:** 46
+
+### What Was Built
+
+- Side ledger: Person/Debt/repayment/size-change with remaining math isolated from NW (DISOL-01)
+- `/debts` CRUD + nav; DestructiveConfirmStep constitution
+- Repayments, early forgive, timeline, principal stack chart, primary I-owe/they-owe totals
+- Audit→Phase 12: refresh shells, UI-home move, Nyquist 10–12; forgive opaque-error fix at close
+
+### What Worked
+
+- Size-change ledger (not writeOff column) kept audit trail honest
+- Milestone audit → insert Phase 12 closed tech debt before archive
+- Diagnose-only debug (G-10-5/G-10-8) then targeted client fix at close unblocked clean archive
+
+### What Was Inefficient
+
+- Optional concurrency UAT opaque path needed two debug sessions after 10-04 server map
+- VALIDATION.md for 10–11 stayed draft until Phase 12 (repeat of v1.0 Nyquist lag)
+- DestructiveConfirmStep lived under `components/debts/` until Phase 12 UI-home move
+
+### Patterns Established
+
+- Debts never import into NW / historical-series (DISOL scan)
+- In-dialog destructive confirm only — no `window.confirm` for irreversible actions
+- Stale writes: map P2025 → refresh RU; field errors before opaque catch-all on client
+
+### Key Lessons
+
+1. Client error chaining matters as much as server catch maps for UAT concurrency truth
+2. Ship Nyquist VALIDATION with phase evidence; do not wait for milestone audit
+3. Cross-domain UI primitives belong in `components/ui/` from first consumer
+
+### Cost Observations
+
+- Timeline: ~4 calendar days (2026-09-04 → 2026-09-07)
+- Plans: 18; suite ~265 tests at Phase 12 close
+
+---
+
 ## Cross-Milestone Trends
 
 ### Process Evolution
@@ -55,14 +98,18 @@
 | Milestone | Sessions | Phases | Key Change |
 |-----------|----------|--------|------------|
 | v1.0 | — | 7 | First GSD cycle; audit inserted Phase 7 for LOCF + Nyquist |
+| v1.1 | — | 5 | Audit inserted Phase 12; side-ledger domain + DISOL isolation |
 
 ### Cumulative Quality
 
 | Milestone | Tests | Coverage | Zero-Dep Additions |
 |-----------|-------|----------|-------------------|
 | v1.0 | 153 | — | Vitest + Wave 0 harness from Phase 1 |
+| v1.1 | ~265 | — | Debts domain + disol scan + forgive error helper |
 
 ### Top Lessons (Verified Across Milestones)
 
 1. Shared LOCF path prevents scanner drift across dashboard/charts/pages
 2. Russian-first human verify at plan end catches UI contract gaps early
+3. Nyquist VALIDATION lag repeats unless closed in-phase — budget a cleanup phase or gate earlier
+4. Audit-open todos/debug/quick must be cleared or acknowledged before milestone close

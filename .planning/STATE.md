@@ -2,18 +2,18 @@
 gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Долги людям
-current_phase: 12
-status: completed
+status: Awaiting next milestone
 stopped_at: Phase 12 complete — all phases complete
-last_updated: "2026-09-06T22:43:26.922Z"
+last_updated: "2026-09-06T22:54:02.654Z"
 last_activity: 2026-09-07
-last_activity_desc: Phase 12 complete
-state_head: 8e93910fcc99b0cb6a858ca454e0716d55215468
+last_activity_desc: Milestone v1.1 completed and archived
+state_head: ef65ec4459e367fb7b5ff2f3ae67be1e0d98e9da
 progress:
   total_phases: 5
   completed_phases: 5
   total_plans: 18
   completed_plans: 18
+current_phase: 12
 ---
 
 # Project State
@@ -27,11 +27,10 @@ See: .planning/PROJECT.md (updated 2026-09-07 after Phase 12)
 
 ## Current Position
 
-Phase: 12
-Plan: Not started
-Status: All phases complete
-Total Plans in Phase: 3
-Last activity: 2026-09-07 — Phase 12 complete
+Phase: Milestone v1.1 complete
+Plan: —
+Status: Awaiting next milestone
+Last activity: 2026-09-07 — Milestone v1.1 completed and archived
 
 ## Performance Metrics
 
@@ -255,5 +254,4 @@ Resume file: None
 
 ## Operator Next Steps
 
-- `/gsd-execute-phase 12` — Wave 1: 12-01 tracer refresh+assert; then 12-02 UI home; 12-03 Nyquist
-- Plans: `.planning/phases/12-address-tech-debt-debts-refresh-nyquist-10-11/12-0{1,2,3}-PLAN.md`
+- Start the next milestone with /gsd-new-milestone
