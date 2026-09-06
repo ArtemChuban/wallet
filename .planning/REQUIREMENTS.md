@@ -29,8 +29,8 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Charts & totals
 
-- [ ] **DCHART-01**: User can see remaining-balance-over-time chart in the debt’s currency
-- [ ] **DCHART-02**: User can see repayment-amounts chart for a debt
+- [x] **DCHART-01**: User can see remaining-balance-over-time chart in the debt’s currency
+- [x] **DCHART-02**: User can see repayment-amounts chart for a debt
 - [ ] **DTOTAL-01**: Debts section shows totals «I owe» / «they owe me» in primary with partial banner when FX missing
 
 ### Nav / isolation
@@ -91,8 +91,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | REPAY-01 | Phase 10 | Complete |
 | REPAY-02 | Phase 10 | Complete |
 | REPAY-03 | Phase 10 | Complete |
-| DCHART-01 | Phase 11 | Pending |
-| DCHART-02 | Phase 11 | Pending |
+| DCHART-01 | Phase 11 | Complete |
+| DCHART-02 | Phase 11 | Complete |
 | DTOTAL-01 | Phase 11 | Pending |
 | DNAV-01 | Phase 9 | Complete |
 | DISOL-01 | Phase 8 + 11 | Complete |
