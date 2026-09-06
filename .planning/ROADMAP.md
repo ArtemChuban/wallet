@@ -154,7 +154,7 @@ Plans:
 | 9 | v1.1 | 4/4 | Ready for verification|
 
 | 10 | v1.1 | 4/4 | Complete — ready for verification |
-| 11 | v1.1 | 0/4 | Planned |
+| 11 | v1.1 | 2/4 | In Progress |
 
 ---
 *Roadmap created: 2026-09-04 for milestone v1.1*
