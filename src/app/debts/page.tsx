@@ -133,10 +133,30 @@ export default async function DebtsPage() {
     }),
   }));
 
-  const { iOwePrimaryMinor, theyOwePrimaryMinor } =
+  const { rows, iOwePrimaryMinor, theyOwePrimaryMinor, isPartial } =
     computeDebtPrimaryTotals(totalsInputs);
   const iOweDisplay = formatMinorToMajor(iOwePrimaryMinor, primaryScale);
   const theyOweDisplay = formatMinorToMajor(theyOwePrimaryMinor, primaryScale);
+
+  const debtMetaById = new Map(
+    people.flatMap((p) =>
+      p.debts.map((d) => [
+        d.id,
+        { personName: p.name, currencyCode: d.currencyCode },
+      ]),
+    ),
+  );
+  const excludedDebts = rows
+    .filter((row) => !row.includedInTotal)
+    .map((row) => {
+      const meta = debtMetaById.get(row.debtId);
+      return {
+        debtId: row.debtId,
+        personName: meta?.personName ?? "—",
+        currencyCode: meta?.currencyCode ?? "—",
+        reason: row.excludeReason === "no_fx" ? "нет курса" : row.excludeReason,
+      };
+    });
 
   const peopleOptions = people.map((p) => ({ id: p.id, name: p.name }));
 
@@ -166,6 +186,8 @@ export default async function DebtsPage() {
         iOweDisplay={iOweDisplay}
         theyOweDisplay={theyOweDisplay}
         primaryCode={primaryCode}
+        isPartial={isPartial}
+        excludedDebts={excludedDebts}
       />
       <DebtsList people={people} currencies={currencies} />
     </main>
