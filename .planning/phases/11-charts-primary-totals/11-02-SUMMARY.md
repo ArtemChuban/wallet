@@ -116,7 +116,7 @@ Each task was committed atomically:
 2. **Task 2: Edit UI create-only Дата + chart empty-history polish** - `7bb70ef` (feat)
 3. **Task 3: Keep debts chart suites green** - no commit (verify-only; 98 tests pass, no code changes)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `16c0615` / `454fe95` / `920f5ce` (docs: complete plan)
 
 _Note: Task 1 was coverage TDD — RED could not fail because 11-01 already implemented schema omit + action ignore._
 
