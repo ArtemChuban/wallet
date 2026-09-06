@@ -5,10 +5,10 @@ milestone_name: Долги людям
 current_phase: 11
 current_phase_name: Charts + primary totals
 status: ready
-stopped_at: Phase 11 context gathered
-last_updated: "2026-09-05T21:24:46.362Z"
-last_activity: 2026-09-05
-last_activity_desc: Phase 10 complete; G-10-8 waived; ready Phase 11
+stopped_at: Phase 11 research complete
+last_updated: "2026-09-06T14:34:00.000Z"
+last_activity: 2026-09-06
+last_activity_desc: Phase 11 RESEARCH.md written; ready to plan
 state_head: 73fd9f3d3995496eafb5be38e170a40689c1757f
 progress:
   total_phases: 4
@@ -32,7 +32,7 @@ Phase: 11 (Charts + primary totals) — READY TO PLAN
 Plan: —
 Status: Phase 10 complete (G-10-8 deferred by user)
 Total Plans in Phase: —
-Last activity: 2026-09-05 — Closed Phase 10; next is Phase 11
+Last activity: 2026-09-06 — Phase 11 research complete; next `/gsd-plan-phase` planning
 
 ## Performance Metrics
 
@@ -219,9 +219,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-05T21:24:46.226Z
-Stopped at: Phase 11 context gathered
-Resume file: /home/artem/Documents/wallet/.planning/phases/11-charts-primary-totals/11-CONTEXT.md
+Last session: 2026-09-06T14:34:00.000Z
+Stopped at: Phase 11 research complete
+Resume file: /home/artem/Documents/wallet/.planning/phases/11-charts-primary-totals/11-RESEARCH.md
 
 ## Quick Tasks Completed
 
