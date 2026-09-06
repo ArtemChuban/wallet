@@ -302,11 +302,9 @@ describe("buildDebtPrincipalStackSeries", () => {
     points: { repaidMajor: number; remainingMajor: number }[],
   ) {
     for (const p of points) {
-      expect(p.repaidMajor + p.remainingMajor).toBeCloseTo(
-        p.repaidMajor + p.remainingMajor,
-        10,
-      );
-      // principal = repaid + remaining (D-03)
+      expect(p.remainingMajor).toBeGreaterThanOrEqual(0);
+      expect(p.repaidMajor).toBeGreaterThanOrEqual(0);
+      // principal-at-date = repaid + remaining (D-03); both legs non-negative
       expect(p.repaidMajor + p.remainingMajor).toBeGreaterThanOrEqual(0);
     }
   }
@@ -451,9 +449,10 @@ describe("buildDebtPrincipalStackSeries", () => {
       { asOfDate: "2026-08-20", repaidMajor: 50, remainingMajor: 150 },
       { asOfDate: "2026-09-06", repaidMajor: 50, remainingMajor: 150 },
     ]);
-    for (const p of points) {
-      expect(p.remainingMajor).toBeGreaterThanOrEqual(0);
-    }
+    assertStackInvariant(points);
+    expect(points[0]!.repaidMajor + points[0]!.remainingMajor).toBe(100);
+    expect(points[1]!.repaidMajor + points[1]!.remainingMajor).toBe(100);
+    expect(points[2]!.repaidMajor + points[2]!.remainingMajor).toBe(200);
   });
 
   it("end-of-day totals are order-independent for same asOfDate", () => {
