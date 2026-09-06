@@ -6,10 +6,10 @@ current_phase: 11
 current_phase_name: Charts + primary totals
 status: verifying
 stopped_at: Completed 11-04-PLAN.md
-last_updated: "2026-09-06T16:30:31.742Z"
+last_updated: "2026-09-06T16:30:40.257Z"
 last_activity: 2026-09-06
 last_activity_desc: Phase 11 execution started
-state_head: eaed013eca3e44aebf2de80d0990d4e62c153b69
+state_head: 95bc935303ad9e343256f3129ae5f8202d66c13f
 progress:
   total_phases: 4
   completed_phases: 3
@@ -197,6 +197,8 @@ Recent decisions affecting current work:
 - [Phase 11]: TDD RED skipped for schema/action immutability — 11-01 already green; Task 1 added missing action smuggle assertion only
 - [Phase 11]: Hero always mounts above DebtsList/empty CTA even with zero people (D-12)
 - [Phase 11]: Excluded row labels join person name + currencyCode + нет курса for no_fx (D-13)
+- [Phase 11]: Excluded-account reasons reuse DashboardAccountList copy: нет баланса | нет курса — Match /debts partial honesty UX on Капитал without new copy invent
+- [Phase 11]: Optional DebtPrincipalStackChart historical-series ban included in disol.test.ts — Locks T-11-05 bidirectional isolation for chart series
 
 ### Pending Todos
 

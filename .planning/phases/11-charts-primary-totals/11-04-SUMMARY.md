@@ -94,7 +94,7 @@ Each task was committed atomically:
 1. **Task 1: Капитал partial banner excluded-account list (D-14)** - `1e85340` (feat)
 2. **Task 2: DISOL-01 automated isolation scan** - `eaed013` (test)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `95bc935` (docs: complete plan)
 
 ## Files Created/Modified
 - `src/app/page.tsx` - Excluded-account `<ul>` under «Итог неполный» from `!includedInTotal` rows
