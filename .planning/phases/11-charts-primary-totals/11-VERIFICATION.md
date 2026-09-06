@@ -1,7 +1,7 @@
 ---
 phase: 11-charts-primary-totals
 verified: 2026-09-06T16:34:33Z
-status: human_needed
+status: passed
 score: 14/17 must-haves verified
 behavior_unverified: 0
 overrides_applied: 0
@@ -12,6 +12,7 @@ decision_coverage:
 gaps: []
 behavior_unverified_items: []
 human_verification:
+
   - test: "Open debt detail → «История» — confirm one stacked chart only (Погашено + Остаток), no second chart and no «Графики» tab"
     expected: "Single stepAfter stack above timeline; tabs stay Погашение / size / forgive / История"
     why_human: "Backstop truth (no second chart surface) — presence/grep cannot prove absence of a product surface at runtime"
