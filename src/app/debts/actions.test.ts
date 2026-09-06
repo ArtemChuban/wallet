@@ -261,6 +261,7 @@ describe("createDebt (DEBT-01)", () => {
     formData.set("direction", "I_OWE");
     formData.set("currencyCode", "RUB");
     formData.set("initialAmountMajor", "100.50");
+    formData.set("openedAsOf", "2026-09-01");
     formData.set("dueDate", "2026-12-01");
     formData.set("note", "за обед");
 
@@ -278,6 +279,7 @@ describe("createDebt (DEBT-01)", () => {
         direction: "I_OWE",
         currencyCode: "RUB",
         initialAmountMinor: 10050n,
+        openedAsOf: "2026-09-01",
         dueDate: "2026-12-01",
         note: "за обед",
         status: "OPEN",
@@ -293,6 +295,7 @@ describe("createDebt (DEBT-01)", () => {
     formData.set("direction", "THEY_OWE");
     formData.set("currencyCode", "RUB");
     formData.set("initialAmountMajor", "0");
+    formData.set("openedAsOf", "2026-09-01");
 
     const result = await createDebt({}, formData);
 
@@ -310,6 +313,7 @@ describe("createDebt (DEBT-01)", () => {
     formData.set("direction", "THEY_OWE");
     formData.set("currencyCode", "RUB");
     formData.set("initialAmountMajor", "250");
+    formData.set("openedAsOf", "2026-08-15");
     formData.set("note", "займ");
 
     const result = await createDebt({}, formData);
@@ -323,6 +327,7 @@ describe("createDebt (DEBT-01)", () => {
             direction: "THEY_OWE",
             currencyCode: "RUB",
             initialAmountMinor: 25000n,
+            openedAsOf: "2026-08-15",
             dueDate: undefined,
             note: "займ",
             status: "OPEN",

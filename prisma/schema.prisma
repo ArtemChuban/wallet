@@ -53,6 +53,8 @@ model Debt {
   currencyCode       String
   currency           Currency         @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
   initialAmountMinor BigInt
+  /// Create-time open calendar date (YYYY-MM-DD); series start (D-08). Immutable after create.
+  openedAsOf         String
   dueDate            String? // YYYY-MM-DD
   note               String?
   status             DebtStatus       @default(OPEN)

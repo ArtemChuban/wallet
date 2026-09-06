@@ -18,6 +18,7 @@ import {
   DebtFormDialog,
   type DebtRow,
 } from "@/components/debts/DebtFormDialog";
+import { DebtPrincipalStackChart } from "@/components/debts/DebtPrincipalStackChart";
 import { DestructiveConfirmStep } from "@/components/debts/DestructiveConfirmStep";
 import { Button } from "@/components/ui/button";
 import {
@@ -518,7 +519,15 @@ function DebtDetailBody({
       ) : null}
 
       {tab === "history" ? (
-        <div className="grid gap-2" role="tabpanel" aria-label="История">
+        <div className="grid gap-4" role="tabpanel" aria-label="История">
+          <DebtPrincipalStackChart
+            openedAsOf={debt.openedAsOf}
+            initialAmountMinor={debt.initialAmountMinor}
+            repayments={debt.repayments ?? []}
+            sizeChanges={debt.sizeChanges ?? []}
+            today={calendarDateToday()}
+            scale={debt.currency.scale}
+          />
           {timeline.length === 0 ? (
             <p className="text-sm text-muted-foreground">Пока нет событий</p>
           ) : (

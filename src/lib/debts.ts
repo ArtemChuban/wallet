@@ -1,4 +1,4 @@
-import { convertOtherMinorToPrimaryMinor } from "@/lib/money";
+import { convertOtherMinorToPrimaryMinor, minorToMajorNumber } from "@/lib/money";
 
 /** Debt status mirrored from Prisma DebtStatus enum (pure helpers — no Prisma). */
 export type DebtStatus = "OPEN" | "CLOSED";
@@ -194,4 +194,128 @@ export function computeDebtPrimaryTotals(
   }
   const isPartial = rows.some((row) => !row.includedInTotal);
   return { rows, iOwePrimaryMinor, theyOwePrimaryMinor, isPartial };
+}
+
+/** Chart point for debt principal stack (native majors). */
+export type DebtPrincipalStackPoint = {
+  asOfDate: string;
+  repaidMajor: number;
+  remainingMajor: number;
+};
+
+export type DebtStackRepayment = {
+  id: number;
+  asOfDate: string;
+  amountMinor: bigint;
+};
+
+export type DebtStackSizeChange = {
+  id: number;
+  asOfDate: string;
+  deltaMinor: bigint;
+};
+
+type StackEvent =
+  | { kind: "repayment"; id: number; asOfDate: string; amountMinor: bigint }
+  | { kind: "sizeChange"; id: number; asOfDate: string; deltaMinor: bigint };
+
+const KIND_ORDER: Record<StackEvent["kind"], number> = {
+  repayment: 0,
+  sizeChange: 1,
+};
+
+/**
+ * Native principal stack series for debt detail chart (D-04 / D-06 / D-07).
+ * One point per distinct asOfDate; flat open→events→today. No FX.
+ */
+export function buildDebtPrincipalStackSeries(input: {
+  openedAsOf: string;
+  initialAmountMinor: bigint;
+  repayments: readonly DebtStackRepayment[];
+  sizeChanges: readonly DebtStackSizeChange[];
+  today: string;
+  scale: number;
+}): DebtPrincipalStackPoint[] {
+  const {
+    openedAsOf,
+    initialAmountMinor,
+    repayments,
+    sizeChanges,
+    today,
+    scale,
+  } = input;
+
+  const events: StackEvent[] = [
+    ...repayments.map(
+      (r): StackEvent => ({
+        kind: "repayment",
+        id: r.id,
+        asOfDate: r.asOfDate,
+        amountMinor: r.amountMinor,
+      }),
+    ),
+    ...sizeChanges.map(
+      (s): StackEvent => ({
+        kind: "sizeChange",
+        id: s.id,
+        asOfDate: s.asOfDate,
+        deltaMinor: s.deltaMinor,
+      }),
+    ),
+  ];
+
+  events.sort((a, b) => {
+    if (a.asOfDate !== b.asOfDate) {
+      return a.asOfDate < b.asOfDate ? -1 : 1;
+    }
+    if (a.id !== b.id) return a.id - b.id;
+    return KIND_ORDER[a.kind] - KIND_ORDER[b.kind];
+  });
+
+  let repaid = 0n;
+  let remaining = initialAmountMinor;
+
+  const points: DebtPrincipalStackPoint[] = [];
+
+  function emit(asOfDate: string) {
+    points.push({
+      asOfDate,
+      repaidMajor: minorToMajorNumber(repaid, scale),
+      remainingMajor: minorToMajorNumber(remaining, scale),
+    });
+  }
+
+  emit(openedAsOf);
+
+  let i = 0;
+  while (i < events.length) {
+    const date = events[i]!.asOfDate;
+    while (i < events.length && events[i]!.asOfDate === date) {
+      const ev = events[i]!;
+      if (ev.kind === "repayment") {
+        repaid += ev.amountMinor;
+        remaining -= ev.amountMinor;
+      } else {
+        remaining += ev.deltaMinor;
+      }
+      i += 1;
+    }
+    if (date === openedAsOf) {
+      // Replace seed with end-of-day state on open date
+      points[points.length - 1] = {
+        asOfDate: date,
+        repaidMajor: minorToMajorNumber(repaid, scale),
+        remainingMajor: minorToMajorNumber(remaining, scale),
+      };
+    } else {
+      emit(date);
+    }
+  }
+
+  const lastDate = points[points.length - 1]!.asOfDate;
+  if (lastDate < today) {
+    emit(today);
+  }
+
+  return points;
 }

@@ -35,6 +35,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { formatMinorToMajor } from "@/lib/money";
+import { calendarDateToday } from "@/lib/dates";
 
 type CurrencyOption = {
   code: string;
@@ -69,6 +70,8 @@ export type DebtRow = {
   currencyCode: string;
   /** Serialized BigInt string from RSC. */
   initialAmountMinor: string;
+  /** Create-time open calendar date YYYY-MM-DD (D-08). */
+  openedAsOf: string;
   /** Serialized remainingMinor from RSC. */
   remainingMinor: string;
   /** Persisted Debt.status after sync writes (OPEN | CLOSED). */
@@ -156,6 +159,7 @@ function DebtFormBody({
       : (currencies[0]?.code ?? ""),
   );
   const [newPersonName, setNewPersonName] = useState("");
+  const [openedAsOf, setOpenedAsOf] = useState(() => calendarDateToday());
   const [dueDate, setDueDate] = useState(
     mode === "edit" && debt?.dueDate ? debt.dueDate : "",
   );
@@ -420,6 +424,27 @@ function DebtFormBody({
           </p>
         </div>
       )}
+
+      {mode === "create" ? (
+        <div className="grid gap-2">
+          <Label htmlFor="debt-opened">Дата</Label>
+          <Input
+            id="debt-opened"
+            name="openedAsOf"
+            type="date"
+            value={openedAsOf}
+            onChange={(e) => setOpenedAsOf(e.target.value)}
+            required
+            aria-invalid={Boolean(state.errors?.openedAsOf)}
+            disabled={isPending}
+          />
+          {state.errors?.openedAsOf?.[0] ? (
+            <p className="text-sm text-destructive" role="alert">
+              {state.errors.openedAsOf[0]}
+            </p>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="grid gap-2">
         <Label htmlFor="debt-due">Срок (необязательно)</Label>

@@ -265,6 +265,7 @@ export async function createDebt(
         direction: formData.get("direction"),
         currencyCode: formData.get("currencyCode"),
         initialAmountMajor: formData.get("initialAmountMajor"),
+        openedAsOf: formData.get("openedAsOf"),
         dueDate: formData.get("dueDate") ?? undefined,
         note: formData.get("note") ?? undefined,
       });
@@ -278,6 +279,7 @@ export async function createDebt(
         direction,
         currencyCode,
         initialAmountMajor,
+        openedAsOf,
         dueDate,
         note,
       } = validated.data;
@@ -294,6 +296,7 @@ export async function createDebt(
           direction,
           currencyCode,
           initialAmountMinor: resolved.initialAmountMinor,
+          openedAsOf,
           dueDate,
           note,
           status: "OPEN",
@@ -305,6 +308,7 @@ export async function createDebt(
         direction: formData.get("direction"),
         currencyCode: formData.get("currencyCode"),
         initialAmountMajor: formData.get("initialAmountMajor"),
+        openedAsOf: formData.get("openedAsOf"),
         dueDate: formData.get("dueDate") ?? undefined,
         note: formData.get("note") ?? undefined,
       });
@@ -318,6 +322,7 @@ export async function createDebt(
         direction,
         currencyCode,
         initialAmountMajor,
+        openedAsOf,
         dueDate,
         note,
       } = validated.data;
@@ -336,6 +341,7 @@ export async function createDebt(
               direction,
               currencyCode,
               initialAmountMinor: resolved.initialAmountMinor,
+              openedAsOf,
               dueDate,
               note,
               status: "OPEN",

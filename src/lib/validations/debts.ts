@@ -65,6 +65,7 @@ export const createDebtSchema = z
     direction: debtDirectionSchema,
     currencyCode: currencyCodeSchema,
     initialAmountMajor: z.string().trim().min(1, "Введите корректную сумму"),
+    openedAsOf: asOfDateSchema,
     dueDate: optionalDueDateSchema,
     note: optionalNoteSchema,
   })
@@ -88,6 +89,7 @@ export const createDebtWithNewPersonSchema = z
     direction: debtDirectionSchema,
     currencyCode: currencyCodeSchema,
     initialAmountMajor: z.string().trim().min(1, "Введите корректную сумму"),
+    openedAsOf: asOfDateSchema,
     dueDate: optionalDueDateSchema,
     note: optionalNoteSchema,
   })

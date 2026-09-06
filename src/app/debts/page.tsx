@@ -58,6 +58,7 @@ export default async function DebtsPage() {
         direction: d.direction,
         currencyCode: d.currencyCode,
         initialAmountMinor: d.initialAmountMinor.toString(),
+        openedAsOf: d.openedAsOf,
         remainingMinor: remaining.toString(),
         status: d.status,
         dueDate: d.dueDate,
