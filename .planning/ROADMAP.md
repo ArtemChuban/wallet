@@ -151,20 +151,20 @@ Plans:
 **Goal:** Close v1.1 audit tech debt — debts list refresh after mutations, Nyquist validate phases 10–11, small maintainability leftovers from audit.
 **Requirements:** TD-REFRESH-01, TD-STATUS-01, TD-ASSERT-01, TD-UIHOME-01, NYQ-10, NYQ-11, NYQ-12
 **Depends on:** Phase 11
-**Plans:** 3 plans
+**Plans:** 3/3 plans executed
 
 Plans:
 **Wave 1**
 
-- [ ] 12-01-PLAN.md — Tracer: router.refresh + assertStatusSynced + assertInitialImmutable docs
+- [x] 12-01-PLAN.md — Tracer: router.refresh + assertStatusSynced + assertInitialImmutable docs
 
 **Wave 2** *(blocked on Wave 1)*
 
-- [ ] 12-02-PLAN.md — Move DestructiveConfirmStep to components/ui
+- [x] 12-02-PLAN.md — Move DestructiveConfirmStep to components/ui
 
 **Wave 3** *(blocked on Wave 2)*
 
-- [ ] 12-03-PLAN.md — Evidence-first Nyquist close for phases 10–11 + 12
+- [x] 12-03-PLAN.md — Evidence-first Nyquist close for phases 10–11 + 12
 
 ## Progress
 
@@ -175,7 +175,7 @@ Plans:
 | 9 | v1.1 | 4/4 | Complete |
 | 10 | v1.1 | 4/4 | Complete |
 | 11 | v1.1 | 4/4 | Complete |
-| 12 | v1.1 | 0/3 | Planned |
+| 12 | v1.1 | 0/3 | In Progress|
 
 ---
 *Roadmap created: 2026-09-04 for milestone v1.1*
