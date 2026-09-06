@@ -51,6 +51,8 @@ Local Dockerized net-worth tracker + personal-debts side ledger: SQLite → curr
 - ✓ Debt auto-closes at remaining 0; user can also close early by writing off / forgiving remaining — Phase 10
 - ✓ Debts section shows totals «я должен» / «мне должны» in primary with FX partial honesty; debts never change NW — Phases 8+11
 - ✓ Separate nav section «Долги» (Russian-first UI) — Phase 9
+- ✓ Debts mutations refresh `/debts` client+server without touching Капитал `/`; status↔remaining hard-asserted — Phase 12
+- ✓ Shared DestructiveConfirmStep under `components/ui/`; Nyquist VALIDATION closed for phases 10–12 — Phase 12
 
 ### Active
 
@@ -133,4 +135,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-06 after Phase 11*
+*Last updated: 2026-09-07 after Phase 12*

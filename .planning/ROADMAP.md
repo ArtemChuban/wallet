@@ -30,7 +30,7 @@ Full detail: [milestones/v1.0-ROADMAP.md](./milestones/v1.0-ROADMAP.md)
 - [x] **Phase 9: People + debts CRUD + nav** — `/debts` list, person/debt dialogs, «Долги» nav, RU empty states
 - [x] **Phase 10: Repayments + close/write-off** — Dated repayments, history, delete/reopen, auto-close, early forgive (completed 2026-09-05)
 - [x] **Phase 11: Charts + primary totals** — Remaining + repayment charts; I-owe/they-owe primary hero with FX partial banner (completed 2026-09-06)
-- [ ] **Phase 12: Address tech debt: debts refresh + Nyquist 10–11** — Post-audit cleanup from v1.1-MILESTONE-AUDIT (3 plans)
+- [x] **Phase 12: Address tech debt: debts refresh + Nyquist 10–11** — Post-audit cleanup from v1.1-MILESTONE-AUDIT (3 plans)
 
 ## Phase Details
 
@@ -151,7 +151,7 @@ Plans:
 **Goal:** Close v1.1 audit tech debt — debts list refresh after mutations, Nyquist validate phases 10–11, small maintainability leftovers from audit.
 **Requirements:** TD-REFRESH-01, TD-STATUS-01, TD-ASSERT-01, TD-UIHOME-01, NYQ-10, NYQ-11, NYQ-12
 **Depends on:** Phase 11
-**Plans:** 3/3 plans executed
+**Plans:** 3/3 plans complete
 
 Plans:
 **Wave 1**
@@ -175,7 +175,7 @@ Plans:
 | 9 | v1.1 | 4/4 | Complete |
 | 10 | v1.1 | 4/4 | Complete |
 | 11 | v1.1 | 4/4 | Complete |
-| 12 | v1.1 | 3/3 | Verified |
+| 12 | v1.1 | 3/3 | Complete    |
 
 ---
 *Roadmap created: 2026-09-04 for milestone v1.1*

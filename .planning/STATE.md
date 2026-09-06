@@ -3,42 +3,41 @@ gsd_state_version: 1.0
 milestone: v1.1
 milestone_name: Долги людям
 current_phase: 12
-current_phase_name: "Address tech debt: debts refresh + Nyquist 10–11"
-status: Plans revised — execute next
-stopped_at: Phase 12 plans revised (checker feedback) — execute next
-last_updated: "2026-09-06T22:02:01.378Z"
-last_activity: 2026-09-06
-last_activity_desc: Phase 12 plans revised for checker (12-02 import graph, 12-03 Nyquist verifies, RESEARCH RESOLVED)
-state_head: 193c1c7a3993dd1f16faa4e16e4cff41b57c4508
+status: completed
+stopped_at: Phase 12 complete — all phases complete
+last_updated: "2026-09-06T22:43:26.922Z"
+last_activity: 2026-09-07
+last_activity_desc: Phase 12 complete
+state_head: 8e93910fcc99b0cb6a858ca454e0716d55215468
 progress:
   total_phases: 5
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 18
-  completed_plans: 15
+  completed_plans: 18
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-09-06 after Phase 11)
+See: .planning/PROJECT.md (updated 2026-09-07 after Phase 12)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 12 tech debt — plans ready; `/gsd-execute-phase 12`
+**Current focus:** All v1.1 phases complete — `/gsd-complete-milestone v1.1`
 
 ## Current Position
 
-Phase: 12 (Address tech debt: debts refresh + Nyquist 10–11) — READY TO EXECUTE
-Plan: 12-01 (Wave 1) ready
-Status: Plans revised — execute next
+Phase: 12
+Plan: Not started
+Status: All phases complete
 Total Plans in Phase: 3
-Last activity: 2026-09-06 — Phase 12 plans revised (checker feedback)
+Last activity: 2026-09-07 — Phase 12 complete
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 32
+- Total plans completed: 35
 - Average duration: —
 - Total execution time: 0 hours
 
@@ -55,6 +54,7 @@ Last activity: 2026-09-06 — Phase 12 plans revised (checker feedback)
 | 07 | 3 | - | - |
 | 10 | 4 | - | - |
 | 11 | 4 | - | - |
+| 12 | 3 | - | - |
 
 **Recent Trend:**
 
@@ -201,6 +201,11 @@ Recent decisions affecting current work:
 - [Phase 11]: Excluded-account reasons reuse DashboardAccountList copy: нет баланса | нет курса — Match /debts partial honesty UX on Капитал without new copy invent
 - [Phase 11]: Optional DebtPrincipalStackChart historical-series ban included in disol.test.ts — Locks T-11-05 bidirectional isolation for chart series
 
+- [Phase 12]: Shell-only router.refresh so all debt mutation success paths inherit one refresh
+- [Phase 12]: Hard throw on status↔remaining desync; no coerce status for display
+- [Phase 12]: DestructiveConfirmStep moved to components/ui/ with no debts/ re-export shim
+- [Phase 12]: Evidence-first Nyquist — suite green before VALIDATION frontmatter flip
+
 ### Pending Todos
 
 - Add timezone selection to settings (general, minor)
@@ -234,7 +239,7 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-09-06T22:00:00.000Z
-Stopped at: Phase 12 planned (3 plans) — execute next
+Stopped at: Phase 12 complete — all phases complete
 Resume file: none
 
 ## Quick Tasks Completed
