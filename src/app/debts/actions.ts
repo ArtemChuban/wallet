@@ -44,6 +44,7 @@ export type DebtActionState = {
     amountMajor?: string[];
     deltaMajor?: string[];
     asOfDate?: string[];
+    openedAsOf?: string[];
     dueDate?: string[];
     note?: string[];
     debtId?: string[];
