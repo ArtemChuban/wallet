@@ -1,8 +1,8 @@
 ---
-status: diagnosed
+status: resolved
 trigger: "UAT gap G-10-8 — concurrency smoke re-test after 10-04 G-10-5 still shows opaque «Не удалось сохранить…» instead of refresh RU"
 created: 2026-09-05T18:47:00Z
-updated: 2026-09-05T18:53:03Z
+updated: 2026-09-07T00:50:00Z
 goal: find_root_cause_only
 gap_id: G-10-8
 symptoms_prefilled: true
@@ -80,9 +80,14 @@ started: "2026-09-05 re-UAT after 10-04 G-10-5 (prior G-10-5 same opaque; tracke
 ## Resolution
 
 root_cause: "AND-gate multi-factor after G-10-5: (1) DebtDetailDialog forgive handleConfirm ignores errors.deltaMajor so OVER_FLOOR/DELTA_ZERO fall through to client opaque fallback identical to server catch-all (WR-01); (2) forgive failure setConfirm(null) and forgive tab never renders actionError so even correct staleRecordRefreshState message is invisible (CR-01); (3) peer-tab history-event delete rarely produces P2025 — 10-04 server map does not cover the common concurrent path; repay/size still collapse unmapped throws to opaque catch-all"
-fix: ""
-verification: ""
-files_changed: []
+fix: "Client: resolveForgiveActionError chains asOfDate→deltaMajor→message→opaque; forgive failure keeps confirm (actionError visible); forgive tabpanel also renders actionError. Server forgiveRemaining: OVER_FLOOR/DELTA_ZERO return message+errors.deltaMajor so message-only clients avoid opaque."
+verification: "vitest: forgive-action-error.test.ts (4) + actions.test.ts G-10-5 OVER_FLOOR/P2025 — 44 passed"
+files_changed:
+  - src/components/debts/DebtDetailDialog.tsx
+  - src/components/debts/forgive-action-error.ts
+  - src/components/debts/forgive-action-error.test.ts
+  - src/app/debts/actions.ts
+  - src/app/debts/actions.test.ts
 oracle_type: derived
 specialist_hint: react
 confidence: high

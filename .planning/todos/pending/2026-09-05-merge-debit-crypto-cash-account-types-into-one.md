@@ -4,6 +4,9 @@ title: Merge debit, crypto, and cash account types into one type
 area: database
 severity: minor
 files: []
+audit_acknowledged:
+  milestone: v1.1
+  at: 2026-09-06
 ---
 
 ## Problem

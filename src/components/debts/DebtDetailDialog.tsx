@@ -19,6 +19,7 @@ import {
   DebtFormDialog,
   type DebtRow,
 } from "@/components/debts/DebtFormDialog";
+import { resolveForgiveActionError } from "@/components/debts/forgive-action-error";
 import { DebtPrincipalStackChart } from "@/components/debts/DebtPrincipalStackChart";
 import { DestructiveConfirmStep } from "@/components/ui/destructive-confirm-step";
 import { Button } from "@/components/ui/button";
@@ -203,12 +204,8 @@ function DebtDetailBody({
       }
       const result = await forgiveRemaining({}, formData);
       if (!result.success) {
-        setActionError(
-          result.errors?.asOfDate?.[0] ??
-            result.message ??
-            "Не удалось сохранить. Проверьте поля и попробуйте снова.",
-        );
-        setConfirm(null);
+        // WR-01/CR-01: surface deltaMajor + keep confirm so actionError stays visible
+        setActionError(resolveForgiveActionError(result));
         return;
       }
       onSuccess();
@@ -499,6 +496,11 @@ function DebtDetailBody({
               disabled={isActing}
             />
           </div>
+          {actionError ? (
+            <p className="text-sm text-destructive" role="alert">
+              {actionError}
+            </p>
+          ) : null}
           <div className="flex justify-end">
             <Button
               type="button"

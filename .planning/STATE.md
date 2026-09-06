@@ -231,6 +231,11 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 | Category | Item | Status | Deferred At | Milestone |
 |----------|------|--------|-------------|-----------|
+| todos | 2026-09-05-add-salary-income-tracking-with-forecast.md | (presence-only) | 2026-09-07 | v1.1 |
+| todos | 2026-09-05-add-timezone-selection-to-settings.md | (presence-only) | 2026-09-07 | v1.1 |
+| todos | 2026-09-05-improve-credit-account-type-with-limit-grace-period-and-fore.md | (presence-only) | 2026-09-07 | v1.1 |
+| todos | 2026-09-05-integrate-local-ai-agent-via-subprocess.md | (presence-only) | 2026-09-07 | v1.1 |
+| todos | 2026-09-05-merge-debit-crypto-cash-account-types-into-one.md | (presence-only) | 2026-09-07 | v1.1 |
 | maintainability | Triplicate LOCF (helpers unused; page batch + historical-series copies) | closed (Phase 07) | 2026-09-04 | v1 |
 | nyquist | Phases 3–6 VALIDATION.md still `draft` / NOT-VALIDATED | closed (Phase 07) | 2026-09-04 | v1 |
 | docs | PROJECT.md Active still lists charts unchecked | closed (moved to Validated at Phase 07 transition) | 2026-09-04 | v1 |

@@ -10,22 +10,19 @@ At any moment, see true net worth (assets minus credit-card debt) in the primary
 
 ## Current State
 
-**Shipped:** v1.0 MVP (2026-09-04); v1.1 Долги людям phases 8–11 complete (awaiting milestone archive)
+**Shipped:** v1.0 MVP (2026-09-04); **v1.1 Долги людям (2026-09-07)**
 
-Local Dockerized net-worth tracker + personal-debts side ledger: SQLite → currencies/accounts → dated balances → dated FX → NW dashboard/charts → `/debts` people/debts/repayments with native stack chart and primary I-owe/they-owe totals. Stack: Next.js 16 App Router, Prisma 7 + SQLite, shadcn/ui, recharts, Vitest. Russian-first UI. Debts never change NW (DISOL-01).
+Local Dockerized net-worth tracker + personal-debts side ledger: SQLite → currencies/accounts → dated balances → dated FX → NW dashboard/charts → `/debts` people/debts/repayments/size-changes with native stack chart and primary I-owe/they-owe totals. Stack: Next.js 16 App Router, Prisma 7 + SQLite, shadcn/ui, recharts, Vitest. Russian-first UI. Debts never change NW (DISOL-01).
 
-## Current Milestone: v1.1 Долги людям
+## Next Milestone Goals
 
-**Goal:** Учёт долгов «я должен» / «мне должны» в отдельном разделе — люди, долги, частичные погашения с историей и графиком — без влияния на net worth.
-
-**Target features:**
-- Сущность «человек» → несколько долгов на одного
-- Долг: направление, валюта, начальная сумма, опц. due date, опц. заметка; остаток = initial − Σ погашений
-- Погашения только в валюте долга, с as-of датой (бэкдейт разрешён)
-- График: остаток во времени + суммы погашений
-- Закрытие: авто при остатке 0 или досрочно со списанием/прощением остатка
-- Сводка totals «я должен» / «мне должны» в primary (FX as-of)
-- Отдельный nav «Долги»; NW/charts не меняют смысл
+Define via `/gsd-new-milestone`. Candidate backlog (deferred at v1.1 close):
+- Salary/income tracking with plan vs actual + forecast
+- Timezone selection in settings
+- Credit account: limit / grace / statement forecasting
+- Merge debit+crypto+cash account types
+- Local AI agent via subprocess
+- Residual: nav «Валюты» discoverability; RateList still `window.confirm`; ACCT-04 account delete
 
 ## Requirements
 
@@ -56,7 +53,7 @@ Local Dockerized net-worth tracker + personal-debts side ledger: SQLite → curr
 
 ### Active
 
-(none for v1.1 — milestone phases complete)
+(none — define in `/gsd-new-milestone`)
 
 ### Out of Scope
 
@@ -115,7 +112,8 @@ v1.1 adds personal debts (people ↔ money owed) as a parallel domain: same mone
 | Debt.openedAsOf required + immutable after create | Series start date; Moscow calendar backfill | ✓ Good — Phase 11 |
 | Destructive confirm = in-dialog second step, never `window.confirm` | Accidental deletes; consistent RU UX; honest cascade copy | Locked Phase 9 — app-wide constitution |
 | Agent-driven UAT (Orca browser + `npm run dev`); human only for subjective/parallel/blocked | Avoid repetitive conversational UAT; same for Cursor / Claude Code / Codex | Locked — see `.planning/OPERATOR.md` |
-| DebtDetailDialog = tabs (Погашение / Изменение / Простить / История), not stacked forms | User approved mock variant 1 over primary-CTA; reduces modal overload | Locked 2026-09-05 — mock `/tmp/wallet-debt-detail-variants.html`; implement as UI follow-up |
+| DebtDetailDialog = tabs (Погашение / Изменение / Простить / История), not stacked forms | User approved mock variant 1 over primary-CTA; reduces modal overload | ✓ Good — quick 2026-09-05 |
+| Forgive error surface: deltaMajor + message before opaque; keep confirm on failure | G-10-8 WR-01/CR-01 after P2025 server map | ✓ Good — 2026-09-07 |
 
 ## Evolution
 
@@ -135,4 +133,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-07 after Phase 12*
+*Last updated: 2026-09-07 after v1.1 milestone*

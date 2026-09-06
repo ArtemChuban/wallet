@@ -4,6 +4,9 @@ title: Improve credit account type (limit, grace period, statement-date forecast
 area: general
 severity: major
 files: []
+audit_acknowledged:
+  milestone: v1.1
+  at: 2026-09-06
 ---
 
 ## Problem

@@ -4,6 +4,9 @@ title: Add salary/income tracking with plan vs actual and forecast
 area: general
 severity: major
 files: []
+audit_acknowledged:
+  milestone: v1.1
+  at: 2026-09-06
 ---
 
 ## Problem

@@ -1010,6 +1010,9 @@ describe("forgiveRemaining (DEBT-05 / T-10-02)", () => {
     expect(result.errors?.deltaMajor).toEqual([
       "Изменение сделало бы остаток отрицательным",
     ]);
+    expect(result.message).toBe(
+      "Изменение сделало бы остаток отрицательным",
+    );
     expect(result.message).not.toBe(
       "Не удалось сохранить. Проверьте поля и попробуйте снова.",
     );

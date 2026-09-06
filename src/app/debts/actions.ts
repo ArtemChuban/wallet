@@ -938,20 +938,17 @@ export async function forgiveRemaining(
       (error.message === "OVER_FLOOR" ||
         error.message === "size change would make remaining < 0")
     ) {
-      return {
-        errors: {
-          deltaMajor: ["Изменение сделало бы остаток отрицательным"],
-        },
-      };
+      const msg = "Изменение сделало бы остаток отрицательным";
+      // message + errors: clients that only read message still avoid opaque (G-10-8)
+      return { message: msg, errors: { deltaMajor: [msg] } };
     }
     if (
       error instanceof Error &&
       (error.message === "DELTA_ZERO" ||
         error.message === "size delta must not be 0")
     ) {
-      return {
-        errors: { deltaMajor: ["Изменение не может быть нулевым"] },
-      };
+      const msg = "Изменение не может быть нулевым";
+      return { message: msg, errors: { deltaMajor: [msg] } };
     }
     if (isRecordNotFound(error)) {
       return staleRecordRefreshState();

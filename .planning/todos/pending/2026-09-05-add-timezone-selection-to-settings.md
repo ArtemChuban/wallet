@@ -4,6 +4,9 @@ title: Add timezone selection to settings
 area: general
 severity: minor
 files: []
+audit_acknowledged:
+  milestone: v1.1
+  at: 2026-09-06
 ---
 
 ## Problem

@@ -1,3 +1,8 @@
+---
+status: complete
+date: 2026-09-05
+---
+
 # Quick: DebtDetailDialog tabs
 
 **Date:** 2026-09-05  
