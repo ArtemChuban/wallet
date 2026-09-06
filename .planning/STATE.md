@@ -4,11 +4,11 @@ milestone: v1.1
 milestone_name: Долги людям
 current_phase: 11
 current_phase_name: Charts + primary totals
-status: uat_passed_awaiting_security
-stopped_at: Phase 11 UAT complete (5/5); SECURITY.md missing — run /gsd-secure-phase 11
-last_updated: "2026-09-06T20:03:20.272Z"
+status: security_verified_awaiting_validate
+stopped_at: Phase 11 SECURITY verified (threats_open: 0) — run /gsd-validate-phase 11
+last_updated: "2026-09-06T20:10:00.000Z"
 last_activity: 2026-09-06
-last_activity_desc: Phase 11 UAT complete — 5/5 pass; advancement blocked on security gate
+last_activity_desc: Phase 11 secure-phase complete — 11-SECURITY.md verified, threats_open: 0
 state_head: 95bc935303ad9e343256f3129ae5f8202d66c13f
 progress:
   total_phases: 4
@@ -28,11 +28,11 @@ See: .planning/PROJECT.md (updated 2026-09-04 after starting v1.1)
 
 ## Current Position
 
-Phase: 11 (Charts + primary totals) — UAT PASSED
+Phase: 11 (Charts + primary totals) — SECURITY VERIFIED
 Plan: 4 of 4
-Status: UAT 5/5 pass; blocked on SECURITY.md before phase transition
+Status: SECURITY verified (threats_open: 0); next Nyquist validate
 Total Plans in Phase: 4
-Last activity: 2026-09-06 — Phase 11 UAT complete
+Last activity: 2026-09-06 — Phase 11 secure-phase complete
 
 ## Performance Metrics
 
@@ -243,7 +243,6 @@ Resume file: None
 
 ## Operator Next Steps
 
-- `/gsd-secure-phase 11` — required (security_enforcement); produces SECURITY.md before phase advance
 - `/gsd-validate-phase 11` — Nyquist VALIDATION.md still `draft` / not compliant
 - `/gsd-ui-review 11` — optional visual audit after frontend phase
-- After security clears: phase transition marks 11 complete → next milestone/phase
+- After validate clears: phase transition marks 11 complete → next milestone/phase
