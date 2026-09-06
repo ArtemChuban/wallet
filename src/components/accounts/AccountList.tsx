@@ -5,7 +5,7 @@ import { ChevronDown, ChevronRight } from "lucide-react";
 import { deleteBalanceSnapshot } from "@/app/accounts/actions";
 import { AccountFormDialog } from "@/components/accounts/AccountFormDialog";
 import { SetBalanceDialog } from "@/components/accounts/SetBalanceDialog";
-import { DestructiveConfirmStep } from "@/components/debts/DestructiveConfirmStep";
+import { DestructiveConfirmStep } from "@/components/ui/destructive-confirm-step";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

@@ -14,7 +14,7 @@ import {
   updateDebtMeta,
   type DebtActionState,
 } from "@/app/debts/actions";
-import { DestructiveConfirmStep } from "@/components/debts/DestructiveConfirmStep";
+import { DestructiveConfirmStep } from "@/components/ui/destructive-confirm-step";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

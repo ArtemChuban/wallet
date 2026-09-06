@@ -9,7 +9,7 @@ import {
   DebtFormDialog,
   type DebtRow,
 } from "@/components/debts/DebtFormDialog";
-import { DestructiveConfirmStep } from "@/components/debts/DestructiveConfirmStep";
+import { DestructiveConfirmStep } from "@/components/ui/destructive-confirm-step";
 import { PersonFormDialog } from "@/components/debts/PersonFormDialog";
 import { Button } from "@/components/ui/button";
 import {
