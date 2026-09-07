@@ -1,7 +1,10 @@
 import { existsSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { convertOtherMinorToPrimaryMinor } from "@/lib/money";
+import type { IncomeActualFactInput } from "@/lib/income";
 import {
   assertOneTimePlanImmutable,
+  computePersonIncomeStats,
   incomeVarianceMinor,
   incomeVariancePhrase,
   isIncomeOverdue,
@@ -10,6 +13,20 @@ import {
   listRecurringOccurrences,
   nextOpenPlannedAsOf,
 } from "@/lib/income";
+
+function factInput(
+  overrides: Partial<IncomeActualFactInput> &
+    Pick<
+      IncomeActualFactInput,
+      "personId" | "currencyCode" | "amountMinor" | "actualAsOf"
+    >,
+): IncomeActualFactInput {
+  return {
+    currencyScale: 2,
+    isPrimaryCurrency: true,
+    ...overrides,
+  };
+}
 
 describe("listRecurringOccurrences tracer (FND-OCC / D-13 / D-15 / D-16)", () => {
   it("returns one Feb slot with DOM-31 clamped and bigint plannedAmountMinor", () => {
@@ -377,11 +394,199 @@ describe("income schema conventions (D-01..D-05, D-09..D-11)", () => {
   });
 });
 
+describe("computePersonIncomeStats", () => {
+  const primaryScale = 2;
+
+  it("sums native multi-ccy buckets sorted by currencyCode asc", () => {
+    const byPerson = computePersonIncomeStats(
+      [
+        factInput({
+          personId: 1,
+          currencyCode: "USDT",
+          amountMinor: 10_00n,
+          actualAsOf: "2026-01-10",
+          isPrimaryCurrency: false,
+          currencyScale: 2,
+        }),
+        factInput({
+          personId: 1,
+          currencyCode: "EUR",
+          amountMinor: 5_00n,
+          actualAsOf: "2026-01-11",
+          isPrimaryCurrency: false,
+          currencyScale: 2,
+        }),
+        factInput({
+          personId: 1,
+          currencyCode: "USDT",
+          amountMinor: 3_00n,
+          actualAsOf: "2026-02-01",
+          isPrimaryCurrency: false,
+          currencyScale: 2,
+        }),
+      ],
+      [
+        {
+          currencyCode: "USDT",
+          asOfDate: "2026-01-01",
+          rateToPrimaryScaled: 90_00000000n,
+        },
+        {
+          currencyCode: "EUR",
+          asOfDate: "2026-01-01",
+          rateToPrimaryScaled: 100_00000000n,
+        },
+      ],
+      primaryScale,
+    );
+    const stats = byPerson.get(1);
+    expect(stats).toBeDefined();
+    expect(stats!.nativeByCurrency.map((n) => n.currencyCode)).toEqual([
+      "EUR",
+      "USDT",
+    ]);
+    expect(stats!.nativeByCurrency[0]!.totalMinor).toBe(5_00n);
+    expect(stats!.nativeByCurrency[1]!.totalMinor).toBe(13_00n);
+  });
+
+  it("converts primary via locfRateAsOf at each fact actualAsOf (not today)", () => {
+    const rateJan = 90_00000000n;
+    const rateFeb = 100_00000000n;
+    const amount = 10_00n;
+    const expected =
+      convertOtherMinorToPrimaryMinor(amount, rateJan, 2, primaryScale) +
+      convertOtherMinorToPrimaryMinor(amount, rateFeb, 2, primaryScale);
+    const byPerson = computePersonIncomeStats(
+      [
+        factInput({
+          personId: 2,
+          currencyCode: "USD",
+          amountMinor: amount,
+          actualAsOf: "2026-01-15",
+          isPrimaryCurrency: false,
+        }),
+        factInput({
+          personId: 2,
+          currencyCode: "USD",
+          amountMinor: amount,
+          actualAsOf: "2026-02-15",
+          isPrimaryCurrency: false,
+        }),
+      ],
+      [
+        {
+          currencyCode: "USD",
+          asOfDate: "2026-01-01",
+          rateToPrimaryScaled: rateJan,
+        },
+        {
+          currencyCode: "USD",
+          asOfDate: "2026-02-01",
+          rateToPrimaryScaled: rateFeb,
+        },
+      ],
+      primaryScale,
+    );
+    const stats = byPerson.get(2)!;
+    expect(stats.primaryTotalMinor).toBe(expected);
+    expect(stats.isPartial).toBe(false);
+    expect(stats.excludedFactCount).toBe(0);
+  });
+
+  it("missing FX excludes from primary only, sets isPartial, native intact", () => {
+    const byPerson = computePersonIncomeStats(
+      [
+        factInput({
+          personId: 3,
+          currencyCode: "USD",
+          amountMinor: 50_00n,
+          actualAsOf: "2026-03-01",
+          isPrimaryCurrency: false,
+        }),
+      ],
+      [],
+      primaryScale,
+    );
+    const stats = byPerson.get(3)!;
+    expect(stats.nativeByCurrency).toHaveLength(1);
+    expect(stats.nativeByCurrency[0]!.totalMinor).toBe(50_00n);
+    expect(stats.primaryTotalMinor).toBe(0n);
+    expect(stats.isPartial).toBe(true);
+    expect(stats.excludedFactCount).toBe(1);
+  });
+
+  it("empty facts → empty map (plan-only / no stats)", () => {
+    const byPerson = computePersonIncomeStats([], [], primaryScale);
+    expect(byPerson.size).toBe(0);
+  });
+
+  it("merges recurring + one-time facts for same personId into one Σ", () => {
+    const byPerson = computePersonIncomeStats(
+      [
+        factInput({
+          personId: 4,
+          currencyCode: "RUB",
+          amountMinor: 100_00n,
+          actualAsOf: "2026-01-05",
+          isPrimaryCurrency: true,
+        }),
+        factInput({
+          personId: 4,
+          currencyCode: "RUB",
+          amountMinor: 25_00n,
+          actualAsOf: "2026-01-20",
+          isPrimaryCurrency: true,
+        }),
+      ],
+      [],
+      primaryScale,
+    );
+    const stats = byPerson.get(4)!;
+    expect(stats.nativeByCurrency).toHaveLength(1);
+    expect(stats.nativeByCurrency[0]!.totalMinor).toBe(125_00n);
+    expect(stats.primaryTotalMinor).toBe(125_00n);
+    expect(stats.isPartial).toBe(false);
+  });
+
+  it("counts ≥2 actuals all-time (not next-open slot only)", () => {
+    const byPerson = computePersonIncomeStats(
+      [
+        factInput({
+          personId: 5,
+          currencyCode: "RUB",
+          amountMinor: 10_00n,
+          actualAsOf: "2026-01-15",
+          isPrimaryCurrency: true,
+        }),
+        factInput({
+          personId: 5,
+          currencyCode: "RUB",
+          amountMinor: 20_00n,
+          actualAsOf: "2026-02-15",
+          isPrimaryCurrency: true,
+        }),
+        factInput({
+          personId: 5,
+          currencyCode: "RUB",
+          amountMinor: 30_00n,
+          actualAsOf: "2026-03-15",
+          isPrimaryCurrency: true,
+        }),
+      ],
+      [],
+      primaryScale,
+    );
+    const stats = byPerson.get(5)!;
+    expect(stats.nativeByCurrency[0]!.totalMinor).toBe(60_00n);
+    expect(stats.primaryTotalMinor).toBe(60_00n);
+  });
+});
+
 describe("income isolation (ISO-01 light)", () => {
-  it("income.ts does not import net-worth, historical-series, or Prisma", () => {
+  it("income.ts does not import net-worth, historical-series, debts aggregates, or Prisma", () => {
     const src = readFileSync("src/lib/income.ts", "utf8");
     expect(src).not.toMatch(
-      /from\s+["']@\/lib\/(?:net-worth|historical-series)["']/,
+      /from\s+["']@\/lib\/(?:net-worth|historical-series|debts)["']/,
     );
     expect(src).not.toMatch(
       /from\s+["']@\/generated\/prisma|from\s+["'][^"']*prisma["']/,

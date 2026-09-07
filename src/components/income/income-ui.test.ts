@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
 const listSrc = readFileSync("src/components/income/IncomeList.tsx", "utf8");
+const pageSrc = readFileSync("src/app/income/page.tsx", "utf8");
 const formDialogSrc = readFileSync(
   "src/components/income/IncomeFormDialog.tsx",
   "utf8",
@@ -66,5 +67,33 @@ describe("income fact / overdue chrome (ACT-02 / ACT-03)", () => {
     expect(listSrc).not.toMatch(/\brecharts\b/);
     expect(factDialogSrc).not.toMatch(/@\/components\/ui\/chart/);
     expect(factDialogSrc).not.toMatch(/\brecharts\b/);
+  });
+});
+
+describe("counterparty stats", () => {
+  it("Person header shows all-time window hint", () => {
+    expect(listSrc).toMatch(/за всё время/);
+  });
+
+  it("partial honesty copy present (Итог неполный or нет курса)", () => {
+    expect(
+      /Итог неполный|нет курса/.test(listSrc),
+    ).toBe(true);
+  });
+
+  it("page wires computePersonIncomeStats and fxRate load", () => {
+    expect(pageSrc).toMatch(/computePersonIncomeStats/);
+    expect(pageSrc).toMatch(/fxRate/);
+  });
+
+  it("forbids DebtsPrimaryTotalsHero on income page (no page hero)", () => {
+    expect(pageSrc).not.toMatch(/DebtsPrimaryTotalsHero/);
+    expect(pageSrc).not.toMatch(/всего получено/);
+    expect(listSrc).not.toMatch(/DebtsPrimaryTotalsHero/);
+  });
+
+  it("keeps DestructiveConfirmStep / no browser native confirm", () => {
+    expect(listSrc).toMatch(/DestructiveConfirmStep/);
+    expect(listSrc).not.toMatch(/window\.confirm/);
   });
 });
