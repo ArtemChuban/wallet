@@ -5,11 +5,11 @@ milestone_name: Доходы
 current_phase: 17
 current_phase_name: NW forecast overlay + isolation
 status: executing
-stopped_at: Phase 17 context gathered
-last_updated: "2026-09-07T19:50:22.383Z"
+stopped_at: Phase 17 UI-SPEC drafted
+last_updated: "2026-09-07T20:00:00.000Z"
 last_activity: 2026-09-07
-last_activity_desc: Phase 17 execution started
-state_head: 6e91b8093e1d0a452bfc3bd1ee81f94ae71c1c2a
+last_activity_desc: Phase 17 UI design contract written
+state_head: ecff81e
 progress:
   total_phases: 5
   completed_phases: 4
@@ -29,12 +29,12 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 
 ## Current Position
 
-Phase: 17 (NW forecast overlay + isolation) — READY TO EXECUTE
+Phase: 17 (NW forecast overlay + isolation) — UI-SPEC draft ready for checker
 Plan: 1 of ?
-Status: Ready to execute
-Last activity: 2026-09-07 — Phase 17 execution started
+Status: UI-SPEC drafted — awaiting checker / plan
+Last activity: 2026-09-07 — Phase 17 UI design contract written
 
-Progress: [████░░░░░░] 40% (v1.2 — phase 15 verified; phase 16 planned)
+Progress: [████░░░░░░] 40% (v1.2 — phase 16 done; phase 17 UI-SPEC)
 
 ## Performance Metrics
 
