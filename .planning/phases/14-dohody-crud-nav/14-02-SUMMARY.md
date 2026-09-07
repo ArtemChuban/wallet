@@ -124,7 +124,7 @@ status: complete
 4. **Task 3 RED: Person Restrict failing tests** - `3082bca` (test)
 5. **Task 3 GREEN: Restrict + dual revalidate + DebtsList** - `b96a320` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `cc61bd1` (docs: complete plan)
 
 ## Files Created/Modified
 
