@@ -2,11 +2,16 @@
 
 import { revalidatePath } from "next/cache";
 import { Prisma } from "@/generated/prisma/client";
+import { assertOneTimePlanImmutable } from "@/lib/income";
 import { ensureSqlitePragmas, prisma } from "@/lib/db";
 import { parseMajorToMinor } from "@/lib/money";
 import {
+  createOneTimeIncomeSchema,
+  createOneTimeIncomeWithNewPersonSchema,
   createRecurringIncomeSchema,
   createRecurringIncomeWithNewPersonSchema,
+  updateOneTimeIncomeSchema,
+  updateRecurringIncomeSchema,
 } from "@/lib/validations/income";
 
 export type IncomeActionState = {
@@ -194,4 +199,296 @@ export async function createRecurringIncome(
 
   revalidatePath("/income");
   return { success: true, message: "Сохранено" };
+}
+
+/**
+ * Create one-time income for existing person, or compound new-person+income (SRC-02 / D-07).
+ */
+export async function createOneTimeIncome(
+  _prev: IncomeActionState,
+  formData: FormData,
+): Promise<IncomeActionState> {
+  const personIdRaw = formData.get("personId");
+  const hasPersonId =
+    typeof personIdRaw === "string" && personIdRaw.trim() !== "";
+
+  try {
+    await ensureSqlitePragmas();
+
+    if (hasPersonId) {
+      const validated = createOneTimeIncomeSchema.safeParse({
+        personId: personIdRaw,
+        currencyCode: formData.get("currencyCode"),
+        plannedAmountMajor: formData.get("plannedAmountMajor"),
+        plannedAsOf: formData.get("plannedAsOf"),
+        note: formData.get("note") ?? undefined,
+      });
+
+      if (!validated.success) {
+        return { errors: validated.error.flatten().fieldErrors };
+      }
+
+      const {
+        personId,
+        currencyCode,
+        plannedAmountMajor,
+        plannedAsOf,
+        note,
+      } = validated.data;
+
+      const resolved = await resolvePlannedMinor(
+        currencyCode,
+        plannedAmountMajor,
+      );
+      if (!resolved.ok) return resolved.state;
+
+      await prisma.oneTimeIncome.create({
+        data: {
+          personId,
+          currencyCode,
+          plannedAmountMinor: resolved.plannedAmountMinor,
+          plannedAsOf,
+          note: note ?? null,
+        },
+      });
+    } else {
+      const validated = createOneTimeIncomeWithNewPersonSchema.safeParse({
+        name: formData.get("name"),
+        currencyCode: formData.get("currencyCode"),
+        plannedAmountMajor: formData.get("plannedAmountMajor"),
+        plannedAsOf: formData.get("plannedAsOf"),
+        note: formData.get("note") ?? undefined,
+      });
+
+      if (!validated.success) {
+        return { errors: validated.error.flatten().fieldErrors };
+      }
+
+      const { name, currencyCode, plannedAmountMajor, plannedAsOf, note } =
+        validated.data;
+
+      const resolved = await resolvePlannedMinor(
+        currencyCode,
+        plannedAmountMajor,
+      );
+      if (!resolved.ok) return resolved.state;
+
+      await prisma.person.create({
+        data: {
+          name,
+          oneTimeIncomes: {
+            create: {
+              currencyCode,
+              plannedAmountMinor: resolved.plannedAmountMinor,
+              plannedAsOf,
+              note: note ?? null,
+            },
+          },
+        },
+      });
+    }
+  } catch (error) {
+    if (isUniqueNameViolation(error)) {
+      return { errors: { name: ["Человек с таким именем уже есть"] } };
+    }
+    return {
+      message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/income");
+  return { success: true, message: "Сохранено" };
+}
+
+/**
+ * Update recurring amount/schedule/note only — person/currency locked via .strict().
+ */
+export async function updateRecurringIncome(
+  _prev: IncomeActionState,
+  formData: FormData,
+): Promise<IncomeActionState> {
+  const validated = updateRecurringIncomeSchema.safeParse({
+    id: formData.get("id"),
+    plannedAmountMajor: formData.get("plannedAmountMajor"),
+    dayOfMonth: formData.get("dayOfMonth"),
+    startAsOf: formData.get("startAsOf"),
+    note: formData.get("note") ?? undefined,
+  });
+
+  if (!validated.success) {
+    return { errors: validated.error.flatten().fieldErrors };
+  }
+
+  const { id, plannedAmountMajor, dayOfMonth, startAsOf, note } =
+    validated.data;
+
+  try {
+    await ensureSqlitePragmas();
+    const existing = await prisma.recurringIncome.findUnique({
+      where: { id },
+      select: { currencyCode: true },
+    });
+    if (!existing) {
+      return {
+        message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+      };
+    }
+
+    const resolved = await resolvePlannedMinor(
+      existing.currencyCode,
+      plannedAmountMajor,
+    );
+    if (!resolved.ok) return resolved.state;
+
+    await prisma.recurringIncome.update({
+      where: { id },
+      data: {
+        plannedAmountMinor: resolved.plannedAmountMinor,
+        dayOfMonth,
+        startAsOf,
+        note: note ?? null,
+      },
+    });
+  } catch {
+    return {
+      message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/income");
+  return { success: true, message: "Сохранено" };
+}
+
+/**
+ * Update one-time amount/plannedAsOf/note; assertOneTimePlanImmutable when actual exists.
+ */
+export async function updateOneTimeIncome(
+  _prev: IncomeActionState,
+  formData: FormData,
+): Promise<IncomeActionState> {
+  const validated = updateOneTimeIncomeSchema.safeParse({
+    id: formData.get("id"),
+    plannedAmountMajor: formData.get("plannedAmountMajor"),
+    plannedAsOf: formData.get("plannedAsOf"),
+    note: formData.get("note") ?? undefined,
+  });
+
+  if (!validated.success) {
+    return { errors: validated.error.flatten().fieldErrors };
+  }
+
+  const { id, plannedAmountMajor, plannedAsOf, note } = validated.data;
+
+  try {
+    await ensureSqlitePragmas();
+    const existing = await prisma.oneTimeIncome.findUnique({
+      where: { id },
+      select: {
+        currencyCode: true,
+        plannedAsOf: true,
+        plannedAmountMinor: true,
+        actuals: { select: { id: true }, take: 1 },
+      },
+    });
+    if (!existing) {
+      return {
+        message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+      };
+    }
+
+    const resolved = await resolvePlannedMinor(
+      existing.currencyCode,
+      plannedAmountMajor,
+    );
+    if (!resolved.ok) return resolved.state;
+
+    const hasActual = existing.actuals.length > 0;
+    assertOneTimePlanImmutable(hasActual, {
+      plannedAsOf: existing.plannedAsOf,
+      plannedAmountMinor: existing.plannedAmountMinor,
+    }, {
+      plannedAsOf,
+      plannedAmountMinor: resolved.plannedAmountMinor,
+    });
+
+    await prisma.oneTimeIncome.update({
+      where: { id },
+      data: {
+        plannedAmountMinor: resolved.plannedAmountMinor,
+        plannedAsOf,
+        note: note ?? null,
+      },
+    });
+  } catch (error) {
+    if (
+      error instanceof Error &&
+      error.message ===
+        "one-time plan fields are immutable after an actual exists"
+    ) {
+      return {
+        message:
+          "Нельзя изменить план: уже есть факт получения. Сумма и дата плана зафиксированы.",
+      };
+    }
+    return {
+      message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/income");
+  return { success: true, message: "Сохранено" };
+}
+
+/**
+ * Delete recurring income definition; Cascade removes actuals via schema.
+ */
+export async function deleteRecurringIncome(
+  formData: FormData,
+): Promise<IncomeActionState> {
+  const idRaw = formData.get("id");
+  const id =
+    typeof idRaw === "string" && /^\d+$/.test(idRaw.trim())
+      ? Number(idRaw.trim())
+      : NaN;
+
+  if (!Number.isInteger(id) || id <= 0) {
+    return { message: "Не удалось удалить. Попробуйте снова." };
+  }
+
+  try {
+    await ensureSqlitePragmas();
+    await prisma.recurringIncome.delete({ where: { id } });
+  } catch {
+    return { message: "Не удалось удалить. Попробуйте снова." };
+  }
+
+  revalidatePath("/income");
+  return { success: true, message: "Удалено" };
+}
+
+/**
+ * Delete one-time income definition; Cascade removes actuals via schema.
+ */
+export async function deleteOneTimeIncome(
+  formData: FormData,
+): Promise<IncomeActionState> {
+  const idRaw = formData.get("id");
+  const id =
+    typeof idRaw === "string" && /^\d+$/.test(idRaw.trim())
+      ? Number(idRaw.trim())
+      : NaN;
+
+  if (!Number.isInteger(id) || id <= 0) {
+    return { message: "Не удалось удалить. Попробуйте снова." };
+  }
+
+  try {
+    await ensureSqlitePragmas();
+    await prisma.oneTimeIncome.delete({ where: { id } });
+  } catch {
+    return { message: "Не удалось удалить. Попробуйте снова." };
+  }
+
+  revalidatePath("/income");
+  return { success: true, message: "Удалено" };
 }
