@@ -21,12 +21,17 @@ vi.mock("@/lib/db", () => ({
     },
     recurringIncomeActual: {
       upsert: vi.fn(),
+      delete: vi.fn(),
     },
     oneTimeIncome: {
       create: vi.fn(),
       update: vi.fn(),
       delete: vi.fn(),
       findUnique: vi.fn(),
+    },
+    oneTimeIncomeActual: {
+      upsert: vi.fn(),
+      delete: vi.fn(),
     },
   },
   ensureSqlitePragmas: vi.fn(),
@@ -56,9 +61,12 @@ import {
   createOneTimeIncome,
   createRecurringIncome,
   deleteOneTimeIncome,
+  deleteOneTimeIncomeActual,
   deleteRecurringIncome,
+  deleteRecurringIncomeActual,
   updateOneTimeIncome,
   updateRecurringIncome,
+  upsertOneTimeIncomeActual,
   upsertRecurringIncomeActual,
 } from "./actions";
 
@@ -499,6 +507,151 @@ describe("upsertRecurringIncomeActual (ACT-01 / D-04)", () => {
     expect(result.success).toBeUndefined();
     expect(result.message).toBeTruthy();
     expect(prisma.recurringIncomeActual.upsert).not.toHaveBeenCalled();
+  });
+});
+
+describe("upsertOneTimeIncomeActual (ACT-01 / D-04)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+    vi.mocked(prisma.oneTimeIncome.findUnique).mockResolvedValue({
+      id: 4,
+      currencyCode: "RUB",
+      plannedAsOf: "2026-10-01",
+      plannedAmountMinor: 1000n,
+      currency: { scale: 2 },
+    } as never);
+    vi.mocked(prisma.oneTimeIncomeActual.upsert).mockResolvedValue(
+      {} as never,
+    );
+    vi.mocked(parseMajorToMinor).mockImplementation((major: string) => {
+      const n = Number(major);
+      if (!Number.isFinite(n)) throw new Error("bad major");
+      return BigInt(Math.round(n * 100));
+    });
+  });
+
+  it("rejects when plannedAsOf differs from definition plannedAsOf", async () => {
+    const formData = new FormData();
+    formData.set("oneTimeIncomeId", "4");
+    formData.set("plannedAsOf", "2026-11-01");
+    formData.set("actualAmountMajor", "10");
+    formData.set("actualAsOf", "2026-09-01");
+
+    const result = await upsertOneTimeIncomeActual({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.errors?.plannedAsOf ?? result.message).toBeTruthy();
+    expect(prisma.oneTimeIncomeActual.upsert).not.toHaveBeenCalled();
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  it("upserts on oneTimeIncomeId_plannedAsOf and allows future actualAsOf", async () => {
+    const formData = new FormData();
+    formData.set("oneTimeIncomeId", "4");
+    formData.set("plannedAsOf", "2026-10-01");
+    formData.set("actualAmountMajor", "15.50");
+    formData.set("actualAsOf", "2099-06-01");
+    formData.set("note", "факт");
+
+    const result = await upsertOneTimeIncomeActual({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.oneTimeIncome.findUnique).toHaveBeenCalledWith({
+      where: { id: 4 },
+      include: { currency: { select: { scale: true } } },
+    });
+    expect(prisma.oneTimeIncomeActual.upsert).toHaveBeenCalledWith({
+      where: {
+        oneTimeIncomeId_plannedAsOf: {
+          oneTimeIncomeId: 4,
+          plannedAsOf: "2026-10-01",
+        },
+      },
+      update: {
+        amountMinor: 1550n,
+        actualAsOf: "2099-06-01",
+        note: "факт",
+      },
+      create: {
+        oneTimeIncomeId: 4,
+        plannedAsOf: "2026-10-01",
+        amountMinor: 1550n,
+        actualAsOf: "2099-06-01",
+        note: "факт",
+      },
+    });
+    expect(prisma.oneTimeIncome.update).not.toHaveBeenCalled();
+    expect(revalidatePath).toHaveBeenCalledWith("/income");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/");
+  });
+
+  it("fails closed when parent one-time income missing", async () => {
+    vi.mocked(prisma.oneTimeIncome.findUnique).mockResolvedValue(null);
+
+    const formData = new FormData();
+    formData.set("oneTimeIncomeId", "99");
+    formData.set("plannedAsOf", "2026-10-01");
+    formData.set("actualAmountMajor", "10");
+    formData.set("actualAsOf", "2026-09-01");
+
+    const result = await upsertOneTimeIncomeActual({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBeTruthy();
+    expect(prisma.oneTimeIncomeActual.upsert).not.toHaveBeenCalled();
+  });
+});
+
+describe("deleteRecurringIncomeActual / deleteOneTimeIncomeActual (D-04)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+    vi.mocked(prisma.recurringIncomeActual.delete).mockResolvedValue(
+      {} as never,
+    );
+    vi.mocked(prisma.oneTimeIncomeActual.delete).mockResolvedValue(
+      {} as never,
+    );
+  });
+
+  it("deletes recurring actual by id and revalidates /income only", async () => {
+    const formData = new FormData();
+    formData.set("id", "12");
+
+    const result = await deleteRecurringIncomeActual(formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.recurringIncomeActual.delete).toHaveBeenCalledWith({
+      where: { id: 12 },
+    });
+    expect(revalidatePath).toHaveBeenCalledWith("/income");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/");
+  });
+
+  it("deletes one-time actual by id and revalidates /income only", async () => {
+    const formData = new FormData();
+    formData.set("id", "7");
+
+    const result = await deleteOneTimeIncomeActual(formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.oneTimeIncomeActual.delete).toHaveBeenCalledWith({
+      where: { id: 7 },
+    });
+    expect(revalidatePath).toHaveBeenCalledWith("/income");
+    expect(revalidatePath).not.toHaveBeenCalledWith("/");
+  });
+
+  it("rejects invalid id without Prisma delete", async () => {
+    const formData = new FormData();
+    formData.set("id", "0");
+
+    const result = await deleteRecurringIncomeActual(formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBeTruthy();
+    expect(prisma.recurringIncomeActual.delete).not.toHaveBeenCalled();
   });
 });
 
