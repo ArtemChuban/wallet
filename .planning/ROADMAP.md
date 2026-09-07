@@ -89,8 +89,16 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
+**Wave 1**
+
 - [ ] 14-01-PLAN.md — Nav + /income shell, Zod validations, nextOpenPlannedAsOf
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 14-02-PLAN.md — Income Server Actions + Person Restrict dual revalidate
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
 - [ ] 14-03-PLAN.md — IncomeList + IncomeFormDialog full CRUD UI
 
 **UI hint**: yes
