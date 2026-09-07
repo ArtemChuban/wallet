@@ -4,7 +4,31 @@ import {
   updateAccountNameSchema,
 } from "./account";
 
-describe("createAccountSchema (ACCT-01 / ACCT-02)", () => {
+describe("createAccountSchema (ACCT-01 / QUICK-0i7 ASSET)", () => {
+  it("accepts ASSET without creditLimitMajor", () => {
+    const result = createAccountSchema.safeParse({
+      name: "Счёт",
+      type: "ASSET",
+      currencyCode: "RUB",
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.type).toBe("ASSET");
+      expect(result.data.creditLimitMajor).toBeUndefined();
+    }
+  });
+
+  it("accepts ASSET with any allowed currency code (D-04)", () => {
+    for (const currencyCode of ["RUB", "USDT", "EUR"] as const) {
+      const result = createAccountSchema.safeParse({
+        name: `Счёт ${currencyCode}`,
+        type: "ASSET",
+        currencyCode,
+      });
+      expect(result.success).toBe(true);
+    }
+  });
+
   it("accepts FIAT_CREDIT with positive creditLimitMajor", () => {
     const result = createAccountSchema.safeParse({
       name: "Кредитка",
@@ -74,24 +98,33 @@ describe("createAccountSchema (ACCT-01 / ACCT-02)", () => {
     expect(result.success).toBe(true);
   });
 
-  it("rejects non-credit types with creditLimitMajor", () => {
-    for (const type of ["FIAT_DEBIT", "CRYPTO", "CASH"] as const) {
-      const result = createAccountSchema.safeParse({
-        name: "Счёт",
-        type,
-        currencyCode: "RUB",
-        creditLimitMajor: "100",
-      });
-      expect(result.success).toBe(false);
-      if (!result.success) {
-        const messages = result.error.issues.map((i) => i.message);
-        expect(messages).toContain("Лимит только для кредитного счёта");
-      }
+  it("rejects creditLimitMajor when type is ASSET", () => {
+    const result = createAccountSchema.safeParse({
+      name: "Счёт",
+      type: "ASSET",
+      currencyCode: "RUB",
+      creditLimitMajor: "100",
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const messages = result.error.issues.map((i) => i.message);
+      expect(messages).toContain("Лимит только для кредитного счёта");
     }
   });
 
-  it("accepts all four AccountType values", () => {
-    const types = ["FIAT_DEBIT", "FIAT_CREDIT", "CRYPTO", "CASH"] as const;
+  it("D-02: rejects legacy types FIAT_DEBIT / CRYPTO / CASH on create", () => {
+    for (const type of ["FIAT_DEBIT", "CRYPTO", "CASH"] as const) {
+      const result = createAccountSchema.safeParse({
+        name: `Счёт ${type}`,
+        type,
+        currencyCode: "RUB",
+      });
+      expect(result.success).toBe(false);
+    }
+  });
+
+  it("accepts only ASSET and FIAT_CREDIT write types", () => {
+    const types = ["ASSET", "FIAT_CREDIT"] as const;
     for (const type of types) {
       const result = createAccountSchema.safeParse({
         name: `Счёт ${type}`,
@@ -102,22 +135,6 @@ describe("createAccountSchema (ACCT-01 / ACCT-02)", () => {
       expect(result.success).toBe(true);
       if (result.success) {
         expect(result.data.type).toBe(type);
-      }
-    }
-  });
-
-  it("accepts FIAT_DEBIT/CRYPTO/CASH without credit limit (null-limit path)", () => {
-    for (const type of ["FIAT_DEBIT", "CRYPTO", "CASH"] as const) {
-      const result = createAccountSchema.safeParse({
-        name: `Счёт ${type}`,
-        type,
-        currencyCode: "RUB",
-      });
-      expect(result.success).toBe(true);
-      if (result.success) {
-        // Non-credit create: no limit field → action persists creditLimitMinor null
-        expect(result.data.creditLimitMajor).toBeUndefined();
-        expect(result.data).not.toHaveProperty("creditLimitMinor");
       }
     }
   });

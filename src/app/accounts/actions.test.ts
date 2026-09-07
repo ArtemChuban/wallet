@@ -111,7 +111,26 @@ describe("createAccount types (ACCT-01)", () => {
     vi.mocked(prisma.account.create).mockResolvedValue({} as never);
   });
 
-  it("persists creditLimitMinor null for non-credit types", async () => {
+  it("persists type ASSET with creditLimitMinor null", async () => {
+    const formData = new FormData();
+    formData.set("name", "Счёт ASSET");
+    formData.set("type", "ASSET");
+    formData.set("currencyCode", "RUB");
+
+    const result = await createAccount({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.account.create).toHaveBeenCalledWith({
+      data: {
+        name: "Счёт ASSET",
+        type: "ASSET",
+        currencyCode: "RUB",
+        creditLimitMinor: null,
+      },
+    });
+  });
+
+  it("D-02: rejects legacy create types FIAT_DEBIT / CRYPTO / CASH", async () => {
     for (const type of ["FIAT_DEBIT", "CRYPTO", "CASH"] as const) {
       vi.mocked(prisma.account.create).mockClear();
       const formData = new FormData();
@@ -121,15 +140,8 @@ describe("createAccount types (ACCT-01)", () => {
 
       const result = await createAccount({}, formData);
 
-      expect(result.success).toBe(true);
-      expect(prisma.account.create).toHaveBeenCalledWith({
-        data: {
-          name: `Счёт ${type}`,
-          type,
-          currencyCode: "RUB",
-          creditLimitMinor: null,
-        },
-      });
+      expect(result.success).toBeUndefined();
+      expect(prisma.account.create).not.toHaveBeenCalled();
     }
   });
 
