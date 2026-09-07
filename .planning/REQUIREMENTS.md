@@ -20,7 +20,7 @@ Requirements for milestone v1.2. Each maps to roadmap phases.
 
 ### Counterparties
 
-- [ ] **CPTY-01**: User can view per-Person income stats (Σ in primary with FX LOCF honesty / partial)
+- [ ] **CPTY-01**: User can view per-Person income stats — hybrid native-first Σ (by currency) plus primary secondary via FX LOCF as-of each fact's actualAsOf, with partial honesty («итог неполный» / нет курса) when rates are missing
 
 ### Доходы UI
 
