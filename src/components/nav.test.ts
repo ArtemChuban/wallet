@@ -4,9 +4,10 @@ import { describe, expect, it } from "vitest";
 const navSrc = readFileSync("src/components/nav.tsx", "utf8");
 
 describe("nav DNAV-01 / D-18", () => {
-  it("orders Главная · Счета · Долги · Валюты with correct hrefs", () => {
+  it("orders Главная · Счета · Доходы · Долги · Валюты with correct hrefs", () => {
     expect(navSrc).toMatch(/href:\s*"\/"/);
     expect(navSrc).toMatch(/href:\s*"\/accounts"/);
+    expect(navSrc).toMatch(/href:\s*"\/income"/);
     expect(navSrc).toMatch(/href:\s*"\/debts"/);
     expect(navSrc).toMatch(/href:\s*"\/currencies\/rates"/);
 
@@ -16,6 +17,7 @@ describe("nav DNAV-01 / D-18", () => {
     expect(hrefMatches).toEqual([
       "/",
       "/accounts",
+      "/income",
       "/debts",
       "/currencies/rates",
     ]);
@@ -26,6 +28,7 @@ describe("nav DNAV-01 / D-18", () => {
     expect(labelMatches).toEqual([
       "Главная",
       "Счета",
+      "Доходы",
       "Долги",
       "Валюты",
     ]);

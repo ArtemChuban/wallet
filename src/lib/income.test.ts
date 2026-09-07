@@ -339,7 +339,7 @@ describe("income isolation (ISO-01 light)", () => {
     });
   }
 
-  it("UI-00: src/app/income does not exist", () => {
-    expect(existsSync("src/app/income")).toBe(false);
+  it("UI-01: src/app/income/page.tsx exists", () => {
+    expect(existsSync("src/app/income/page.tsx")).toBe(true);
   });
 });

@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 const links = [
   { href: "/", label: "Главная" },
   { href: "/accounts", label: "Счета" },
+  { href: "/income", label: "Доходы" },
   { href: "/debts", label: "Долги" },
   { href: "/currencies/rates", label: "Валюты" },
 ] as const;
