@@ -32,9 +32,9 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 Phase: 15 (Plan vs actual + overdue) — VERIFICATION PASSED
 Plan: 3 of 3
 Status: 15-VERIFICATION.md status=passed (3/3 roadmap SCs)
-Last activity: 2026-09-07 — gsd-verifier: codegraph + vitest spot-checks + Orca UAT
+Last activity: 2026-09-07 — gsd-ui-researcher: 16-UI-SPEC.md drafted (CPTY-01 hybrid header)
 
-Progress: [████░░░░░░] 40% (v1.2 — verification complete for phase 15; orchestrator advances)
+Progress: [████░░░░░░] 40% (v1.2 — phase 15 verified; phase 16 UI contract ready for checker)
 
 ## Performance Metrics
 
