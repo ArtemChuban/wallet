@@ -5,16 +5,16 @@ milestone_name: Доходы
 current_phase: 16
 current_phase_name: Counterparty income stats
 status: planned
-stopped_at: Phase 16 plans written (16-01, 16-02)
-last_updated: "2026-09-07T20:50:00.000Z"
+stopped_at: Phase 16 plans executed — awaiting verification
+last_updated: "2026-09-07T19:03:52.440Z"
 last_activity: 2026-09-07
 last_activity_desc: Phase 16 PLAN.md created — execute next
-state_head: 7c00d0d
+state_head: a6ec244651af0f1f85f6f9178e5fd3798d9d51be
 progress:
   total_phases: 5
   completed_phases: 3
   total_plans: 11
-  completed_plans: 9
+  completed_plans: 11
   percent: 60
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 ## Current Position
 
 Phase: 16 (Counterparty income stats) — PLANNED
-Plan: 0 of 2
+Plan: 2 of 2
 Status: 16-01 + 16-02 PLAN.md ready (CPTY-01 hybrid header stats)
 Last activity: 2026-09-07 — gsd-planner: Phase 16 plans written
 
@@ -126,6 +126,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T20:50:00.000Z
-Stopped at: Phase 16 plans written — run /gsd-execute-phase 16
-Resume file: .planning/phases/16-counterparty-income-stats/16-01-PLAN.md
+Last session: 2026-09-07T19:03:52.310Z
+Stopped at: Phase 16 plans executed — awaiting verification
+Resume file: .planning/phases/16-counterparty-income-stats/16-02-SUMMARY.md
