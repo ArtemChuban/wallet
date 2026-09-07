@@ -5,11 +5,11 @@ milestone_name: Доходы
 current_phase: 15
 current_phase_name: Plan vs actual + overdue
 status: verifying
-stopped_at: Phase 16 context gathered
-last_updated: "2026-09-07T18:28:30.381Z"
+stopped_at: Phase 16 UI-SPEC drafted
+last_updated: "2026-09-07T20:34:00.000Z"
 last_activity: 2026-09-07
-last_activity_desc: Phase 15 VERIFICATION passed — ACT-01/02/03 + Orca UAT
-state_head: feb613e604394ee800fadaf0bc034f7278e99393
+last_activity_desc: Phase 16 UI-SPEC written — counterparty income stats contract
+state_head: 7c00d0d
 progress:
   total_phases: 5
   completed_phases: 3
