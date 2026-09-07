@@ -6,6 +6,7 @@ import {
   createRecurringIncomeWithNewPersonSchema,
   updateOneTimeIncomeSchema,
   updateRecurringIncomeSchema,
+  upsertRecurringIncomeActualSchema,
 } from "./income";
 
 const recurringBase = {
@@ -239,5 +240,74 @@ describe("updateOneTimeIncomeSchema (A1)", () => {
         plannedAsOf: "2026-01-01",
       }).success,
     ).toBe(false);
+  });
+});
+
+describe("upsertRecurringIncomeActualSchema (ACT-01 / D-19)", () => {
+  const base = {
+    recurringIncomeId: "1",
+    plannedAsOf: "2026-08-31",
+    actualAmountMajor: "1000.50",
+    actualAsOf: "2026-09-01",
+  };
+
+  it("accepts positive major + dates + optional note", () => {
+    const result = upsertRecurringIncomeActualSchema.safeParse({
+      ...base,
+      note: "факт",
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.recurringIncomeId).toBe(1);
+      expect(result.data.plannedAsOf).toBe("2026-08-31");
+      expect(result.data.actualAmountMajor).toBe("1000.50");
+      expect(result.data.actualAsOf).toBe("2026-09-01");
+      expect(result.data.note).toBe("факт");
+    }
+  });
+
+  it("rejects zero/negative/empty actualAmountMajor", () => {
+    for (const actualAmountMajor of ["0", "-10", "", "   "] as const) {
+      expect(
+        upsertRecurringIncomeActualSchema.safeParse({
+          ...base,
+          actualAmountMajor,
+        }).success,
+      ).toBe(false);
+    }
+  });
+
+  it("requires recurringIncomeId, plannedAsOf, actualAsOf YYYY-MM-DD", () => {
+    expect(
+      upsertRecurringIncomeActualSchema.safeParse({
+        actualAmountMajor: "10",
+        plannedAsOf: "2026-08-31",
+        actualAsOf: "2026-09-01",
+      }).success,
+    ).toBe(false);
+    for (const plannedAsOf of ["2026/08/31", ""] as const) {
+      expect(
+        upsertRecurringIncomeActualSchema.safeParse({
+          ...base,
+          plannedAsOf,
+        }).success,
+      ).toBe(false);
+    }
+    for (const actualAsOf of ["09-01-2026", ""] as const) {
+      expect(
+        upsertRecurringIncomeActualSchema.safeParse({
+          ...base,
+          actualAsOf,
+        }).success,
+      ).toBe(false);
+    }
+  });
+
+  it("accepts future actualAsOf (D-19 — no repayment-style upper bound)", () => {
+    const result = upsertRecurringIncomeActualSchema.safeParse({
+      ...base,
+      actualAsOf: "2099-12-31",
+    });
+    expect(result.success).toBe(true);
   });
 });
