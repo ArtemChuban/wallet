@@ -384,17 +384,15 @@ const overdue = isIncomeOverdue(row.nextPlannedAsOf, row.hasActual, today);
 
 **If A3 conflicts with stakeholder reading of ACT-03:** still honor D-05/D-07; satisfy ACT-03 via one-time + dialog (locked).
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **UI-SPEC for Phase 15**
+1. **UI-SPEC for Phase 15** — RESOLVED via `15-UI-SPEC.md`
    - What we know: Phase 14 UI-SPEC deferred overdue; `workflow.ui_phase: true`.
-   - What's unclear: Exact spacing/copy table for fact dialog — expect `/gsd-ui-phase` after research/plan.
-   - Recommendation: Planner leaves UI chrome details to UI-SPEC; research locks behavior + tokens.
+   - Resolution: Full spacing/copy/color/copywriting contract for fact dialog, overdue chrome, and variance phrases shipped in `15-UI-SPEC.md` (locked from CONTEXT D-01..D-20 + RESEARCH).
 
-2. **Dialog live Δ preview while typing**
+2. **Dialog live Δ preview while typing** — RESOLVED — live «Отклонение» in `15-03` IncomeFactDialog
    - What we know: D-16 requires RO plan fields; D-14 formula clear.
-   - What's unclear: Whether live Δ in dialog is required or only post-save list.
-   - Recommendation: Include live Δ in dialog (cheap; helps recurring ACT-03).
+   - Resolution: Live Δ preview while typing is required; Plan `15-03` wires «Отклонение» via `incomeVarianceMinor` / `incomeVariancePhrase` in `IncomeFactDialog` (ACT-03 for recurring).
 
 ## Environment Availability
 
