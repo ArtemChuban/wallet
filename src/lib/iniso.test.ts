@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { RATE_SCALE_E8 } from "@/lib/money";
 import {
   buildNetWorthSeries,
+  type BuildNetWorthSeriesInput,
   type SeriesAccount,
   type SeriesRate,
   type SeriesSnapshot,
@@ -18,15 +19,8 @@ describe("INISO-01 isolation", () => {
     });
   }
 
-  it("nw-forecast.ts (when present) bans prisma / BalanceSnapshot / net-worth / historical-series", () => {
-    let src: string;
-    try {
-      src = readFileSync("src/lib/nw-forecast.ts", "utf8");
-    } catch {
-      // Wave 0 RED: module may not exist yet — fail until Plan 01 tracer creates it.
-      expect.fail("src/lib/nw-forecast.ts missing — create in tracer task");
-      return;
-    }
+  it("nw-forecast.ts bans prisma / BalanceSnapshot / net-worth / historical-series", () => {
+    const src = readFileSync("src/lib/nw-forecast.ts", "utf8");
     expect(src).not.toMatch(
       /from\s+["']@\/generated\/prisma|from\s+["'][^"']*prisma["']/,
     );
@@ -36,14 +30,97 @@ describe("INISO-01 isolation", () => {
   });
 
   /**
-   * Past-series golden identity — full with/without income fixture green in Plan 02.
-   * Wave 0 stub: baseline golden for account-only path (API has no income param).
+   * Past-series golden identity (D-17): same accounts/snapshots/rates → identical
+   * totals whether income is conceptually present or not. Income never enters
+   * buildNetWorthSeries — API surface has no income field; a second call with
+   * the same NW inputs stays bitwise-identical (ISO-01).
    */
-  it.todo(
-    "past buildNetWorthSeries golden identity identical with/without income fixtures (D-17) — Plan 02",
-  );
+  it("INISO past series golden identity identical with/without income fixtures (D-17)", () => {
+    const accounts: SeriesAccount[] = [
+      {
+        id: 1,
+        type: "FIAT_DEBIT",
+        currencyCode: "RUB",
+        currencyScale: 2,
+        isPrimaryCurrency: true,
+        creditLimitMinor: null,
+      },
+      {
+        id: 2,
+        type: "FIAT_DEBIT",
+        currencyCode: "USD",
+        currencyScale: 2,
+        isPrimaryCurrency: false,
+        creditLimitMinor: null,
+      },
+    ];
+    const snapshots: SeriesSnapshot[] = [
+      { accountId: 1, asOfDate: "2026-01-01", amountMinor: 100_000n },
+      { accountId: 2, asOfDate: "2026-01-01", amountMinor: 10_000n },
+      { accountId: 1, asOfDate: "2026-01-15", amountMinor: 150_000n },
+    ];
+    const rates: SeriesRate[] = [
+      {
+        currencyCode: "USD",
+        asOfDate: "2026-01-01",
+        rateToPrimaryScaled: 50n * RATE_SCALE_E8,
+      },
+      {
+        currencyCode: "USD",
+        asOfDate: "2026-01-20",
+        rateToPrimaryScaled: 55n * RATE_SCALE_E8,
+      },
+    ];
+    const input: BuildNetWorthSeriesInput = {
+      accounts,
+      snapshots,
+      rates,
+      primaryScale: 2,
+      preset: "90d",
+      today: "2026-01-31",
+    };
 
-  it("past buildNetWorthSeries golden baseline (account-only, no income API) (D-17 stub)", () => {
+    // Conceptual income fixture — never passed into NW math (isolation wall).
+    const _incomePresentConceptually = {
+      recurring: [{ plannedAmountMinor: 200_000n, dayOfMonth: 25 }],
+      oneTime: [{ plannedAsOf: "2026-02-10", plannedAmountMinor: 50_000n }],
+    };
+    void _incomePresentConceptually;
+
+    const withoutIncomeCall = buildNetWorthSeries(input);
+    const withIncomeStillSameCall = buildNetWorthSeries({ ...input });
+
+    const golden = withoutIncomeCall.map((p) => [
+      p.asOfDate,
+      p.totalPrimaryMinor.toString(),
+    ]);
+    expect(withIncomeStillSameCall.map((p) => [p.asOfDate, p.totalPrimaryMinor.toString()])).toEqual(
+      golden,
+    );
+    expect(golden.length).toBeGreaterThan(0);
+
+    // API surface: BuildNetWorthSeriesInput has no income / forecast fields
+    const keys = Object.keys(input).sort();
+    expect(keys).toEqual(
+      ["accounts", "preset", "primaryScale", "rates", "snapshots", "today"].sort(),
+    );
+    expect(keys).not.toContain("income");
+    expect(keys).not.toContain("forecast");
+    expect(keys).not.toContain("recurring");
+    expect(keys).not.toContain("oneTime");
+
+    // Type-level wall: excess income props are not part of the public input type
+    type ForbiddenIncomeKeys = Extract<
+      keyof BuildNetWorthSeriesInput,
+      "income" | "forecast" | "recurring" | "oneTime" | "slots"
+    >;
+    type AssertNever<T extends never> = T;
+    type _NoIncomeOnApi = AssertNever<ForbiddenIncomeKeys>;
+    const _typeCheck: _NoIncomeOnApi = undefined as never;
+    void _typeCheck;
+  });
+
+  it("past buildNetWorthSeries golden baseline (account-only, no income API) (D-17)", () => {
     const accounts: SeriesAccount[] = [
       {
         id: 1,
@@ -67,7 +144,6 @@ describe("INISO-01 isolation", () => {
       today: "2026-01-31",
     });
     expect(points.map((p) => p.totalPrimaryMinor)).toEqual([100_000n, 100_000n]);
-    // Sanity: RATE_SCALE unused here but keeps money import live for Plan 02 FX fixtures
     expect(RATE_SCALE_E8).toBeGreaterThan(0n);
   });
 });

@@ -659,7 +659,13 @@ describe("income actions isolation (UI-01)", () => {
   it("actions.ts never references BalanceSnapshot or net-worth/historical-series imports", () => {
     const src = readFileSync("src/app/income/actions.ts", "utf8");
     expect(src).not.toMatch(/BalanceSnapshot/);
+    expect(src).not.toMatch(/\bbalanceSnapshot\b/);
     expect(src).not.toMatch(/@\/lib\/(?:net-worth|historical-series)/);
     expect(src).not.toMatch(/revalidatePath\("\/"\)/);
+  });
+
+  it("prisma test double has no BalanceSnapshot write surface (ISO-01 / D-17)", () => {
+    expect(prisma).not.toHaveProperty("balanceSnapshot");
+    expect(prisma).not.toHaveProperty("BalanceSnapshot");
   });
 });
