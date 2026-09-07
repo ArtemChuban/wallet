@@ -1,10 +1,11 @@
 ---
 phase: "17"
 slug: nw-forecast-overlay-isolation
-status: draft
+status: approved
 shadcn_initialized: true
 preset: "b2fA (base-nova / neutral / geist / lucide)"
 created: "2026-09-07"
+reviewed_at: "2026-09-07T22:03:00+02:00"
 ---
 
 # Phase 17 — UI Design Contract
