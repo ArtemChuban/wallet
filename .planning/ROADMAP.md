@@ -59,7 +59,7 @@ Full detail: [milestones/v1.1-ROADMAP.md](./milestones/v1.1-ROADMAP.md)
   2. Pure domain helpers list virtual plan occurrences with day-of-month clamp (short months never skip)
   3. Vitest covers occurrence identity, overdue predicate inputs, and BigInt money paths without writing BalanceSnapshot
 
-**Plans**: 2/3 plans executed
+**Plans**: 3/3 plans executed
 
 Plans:
 **Wave 1**
@@ -72,7 +72,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 13-03-PLAN.md — Overdue/immutability helpers + schema/ISO locks + full suite
+- [x] 13-03-PLAN.md — Overdue/immutability helpers + schema/ISO locks + full suite
 
 ### Phase 14: Доходы CRUD + nav
 
@@ -141,7 +141,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 13. Income schema + domain math | 2/3 | In Progress |  |
+| 13. Income schema + domain math | 3/3 | Plans complete |  |
 | 14. Доходы CRUD + nav | 0/? | Not started | - |
 | 15. Plan vs actual + overdue | 0/? | Not started | - |
 | 16. Counterparty income stats | 0/? | Not started | - |

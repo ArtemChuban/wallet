@@ -5,17 +5,17 @@ milestone_name: Доходы
 current_phase: 13
 current_phase_name: income-schema-domain-math
 status: in_progress
-stopped_at: Completed 13-02-PLAN.md
-last_updated: "2026-09-07T11:29:00.455Z"
+stopped_at: Completed 13-03-PLAN.md
+last_updated: "2026-09-07T11:34:12.977Z"
 last_activity: 2026-09-07
-last_activity_desc: Completed 13-02 — freeze + one-time occurrence API
-state_head: 85e79f8f1cf1054eecbfbbaa0d3b73206e403ec2
+last_activity_desc: Completed 13-03 — overdue + immutability + schema/ISO locks
+state_head: ef5654ed4a7eb3d9f7ac775937c75053eafdc889
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 3
-  completed_plans: 2
-  percent: 67
+  completed_plans: 3
+  percent: 20
 ---
 
 # Project State
@@ -29,12 +29,12 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 
 ## Current Position
 
-Phase: 13 (income-schema-domain-math) — IN PROGRESS
-Plan: 13-03 (next)
-Status: 13-02 complete; 2/3 plans
-Last activity: 2026-09-07 — Completed 13-02 freeze + one-time occurrence API
+Phase: 13 (income-schema-domain-math) — PLANS COMPLETE
+Plan: 3/3 (all plans have SUMMARY)
+Status: 13-03 complete — overdue + immutability + schema/ISO locks
+Last activity: 2026-09-07 — Completed 13-03 overdue helpers and ISO locks
 
-Progress: [██████░░░░] 67% (v1.2)
+Progress: [██░░░░░░░░] 20% (v1.2 — 0/5 phases verified)
 
 ## Performance Metrics
 
@@ -53,6 +53,7 @@ Progress: [██████░░░░] 67% (v1.2)
 |------|----------|-------|-------|
 | Phase 13 P01 | 3min | 3 tasks | 7 files |
 | Phase 13 P02 | 2min | 2 tasks | 2 files |
+| Phase 13 P03 | 2min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -70,6 +71,8 @@ Recent decisions affecting current work:
 - [Phase 13]: Tracer ignores actuals; freeze-merge deferred to Plan 02
 - [Phase 13]: A2 month-keyed freeze: frozen actual plannedAsOf wins over differing DOM candidate
 - [Phase 13]: listAllInRange requires explicit from/to; no default horizon
+- [Phase 13]: assertOneTimePlanImmutable throws when hasActual and plan date/amount differ
+- [Phase 13]: ISO-01 light: bidirectional income↔NW/historical file-scan + UI-00 existsSync
 
 ### Pending Todos
 
@@ -106,6 +109,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T11:29:00.432Z
-Stopped at: Completed 13-02-PLAN.md
+Last session: 2026-09-07T11:34:12.952Z
+Stopped at: Completed 13-03-PLAN.md
 Resume file: None
