@@ -58,7 +58,7 @@ Declared values (must be multiples of 4):
 |-------|-------|-------|
 | xs | 4px | Gap between native currency lines in multi-ccy stack (`gap-1`) |
 | sm | 8px | Native↔primary vertical stack gap; hint↔amounts gap (`gap-2`); header action gap |
-| md | 16px | Default; list/group `px-4`; gap between name / stats / CTA clusters (`gap-3`–`gap-4` OK) |
+| md | 16px | Default; list/group `px-4`; gap between name / stats / CTA clusters (`gap-2` or `gap-4` only — scale tokens) |
 | lg | 24px | Person-group vertical rhythm |
 | xl | 32px | Page header ↔ list (`gap-8` on main) |
 | 2xl | 48px | Major section breaks (rare on `/income`) |
@@ -174,7 +174,7 @@ Sources: CONTEXT D-01..D-15 Discretion; RESEARCH Open Q1 recommendation; DebtsPr
 | Decision | Contract |
 |----------|----------|
 | Placement | Stats **inside** each Person group header on `/income` — not a separate «Статистика» page (D-10) |
-| Header geometry | `flex` / `flex-wrap` / `items-start|center` / `justify-between` / `gap-3`: **left** Person name; **center-right** stats block `text-right` (only if ≥1 actual); **far right** existing CTAs («Изменить имя» / «Удалить человека») |
+| Header geometry | `flex` / `flex-wrap` / `items-start|center` / `justify-between` / `gap-4` (16px scale): **left** Person name; **center-right** stats block `text-right` (only if ≥1 actual); **far right** existing CTAs («Изменить имя» / «Удалить человека») |
 | Native vs primary | Native stack larger (Body/semibold mono); primary one line under (Label/muted mono) when shown (D-06 + identity-omit) |
 | Multi-ccy | One native line per currency (sorted by `currencyCode` asc for stability) + **one** rolled primary-Σ (D-07) |
 | Membership | All-time actuals only (`actualAsOf` membership); recurring+one-time merged (D-01, D-02, D-13, D-14) |
