@@ -118,7 +118,7 @@ Each task was committed atomically:
 2. **Task 2: Zod one-time upsert + delete schemas** — `6dc72f1` (test) → `e5dcd35` (feat)
 3. **Task 3: incomeVarianceMinor + RU phrases** — `e499c8e`/`d9a8307` (test) → `954445b` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `0ab64a2` / `b0349a6` (docs: complete plan + STATE position)
 
 _Note: TDD tasks used RED → GREEN commits; Task 3 RED split across two test commits._
 
