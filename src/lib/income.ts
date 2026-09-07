@@ -80,6 +80,27 @@ export function isIncomeOverdue(
   return plannedAsOf < today && !hasActual;
 }
 
+/**
+ * Plan vs actual delta in source-currency minor units (ACT-03 / D-13 / D-14).
+ * Formula: actual − plan. No FX conversion.
+ */
+export function incomeVarianceMinor(
+  actualAmountMinor: bigint,
+  plannedAmountMinor: bigint,
+): bigint {
+  return actualAmountMinor - plannedAmountMinor;
+}
+
+/**
+ * RU variance phrase for UI chrome (D-14 / UI-SPEC).
+ * positive → больше плана; negative → меньше плана; zero → как план.
+ */
+export function incomeVariancePhrase(deltaMinor: bigint): string {
+  if (deltaMinor > 0n) return "больше плана";
+  if (deltaMinor < 0n) return "меньше плана";
+  return "как план";
+}
+
 export type OneTimePlanFields = {
   plannedAsOf: string;
   plannedAmountMinor: bigint;
