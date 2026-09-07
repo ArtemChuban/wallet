@@ -116,7 +116,7 @@ describe("prisma migrate deploy host gate (PLAT-01 / 01-03-03)", () => {
     try {
       const tables = db
         .prepare(
-          "SELECT name FROM sqlite_master WHERE type='table' AND name IN ('Currency','Account','FxRate','BalanceSnapshot','Person','Debt','DebtRepayment','DebtSizeChange','_prisma_migrations')",
+          "SELECT name FROM sqlite_master WHERE type='table' AND name IN ('Currency','Account','FxRate','BalanceSnapshot','Person','Debt','DebtRepayment','DebtSizeChange','RecurringIncome','OneTimeIncome','RecurringIncomeActual','OneTimeIncomeActual','_prisma_migrations')",
         )
         .all() as Array<{ name: string }>;
       expect(tables.map((t) => t.name).sort()).toEqual([
@@ -127,7 +127,11 @@ describe("prisma migrate deploy host gate (PLAT-01 / 01-03-03)", () => {
         "DebtRepayment",
         "DebtSizeChange",
         "FxRate",
+        "OneTimeIncome",
+        "OneTimeIncomeActual",
         "Person",
+        "RecurringIncome",
+        "RecurringIncomeActual",
         "_prisma_migrations",
       ].sort());
       const applied = db
@@ -152,6 +156,9 @@ describe("prisma migrate deploy host gate (PLAT-01 / 01-03-03)", () => {
       ).toBe(true);
       expect(
         applied.some((r) => r.migration_name.includes("debts_schema")),
+      ).toBe(true);
+      expect(
+        applied.some((r) => r.migration_name.includes("income_schema")),
       ).toBe(true);
 
       const rub = db
