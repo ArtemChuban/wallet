@@ -1,6 +1,8 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
+  assertOneTimePlanImmutable,
+  isIncomeOverdue,
   listAllInRange,
   listOneTimeOccurrences,
   listRecurringOccurrences,
@@ -219,6 +221,71 @@ describe("listOneTimeOccurrences + listAllInRange (D-13 / D-14 / D-15)", () => {
     expect(all.every((s) => typeof s.plannedAmountMinor === "bigint")).toBe(
       true,
     );
+  });
+});
+
+describe("isIncomeOverdue (FND-OVER / D-08 / D-13)", () => {
+  const today = "2026-03-10";
+
+  it("true when plannedAsOf < today and no actual", () => {
+    expect(isIncomeOverdue("2026-03-09", false, today)).toBe(true);
+  });
+
+  it("false when plannedAsOf == today and no actual", () => {
+    expect(isIncomeOverdue("2026-03-10", false, today)).toBe(false);
+  });
+
+  it("false when plannedAsOf > today and no actual", () => {
+    expect(isIncomeOverdue("2026-03-11", false, today)).toBe(false);
+  });
+
+  it("false when hasActual even if plannedAsOf < today", () => {
+    expect(isIncomeOverdue("2026-03-01", true, today)).toBe(false);
+  });
+
+  it("does not call calendarDateToday — today is injected (D-13)", () => {
+    expect(isIncomeOverdue("2020-01-01", false, "2019-12-31")).toBe(false);
+    expect(isIncomeOverdue("2020-01-01", false, "2020-01-02")).toBe(true);
+  });
+});
+
+describe("assertOneTimePlanImmutable (D-08)", () => {
+  const stored = {
+    plannedAsOf: "2026-03-05",
+    plannedAmountMinor: 1000_00n,
+  };
+
+  it("rejects plannedAsOf change when actual exists", () => {
+    expect(() =>
+      assertOneTimePlanImmutable(true, stored, {
+        plannedAsOf: "2026-03-06",
+        plannedAmountMinor: 1000_00n,
+      }),
+    ).toThrow(/immutable/i);
+  });
+
+  it("rejects plannedAmountMinor change when actual exists", () => {
+    expect(() =>
+      assertOneTimePlanImmutable(true, stored, {
+        plannedAsOf: "2026-03-05",
+        plannedAmountMinor: 999_00n,
+      }),
+    ).toThrow(/immutable/i);
+  });
+
+  it("allows identical plan fields when actual exists", () => {
+    expect(() =>
+      assertOneTimePlanImmutable(true, stored, { ...stored }),
+    ).not.toThrow();
+  });
+
+  it("allows plan field changes when no actual yet", () => {
+    expect(() =>
+      assertOneTimePlanImmutable(false, stored, {
+        plannedAsOf: "2026-04-01",
+        plannedAmountMinor: 1n,
+      }),
+    ).not.toThrow();
   });
 });
 
