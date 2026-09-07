@@ -113,6 +113,86 @@ describe("forecast membership/cumulative", () => {
   });
 });
 
+describe("forecast membership edges", () => {
+  it("same-day open slots sum into one stair step (D-04, D-06)", () => {
+    const slots: ForecastSlot[] = [
+      primarySlot(1, "2026-03-15", 100_000n),
+      primarySlot(2, "2026-03-15", 25_000n),
+    ];
+    const result = buildNetWorthForecastSeries({
+      anchorPrimaryMinor: 1_000_000n,
+      slots,
+      rates: [],
+      primaryScale: 2,
+      today,
+      horizonEnd: "2026-03-31",
+    });
+    expect(result.includedSlotCount).toBe(2);
+    expect(
+      result.points.find((p) => p.asOfDate === "2026-03-15")?.forecastPrimaryMinor,
+    ).toBe(1_125_000n);
+  });
+
+  it("slots on today or past / beyond horizon are ignored by builder (D-02, D-03)", () => {
+    const slots: ForecastSlot[] = [
+      primarySlot(1, today, 999_000n),
+      primarySlot(2, "2026-02-01", 999_000n),
+      primarySlot(3, "2026-04-15", 50_000n),
+      primarySlot(4, "2026-03-10", 10_000n),
+    ];
+    const result = buildNetWorthForecastSeries({
+      anchorPrimaryMinor: 100_000n,
+      slots,
+      rates: [],
+      primaryScale: 2,
+      today,
+      horizonEnd: "2026-03-31",
+    });
+    expect(result.includedSlotCount).toBe(1);
+    expect(
+      result.points.find((p) => p.asOfDate === "2026-03-10")?.forecastPrimaryMinor,
+    ).toBe(110_000n);
+    expect(result.points.some((p) => p.forecastPrimaryMinor >= 999_000n)).toBe(
+      false,
+    );
+  });
+
+  it("isPartialForecast stays true when some slots convert and some miss FX (D-14)", () => {
+    const slots: ForecastSlot[] = [
+      usdSlot(1, "2026-03-10", 10_000n),
+      primarySlot(2, "2026-03-12", 5_000n),
+      {
+        parentId: 3,
+        plannedAsOf: "2026-03-20",
+        plannedAmountMinor: 1_000n,
+        currencyCode: "EUR",
+        currencyScale: 2,
+        isPrimaryCurrency: false,
+      },
+    ];
+    const result = buildNetWorthForecastSeries({
+      anchorPrimaryMinor: 0n,
+      slots,
+      rates: [
+        {
+          currencyCode: "USD",
+          asOfDate: today,
+          rateToPrimaryScaled: 80n * RATE_SCALE_E8,
+        },
+      ],
+      primaryScale: 2,
+      today,
+      horizonEnd: "2026-03-31",
+    });
+    expect(result.excludedMissingFxCount).toBe(1);
+    expect(result.isPartialForecast).toBe(true);
+    expect(result.includedSlotCount).toBe(2);
+    expect(
+      result.points.find((p) => p.asOfDate === "2026-03-12")?.forecastPrimaryMinor,
+    ).toBe(800_000n + 5_000n);
+  });
+});
+
 describe("forecast FX", () => {
   it("locfRateAsOf(..., today); missing → exclude + isPartialForecast (D-13, D-14)", () => {
     const slots: ForecastSlot[] = [

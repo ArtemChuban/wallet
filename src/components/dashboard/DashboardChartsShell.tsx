@@ -253,6 +253,7 @@ export function DashboardChartsShell({
       ]),
     );
 
+    // D-02: filled recurring via occurrenceKeyString against actual keys (Pitfall 3).
     const filledRecurring = new Set(
       recurringActuals.map((a) =>
         occurrenceKeyString({
@@ -273,6 +274,7 @@ export function DashboardChartsShell({
       horizonEnd,
     );
 
+    // Open membership at boundary (D-01..D-03): recurring+one-time; strict > today; no actual.
     const openSlots: ForecastSlot[] = [];
     for (const o of raw) {
       if (!(o.plannedAsOf > today)) continue;
@@ -284,7 +286,9 @@ export function DashboardChartsShell({
           parentId: o.parentId,
           plannedAsOf: o.plannedAsOf,
           plannedAmountMinor: o.plannedAmountMinor,
-          ...cur,
+          currencyCode: cur.currencyCode,
+          currencyScale: cur.currencyScale,
+          isPrimaryCurrency: cur.isPrimaryCurrency,
         });
         continue;
       }
@@ -299,7 +303,9 @@ export function DashboardChartsShell({
         parentId: o.parentId,
         plannedAsOf: o.plannedAsOf,
         plannedAmountMinor: o.plannedAmountMinor,
-        ...cur,
+        currencyCode: cur.currencyCode,
+        currencyScale: cur.currencyScale,
+        isPrimaryCurrency: cur.isPrimaryCurrency,
       });
     }
 
