@@ -1,7 +1,8 @@
 ---
 phase: "16"
 slug: counterparty-income-stats
-status: draft
+status: approved
+reviewed_at: "2026-09-07T20:39:00+02:00"
 shadcn_initialized: true
 preset: "b2fA (base-nova / neutral / geist / lucide)"
 created: "2026-09-07"
