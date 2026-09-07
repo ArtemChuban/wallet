@@ -4,10 +4,10 @@ milestone: v1.2
 milestone_name: Доходы
 status: Awaiting next milestone
 stopped_at: Milestone v1.2 archived — awaiting /gsd-new-milestone
-last_updated: "2026-09-08T00:10:00Z"
+last_updated: "2026-09-08T00:35:00Z"
 last_activity: 2026-09-08
-last_activity_desc: Milestone v1.2 completed and archived
-state_head: fb33b76c67ccf7c1c3da61e1f3c29b6f298a0e81
+last_activity_desc: Quick 260908-0i7 ASSET merge — plan created
+state_head: 9330b39
 progress:
   total_phases: 5
   completed_phases: 5
@@ -24,14 +24,14 @@ current_phase: —
 See: .planning/PROJECT.md (updated 2026-09-08 after v1.2)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Planning next milestone (`/gsd-new-milestone`)
+**Current focus:** Quick task `260908-0i7` — merge debit/crypto/cash → ASSET (plan ready)
 
 ## Current Position
 
 Phase: Milestone v1.2 complete
 Plan: —
-Status: Awaiting next milestone
-Last activity: 2026-09-08 — Milestone v1.2 completed and archived
+Status: Quick task in progress — 260908-0i7 plan ready for execute
+Last activity: 2026-09-08 — Planned quick ASSET account-type merge (`260908-0i7-PLAN.md`)
 
 ## Performance Metrics
 
@@ -107,10 +107,11 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-08T00:10:00Z
-Stopped at: Milestone v1.2 archived
-Resume file: None
+Last session: 2026-09-08T00:35:00Z
+Stopped at: Quick 260908-0i7 plan ready (ASSET merge)
+Resume file: .planning/quick/260908-0i7-merge-debit-crypto-and-cash-account-type/260908-0i7-PLAN.md
 
 ## Operator Next Steps
 
-- Start the next milestone with /gsd-new-milestone
+- Execute quick 260908-0i7 (orchestrator /gsd-quick continue) or resume that plan
+- After quick: `/gsd-new-milestone` when ready
