@@ -108,7 +108,7 @@ status: complete
 2. **Task 2: End-to-end tracer** - `44d91a3` (feat)
 3. **Task 3: Domain expansion** - `098e7c1` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `1f3b05b` (docs: complete plan)
 
 ## Files Created/Modified
 - `src/lib/nw-forecast.ts` — pure forecast builder + horizon helper
