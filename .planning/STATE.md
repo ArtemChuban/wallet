@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Доходы
 status: Awaiting next milestone
-stopped_at: Phase 17 complete — all phases complete
-last_updated: "2026-09-07T22:08:16.898Z"
+stopped_at: Milestone v1.2 archived — awaiting /gsd-new-milestone
+last_updated: "2026-09-08T00:10:00Z"
 last_activity: 2026-09-08
 last_activity_desc: Milestone v1.2 completed and archived
 state_head: fb33b76c67ccf7c1c3da61e1f3c29b6f298a0e81
@@ -14,17 +14,17 @@ progress:
   total_plans: 14
   completed_plans: 14
   percent: 100
-current_phase: 17
+current_phase: —
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-09-07 after Phase 17)
+See: .planning/PROJECT.md (updated 2026-09-08 after v1.2)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** v1.2 Доходы — Nyquist compliant; ready `/gsd-complete-milestone v1.2`
+**Current focus:** Planning next milestone (`/gsd-new-milestone`)
 
 ## Current Position
 
@@ -37,11 +37,11 @@ Last activity: 2026-09-08 — Milestone v1.2 completed and archived
 
 **Velocity:**
 
-- Total plans completed: 42 (v1.0: 24 + v1.1: 18)
+- Total plans completed: 56 (v1.0: 24 + v1.1: 18 + v1.2: 14)
 - Average duration: —
 - Total execution time: —
 
-**By Phase:** Prior milestone tables retained in git history / prior STATE; v1.2 plans TBD after plan-phase.
+**By Phase:** v1.2 per-plan metrics below; prior milestones in git history.
 
 *Updated after each plan completion*
 **Per-Plan Metrics:**
@@ -57,6 +57,8 @@ Last activity: 2026-09-08 — Milestone v1.2 completed and archived
 | Phase 15 P01 | 4min | 3 tasks | 6 files |
 | Phase 15 P02 | 2min | 2 tasks | 4 files |
 | Phase 15 P03 | 4min | 3 tasks | 6 files |
+| Phase 16 P01 | — | 3 tasks | — |
+| Phase 16 P02 | — | 3 tasks | — |
 | Phase 17 P01 | 7min | 3 tasks | 7 files |
 | Phase 17 P02 | 2min | 3 tasks | 4 files |
 | Phase 17 P03 | 3min | 3 tasks | 4 files |
@@ -66,37 +68,12 @@ Last activity: 2026-09-08 — Milestone v1.2 completed and archived
 ### Decisions
 
 Decisions are logged in PROJECT.md Key Decisions table.
-Recent decisions affecting current work:
+v1.2 locks carried forward:
 
-- v1.2 income = side ledger (template → virtual occurrences → optional actual); not double-entry posting
-- Actual does not write BalanceSnapshot; forecast is overlay only — never mutates historical LOCF / computeNetWorthRows (ISO-01)
-- Reuse Person for counterparties; zero new npm packages; DOM clamp not rrule skip
-- Roadmap order: schema+domain → /income CRUD → actual+overdue → stats → forecast+isolation
+- Income = side ledger; actual ≠ BalanceSnapshot; forecast overlay only (ISO-01)
+- Reuse Person for counterparties; DOM clamp not rrule skip
+- Forecast = dashed «Прогноз» + hinge + FX partial banner
 - DestructiveConfirmStep app-wide; agent-driven UAT via OPERATOR.md + Orca
-- [Phase 13]: Four models (CONTEXT D-03/D-04) — auto-selected over polymorphic IncomeSource+enum
-- [Phase 13]: Tracer ignores actuals; freeze-merge deferred to Plan 02
-- [Phase 13]: A2 month-keyed freeze: frozen actual plannedAsOf wins over differing DOM candidate
-- [Phase 13]: listAllInRange requires explicit from/to; no default horizon
-- [Phase 13]: assertOneTimePlanImmutable throws when hasActual and plan date/amount differ
-- [Phase 13]: ISO-01 light: bidirectional income↔NW/historical file-scan + UI-00 existsSync
-- [Phase 14]: Empty /income shell: PersonFormDialog only; IncomeFormDialog deferred to Plan 03
-- [Phase 14]: nextOpenPlannedAsOf fallback = startAsOf when 400d horizon fully filled (A3)
-- [Phase 14]: [Phase 14]: Six named income CRUD exports; assertOneTimePlanImmutable on one-time update with actual
-- [Phase 14]: [Phase 14]: deletePerson Restrict spans debts+income; dual revalidatePath /debts+/income
-- [Phase 14]: [Phase 14]: create/update dispatch by hidden kind to six Plan-02 actions
-- [Phase 14]: [Phase 14]: Income UI nextPlannedAsOf = nextOpen (recurring) / plannedAsOf (one-time); sort asc in person group
-- [Phase 15]: Future actualAsOf accepted — no repayment today upper bound (D-19)
-- [Phase 15]: Parent findUnique fail-closed before actual upsert; scale from parent currency
-- [Phase 15]: One-time actual upsert asserts plannedAsOf === definition.plannedAsOf (field error on spoof)
-- [Phase 15]: IncomeRow hasActual/overdue plumbed from RSC; chrome deferred to 15-03 (D-20)
-- [Phase 15]: IncomeFactDialog labels derived from hasActual+overdue; actualNote plumbed for edit prefill
-- [Phase 17]: Shell recomputes NW forecast in useMemo on range; page preloads max 1y income
-- [Phase 17]: Forecast Line: stepAfter dashed muted-foreground «Прогноз»; ReferenceLine deferred Plan 03
-- [Phase 17]: Enforce full INISO suite permanently (D-17)
-- [Phase 17]: FCST-01 docs = recurring + future one-time (D-01)
-- [Phase 17]: Future tooltip omits stack + Итого; fact filters forecast payload row
-- [Phase 17]: Partial banner after chart; hide Line when includedSlotCount=0 keep banner on FX exclude
-- [Phase 17]: Merge promotes today hinge + horizonEnd even when fact row missing
 
 ### Pending Todos
 
@@ -104,17 +81,16 @@ Recent decisions affecting current work:
 - Integrate local AI agent via subprocess (general, minor)
 - Merge debit/crypto/cash account types (database, minor)
 - Improve credit account type — grace / statement forecasting (general, major)
-- Salary/income tracking — **in progress as v1.2**
 
 ### Blockers/Concerns
 
-- Person-as-employer UX copy — validate in Phase 14 discuss if mixing debts+income people confuses
+*(none open)*
 
 ### Roadmap Evolution
 
 - Phase 7: LOCF consolidation + Nyquist 3–6 (v1.0)
 - Phase 12: debts refresh + Nyquist 10–11 (v1.1)
-- Phases 13–17: v1.2 Доходы (schema → CRUD → actual/overdue → stats → forecast+ISO)
+- Phases 13–17: v1.2 Доходы — SHIPPED 2026-09-08
 
 ## Deferred Items
 
@@ -122,7 +98,7 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 | Category | Item | Status | Deferred At | Milestone |
 |----------|------|--------|-------------|-----------|
-| todos | 2026-09-05-add-salary-income-tracking-with-forecast.md | promoted → v1.2 | 2026-09-07 | v1.1 |
+| todos | 2026-09-05-add-salary-income-tracking-with-forecast.md | promoted → v1.2 (shipped) | 2026-09-07 | v1.1 |
 | todos | 2026-09-05-add-timezone-selection-to-settings.md | (presence-only) | 2026-09-07 | v1.1 |
 | todos | 2026-09-05-improve-credit-account-type-with-limit-grace-period-and-fore.md | (presence-only) | 2026-09-07 | v1.1 |
 | todos | 2026-09-05-integrate-local-ai-agent-via-subprocess.md | (presence-only) | 2026-09-07 | v1.1 |
@@ -131,8 +107,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T22:10:00Z
-Stopped at: Nyquist 13–17 validated — ready `/gsd-complete-milestone v1.2`
+Last session: 2026-09-08T00:10:00Z
+Stopped at: Milestone v1.2 archived
 Resume file: None
 
 ## Operator Next Steps
