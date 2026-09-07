@@ -63,6 +63,14 @@ export type IncomeRow = {
   plannedAsOf: string | null;
   note: string | null;
   nextPlannedAsOf: string;
+  /** Next-open (recurring) / plan-key (one-time) has an actual fact. */
+  hasActual: boolean;
+  /** isIncomeOverdue(nextPlannedAsOf, hasActual, Moscow today) — Plan 03 chrome. */
+  overdue: boolean;
+  actualId?: number;
+  /** Serialized BigInt string from RSC when hasActual. */
+  actualAmountMinor?: string;
+  actualAsOf?: string;
   currency: { code: string; name: string; scale: number };
   person: { id: number; name: string };
 };

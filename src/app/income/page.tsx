@@ -4,9 +4,17 @@ import { PersonFormDialog } from "@/components/debts/PersonFormDialog";
 import { Button } from "@/components/ui/button";
 import { calendarDateToday } from "@/lib/dates";
 import { ensureSqlitePragmas, prisma } from "@/lib/db";
-import { nextOpenPlannedAsOf } from "@/lib/income";
+import { isIncomeOverdue, nextOpenPlannedAsOf } from "@/lib/income";
 
 export const dynamic = "force-dynamic";
+
+const actualSelect = {
+  id: true,
+  plannedAsOf: true,
+  amountMinor: true,
+  actualAsOf: true,
+  note: true,
+} as const;
 
 export default async function IncomePage() {
   await ensureSqlitePragmas();
@@ -22,7 +30,10 @@ export default async function IncomePage() {
           include: {
             currency: { select: { code: true, name: true, scale: true } },
             actuals: {
-              select: { recurringIncomeId: true, plannedAsOf: true },
+              select: {
+                ...actualSelect,
+                recurringIncomeId: true,
+              },
             },
           },
         },
@@ -30,6 +41,12 @@ export default async function IncomePage() {
           orderBy: { id: "desc" },
           include: {
             currency: { select: { code: true, name: true, scale: true } },
+            actuals: {
+              select: {
+                ...actualSelect,
+                oneTimeIncomeId: true,
+              },
+            },
           },
         },
       },
@@ -58,6 +75,9 @@ export default async function IncomePage() {
         r.actuals,
         today,
       );
+      // Next-open slot: matching actual usually absent (FIFO unfilled).
+      const slotActual = r.actuals.find((a) => a.plannedAsOf === nextPlannedAsOf);
+      const hasActual = slotActual != null;
       return {
         id: r.id,
         kind: "recurring" as const,
@@ -68,24 +88,43 @@ export default async function IncomePage() {
         plannedAsOf: null as string | null,
         note: r.note,
         nextPlannedAsOf,
+        hasActual,
+        overdue: isIncomeOverdue(nextPlannedAsOf, hasActual, today),
+        actualId: slotActual?.id,
+        actualAmountMinor: slotActual
+          ? slotActual.amountMinor.toString()
+          : undefined,
+        actualAsOf: slotActual?.actualAsOf,
         currency: r.currency,
         person: { id: p.id, name: p.name },
       };
     });
 
-    const oneTimeRows = p.oneTimeIncomes.map((o) => ({
-      id: o.id,
-      kind: "oneTime" as const,
-      currencyCode: o.currencyCode,
-      plannedAmountMinor: o.plannedAmountMinor.toString(),
-      dayOfMonth: null as number | null,
-      startAsOf: null as string | null,
-      plannedAsOf: o.plannedAsOf,
-      note: o.note,
-      nextPlannedAsOf: o.plannedAsOf,
-      currency: o.currency,
-      person: { id: p.id, name: p.name },
-    }));
+    const oneTimeRows = p.oneTimeIncomes.map((o) => {
+      const nextPlannedAsOf = o.plannedAsOf;
+      const slotActual = o.actuals.find((a) => a.plannedAsOf === o.plannedAsOf);
+      const hasActual = slotActual != null;
+      return {
+        id: o.id,
+        kind: "oneTime" as const,
+        currencyCode: o.currencyCode,
+        plannedAmountMinor: o.plannedAmountMinor.toString(),
+        dayOfMonth: null as number | null,
+        startAsOf: null as string | null,
+        plannedAsOf: o.plannedAsOf,
+        note: o.note,
+        nextPlannedAsOf,
+        hasActual,
+        overdue: isIncomeOverdue(nextPlannedAsOf, hasActual, today),
+        actualId: slotActual?.id,
+        actualAmountMinor: slotActual
+          ? slotActual.amountMinor.toString()
+          : undefined,
+        actualAsOf: slotActual?.actualAsOf,
+        currency: o.currency,
+        person: { id: p.id, name: p.name },
+      };
+    });
 
     const incomes = [...recurringRows, ...oneTimeRows].sort((a, b) =>
       a.nextPlannedAsOf < b.nextPlannedAsOf
