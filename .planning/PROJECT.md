@@ -8,25 +8,22 @@ A local, single-user personal finance site for tracking net worth across account
 
 At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
 
-## Current Milestone: v1.2 Доходы
-
-**Goal:** Учёт доходов (регулярная зарплата + разовые) с контрагентами, plan vs actual, мульти-валюта; отдельная страница «Доходы»; на Капитале — прогноз NW с регулярной зарплатой; просрочка без факта подсвечена.
-
-**Target features:**
-- Регулярные доходы (ежемесячно в дату) + разовые
-- Контрагент у дохода + статистика по контрагентам
-- Факт вручную; баланс счёта пока не меняется
-- Доход в разных валютах
-- Отдельная страница «Доходы» (nav)
-- На `/` (Капитал): график NW + проекция вперёд с учётом регулярной зарплаты и FX
-- Если дата плана прошла, а факта нет — подсветка «заполни»
-
 ## Current State
 
-**Shipped:** v1.0 MVP (2026-09-04); **v1.1 Долги людям (2026-09-07)**; **v1.2 Доходы (2026-09-07)** — phases 13–17 complete, UAT passed  
-**Active:** milestone ready to archive (`/gsd-complete-milestone`)
+**Shipped:** v1.0 MVP (2026-09-04); **v1.1 Долги людям (2026-09-07)**; **v1.2 Доходы (2026-09-08)** — income side ledger + Капитал forecast overlay archived.
 
 Local Dockerized net-worth tracker + personal-debts side ledger + income ledger: SQLite → currencies/accounts → dated balances → dated FX → NW dashboard/charts with dashed «Прогноз» overlay from open planned pay → `/debts` + `/income`. Stack: Next.js 16 App Router, Prisma 7 + SQLite, shadcn/ui, recharts, Vitest. Russian-first UI. Debts never change NW (DISOL-01). Income never writes BalanceSnapshot / past LOCF (ISO-01).
+
+## Next Milestone Goals
+
+*(Define via `/gsd-new-milestone` — questioning → research → requirements → roadmap.)*
+
+Candidates from backlog / Out of Scope (not committed):
+- Auto-apply income actual → account balance snapshot
+- Timezone selection in settings
+- Credit account grace / statement forecasting
+- Account delete (ACCT-04 residual)
+- Local AI agent / merge account types
 
 ## Requirements
 
@@ -67,7 +64,7 @@ Local Dockerized net-worth tracker + personal-debts side ledger + income ledger:
 
 ### Active
 
-*(none — v1.2 Доходы complete)*
+*(none — awaiting `/gsd-new-milestone`)*
 
 ### Out of Scope
 
@@ -97,7 +94,7 @@ Shipped v1.0: capital visibility across disconnected money places (bank, USDT, c
 
 v1.1 adds personal debts (people ↔ money owed) as a parallel domain: same money/FX primitives for primary totals and charts, but debt balances must not flow into `computeNetWorthRows` or NW charts.
 
-v1.2 adds income (зарплата + разовые) as another parallel ledger: plan vs actual, counterparties + stats, multi-currency; Капитал shows forward NW projection from recurring pay. Marking actual does not bump account balances yet.
+v1.2 adds income (зарплата + разовые) as another parallel ledger: plan vs actual, counterparties + stats, multi-currency; Капитал shows forward NW projection from open planned pay (recurring + future one-time). Marking actual does not bump account balances yet. Milestone archived 2026-09-08.
 
 **UI constitution — destructive actions:** Never use `window.confirm` (or equivalent browser confirm) for deletes or other irreversible actions. Always use an in-app second step inside the dialog/flow (explicit «точно удалить?» / equivalent) with Russian copy that states what will be lost. Applies app-wide from Phase 9 onward (debts, people, balance snapshots, and any future destructive UX).
 
@@ -156,4 +153,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-07 after Phase 17 (v1.2 phases complete)*
+*Last updated: 2026-09-08 after v1.2 milestone*

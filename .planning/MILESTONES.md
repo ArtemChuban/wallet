@@ -1,5 +1,24 @@
 # Milestones
 
+## v1.2 Доходы (Shipped: 2026-09-08)
+
+**Closeout:** verified_closeout  
+**Known verification overrides:** 0 newly acknowledged, 4 carried forward from a prior close (see STATE.md Deferred Items)  
+**Phases completed:** 5 phases, 14 plans, 39 tasks  
+**Git range:** `ce71852` → `fb33b76` (~112 files, +22k/−861)  
+**Timeline:** 2026-09-07 → 2026-09-08 (~1 day)
+
+**Key accomplishments:**
+
+- Four-model income side ledger + freeze-aware occurrences + DOM clamp (Phases 13)
+- «Доходы» nav/CRUD with Person Restrict + DestructiveConfirmStep (Phase 14)
+- Plan vs actual + overdue «заполни» + variance chrome (Phase 15)
+- Per-Person hybrid income stats via FX LOCF honesty (Phase 16)
+- Капитал dashed «Прогноз» overlay; INISO keeps historical NW income-free (Phase 17)
+- Nyquist VALIDATION compliant for phases 13–17; audit 9/9 REQ + 5/5 flows
+
+---
+
 ## v1.1 Долги людям (Shipped: 2026-09-07)
 
 **Closeout:** override_closeout  

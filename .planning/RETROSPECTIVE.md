@@ -91,6 +91,50 @@
 
 ---
 
+## Milestone: v1.2 — Доходы
+
+**Shipped:** 2026-09-08
+**Phases:** 5 | **Plans:** 14 | **Tasks:** 39
+
+### What Was Built
+
+- Income side ledger: four Prisma models, freeze-aware virtual occurrences, DOM clamp
+- `/income` CRUD + Person Restrict; plan vs actual + overdue «заполни» + variance
+- Per-Person hybrid income stats (native Σ + primary FX LOCF honesty)
+- Капитал dashed «Прогноз» overlay from open planned pay; INISO keeps past NW income-free
+
+### What Worked
+
+- Side-ledger pattern (same as debts) kept ISO-01 isolation clean with file-scan gates
+- Forecast as overlay (not LOCF mutation) made FCST/ISO requirements compose without conflict
+- Nyquist validate-phase 13–17 reconciled before close — no late cleanup phase needed
+
+### What Was Inefficient
+
+- Phase 16 Orca UAT hit runtime_open_timeout; closed with SSR/Vitest override
+- codegraph index lagged new forecast symbols at audit time
+- Income actions intentionally skip `revalidatePath('/')` → soft-lag Капитал until fresh load
+
+### Patterns Established
+
+- Income actual ≠ BalanceSnapshot; forecast = ComposedChart dashed Line + hinge + partial banner
+- Month-keyed freeze (A2): frozen actual plannedAsOf wins over differing DOM candidate
+- Reuse Person for income counterparties; zero new npm packages
+
+### Key Lessons
+
+1. Isolation scans (DISOL/INISO) at plan time beat post-hoc audit debt
+2. Soft revalidate tradeoffs for forecast chrome need explicit UI lock in CONTEXT
+3. Agent UAT (Orca) still needs timeout budget for heavier pages
+
+### Cost Observations
+
+- Timeline: ~1 calendar day (2026-09-07 → 2026-09-08)
+- Plans: 14; suite ~296 tests at Phase 13–17 close
+- Notable: most plans 2–7 min; forecast chrome densest (17-01/03)
+
+---
+
 ## Cross-Milestone Trends
 
 ### Process Evolution
@@ -99,6 +143,7 @@
 |-----------|----------|--------|------------|
 | v1.0 | — | 7 | First GSD cycle; audit inserted Phase 7 for LOCF + Nyquist |
 | v1.1 | — | 5 | Audit inserted Phase 12; side-ledger domain + DISOL isolation |
+| v1.2 | — | 5 | Second side ledger (income) + forecast overlay; Nyquist closed in-phase |
 
 ### Cumulative Quality
 
@@ -106,6 +151,7 @@
 |-----------|-------|----------|-------------------|
 | v1.0 | 153 | — | Vitest + Wave 0 harness from Phase 1 |
 | v1.1 | ~265 | — | Debts domain + disol scan + forgive error helper |
+| v1.2 | ~296 | — | Income domain + INISO scan + nw-forecast overlay |
 
 ### Top Lessons (Verified Across Milestones)
 
@@ -113,3 +159,4 @@
 2. Russian-first human verify at plan end catches UI contract gaps early
 3. Nyquist VALIDATION lag repeats unless closed in-phase — budget a cleanup phase or gate earlier
 4. Audit-open todos/debug/quick must be cleared or acknowledged before milestone close
+5. Side ledgers (debts, income) stay out of historical NW via explicit isolation suites

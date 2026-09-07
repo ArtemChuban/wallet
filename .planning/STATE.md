@@ -2,19 +2,19 @@
 gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Доходы
-current_phase: 17
-status: completed
+status: Awaiting next milestone
 stopped_at: Phase 17 complete — all phases complete
-last_updated: "2026-09-07T21:45:38.453Z"
-last_activity: 2026-09-07
-last_activity_desc: Nyquist validate-phase 13–17 reconciled (compliant)
-state_head: 604bb70c5ccc2977373291f7922500b06ac398e1
+last_updated: "2026-09-07T22:08:16.898Z"
+last_activity: 2026-09-08
+last_activity_desc: Milestone v1.2 completed and archived
+state_head: fb33b76c67ccf7c1c3da61e1f3c29b6f298a0e81
 progress:
   total_phases: 5
   completed_phases: 5
   total_plans: 14
   completed_plans: 14
   percent: 100
+current_phase: 17
 ---
 
 # Project State
@@ -28,12 +28,10 @@ See: .planning/PROJECT.md (updated 2026-09-07 after Phase 17)
 
 ## Current Position
 
-Phase: 17
-Plan: Not started
-Status: All phases complete
-Last activity: 2026-09-07 — Phase 17 complete
-
-Progress: [████████████████████] 14/14 plans (100%)
+Phase: Milestone v1.2 complete
+Plan: —
+Status: Awaiting next milestone
+Last activity: 2026-09-08 — Milestone v1.2 completed and archived
 
 ## Performance Metrics
 
@@ -136,3 +134,7 @@ Items acknowledged and deferred at milestone close, most recent first:
 Last session: 2026-09-07T22:10:00Z
 Stopped at: Nyquist 13–17 validated — ready `/gsd-complete-milestone v1.2`
 Resume file: None
+
+## Operator Next Steps
+
+- Start the next milestone with /gsd-new-milestone
