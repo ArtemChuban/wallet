@@ -8,8 +8,8 @@ status: in_progress
 stopped_at: Completed 15-02-PLAN.md
 last_updated: "2026-09-07T17:28:30.658Z"
 last_activity: 2026-09-07
-last_activity_desc: Completed 15-01 ACT-01 tracer + variance helpers
-state_head: c2e3e6c6427dd63a5cc1c48af69cbb539e2d2100
+last_activity_desc: Completed 15-02 actual actions + overdue RSC props
+state_head: 1fe96fb
 progress:
   total_phases: 5
   completed_phases: 2
@@ -31,8 +31,8 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 
 Phase: 15 (Plan vs actual + overdue) — IN PROGRESS
 Plan: 3 of 3
-Status: 15-01 complete — ready for 15-02
-Last activity: 2026-09-07 — Completed 15-01-PLAN.md (upsert actual tracer + variance)
+Status: 15-02 complete — ready for 15-03
+Last activity: 2026-09-07 — Completed 15-02-PLAN.md (actual actions + overdue props)
 
 Progress: [████░░░░░░] 40% (v1.2 — 0/5 phases verified)
 
