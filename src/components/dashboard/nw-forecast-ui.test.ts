@@ -40,4 +40,10 @@ describe("forecast chart chrome file-scan", () => {
       /forecastHorizonEnd|buildNetWorthForecastSeries/,
     );
   });
+
+  it("partial banner Прогноз неполный · нет курса with role=status (D-15)", () => {
+    expect(shellSrc).toMatch(/Прогноз неполный/);
+    expect(shellSrc).toMatch(/нет курса/);
+    expect(shellSrc).toMatch(/role=["']status["']/);
+  });
 });
