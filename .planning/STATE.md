@@ -5,16 +5,16 @@ milestone_name: Доходы
 current_phase: 14
 current_phase_name: Доходы CRUD + nav
 status: executing
-stopped_at: Completed 14-01-PLAN.md
-last_updated: "2026-09-07T12:55:32.559Z"
+stopped_at: Completed 14-02-PLAN.md
+last_updated: "2026-09-07T13:03:41.679Z"
 last_activity: 2026-09-07
 last_activity_desc: Phase 14 plan 01 executed (nav + Zod + nextOpen)
-state_head: f36888749c258671849fa92d44ced5181e126378
+state_head: b96a320ac307c81e84ab5a28f786bd02b22d243d
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 6
-  completed_plans: 4
+  completed_plans: 5
   percent: 20
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 ## Current Position
 
 Phase: 14 (Доходы CRUD + nav) — IN PROGRESS
-Plan: 02 of 03 (14-01 complete)
+Plan: 3 of 03 (14-01 complete)
 Status: Executing — next `/gsd-execute-phase` continues with 14-02
 Last activity: 2026-09-07 — Completed 14-01 (nav + /income shell + Zod + nextOpenPlannedAsOf)
 
@@ -55,6 +55,7 @@ Progress: [██░░░░░░░░] 20% (v1.2 — 0/5 phases verified)
 | Phase 13 P02 | 2min | 2 tasks | 2 files |
 | Phase 13 P03 | 2min | 2 tasks | 2 files |
 | Phase 14 P01 | 4min | 3 tasks | 7 files |
+| Phase 14 P02 | 5min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -76,6 +77,8 @@ Recent decisions affecting current work:
 - [Phase 13]: ISO-01 light: bidirectional income↔NW/historical file-scan + UI-00 existsSync
 - [Phase 14]: Empty /income shell: PersonFormDialog only; IncomeFormDialog deferred to Plan 03
 - [Phase 14]: nextOpenPlannedAsOf fallback = startAsOf when 400d horizon fully filled (A3)
+- [Phase 14]: [Phase 14]: Six named income CRUD exports; assertOneTimePlanImmutable on one-time update with actual
+- [Phase 14]: [Phase 14]: deletePerson Restrict spans debts+income; dual revalidatePath /debts+/income
 
 ### Pending Todos
 
@@ -112,6 +115,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T12:55:32.503Z
-Stopped at: Completed 14-01-PLAN.md
+Last session: 2026-09-07T13:03:41.627Z
+Stopped at: Completed 14-02-PLAN.md
 Resume file: None

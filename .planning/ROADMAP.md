@@ -86,7 +86,7 @@ Plans:
   3. User reaches income via nav «Доходы» and can edit/delete sources; deletes use DestructiveConfirmStep
   4. Recording or listing income never changes account balances (RU copy / behavior matches lock)
 
-**Plans:** 1/3 plans executed
+**Plans:** 2/3 plans executed
 
 Plans:
 **Wave 1**
@@ -95,7 +95,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 14-02-PLAN.md — Income Server Actions + Person Restrict dual revalidate
+- [x] 14-02-PLAN.md — Income Server Actions + Person Restrict dual revalidate
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -156,7 +156,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 13. Income schema + domain math | 3/3 | Plans complete | 2026-09-07 |
-| 14. Доходы CRUD + nav | 1/3 | Not started |  |
+| 14. Доходы CRUD + nav | 2/3 | Not started |  |
 | 15. Plan vs actual + overdue | 0/? | Not started | - |
 | 16. Counterparty income stats | 0/? | Not started | - |
 | 17. NW forecast overlay + isolation | 0/? | Not started | - |
