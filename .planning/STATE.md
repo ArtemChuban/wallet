@@ -5,16 +5,16 @@ milestone_name: Доходы
 current_phase: 14
 current_phase_name: Доходы CRUD + nav
 status: executing
-stopped_at: Completed 14-02-PLAN.md
-last_updated: "2026-09-07T13:03:41.679Z"
+stopped_at: Completed 14-03-PLAN.md
+last_updated: "2026-09-07T13:12:01.870Z"
 last_activity: 2026-09-07
 last_activity_desc: Phase 14 plan 01 executed (nav + Zod + nextOpen)
-state_head: b96a320ac307c81e84ab5a28f786bd02b22d243d
+state_head: 45d36745c1fbf38ba2203c90f3e441a20f034bdb
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 6
-  completed_plans: 5
+  completed_plans: 6
   percent: 20
 ---
 
@@ -56,6 +56,7 @@ Progress: [██░░░░░░░░] 20% (v1.2 — 0/5 phases verified)
 | Phase 13 P03 | 2min | 2 tasks | 2 files |
 | Phase 14 P01 | 4min | 3 tasks | 7 files |
 | Phase 14 P02 | 5min | 3 tasks | 6 files |
+| Phase 14 P03 | 5min | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -79,6 +80,8 @@ Recent decisions affecting current work:
 - [Phase 14]: nextOpenPlannedAsOf fallback = startAsOf when 400d horizon fully filled (A3)
 - [Phase 14]: [Phase 14]: Six named income CRUD exports; assertOneTimePlanImmutable on one-time update with actual
 - [Phase 14]: [Phase 14]: deletePerson Restrict spans debts+income; dual revalidatePath /debts+/income
+- [Phase 14]: [Phase 14]: create/update dispatch by hidden kind to six Plan-02 actions
+- [Phase 14]: [Phase 14]: Income UI nextPlannedAsOf = nextOpen (recurring) / plannedAsOf (one-time); sort asc in person group
 
 ### Pending Todos
 
@@ -115,6 +118,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T13:03:41.627Z
-Stopped at: Completed 14-02-PLAN.md
+Last session: 2026-09-07T13:12:01.818Z
+Stopped at: Completed 14-03-PLAN.md
 Resume file: None
