@@ -203,10 +203,10 @@ RUN npm init -y >/dev/null \
 | A3 | Widening NFT further is worse than CLI overlay | Standalone grows without helping migrate |
 | A4 | `npm ci --omit=dev` fallback still ≪ 2.66GB after chown fix | Fallback disappointing; still must drop chown -R |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Simplify `prisma.config.ts`?** Upstream notes plain `export default { …; url: process.env.DATABASE_URL }` reduces `@prisma/config`/`effect` need. [CITED: github.com/prisma/issues/28607] — out of CONTEXT lock? Treat as optional execute experiment only if overlay still fat; do not block primary path.
-2. **Can `shadcn` stay out of runtime?** It's a prod dependency today — standalone may still pull unused weight; out of scope unless NFT audit shows easy exclude.
+1. **Simplify `prisma.config.ts`?** RESOLVED: deferred / out of scope. Upstream notes plain `export default { …; url: process.env.DATABASE_URL }` reduces `@prisma/config`/`effect` need. [CITED: github.com/prisma/issues/28607] — not in CONTEXT lock; do not block primary path.
+2. **Can `shadcn` stay out of runtime?** RESOLVED: deferred / out of scope. It's a prod dependency today — standalone may still pull unused weight; out of scope unless a later NFT audit.
 
 ## Environment Availability
 
