@@ -118,7 +118,7 @@ status: complete
 2. **Task 2: End-to-end income schema + clamp + listRecurringOccurrences tracer** - `3de8f6e` (feat)
 3. **Task 3: Host prisma migrate deploy + foundation income allowlist** - `f78eff3` (feat)
 
-**Plan metadata:** _(pending docs commit)_
+**Plan metadata:** `52d326d` (docs: complete plan)
 
 ## Files Created/Modified
 - `prisma/schema.prisma` — four income models + Person/Currency inverse relations

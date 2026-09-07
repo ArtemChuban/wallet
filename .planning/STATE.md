@@ -4,18 +4,18 @@ milestone: v1.2
 milestone_name: Доходы
 current_phase: 13
 current_phase_name: income-schema-domain-math
-status: ready_to_execute
+status: in_progress
 stopped_at: Completed 13-01-PLAN.md
 last_updated: "2026-09-07T11:24:16.294Z"
 last_activity: 2026-09-07
-last_activity_desc: Phase 13 checker revision (RESOLVED Qs, PATTERNS cite, VALIDATION FND-SCHEMA)
+last_activity_desc: Completed 13-01 — income schema tracer + migrate
 state_head: f78eff321fe67924f5edc05d4ccb4dd75e6e5d38
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 3
   completed_plans: 1
-  percent: 0
+  percent: 33
 ---
 
 # Project State
