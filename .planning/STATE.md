@@ -2,17 +2,17 @@
 gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Доходы
-current_phase: 13
-current_phase_name: income-schema-domain-math
-status: in_progress
-stopped_at: Completed 13-03-PLAN.md
-last_updated: "2026-09-07T11:34:12.977Z"
+current_phase: 14
+current_phase_name: Доходы CRUD + nav
+status: planning
+stopped_at: Phase 13 complete, ready to plan Phase 14
+last_updated: "2026-09-07T11:39:04.754Z"
 last_activity: 2026-09-07
-last_activity_desc: Completed 13-03 — overdue + immutability + schema/ISO locks
-state_head: ef5654ed4a7eb3d9f7ac775937c75053eafdc889
+last_activity_desc: Phase 13 complete, transitioned to Phase 14
+state_head: a6838100139eb1ac67934808b7b4c41943d32afc
 progress:
   total_phases: 5
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 3
   completed_plans: 3
   percent: 20
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 
 ## Current Position
 
-Phase: 13 (income-schema-domain-math) — PLANS COMPLETE
-Plan: 3/3 (all plans have SUMMARY)
-Status: 13-03 complete — overdue + immutability + schema/ISO locks
-Last activity: 2026-09-07 — Completed 13-03 overdue helpers and ISO locks
+Phase: 14 — Доходы CRUD + nav
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-09-07 — Phase 13 complete, transitioned to Phase 14
 
 Progress: [██░░░░░░░░] 20% (v1.2 — 0/5 phases verified)
 
@@ -110,5 +110,5 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-09-07T11:34:12.952Z
-Stopped at: Completed 13-03-PLAN.md
+Stopped at: Phase 13 complete, ready to plan Phase 14
 Resume file: None

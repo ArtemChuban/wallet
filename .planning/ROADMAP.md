@@ -40,7 +40,7 @@ Full detail: [milestones/v1.1-ROADMAP.md](./milestones/v1.1-ROADMAP.md)
 
 **Milestone Goal:** Учёт доходов (регулярная зарплата + разовые) с контрагентами, plan vs actual, мульти-валюта; страница «Доходы»; на Капитале — прогноз NW с регулярной зарплатой; просрочка без факта подсвечена.
 
-- [ ] **Phase 13: Income schema + domain math** - Persist sources/actuals; virtual occurrences; DOM clamp; plan≠actual fields
+- [x] **Phase 13: Income schema + domain math** - Persist sources/actuals; virtual occurrences; DOM clamp; plan≠actual fields (completed 2026-09-07)
 - [ ] **Phase 14: Доходы CRUD + nav** - «Доходы» page/nav; create/edit/delete recurring + one-time income
 - [ ] **Phase 15: Plan vs actual + overdue** - Record actual; overdue «заполни»; plan vs actual variance on «Доходы»
 - [ ] **Phase 16: Counterparty income stats** - Per-Person Σ in primary with FX LOCF honesty
@@ -59,7 +59,7 @@ Full detail: [milestones/v1.1-ROADMAP.md](./milestones/v1.1-ROADMAP.md)
   2. Pure domain helpers list virtual plan occurrences with day-of-month clamp (short months never skip)
   3. Vitest covers occurrence identity, overdue predicate inputs, and BigInt money paths without writing BalanceSnapshot
 
-**Plans**: 3/3 plans executed
+**Plans**: 3/3 plans complete
 
 Plans:
 **Wave 1**
@@ -141,7 +141,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 13. Income schema + domain math | 3/3 | Plans complete |  |
+| 13. Income schema + domain math | 3/3 | Plans complete | 2026-09-07 |
 | 14. Доходы CRUD + nav | 0/? | Not started | - |
 | 15. Plan vs actual + overdue | 0/? | Not started | - |
 | 16. Counterparty income stats | 0/? | Not started | - |
