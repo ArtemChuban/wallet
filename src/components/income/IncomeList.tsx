@@ -30,12 +30,20 @@ type CurrencyOption = {
   scale: number;
 };
 
+export type PersonIncomeStatsDisplay = {
+  nativeLines: { amount: string; currencyCode: string }[];
+  primaryLine: { amount: string; currencyCode: string } | null;
+  isPartial: boolean;
+};
+
 export type PersonIncomeListItem = {
   id: number;
   name: string;
   debtCount: number;
   incomeCount: number;
   incomes: IncomeRow[];
+  /** Present only when Person has ≥1 actual (D-03). */
+  stats?: PersonIncomeStatsDisplay;
 };
 
 const BLOCKED_DELETE_MESSAGE =
@@ -204,10 +212,40 @@ function PersonGroup({
 
   return (
     <li className="border-b border-border last:border-b-0">
-      <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
+      <div className="flex flex-wrap items-start justify-between gap-4 px-4 py-3">
         <p className="min-w-0 flex-1 break-all text-base font-medium text-foreground">
           {person.name}
         </p>
+        {person.stats ? (
+          <div className="flex shrink-0 flex-col items-end gap-2 text-right">
+            <p className="text-sm text-muted-foreground">за всё время</p>
+            <div className="flex flex-col items-end gap-1">
+              {person.stats.nativeLines.map((line) => (
+                <p
+                  key={line.currencyCode}
+                  className="font-mono text-base font-semibold text-foreground"
+                >
+                  {line.amount}{" "}
+                  <span className="text-sm font-normal text-muted-foreground">
+                    {line.currencyCode}
+                  </span>
+                </p>
+              ))}
+              {person.stats.primaryLine ? (
+                <p className="font-mono text-sm text-muted-foreground">
+                  {person.stats.primaryLine.amount}{" "}
+                  {person.stats.primaryLine.currencyCode}
+                </p>
+              ) : null}
+            </div>
+            {person.stats.isPartial ? (
+              <p className="text-sm text-foreground" role="status">
+                <span className="font-semibold">Итог неполный</span>
+                <span className="text-muted-foreground"> · нет курса</span>
+              </p>
+            ) : null}
+          </div>
+        ) : null}
         <div className="flex shrink-0 flex-wrap items-center gap-2">
           <PersonFormDialog
             mode="edit"

@@ -47,7 +47,7 @@ type AmountRow = {
   amountMinor: bigint;
 };
 
-type RateRow = {
+export type RateRow = {
   currencyCode: string;
   asOfDate: string;
   rateToPrimaryScaled: bigint;

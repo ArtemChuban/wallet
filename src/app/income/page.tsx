@@ -4,7 +4,13 @@ import { PersonFormDialog } from "@/components/debts/PersonFormDialog";
 import { Button } from "@/components/ui/button";
 import { calendarDateToday } from "@/lib/dates";
 import { ensureSqlitePragmas, prisma } from "@/lib/db";
-import { isIncomeOverdue, nextOpenPlannedAsOf } from "@/lib/income";
+import {
+  computePersonIncomeStats,
+  isIncomeOverdue,
+  nextOpenPlannedAsOf,
+  type IncomeActualFactInput,
+} from "@/lib/income";
+import { formatMinorToMajor } from "@/lib/money";
 
 export const dynamic = "force-dynamic";
 
@@ -28,7 +34,9 @@ export default async function IncomePage() {
         recurringIncomes: {
           orderBy: { id: "desc" },
           include: {
-            currency: { select: { code: true, name: true, scale: true } },
+            currency: {
+              select: { code: true, name: true, scale: true, isPrimary: true },
+            },
             actuals: {
               select: {
                 ...actualSelect,
@@ -40,7 +48,9 @@ export default async function IncomePage() {
         oneTimeIncomes: {
           orderBy: { id: "desc" },
           include: {
-            currency: { select: { code: true, name: true, scale: true } },
+            currency: {
+              select: { code: true, name: true, scale: true, isPrimary: true },
+            },
             actuals: {
               select: {
                 ...actualSelect,
@@ -57,11 +67,66 @@ export default async function IncomePage() {
     }),
     prisma.currency.findFirst({
       where: { isPrimary: true },
-      select: { code: true },
+      select: { code: true, scale: true },
     }),
   ]);
 
   const primaryCurrencyCode = primaryCurrency?.code ?? currencies[0]?.code ?? "RUB";
+  const primaryScale = primaryCurrency?.scale ?? currencies[0]?.scale ?? 2;
+
+  const facts: IncomeActualFactInput[] = [];
+  for (const p of peopleRaw) {
+    for (const r of p.recurringIncomes) {
+      for (const a of r.actuals) {
+        facts.push({
+          personId: p.id,
+          currencyCode: r.currencyCode,
+          currencyScale: r.currency.scale,
+          isPrimaryCurrency: r.currency.isPrimary,
+          amountMinor: a.amountMinor,
+          actualAsOf: a.actualAsOf,
+        });
+      }
+    }
+    for (const o of p.oneTimeIncomes) {
+      for (const a of o.actuals) {
+        facts.push({
+          personId: p.id,
+          currencyCode: o.currencyCode,
+          currencyScale: o.currency.scale,
+          isPrimaryCurrency: o.currency.isPrimary,
+          amountMinor: a.amountMinor,
+          actualAsOf: a.actualAsOf,
+        });
+      }
+    }
+  }
+
+  let maxActualAsOf: string | null = null;
+  for (const f of facts) {
+    if (maxActualAsOf === null || f.actualAsOf > maxActualAsOf) {
+      maxActualAsOf = f.actualAsOf;
+    }
+  }
+
+  const rateRows =
+    maxActualAsOf === null
+      ? []
+      : await prisma.fxRate.findMany({
+          where: { asOfDate: { lte: maxActualAsOf } },
+          orderBy: { asOfDate: "desc" },
+          select: {
+            currencyCode: true,
+            asOfDate: true,
+            rateToPrimaryScaled: true,
+          },
+        });
+
+  const statsByPerson = computePersonIncomeStats(
+    facts,
+    rateRows,
+    primaryScale,
+  );
 
   const people = peopleRaw.map((p) => {
     const recurringRows = p.recurringIncomes.map((r) => {
@@ -96,7 +161,11 @@ export default async function IncomePage() {
           : undefined,
         actualAsOf: slotActual?.actualAsOf,
         actualNote: slotActual?.note ?? null,
-        currency: r.currency,
+        currency: {
+          code: r.currency.code,
+          name: r.currency.name,
+          scale: r.currency.scale,
+        },
         person: { id: p.id, name: p.name },
       };
     });
@@ -123,7 +192,11 @@ export default async function IncomePage() {
           : undefined,
         actualAsOf: slotActual?.actualAsOf,
         actualNote: slotActual?.note ?? null,
-        currency: o.currency,
+        currency: {
+          code: o.currency.code,
+          name: o.currency.name,
+          scale: o.currency.scale,
+        },
         person: { id: p.id, name: p.name },
       };
     });
@@ -136,12 +209,45 @@ export default async function IncomePage() {
           : a.id - b.id,
     );
 
+    const domainStats = statsByPerson.get(p.id);
+    let stats:
+      | {
+          nativeLines: { amount: string; currencyCode: string }[];
+          primaryLine: { amount: string; currencyCode: string } | null;
+          isPartial: boolean;
+        }
+      | undefined;
+    if (domainStats) {
+      const nativeLines = domainStats.nativeByCurrency.map((n) => ({
+        amount: formatMinorToMajor(n.totalMinor, n.scale),
+        currencyCode: n.currencyCode,
+      }));
+      const identityOmit =
+        domainStats.nativeByCurrency.length === 1 &&
+        domainStats.nativeByCurrency[0]!.currencyCode === primaryCurrencyCode &&
+        !domainStats.isPartial;
+      stats = {
+        nativeLines,
+        primaryLine: identityOmit
+          ? null
+          : {
+              amount: formatMinorToMajor(
+                domainStats.primaryTotalMinor,
+                primaryScale,
+              ),
+              currencyCode: primaryCurrencyCode,
+            },
+        isPartial: domainStats.isPartial,
+      };
+    }
+
     return {
       id: p.id,
       name: p.name,
       debtCount: p.debts.length,
       incomeCount: p.recurringIncomes.length + p.oneTimeIncomes.length,
       incomes,
+      stats,
     };
   });
 

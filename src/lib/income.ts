@@ -1,9 +1,11 @@
 /**
- * Income side-ledger domain (Phase 13).
- * Pure TypeScript — no Prisma, no net-worth / historical-series imports (ISO-01).
+ * Income side-ledger domain (Phase 13+).
+ * Pure TypeScript — no Prisma, no net-worth / historical-series / debts imports (ISO-01).
  */
 
 import { addCalendarDays, clampDayOfMonth } from "@/lib/dates";
+import { locfRateAsOf, type RateRow } from "@/lib/locf";
+import { convertOtherMinorToPrimaryMinor } from "@/lib/money";
 
 export type IncomeOccurrenceKey = {
   parentId: number;
@@ -330,4 +332,114 @@ export function listAllInRange(
         ? 1
         : a.parentId - b.parentId,
   );
+}
+
+/** One recorded income actual for counterparty Σ (CPTY-01 / D-01 / D-14). */
+export type IncomeActualFactInput = {
+  personId: number;
+  currencyCode: string;
+  currencyScale: number;
+  isPrimaryCurrency: boolean;
+  amountMinor: bigint;
+  /** YYYY-MM-DD — FX as-of + membership (D-05, D-14). */
+  actualAsOf: string;
+};
+
+export type PersonIncomeStats = {
+  personId: number;
+  nativeByCurrency: {
+    currencyCode: string;
+    scale: number;
+    totalMinor: bigint;
+  }[];
+  primaryTotalMinor: bigint;
+  isPartial: boolean;
+  /** Facts excluded from primary only; native still counted (D-08). */
+  excludedFactCount: number;
+};
+
+/**
+ * Per-Person dual native+primary Σ over all actual facts (D-01..D-08, D-13).
+ * LOCF per fact `actualAsOf` — never today-first map. Null rate → exclude primary only.
+ */
+export function computePersonIncomeStats(
+  facts: readonly IncomeActualFactInput[],
+  rates: readonly RateRow[],
+  primaryScale: number,
+): Map<number, PersonIncomeStats> {
+  type Acc = {
+    native: Map<string, { scale: number; totalMinor: bigint }>;
+    primaryTotalMinor: bigint;
+    isPartial: boolean;
+    excludedFactCount: number;
+  };
+
+  const byPerson = new Map<number, Acc>();
+
+  for (const fact of facts) {
+    let acc = byPerson.get(fact.personId);
+    if (!acc) {
+      acc = {
+        native: new Map(),
+        primaryTotalMinor: 0n,
+        isPartial: false,
+        excludedFactCount: 0,
+      };
+      byPerson.set(fact.personId, acc);
+    }
+
+    const bucket = acc.native.get(fact.currencyCode);
+    if (bucket) {
+      bucket.totalMinor += fact.amountMinor;
+    } else {
+      acc.native.set(fact.currencyCode, {
+        scale: fact.currencyScale,
+        totalMinor: fact.amountMinor,
+      });
+    }
+
+    if (fact.isPrimaryCurrency) {
+      acc.primaryTotalMinor += fact.amountMinor;
+      continue;
+    }
+
+    const rate = locfRateAsOf(rates, fact.currencyCode, fact.actualAsOf);
+    if (rate === null) {
+      acc.isPartial = true;
+      acc.excludedFactCount += 1;
+      continue;
+    }
+
+    acc.primaryTotalMinor += convertOtherMinorToPrimaryMinor(
+      fact.amountMinor,
+      rate,
+      fact.currencyScale,
+      primaryScale,
+    );
+  }
+
+  const out = new Map<number, PersonIncomeStats>();
+  for (const [personId, acc] of byPerson) {
+    const nativeByCurrency = [...acc.native.entries()]
+      .map(([currencyCode, v]) => ({
+        currencyCode,
+        scale: v.scale,
+        totalMinor: v.totalMinor,
+      }))
+      .sort((a, b) =>
+        a.currencyCode < b.currencyCode
+          ? -1
+          : a.currencyCode > b.currencyCode
+            ? 1
+            : 0,
+      );
+    out.set(personId, {
+      personId,
+      nativeByCurrency,
+      primaryTotalMinor: acc.primaryTotalMinor,
+      isPartial: acc.isPartial,
+      excludedFactCount: acc.excludedFactCount,
+    });
+  }
+  return out;
 }
