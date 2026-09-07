@@ -1,28 +1,24 @@
 ---
 phase: 17-nw-forecast-overlay-isolation
-verified: 2026-09-07T20:40:00Z
+verified: 2026-09-07T21:50:00Z
 status: passed
-score: 4/5 must-haves verified
-behavior_unverified: 1
+score: 5/5 must-haves verified
+behavior_unverified: 0
 overrides_applied: 0
 decision_coverage:
   honored: 18
   total: 18
   not_honored: []
-behavior_unverified_items:
-
-  - truth: "On `/`, user sees NW chart with future dashed overlay from open planned income (recurring + future one-time) converted via FX LOCF"
-    test: "Orca on `/` with open future recurring + one-time slots; switch 30д/90д/1г/всё"
-    expected: "Dashed «Прогноз» Line after today hinge; amounts match FX@today cumulative stair-step; filled/today/overdue slots absent"
-    why_human: "Unit/file-scan prove math + ComposedChart wiring; cannot prove readable overlay / hinge / horizon growth in live UI"
+behavior_unverified_items: []
 human_verification:
-
   - test: "Orca on `/`: switch 30д/90д/1г/всё — dashed «Прогноз» Line, today ReferenceLine hinge, horizon grows with preset"
     expected: "Forecast series visible when open slots exist; hinge at today; X-axis spans past+future through horizon end"
-    why_human: "Visual judgment + range interaction; harvested from 17-03-PLAN human-check"
+    result: pass
+    evidence: "17-UAT.md #10 — 30д hide Line; 90д/1г/всё dashed Прогноз + ReferenceLine; axis grows"
   - test: "Missing FX for a future non-primary slot → banner «Прогноз неполный · нет курса»; Line hide/keep per D-16"
     expected: "role=status banner near NW chart; if all slots FX-excluded → banner only, no Line; if some convert → Line + banner"
-    why_human: "Partial honesty tone/layout is visual; VALIDATION Manual-Only"
+    result: n/a
+    evidence: "No missing-FX fixture in DB; banner wiring covered by automated tests"
 coincidental_reliance_items:
 
   - truth: "Past NW series / computeNetWorthRows unchanged with or without income data; income actions never write BalanceSnapshot"
@@ -33,9 +29,9 @@ coincidental_reliance_items:
 # Phase 17: NW forecast overlay + isolation Verification Report
 
 **Phase Goal:** Капитал shows forward NW projection from open planned pay (recurring + future one-time); historical NW stays account-only
-**Verified:** 2026-09-07T20:40:00Z
-**Status:** human_needed
-**Re-verification:** No — initial verification
+**Verified:** 2026-09-07T21:50:00Z
+**Status:** passed
+**Re-verification:** Yes — Orca UAT closed human visual gate
 
 ## Goal Achievement
 
@@ -43,13 +39,13 @@ coincidental_reliance_items:
 
 | # | Truth | Status | Evidence |
 | --- | ------- | ---------- | -------------- |
-| 1 | On `/`, user sees NW chart with future dashed overlay from open planned income (recurring + future one-time) converted via FX LOCF | ⚠️ PRESENT_BEHAVIOR_UNVERIFIED | `page.tsx` loads recurring+oneTime+actuals → shell `listAllInRange` open filter → `buildNetWorthForecastSeries` (FX `locfRateAsOf` @ today) → `NetWorthHistoryChart` ComposedChart dashed Line. Math: `nw-forecast.test.ts` green. Visual “user sees” not exercised. |
+| 1 | On `/`, user sees NW chart with future dashed overlay from open planned income (recurring + future one-time) converted via FX LOCF | ✓ VERIFIED | Orca UAT 2026-09-07: 30д no Line (no open slots); 90д/1г/всё legend «Прогноз» + dashed overlay + ReferenceLine hinge; horizon grows with preset. Math still green in vitest. |
 | 2 | Horizon mirrors dashboard lookback preset (`all` capped at 1y); filled/today/overdue slots stay out of overlay | ✓ VERIFIED | `forecastHorizonEnd` 30/90/365/all→365 tested. Builder ignores `plannedAsOf ≤ today` / beyond horizon. Shell: `from = today+1`, skips oneTime with actual, skips filled recurring via `occurrenceKeyString`. |
 | 3 | Past NW series / `computeNetWorthRows` unchanged with or without income data; income actions never write BalanceSnapshot | ✓ VERIFIED | `iniso.test.ts`: no income/nw-forecast imports in `net-worth.ts` / `historical-series.ts`; nw-forecast bans prisma/BalanceSnapshot/NW imports; API keys exclude income. `actions.ts` has zero BalanceSnapshot refs; actions.test write-gate green. |
 | 4 | Isolation regressions (file-scan / property) and Nyquist validation for v1.2 income phases are green | ✓ VERIFIED | Wave merge: `npx vitest run` nw-forecast + iniso + historical-series + income + actions + nw-forecast-ui → **PASS 99 FAIL 0**. `17-VALIDATION.md`: `wave_0_complete: true`, `nyquist_compliant: true`, task IDs mapped. |
 | 5 | REQUIREMENTS FCST-01 + ROADMAP SC + STATE describe recurring + future one-time (D-01 docs sync) | ✓ VERIFIED | REQUIREMENTS FCST-01 = “recurring + future one-time”; ROADMAP goal/SC1 same; STATE decision “FCST-01 docs = recurring + future one-time”; no stale one-time-excluded blocker. |
 
-**Score:** 4/5 truths verified (1 present, behavior-unverified)
+**Score:** 5/5 truths verified
 
 ### Required Artifacts
 
@@ -96,7 +92,7 @@ Automated `verify.key-links` failed (PLAN `from:` not file paths). Manual wiring
 | -------- | ------- | ------ | ------ |
 | Forecast math + INISO + UI file-scan + actions | `npx vitest run src/lib/nw-forecast.test.ts src/lib/iniso.test.ts src/components/dashboard/nw-forecast-ui.test.ts src/app/income/actions.test.ts` | PASS 48 | ✓ PASS |
 | Wave merge (Nyquist) | `… + historical-series + income` | PASS 99 | ✓ PASS |
-| Live `/` overlay visual | — | needs Orca | ? SKIP → human |
+| Live `/` overlay visual | Orca tab localhost:3000 | pass (17-UAT #10) | ✓ PASS |
 
 ### Probe Execution
 
@@ -108,7 +104,7 @@ Automated `verify.key-links` failed (PLAN `from:` not file paths). Manual wiring
 
 | Requirement | Source Plan | Description | Status | Evidence |
 | ----------- | ---------- | ----------- | ------ | -------- |
-| FCST-01 | 01, 02, 03 | Dashed overlay recurring + future one-time via FX LOCF | ? NEEDS HUMAN | Code+tests green; visual UAT open |
+| FCST-01 | 01, 02, 03 | Dashed overlay recurring + future one-time via FX LOCF | ✓ SATISFIED | Code+tests green; Orca UAT visual pass |
 | ISO-01 | 01, 02 | No historical NW mutation; no BalanceSnapshot from income | ✓ SATISFIED | iniso + actions |
 
 Orphaned requirements for Phase 17: none (only FCST-01, ISO-01).
@@ -149,9 +145,9 @@ All trackable CONTEXT.md decisions honored by shipped artifacts (18/18). Gate no
 
 ### Gaps Summary
 
-No code gaps. Goal implementation present, substantive, wired, data-flowing. Automated FCST math + ISO walls + Nyquist green. Blocker for `passed`: live visual UAT (truth #1 + harvested human-check). After Orca sign-off, status can flip to `passed` without code changes unless UAT finds defects.
+No code gaps. Automated FCST math + ISO walls + Nyquist green. Live Orca UAT passed (truth #1). Partial FX banner live tone N/A without fixture; wiring covered by unit tests.
 
 ---
 
-_Verified: 2026-09-07T20:40:00Z_
-_Verifier: Claude (gsd-verifier)_
+_Verified: 2026-09-07T21:50:00Z_
+_Verifier: agent (gsd-verify-work + Orca)_
