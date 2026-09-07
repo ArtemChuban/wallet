@@ -1,0 +1,165 @@
+"use client";
+
+import {
+  IncomeFormDialog,
+  type IncomeRow,
+} from "@/components/income/IncomeFormDialog";
+import { PersonFormDialog } from "@/components/debts/PersonFormDialog";
+import { Button } from "@/components/ui/button";
+import { formatAsOfDisplay } from "@/lib/dates";
+import { formatMinorToMajor } from "@/lib/money";
+
+type CurrencyOption = {
+  code: string;
+  name: string;
+  scale: number;
+};
+
+export type PersonIncomeListItem = {
+  id: number;
+  name: string;
+  debtCount: number;
+  incomeCount: number;
+  incomes: IncomeRow[];
+};
+
+const KIND_LABELS: Record<"recurring" | "oneTime", string> = {
+  recurring: "Ежемесячный",
+  oneTime: "Разовый",
+};
+
+function IncomeCompactRow({ income }: { income: IncomeRow }) {
+  const amount = formatMinorToMajor(
+    BigInt(income.plannedAmountMinor),
+    income.currency.scale,
+  );
+  return (
+    <li>
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-3">
+        <div className="flex min-w-0 flex-wrap items-baseline gap-2">
+          <span className="text-sm text-muted-foreground">
+            {KIND_LABELS[income.kind]}
+          </span>
+          <span className="font-mono text-base text-foreground">{amount}</span>
+          <span className="font-mono text-sm text-muted-foreground">
+            {income.currencyCode}
+          </span>
+          <span className="font-mono text-sm text-muted-foreground">
+            {formatAsOfDisplay(income.nextPlannedAsOf)}
+          </span>
+        </div>
+      </div>
+    </li>
+  );
+}
+
+function PersonGroup({
+  person,
+  currencies,
+  peopleOptions,
+  primaryCurrencyCode,
+}: {
+  person: PersonIncomeListItem;
+  currencies: CurrencyOption[];
+  peopleOptions: { id: number; name: string }[];
+  primaryCurrencyCode: string;
+}) {
+  return (
+    <li className="border-b border-border last:border-b-0">
+      <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
+        <p className="min-w-0 flex-1 break-all text-base font-medium text-foreground">
+          {person.name}
+        </p>
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
+          <PersonFormDialog
+            mode="edit"
+            person={{ id: person.id, name: person.name }}
+            trigger={
+              <Button type="button" variant="outline" size="sm">
+                Изменить имя
+              </Button>
+            }
+          />
+        </div>
+      </div>
+
+      {person.incomes.length === 0 ? (
+        <div className="flex flex-col items-start gap-3 border-t border-border bg-muted/30 px-4 py-4">
+          <p className="text-base text-muted-foreground">Нет доходов</p>
+          <IncomeFormDialog
+            mode="create"
+            currencies={currencies}
+            people={peopleOptions}
+            primaryCurrencyCode={primaryCurrencyCode}
+            defaultPersonId={person.id}
+            trigger={
+              <Button type="button" size="sm">
+                Новый доход
+              </Button>
+            }
+          />
+        </div>
+      ) : (
+        <ul>
+          {person.incomes.map((income) => (
+            <IncomeCompactRow
+              key={`${income.kind}-${income.id}`}
+              income={income}
+            />
+          ))}
+        </ul>
+      )}
+    </li>
+  );
+}
+
+export function IncomeList({
+  people,
+  currencies,
+  primaryCurrencyCode,
+}: {
+  people: PersonIncomeListItem[];
+  currencies: CurrencyOption[];
+  primaryCurrencyCode: string;
+}) {
+  const peopleOptions = people.map((p) => ({ id: p.id, name: p.name }));
+
+  if (people.length === 0) {
+    return (
+      <div className="flex flex-col items-start gap-4 rounded-lg border border-dashed border-border bg-muted/30 px-4 py-8">
+        <div className="grid gap-2">
+          <h2 className="text-base font-semibold text-foreground">Нет людей</h2>
+          <p className="max-w-prose text-base text-muted-foreground">
+            Добавьте человека или создайте доход, чтобы вести учёт.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <PersonFormDialog
+            mode="create"
+            trigger={<Button type="button">Новый человек</Button>}
+          />
+          <IncomeFormDialog
+            mode="create"
+            currencies={currencies}
+            people={[]}
+            primaryCurrencyCode={primaryCurrencyCode}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <ul className="rounded-lg border border-border bg-background">
+      {people.map((person) => (
+        <PersonGroup
+          key={person.id}
+          person={person}
+          currencies={currencies}
+          peopleOptions={peopleOptions}
+          primaryCurrencyCode={primaryCurrencyCode}
+        />
+      ))}
+    </ul>
+  );
+}
