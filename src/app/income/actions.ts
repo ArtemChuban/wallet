@@ -12,7 +12,10 @@ import {
   createRecurringIncomeWithNewPersonSchema,
   updateOneTimeIncomeSchema,
   updateRecurringIncomeSchema,
+  upsertOneTimeIncomeActualSchema,
   upsertRecurringIncomeActualSchema,
+  deleteOneTimeIncomeActualSchema,
+  deleteRecurringIncomeActualSchema,
 } from "@/lib/validations/income";
 
 export type IncomeActionState = {
@@ -593,4 +596,165 @@ export async function upsertRecurringIncomeActual(
 
   revalidatePath("/income");
   return { success: true, message: "Сохранено" };
+}
+
+/**
+ * Upsert one-time income actual for the plan slot (ACT-01 / D-04 / D-19).
+ * Server asserts plannedAsOf === definition.plannedAsOf (T-15-03).
+ * Future actualAsOf allowed — no repayment-style today upper bound.
+ * revalidatePath("/income") only — never dashboard root or NW ledger writes.
+ */
+export async function upsertOneTimeIncomeActual(
+  _prev: IncomeActionState,
+  formData: FormData,
+): Promise<IncomeActionState> {
+  const validated = upsertOneTimeIncomeActualSchema.safeParse({
+    oneTimeIncomeId: formData.get("oneTimeIncomeId"),
+    plannedAsOf: formData.get("plannedAsOf"),
+    actualAmountMajor: formData.get("actualAmountMajor"),
+    actualAsOf: formData.get("actualAsOf"),
+    note: formData.get("note") ?? undefined,
+  });
+
+  if (!validated.success) {
+    return { errors: validated.error.flatten().fieldErrors };
+  }
+
+  const {
+    oneTimeIncomeId,
+    plannedAsOf,
+    actualAmountMajor,
+    actualAsOf,
+    note,
+  } = validated.data;
+
+  try {
+    await ensureSqlitePragmas();
+
+    const parent = await prisma.oneTimeIncome.findUnique({
+      where: { id: oneTimeIncomeId },
+      include: { currency: { select: { scale: true } } },
+    });
+    if (!parent) {
+      return {
+        message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+      };
+    }
+
+    if (plannedAsOf !== parent.plannedAsOf) {
+      return {
+        errors: {
+          plannedAsOf: ["Дата плана должна совпадать с планом дохода"],
+        },
+      };
+    }
+
+    if (fracDigitCount(actualAmountMajor) > parent.currency.scale) {
+      return {
+        errors: {
+          actualAmountMajor: [
+            `Не больше ${parent.currency.scale} знаков после запятой`,
+          ],
+        },
+      };
+    }
+
+    let amountMinor: bigint;
+    try {
+      amountMinor = parseMajorToMinor(
+        actualAmountMajor,
+        parent.currency.scale,
+      );
+    } catch (err) {
+      const msg =
+        err instanceof Error && err.message === "too many fractional digits"
+          ? `Не больше ${parent.currency.scale} знаков после запятой`
+          : "Некорректная сумма";
+      return { errors: { actualAmountMajor: [msg] } };
+    }
+
+    await prisma.oneTimeIncomeActual.upsert({
+      where: {
+        oneTimeIncomeId_plannedAsOf: {
+          oneTimeIncomeId,
+          plannedAsOf,
+        },
+      },
+      update: {
+        amountMinor,
+        actualAsOf,
+        note: note ?? null,
+      },
+      create: {
+        oneTimeIncomeId,
+        plannedAsOf,
+        amountMinor,
+        actualAsOf,
+        note: note ?? null,
+      },
+    });
+  } catch {
+    return {
+      message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/income");
+  return { success: true, message: "Сохранено" };
+}
+
+/**
+ * Delete a single RecurringIncomeActual by id (D-04).
+ * revalidatePath("/income") only.
+ */
+export async function deleteRecurringIncomeActual(
+  formData: FormData,
+): Promise<IncomeActionState> {
+  const validated = deleteRecurringIncomeActualSchema.safeParse({
+    id: formData.get("id"),
+  });
+
+  if (!validated.success) {
+    return { message: "Не удалось удалить. Попробуйте снова." };
+  }
+
+  const { id } = validated.data;
+
+  try {
+    await ensureSqlitePragmas();
+    await prisma.recurringIncomeActual.delete({ where: { id } });
+  } catch {
+    return { message: "Не удалось удалить. Попробуйте снова." };
+  }
+
+  revalidatePath("/income");
+  return { success: true, message: "Удалено" };
+}
+
+/**
+ * Delete a single OneTimeIncomeActual by id (D-04).
+ * revalidatePath("/income") only.
+ */
+export async function deleteOneTimeIncomeActual(
+  formData: FormData,
+): Promise<IncomeActionState> {
+  const validated = deleteOneTimeIncomeActualSchema.safeParse({
+    id: formData.get("id"),
+  });
+
+  if (!validated.success) {
+    return { message: "Не удалось удалить. Попробуйте снова." };
+  }
+
+  const { id } = validated.data;
+
+  try {
+    await ensureSqlitePragmas();
+    await prisma.oneTimeIncomeActual.delete({ where: { id } });
+  } catch {
+    return { message: "Не удалось удалить. Попробуйте снова." };
+  }
+
+  revalidatePath("/income");
+  return { success: true, message: "Удалено" };
 }
