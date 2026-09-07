@@ -5,11 +5,11 @@ milestone_name: Доходы
 current_phase: 15
 current_phase_name: Plan vs actual + overdue
 status: planning
-stopped_at: Phase 14 complete, ready to plan Phase 15
-last_updated: "2026-09-07T13:23:18.584Z"
+stopped_at: Phase 15 context gathered
+last_updated: "2026-09-07T13:52:58.208Z"
 last_activity: 2026-09-07
 last_activity_desc: Phase 14 complete, transitioned to Phase 15
-state_head: d891f5c14ff8309c3fc714a0861fb6d424a75a47
+state_head: 9c998358f23eb17eb7f89df992a8e3a6a6d41f31
 progress:
   total_phases: 5
   completed_phases: 2
@@ -118,6 +118,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T13:12:01.818Z
-Stopped at: Phase 14 complete, ready to plan Phase 15
-Resume file: None
+Last session: 2026-09-07T13:52:58.122Z
+Stopped at: Phase 15 context gathered
+Resume file: /home/artem/Documents/wallet/.planning/phases/15-plan-vs-actual-overdue/15-CONTEXT.md
