@@ -117,7 +117,7 @@ Each task was committed atomically:
 2. **Task 2: IncomeList overdue + variance chrome + fact CTAs** - `477fd1b` (feat)
 3. **Task 3: income-ui file-scan polish + full suite gate** - `9cc97ff` (test)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `a2cdc50` (docs: complete plan)
 
 ## Files Created/Modified
 

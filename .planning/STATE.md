@@ -8,8 +8,8 @@ status: in_progress
 stopped_at: Completed 15-03-PLAN.md
 last_updated: "2026-09-07T17:36:15.460Z"
 last_activity: 2026-09-07
-last_activity_desc: Completed 15-02 actual actions + overdue RSC props
-state_head: 9cc97ffe92bcd1d09ff07908cdfe003d86857ca3
+last_activity_desc: Completed 15-03 fact dialog + overdue/variance chrome
+state_head: a2cdc50
 progress:
   total_phases: 5
   completed_phases: 2
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 
 ## Current Position
 
-Phase: 15 (Plan vs actual + overdue) — IN PROGRESS
+Phase: 15 (Plan vs actual + overdue) — READY FOR VERIFICATION
 Plan: 3 of 3
-Status: 15-02 complete — ready for 15-03
-Last activity: 2026-09-07 — Completed 15-02-PLAN.md (actual actions + overdue props)
+Status: 15-03 complete — all phase plans done
+Last activity: 2026-09-07 — Completed 15-03-PLAN.md (fact dialog + overdue chrome)
 
 Progress: [████░░░░░░] 40% (v1.2 — 0/5 phases verified)
 
