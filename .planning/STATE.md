@@ -4,11 +4,11 @@ milestone: v1.2
 milestone_name: Доходы
 current_phase: 17
 current_phase_name: NW forecast overlay + isolation
-status: executing
-stopped_at: Phase 17 UI-SPEC drafted
-last_updated: "2026-09-07T20:00:00.000Z"
+status: ready_to_execute
+stopped_at: Phase 17 plans written (3 plans)
+last_updated: "2026-09-07T22:15:00.000Z"
 last_activity: 2026-09-07
-last_activity_desc: Phase 17 UI design contract written
+last_activity_desc: Phase 17 PLAN.md set created (17-01..17-03)
 state_head: ecff81e
 progress:
   total_phases: 5
@@ -29,12 +29,12 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 
 ## Current Position
 
-Phase: 17 (NW forecast overlay + isolation) — UI-SPEC draft ready for checker
-Plan: 1 of ?
-Status: UI-SPEC drafted — awaiting checker / plan
-Last activity: 2026-09-07 — Phase 17 UI design contract written
+Phase: 17 (NW forecast overlay + isolation) — plans ready
+Plan: 0 of 3
+Status: Planned — ready for `/gsd-execute-phase 17`
+Last activity: 2026-09-07 — Phase 17 plans written (wave 1→2→3)
 
-Progress: [████░░░░░░] 40% (v1.2 — phase 16 done; phase 17 UI-SPEC)
+Progress: [████░░░░░░] 40% (v1.2 — phase 16 done; phase 17 planned)
 
 ## Performance Metrics
 
@@ -101,9 +101,8 @@ Recent decisions affecting current work:
 
 ### Blockers/Concerns
 
-- Forecast horizon vs Капитал range presets — lock in Phase 17 plan/discuss (~90d recommended)
 - Person-as-employer UX copy — validate in Phase 14 discuss if mixing debts+income people confuses
-- One-time excluded from NW forecast (FCST-01) — locked; do not regress
+- FCST-01 docs still stale (recurring-only) until Plan 17-02 docs-sync — CONTEXT D-01 wins (recurring + future one-time)
 
 ### Roadmap Evolution
 

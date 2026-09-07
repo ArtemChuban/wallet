@@ -38,15 +38,17 @@ created: "2026-09-07"
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 17-W0-01 | 00→01 | 0 | FCST-01 | T-17-FX | RED scaffolds nw-forecast — never invent FX | unit | `npx vitest run -t "forecast" src/lib/nw-forecast.test.ts` (expect fail until impl) | ❌ W0 | ⬜ pending |
-| 17-W0-02 | 00→01 | 0 | ISO-01 | T-17-ISO | RED scaffolds INISO file-scan + past series | unit | `npx vitest run src/lib/iniso.test.ts` (expect fail until impl) | ❌ W0 | ⬜ pending |
-| 17-01-T? | 01 | 1 | FCST-01 | T-17-FX | Membership/cumulative/horizon/FX overlay math | unit | `npx vitest run src/lib/nw-forecast.test.ts` | ❌ W0 | ⬜ pending |
-| 17-01-T? | 01 | 1 | ISO-01 | T-17-ISO | Past series identity + import walls | unit/file-scan | `npx vitest run src/lib/iniso.test.ts` | ❌ W0 | ⬜ pending |
-| 17-02-T? | 02 | 2 | FCST-01 | T-17-CHART | ComposedChart/Line/ReferenceLine/«Прогноз» | file-scan | `npx vitest run -t "forecast" src/components/dashboard/` | ❌ W0 | ⬜ pending |
-| 17-02-T? | 02 | 2 | FCST-01 | — | REQUIREMENTS/ROADMAP FCST-01 one-time sync | docs-grep | `grep -n FCST-01 .planning/REQUIREMENTS.md` | ⚠️ stale | ⬜ pending |
-| 17-02-T? | 02 | 2 | ISO-01 | T-17-ISO | Income actions never BalanceSnapshot | file-scan | `npx vitest run -t "income actions isolation" src/app/income/actions.test.ts` | ✅ | ⬜ pending |
+| 17-01-T1 | 01 | 1 | FCST-01 | T-17-02 | RED scaffolds nw-forecast — never invent FX | unit | `npx vitest run -t "forecast" src/lib/nw-forecast.test.ts` (expect fail until impl) | ❌ W0 | ⬜ pending |
+| 17-01-T2 | 01 | 1 | FCST-01 | T-17-01 | Tracer open slot → builder → shell → ComposedChart Line | unit/file-scan | `npx vitest run src/lib/nw-forecast.test.ts` + grep builder/ComposedChart | ❌ W0 | ⬜ pending |
+| 17-01-T3 | 01 | 1 | FCST-01 | T-17-02 | Membership/cumulative/horizon/FX overlay math | unit | `npx vitest run src/lib/nw-forecast.test.ts` | ❌ W0 | ⬜ pending |
+| 17-02-T1 | 02 | 2 | ISO-01 | T-17-01 | Checkpoint: confirm one-way INISO walls (D-17) | decision | human resume-signal | n/a | ⬜ pending |
+| 17-02-T2 | 02 | 2 | ISO-01 | T-17-01 | Past series identity + import walls + actions gate | unit/file-scan | `npx vitest run src/lib/iniso.test.ts` + actions isolation | ❌ W0 | ⬜ pending |
+| 17-02-T3 | 02 | 2 | FCST-01 | T-17-06 | REQUIREMENTS/ROADMAP/STATE FCST-01 one-time sync (D-01) | docs-grep | `grep -n FCST-01 .planning/REQUIREMENTS.md` | ⚠️ stale | ⬜ pending |
+| 17-03-T1 | 03 | 3 | FCST-01 | T-17-03 | ComposedChart/Line/ReferenceLine/«Прогноз» | file-scan | `npx vitest run -t "forecast" src/components/dashboard/nw-forecast-ui.test.ts` | ❌ W0 | ⬜ pending |
+| 17-03-T2 | 03 | 3 | FCST-01 | T-17-02 | Partial banner «Прогноз неполный · нет курса» | file-scan | `npx vitest run src/components/dashboard/nw-forecast-ui.test.ts` | ❌ W0 | ⬜ pending |
+| 17-03-T3 | 03 | 3 | FCST-01, ISO-01 | T-17-01 | VALIDATION map + wave merge suite | unit | wave merge vitest + `wave_0_complete: true` | ⚠️ | ⬜ pending |
 
-*Planner fills exact Task IDs. Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
+*Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
 ---
 
@@ -54,7 +56,7 @@ created: "2026-09-07"
 
 - [ ] `src/lib/nw-forecast.test.ts` — membership, cumulative, horizon mirror, FX exclude/partial, empty hide
 - [ ] `src/lib/iniso.test.ts` — file-scan walls + past `buildNetWorthSeries` identity
-- [ ] Optional: dashboard chart forecast file-scan under `src/components/dashboard/`
+- [ ] `src/components/dashboard/nw-forecast-ui.test.ts` — chart forecast file-scan
 - [ ] Framework install: none — Vitest already present
 
 ---

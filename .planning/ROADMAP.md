@@ -152,17 +152,23 @@ Plans:
 
 ### Phase 17: NW forecast overlay + isolation
 
-**Goal**: Капитал shows forward NW projection from recurring pay; historical NW stays account-only
+**Goal**: Капитал shows forward NW projection from open planned pay (recurring + future one-time); historical NW stays account-only
 **Depends on**: Phase 16
 **Requirements**: FCST-01, ISO-01
 **Success Criteria** (what must be TRUE):
 
-  1. On `/`, user sees NW chart with future dashed overlay from recurring planned income converted via FX LOCF
-  2. One-time income is not included in the Капитал forecast overlay
+  1. On `/`, user sees NW chart with future dashed overlay from open planned income (recurring + future one-time) converted via FX LOCF
+  2. Horizon mirrors dashboard lookback preset (`all` capped at 1y); filled/today/overdue slots stay out of overlay
   3. Past NW series / `computeNetWorthRows` unchanged with or without income data; income actions never write BalanceSnapshot
   4. Isolation regressions (file-scan / property) and Nyquist validation for v1.2 income phases are green
 
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 17-01-PLAN.md — Wave 0 + tracer forecast overlay + domain (membership/horizon/FX)
+- [ ] 17-02-PLAN.md — INISO one-way gate + suite green + FCST-01 docs sync
+- [ ] 17-03-PLAN.md — Chart chrome / partial banner + VALIDATION Nyquist gate
+
 **UI hint**: yes
 
 ## Progress
@@ -179,6 +185,6 @@ Plans:
 | 14. Доходы CRUD + nav | 3/3 | Not started | 2026-09-07 |
 | 15. Plan vs actual + overdue | 3/3 | Not started | 2026-09-07 |
 | 16. Counterparty income stats | 2/2 | Planned | 2026-09-07 |
-| 17. NW forecast overlay + isolation | 0/? | Not started | - |
+| 17. NW forecast overlay + isolation | 0/3 | Planned | - |
 
-*Next: `/gsd-plan-phase 13`*
+*Next: `/gsd-execute-phase 17`*
