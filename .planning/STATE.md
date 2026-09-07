@@ -5,10 +5,10 @@ milestone_name: Доходы
 current_phase: 15
 current_phase_name: Plan vs actual + overdue
 status: planning
-stopped_at: Phase 15 context gathered
-last_updated: "2026-09-07T13:52:58.208Z"
+stopped_at: Phase 15 UI-SPEC drafted
+last_updated: "2026-09-07T17:00:00.000Z"
 last_activity: 2026-09-07
-last_activity_desc: Phase 14 complete, transitioned to Phase 15
+last_activity_desc: Phase 15 UI design contract written (15-UI-SPEC.md)
 state_head: 9c998358f23eb17eb7f89df992a8e3a6a6d41f31
 progress:
   total_phases: 5
@@ -25,14 +25,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 14 — Доходы CRUD + nav
+**Current focus:** Phase 15 — Plan vs actual + overdue
 
 ## Current Position
 
 Phase: 15 — Plan vs actual + overdue
 Plan: Not started
-Status: Ready to plan
-Last activity: 2026-09-07 — Phase 14 complete, transitioned to Phase 15
+Status: UI-SPEC drafted — ready for checker / plan
+Last activity: 2026-09-07 — Phase 15 UI design contract written
 
 Progress: [██░░░░░░░░] 20% (v1.2 — 0/5 phases verified)
 
