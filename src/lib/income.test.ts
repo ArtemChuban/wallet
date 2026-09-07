@@ -1,6 +1,10 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { listRecurringOccurrences } from "@/lib/income";
+import {
+  listAllInRange,
+  listOneTimeOccurrences,
+  listRecurringOccurrences,
+} from "@/lib/income";
 
 describe("listRecurringOccurrences tracer (FND-OCC / D-13 / D-15 / D-16)", () => {
   it("returns one Feb slot with DOM-31 clamped and bigint plannedAmountMinor", () => {
@@ -113,6 +117,108 @@ describe("listRecurringOccurrences freeze + inclusive range (D-06 / D-07 / D-15)
     expect(dates).toContain("2026-06-05");
     expect(dates).not.toContain("2026-04-05");
     expect(dates).not.toContain("2026-07-05");
+  });
+});
+
+describe("listOneTimeOccurrences + listAllInRange (D-13 / D-14 / D-15)", () => {
+  it("emits one-time slot when plannedAsOf in inclusive range with bigint amount", () => {
+    const slots = listOneTimeOccurrences(
+      [
+        {
+          id: 10,
+          plannedAmountMinor: 1000_00n,
+          plannedAsOf: "2026-03-05",
+        },
+      ],
+      [],
+      "2026-03-01",
+      "2026-03-31",
+    );
+    expect(slots).toHaveLength(1);
+    expect(slots[0]?.parentId).toBe(10);
+    expect(slots[0]?.plannedAsOf).toBe("2026-03-05");
+    expect(slots[0]?.plannedAmountMinor).toBe(1000_00n);
+    expect(typeof slots[0]?.plannedAmountMinor).toBe("bigint");
+  });
+
+  it("yields none when one-time plannedAsOf outside range", () => {
+    const slots = listOneTimeOccurrences(
+      [
+        {
+          id: 11,
+          plannedAmountMinor: 1n,
+          plannedAsOf: "2026-04-01",
+        },
+      ],
+      [],
+      "2026-03-01",
+      "2026-03-31",
+    );
+    expect(slots).toHaveLength(0);
+  });
+
+  it("joins optional actual by (parentId, plannedAsOf) without mutating plan fields", () => {
+    const slots = listOneTimeOccurrences(
+      [
+        {
+          id: 12,
+          plannedAmountMinor: 500n,
+          plannedAsOf: "2026-05-10",
+        },
+      ],
+      [
+        {
+          oneTimeIncomeId: 12,
+          plannedAsOf: "2026-05-10",
+          amountMinor: 480n,
+          actualAsOf: "2026-05-11",
+        },
+      ],
+      "2026-05-01",
+      "2026-05-31",
+    );
+    expect(slots).toHaveLength(1);
+    expect(slots[0]?.plannedAsOf).toBe("2026-05-10");
+    expect(slots[0]?.plannedAmountMinor).toBe(500n);
+    expect(slots[0]?.actual).toEqual({
+      amountMinor: 480n,
+      actualAsOf: "2026-05-11",
+    });
+  });
+
+  it("listAllInRange merges recurring + one-time for explicit from/to", () => {
+    const all = listAllInRange(
+      {
+        recurring: [
+          {
+            id: 1,
+            plannedAmountMinor: 100n,
+            dayOfMonth: 15,
+            startAsOf: "2026-01-01",
+          },
+        ],
+        recurringActuals: [],
+        oneTime: [
+          {
+            id: 20,
+            plannedAmountMinor: 200n,
+            plannedAsOf: "2026-06-20",
+          },
+        ],
+        oneTimeActuals: [],
+      },
+      "2026-06-01",
+      "2026-06-30",
+    );
+    const recurring = all.filter((s) => s.kind === "recurring");
+    const oneTime = all.filter((s) => s.kind === "oneTime");
+    expect(recurring).toHaveLength(1);
+    expect(recurring[0]?.plannedAsOf).toBe("2026-06-15");
+    expect(oneTime).toHaveLength(1);
+    expect(oneTime[0]?.plannedAsOf).toBe("2026-06-20");
+    expect(all.every((s) => typeof s.plannedAmountMinor === "bigint")).toBe(
+      true,
+    );
   });
 });
 
