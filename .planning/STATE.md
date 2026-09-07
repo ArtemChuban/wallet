@@ -5,17 +5,17 @@ milestone_name: Доходы
 current_phase: 13
 current_phase_name: income-schema-domain-math
 status: in_progress
-stopped_at: Completed 13-01-PLAN.md
-last_updated: "2026-09-07T11:24:16.294Z"
+stopped_at: Completed 13-02-PLAN.md
+last_updated: "2026-09-07T11:29:00.455Z"
 last_activity: 2026-09-07
-last_activity_desc: Completed 13-01 — income schema tracer + migrate
-state_head: f78eff321fe67924f5edc05d4ccb4dd75e6e5d38
+last_activity_desc: Completed 13-02 — freeze + one-time occurrence API
+state_head: 85e79f8f1cf1054eecbfbbaa0d3b73206e403ec2
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
-  percent: 33
+  completed_plans: 2
+  percent: 67
 ---
 
 # Project State
@@ -29,12 +29,12 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 
 ## Current Position
 
-Phase: 13 (income-schema-domain-math) — READY TO EXECUTE
-Plan: 13-01 (next)
-Status: Ready to execute (3 plans)
-Last activity: 2026-09-07 — Phase 13 checker revision applied
+Phase: 13 (income-schema-domain-math) — IN PROGRESS
+Plan: 13-03 (next)
+Status: 13-02 complete; 2/3 plans
+Last activity: 2026-09-07 — Completed 13-02 freeze + one-time occurrence API
 
-Progress: [░░░░░░░░░░] 0% (v1.2)
+Progress: [██████░░░░] 67% (v1.2)
 
 ## Performance Metrics
 
@@ -52,6 +52,7 @@ Progress: [░░░░░░░░░░] 0% (v1.2)
 | Plan | Duration | Tasks | Files |
 |------|----------|-------|-------|
 | Phase 13 P01 | 3min | 3 tasks | 7 files |
+| Phase 13 P02 | 2min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -67,6 +68,8 @@ Recent decisions affecting current work:
 - DestructiveConfirmStep app-wide; agent-driven UAT via OPERATOR.md + Orca
 - [Phase 13]: Four models (CONTEXT D-03/D-04) — auto-selected over polymorphic IncomeSource+enum
 - [Phase 13]: Tracer ignores actuals; freeze-merge deferred to Plan 02
+- [Phase 13]: A2 month-keyed freeze: frozen actual plannedAsOf wins over differing DOM candidate
+- [Phase 13]: listAllInRange requires explicit from/to; no default horizon
 
 ### Pending Todos
 
@@ -103,6 +106,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T11:24:16.272Z
-Stopped at: Completed 13-01-PLAN.md
+Last session: 2026-09-07T11:29:00.432Z
+Stopped at: Completed 13-02-PLAN.md
 Resume file: None
