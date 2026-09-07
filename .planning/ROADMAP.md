@@ -162,12 +162,12 @@ Plans:
   3. Past NW series / `computeNetWorthRows` unchanged with or without income data; income actions never write BalanceSnapshot
   4. Isolation regressions (file-scan / property) and Nyquist validation for v1.2 income phases are green
 
-**Plans**: 1/3 plans executed
+**Plans**: 2/3 plans executed
 
 Plans:
 
 - [x] 17-01-PLAN.md — Wave 0 + tracer forecast overlay + domain (membership/horizon/FX)
-- [ ] 17-02-PLAN.md — INISO one-way gate + suite green + FCST-01 docs sync
+- [x] 17-02-PLAN.md — INISO one-way gate + suite green + FCST-01 docs sync
 - [ ] 17-03-PLAN.md — Chart chrome / partial banner + VALIDATION Nyquist gate
 
 **UI hint**: yes
@@ -186,6 +186,6 @@ Plans:
 | 14. Доходы CRUD + nav | 3/3 | Not started | 2026-09-07 |
 | 15. Plan vs actual + overdue | 3/3 | Not started | 2026-09-07 |
 | 16. Counterparty income stats | 2/2 | Planned | 2026-09-07 |
-| 17. NW forecast overlay + isolation | 1/3 | Planned |  |
+| 17. NW forecast overlay + isolation | 2/3 | Planned |  |
 
 *Next: `/gsd-execute-phase 17`*
