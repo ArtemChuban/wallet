@@ -29,6 +29,41 @@ export type RecurringOccurrence = {
   plannedAmountMinor: bigint;
 };
 
+export type OneTimeIncomeDef = {
+  id: number;
+  plannedAmountMinor: bigint;
+  plannedAsOf: string;
+};
+
+export type OneTimeIncomeActualSlot = {
+  oneTimeIncomeId: number;
+  plannedAsOf: string;
+  amountMinor: bigint;
+  actualAsOf: string;
+};
+
+export type OneTimeOccurrence = {
+  parentId: number;
+  plannedAsOf: string;
+  plannedAmountMinor: bigint;
+  /** Joined actual when key matches; plan fields stay immutable (D-08 readiness). */
+  actual?: {
+    amountMinor: bigint;
+    actualAsOf: string;
+  };
+};
+
+export type IncomeOccurrence =
+  | (RecurringOccurrence & { kind: "recurring" })
+  | (OneTimeOccurrence & { kind: "oneTime" });
+
+export type ListAllInRangeInput = {
+  recurring: readonly RecurringIncomeDef[];
+  recurringActuals: readonly RecurringIncomeActualSlot[];
+  oneTime: readonly OneTimeIncomeDef[];
+  oneTimeActuals: readonly OneTimeIncomeActualSlot[];
+};
+
 export function occurrenceKeyString(k: IncomeOccurrenceKey): string {
   return `${k.parentId}:${k.plannedAsOf}`;
 }
@@ -120,6 +155,81 @@ export function listRecurringOccurrences(
   }
 
   return [...byKey.values()].sort((a, b) =>
+    a.plannedAsOf < b.plannedAsOf
+      ? -1
+      : a.plannedAsOf > b.plannedAsOf
+        ? 1
+        : a.parentId - b.parentId,
+  );
+}
+
+/**
+ * One-time plan slot when definition plannedAsOf ∈ inclusive [from, to] (D-14, D-15).
+ * Optional actual joined by (parentId, plannedAsOf); plan fields unchanged (D-08 readiness).
+ */
+export function listOneTimeOccurrences(
+  defs: readonly OneTimeIncomeDef[],
+  actuals: readonly OneTimeIncomeActualSlot[],
+  from: string,
+  to: string,
+): OneTimeOccurrence[] {
+  const actualByKey = new Map<string, OneTimeIncomeActualSlot>();
+  for (const a of actuals) {
+    actualByKey.set(
+      occurrenceKeyString({
+        parentId: a.oneTimeIncomeId,
+        plannedAsOf: a.plannedAsOf,
+      }),
+      a,
+    );
+  }
+
+  const out: OneTimeOccurrence[] = [];
+  for (const def of defs) {
+    if (def.plannedAsOf < from || def.plannedAsOf > to) continue;
+    const key = occurrenceKeyString({
+      parentId: def.id,
+      plannedAsOf: def.plannedAsOf,
+    });
+    const matched = actualByKey.get(key);
+    const row: OneTimeOccurrence = {
+      parentId: def.id,
+      plannedAsOf: def.plannedAsOf,
+      plannedAmountMinor: def.plannedAmountMinor,
+    };
+    if (matched) {
+      row.actual = {
+        amountMinor: matched.amountMinor,
+        actualAsOf: matched.actualAsOf,
+      };
+    }
+    out.push(row);
+  }
+  return out;
+}
+
+/**
+ * Thin merge of recurring + one-time for the same explicit window (D-13, D-14).
+ * Callers always pass from/to — no default horizon.
+ */
+export function listAllInRange(
+  input: ListAllInRangeInput,
+  from: string,
+  to: string,
+): IncomeOccurrence[] {
+  const recurring = listRecurringOccurrences(
+    input.recurring,
+    input.recurringActuals,
+    from,
+    to,
+  ).map((o) => ({ ...o, kind: "recurring" as const }));
+  const oneTime = listOneTimeOccurrences(
+    input.oneTime,
+    input.oneTimeActuals,
+    from,
+    to,
+  ).map((o) => ({ ...o, kind: "oneTime" as const }));
+  return [...recurring, ...oneTime].sort((a, b) =>
     a.plannedAsOf < b.plannedAsOf
       ? -1
       : a.plannedAsOf > b.plannedAsOf
