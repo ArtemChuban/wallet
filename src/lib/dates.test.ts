@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   addCalendarDays,
+  clampDayOfMonth,
   formatAsOfDisplay,
   parseAsOfDisplay,
   windowStartForPreset,
@@ -32,6 +33,20 @@ describe("addCalendarDays", () => {
   it("handles leap-day safe subtract", () => {
     expect(addCalendarDays("2024-03-01", -1)).toBe("2024-02-29");
     expect(addCalendarDays("2025-03-01", -1)).toBe("2025-02-28");
+  });
+});
+
+describe("clampDayOfMonth (D-16 / FND-CLAMP)", () => {
+  it("maps DOM 31 to Feb last day (non-leap)", () => {
+    expect(clampDayOfMonth(2025, 2, 31)).toBe("2025-02-28");
+  });
+
+  it("maps DOM 31 to Feb last day (leap)", () => {
+    expect(clampDayOfMonth(2024, 2, 31)).toBe("2024-02-29");
+  });
+
+  it("maps DOM 31 to Apr 30", () => {
+    expect(clampDayOfMonth(2026, 4, 31)).toBe("2026-04-30");
   });
 });
 

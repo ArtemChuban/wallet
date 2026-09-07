@@ -50,6 +50,22 @@ export function addCalendarDays(iso: string, days: number): string {
 }
 
 /**
+ * Map day-of-month onto a calendar month without skipping short months (D-16).
+ * UTC family matching addCalendarDays — day 0 of next month index = last day.
+ */
+export function clampDayOfMonth(
+  year: number,
+  month1to12: number,
+  dayOfMonth: number,
+): string {
+  const last = new Date(Date.UTC(year, month1to12, 0)).getUTCDate();
+  const day = Math.min(dayOfMonth, last);
+  const mm = String(month1to12).padStart(2, "0");
+  const dd = String(day).padStart(2, "0");
+  return `${year}-${mm}-${dd}`;
+}
+
+/**
  * Inclusive window start for a range preset, or null for "all".
  * 1y = 365 calendar days before today (RESEARCH A4).
  */

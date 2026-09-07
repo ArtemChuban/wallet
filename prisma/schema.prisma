@@ -17,14 +17,16 @@ enum AccountType {
 }
 
 model Currency {
-  code      String  @id
-  name      String
-  scale     Int // required at create — no DB default
+  code             String  @id
+  name             String
+  scale            Int // required at create — no DB default
   /// Exactly-one primary enforced by migration SQL partial unique index Currency_one_primary (D-01, D-02).
-  isPrimary Boolean @default(false)
-  accounts  Account[]
-  fxRates   FxRate[]
-  debts     Debt[]
+  isPrimary        Boolean @default(false)
+  accounts         Account[]
+  fxRates          FxRate[]
+  debts            Debt[]
+  recurringIncomes RecurringIncome[]
+  oneTimeIncomes   OneTimeIncome[]
 }
 
 enum DebtDirection {
@@ -38,11 +40,13 @@ enum DebtStatus {
 }
 
 model Person {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  debts     Debt[]
+  id               Int               @id @default(autoincrement())
+  name             String            @unique
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  debts            Debt[]
+  recurringIncomes RecurringIncome[]
+  oneTimeIncomes   OneTimeIncome[]
 }
 
 model Debt {
@@ -116,4 +120,61 @@ model BalanceSnapshot {
   amountMinor BigInt // native balance; for FIAT_CREDIT = available remaining
 
   @@unique([accountId, asOfDate], name: "accountId_asOfDate")
+}
+
+/// Recurring income definition — side ledger (D-03). No active/endAsOf (D-01).
+model RecurringIncome {
+  id                 Int                     @id @default(autoincrement())
+  personId           Int
+  person             Person                  @relation(fields: [personId], references: [id], onDelete: Restrict)
+  currencyCode       String
+  currency           Currency                @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
+  plannedAmountMinor BigInt
+  dayOfMonth         Int // 1–31; clamp at generation (D-16)
+  startAsOf          String // YYYY-MM-DD series start (D-15)
+  note               String?
+  createdAt          DateTime                @default(now())
+  updatedAt          DateTime                @updatedAt
+  actuals            RecurringIncomeActual[]
+}
+
+model RecurringIncomeActual {
+  id                Int             @id @default(autoincrement())
+  recurringIncomeId Int
+  recurringIncome   RecurringIncome @relation(fields: [recurringIncomeId], references: [id], onDelete: Cascade)
+  plannedAsOf       String // YYYY-MM-DD — occurrence key half (D-06, D-09)
+  actualAsOf        String // YYYY-MM-DD
+  amountMinor       BigInt
+  note              String?
+  createdAt         DateTime        @default(now())
+
+  @@unique([recurringIncomeId, plannedAsOf])
+}
+
+/// One-time income definition — side ledger (D-03, D-12 readiness).
+model OneTimeIncome {
+  id                 Int                   @id @default(autoincrement())
+  personId           Int
+  person             Person                @relation(fields: [personId], references: [id], onDelete: Restrict)
+  currencyCode       String
+  currency           Currency              @relation(fields: [currencyCode], references: [code], onDelete: Restrict)
+  plannedAmountMinor BigInt
+  plannedAsOf        String // YYYY-MM-DD single plan date
+  note               String?
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+  actuals            OneTimeIncomeActual[]
+}
+
+model OneTimeIncomeActual {
+  id              Int           @id @default(autoincrement())
+  oneTimeIncomeId Int
+  oneTimeIncome   OneTimeIncome @relation(fields: [oneTimeIncomeId], references: [id], onDelete: Cascade)
+  plannedAsOf     String // copy of plan slot key at record time (D-06, D-09)
+  actualAsOf      String
+  amountMinor     BigInt
+  note            String?
+  createdAt       DateTime      @default(now())
+
+  @@unique([oneTimeIncomeId, plannedAsOf])
 }

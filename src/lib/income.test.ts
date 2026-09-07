@@ -1,0 +1,70 @@
+import { readFileSync } from "node:fs";
+import { describe, expect, it } from "vitest";
+import { listRecurringOccurrences } from "@/lib/income";
+
+describe("listRecurringOccurrences tracer (FND-OCC / D-13 / D-15 / D-16)", () => {
+  it("returns one Feb slot with DOM-31 clamped and bigint plannedAmountMinor", () => {
+    const slots = listRecurringOccurrences(
+      [
+        {
+          id: 1,
+          plannedAmountMinor: 100_00n,
+          dayOfMonth: 31,
+          startAsOf: "2026-01-01",
+        },
+      ],
+      [],
+      "2026-02-01",
+      "2026-02-28",
+    );
+    expect(slots).toHaveLength(1);
+    expect(slots[0]?.plannedAsOf).toBe("2026-02-28");
+    expect(slots[0]?.parentId).toBe(1);
+    expect(slots[0]?.plannedAmountMinor).toBe(100_00n);
+    expect(typeof slots[0]?.plannedAmountMinor).toBe("bigint");
+  });
+});
+
+describe("income schema conventions (D-01..D-05, D-09..D-11)", () => {
+  const schema = readFileSync("prisma/schema.prisma", "utf8");
+
+  it("defines four income models with BigInt money and optional note", () => {
+    expect(schema).toMatch(/model RecurringIncome\b/);
+    expect(schema).toMatch(/model OneTimeIncome\b/);
+    expect(schema).toMatch(/model RecurringIncomeActual\b/);
+    expect(schema).toMatch(/model OneTimeIncomeActual\b/);
+    expect(schema).toMatch(/plannedAmountMinor\s+BigInt/);
+    expect(schema).toMatch(/amountMinor\s+BigInt/);
+    expect(schema).not.toMatch(/model RecurringIncome[\s\S]*?\bactive\b/);
+    expect(schema).not.toMatch(/model RecurringIncome[\s\S]*?\bendAsOf\b/);
+  });
+
+  it("uses Restrict on Person/Currency and Cascade on actuals with unique slots", () => {
+    expect(schema).toMatch(
+      /RecurringIncome[\s\S]*?person[\s\S]*?onDelete:\s*Restrict/,
+    );
+    expect(schema).toMatch(
+      /RecurringIncome[\s\S]*?currency[\s\S]*?onDelete:\s*Restrict/,
+    );
+    expect(schema).toMatch(
+      /RecurringIncomeActual[\s\S]*?onDelete:\s*Cascade/,
+    );
+    expect(schema).toMatch(
+      /OneTimeIncomeActual[\s\S]*?onDelete:\s*Cascade/,
+    );
+    expect(schema).toMatch(/@@unique\(\[recurringIncomeId,\s*plannedAsOf\]\)/);
+    expect(schema).toMatch(/@@unique\(\[oneTimeIncomeId,\s*plannedAsOf\]\)/);
+  });
+});
+
+describe("income isolation (ISO-01 light)", () => {
+  it("income.ts does not import net-worth, historical-series, or Prisma", () => {
+    const src = readFileSync("src/lib/income.ts", "utf8");
+    expect(src).not.toMatch(
+      /from\s+["']@\/lib\/(?:net-worth|historical-series)["']/,
+    );
+    expect(src).not.toMatch(
+      /from\s+["']@\/generated\/prisma|from\s+["'][^"']*prisma["']/,
+    );
+  });
+});
