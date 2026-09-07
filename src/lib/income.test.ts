@@ -331,4 +331,15 @@ describe("income isolation (ISO-01 light)", () => {
       /from\s+["']@\/generated\/prisma|from\s+["'][^"']*prisma["']/,
     );
   });
+
+  for (const file of ["src/lib/net-worth.ts", "src/lib/historical-series.ts"]) {
+    it(`${file} does not import income domain module`, () => {
+      const src = readFileSync(file, "utf8");
+      expect(src).not.toMatch(/@\/lib\/income|from ["']\.\/income["']/);
+    });
+  }
+
+  it("UI-00: src/app/income does not exist", () => {
+    expect(existsSync("src/app/income")).toBe(false);
+  });
 });
