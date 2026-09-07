@@ -5,10 +5,10 @@ milestone_name: Доходы
 current_phase: 13
 current_phase_name: v1.2 phases 13–17
 status: ready_to_execute
-stopped_at: Phase 13 planning complete — 3 plans
-last_updated: "2026-09-07T11:15:00.000Z"
+stopped_at: Phase 13 planning revised — checker feedback
+last_updated: "2026-09-07T11:20:00.000Z"
 last_activity: 2026-09-07
-last_activity_desc: Phase 13 PLAN.md set written (13-01..13-03)
+last_activity_desc: Phase 13 checker revision (RESOLVED Qs, PATTERNS cite, VALIDATION FND-SCHEMA)
 state_head: 3298c787136837ecc3e96e9e4a9a1ebb1f6bcc2b
 progress:
   total_phases: 5
@@ -32,7 +32,7 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 Phase: 13 of 17 (Income schema + domain math) — v1.2 phases 13–17
 Plan: 13-01 (next)
 Status: Ready to execute (3 plans)
-Last activity: 2026-09-07 — Phase 13 plans written
+Last activity: 2026-09-07 — Phase 13 checker revision applied
 
 Progress: [░░░░░░░░░░] 0% (v1.2)
 
