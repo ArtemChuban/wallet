@@ -114,7 +114,7 @@ Plans:
   2. When planned date is before Moscow today and no actual exists, occurrence shows overdue «заполни»
   3. User can see plan vs actual variance (view/chart) on «Доходы»
 
-**Plans**: 2/3 plans executed
+**Plans**: 3/3 plans executed
 
 Plans:
 **Wave 1**
@@ -127,7 +127,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 15-03-PLAN.md — IncomeFactDialog + overdue/variance chrome + suite gate (ACT-02, ACT-03)
+- [x] 15-03-PLAN.md — IncomeFactDialog + overdue/variance chrome + suite gate (ACT-02, ACT-03)
 
 **UI hint**: yes
 
@@ -171,7 +171,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 13. Income schema + domain math | 3/3 | Plans complete | 2026-09-07 |
 | 14. Доходы CRUD + nav | 3/3 | Not started | 2026-09-07 |
-| 15. Plan vs actual + overdue | 2/3 | Not started |  |
+| 15. Plan vs actual + overdue | 3/3 | Not started |  |
 | 16. Counterparty income stats | 0/? | Not started | - |
 | 17. NW forecast overlay + isolation | 0/? | Not started | - |
 

@@ -5,16 +5,16 @@ milestone_name: Доходы
 current_phase: 15
 current_phase_name: Plan vs actual + overdue
 status: in_progress
-stopped_at: Completed 15-02-PLAN.md
-last_updated: "2026-09-07T17:28:30.658Z"
+stopped_at: Completed 15-03-PLAN.md
+last_updated: "2026-09-07T17:36:15.460Z"
 last_activity: 2026-09-07
 last_activity_desc: Completed 15-02 actual actions + overdue RSC props
-state_head: 1fe96fb
+state_head: 9cc97ffe92bcd1d09ff07908cdfe003d86857ca3
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 9
-  completed_plans: 8
+  completed_plans: 9
   percent: 40
 ---
 
@@ -59,6 +59,7 @@ Progress: [████░░░░░░] 40% (v1.2 — 0/5 phases verified)
 | Phase 14 P03 | 5min | 3 tasks | 4 files |
 | Phase 15 P01 | 4min | 3 tasks | 6 files |
 | Phase 15 P02 | 2min | 2 tasks | 4 files |
+| Phase 15 P03 | 4min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -88,6 +89,7 @@ Recent decisions affecting current work:
 - [Phase 15]: Parent findUnique fail-closed before actual upsert; scale from parent currency
 - [Phase 15]: One-time actual upsert asserts plannedAsOf === definition.plannedAsOf (field error on spoof)
 - [Phase 15]: IncomeRow hasActual/overdue plumbed from RSC; chrome deferred to 15-03 (D-20)
+- [Phase 15]: IncomeFactDialog labels derived from hasActual+overdue; actualNote plumbed for edit prefill
 
 ### Pending Todos
 
@@ -124,6 +126,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T17:28:30.571Z
-Stopped at: Completed 15-02-PLAN.md
+Last session: 2026-09-07T17:36:15.373Z
+Stopped at: Completed 15-03-PLAN.md
 Resume file: None
