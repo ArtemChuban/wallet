@@ -9,15 +9,16 @@ import {
   type SeriesSnapshot,
 } from "./historical-series";
 
-const primaryDebit = (id: number): SeriesAccount => ({
+const primaryAsset = (id: number): SeriesAccount => ({
   id,
-  type: "FIAT_DEBIT",
+  type: "ASSET",
   currencyCode: "RUB",
   currencyScale: 2,
   isPrimaryCurrency: true,
   creditLimitMinor: null,
 });
 
+/** Legacy soft-read fixture — unmigrated FIAT_DEBIT still works. */
 const usdDebit = (id: number): SeriesAccount => ({
   id,
   type: "FIAT_DEBIT",
@@ -72,7 +73,7 @@ describe("buildNetWorthSeries (CHART-01/CHART-03)", () => {
 
   it("stacks per-account primary contributions; sum equals nw (incl. credit negative)", () => {
     const accounts: SeriesAccount[] = [
-      primaryDebit(1),
+      primaryAsset(1),
       {
         id: 2,
         type: "FIAT_CREDIT",
@@ -104,7 +105,7 @@ describe("buildNetWorthSeries (CHART-01/CHART-03)", () => {
   });
 
   it("series length equals distinct event∪today dates not calendar day count (D-07)", () => {
-    const accounts = [primaryDebit(1)];
+    const accounts = [primaryAsset(1)];
     const snapshots: SeriesSnapshot[] = [
       { accountId: 1, asOfDate: "2026-01-01", amountMinor: 100_000n },
       { accountId: 1, asOfDate: "2026-01-20", amountMinor: 200_000n },
@@ -130,7 +131,7 @@ describe("buildNetWorthSeries (CHART-01/CHART-03)", () => {
   });
 
   it("partial NW day still emits point without partial flag (D-14)", () => {
-    const accounts = [primaryDebit(1), usdDebit(2)];
+    const accounts = [primaryAsset(1), usdDebit(2)];
     const snapshots: SeriesSnapshot[] = [
       { accountId: 1, asOfDate: "2026-01-10", amountMinor: 50_000n },
       { accountId: 2, asOfDate: "2026-01-10", amountMinor: 10_000n },
@@ -152,7 +153,7 @@ describe("buildNetWorthSeries (CHART-01/CHART-03)", () => {
   });
 
   it("window excludes day before start; today always present; all includes earliest", () => {
-    const accounts = [primaryDebit(1)];
+    const accounts = [primaryAsset(1)];
     const snapshots: SeriesSnapshot[] = [
       { accountId: 1, asOfDate: "2025-06-01", amountMinor: 10_000n },
       { accountId: 1, asOfDate: "2026-01-01", amountMinor: 20_000n },
@@ -189,7 +190,7 @@ describe("buildNetWorthSeries (CHART-01/CHART-03)", () => {
 
   it("primary-currency accounts use identity without FxRate", () => {
     const points = buildNetWorthSeries({
-      accounts: [primaryDebit(1)],
+      accounts: [primaryAsset(1)],
       snapshots: [
         { accountId: 1, asOfDate: "2026-01-01", amountMinor: 123_45n },
       ],
@@ -380,7 +381,7 @@ describe("buildAccountSeries (CHART-02/CHART-03)", () => {
   });
 
   it("primary-currency account primary mode equals native without FxRate", () => {
-    const account = primaryDebit(1);
+    const account = primaryAsset(1);
     const snapshots: SeriesSnapshot[] = [
       { accountId: 1, asOfDate: "2026-01-01", amountMinor: 123_45n },
     ];
@@ -410,7 +411,7 @@ describe("buildAccountSeries (CHART-02/CHART-03)", () => {
   });
 
   it("window filter matches buildNetWorthSeries via windowStartForPreset", () => {
-    const account = primaryDebit(1);
+    const account = primaryAsset(1);
     const snapshots: SeriesSnapshot[] = [
       { accountId: 1, asOfDate: "2025-06-01", amountMinor: 10_000n },
       { accountId: 1, asOfDate: "2026-01-01", amountMinor: 20_000n },

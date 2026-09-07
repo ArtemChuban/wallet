@@ -18,11 +18,11 @@ function input(
 }
 
 describe("computeNetWorthRows (NW-01–03, ACCT-03)", () => {
-  it("sums asset in primary currency", () => {
+  it("sums ASSET in primary currency (canonical write type)", () => {
     const { totalPrimaryMinor, isPartial, rows } = computeNetWorthRows([
       input({
         id: 1,
-        type: "FIAT_DEBIT",
+        type: "ASSET",
         locfAmountMinor: 100_000n,
       }),
     ]);
@@ -30,6 +30,18 @@ describe("computeNetWorthRows (NW-01–03, ACCT-03)", () => {
     expect(isPartial).toBe(false);
     expect(rows[0]!.contributionPrimaryMinor).toBe(100_000n);
     expect(rows[0]!.includedInTotal).toBe(true);
+  });
+
+  it("soft-read: legacy FIAT_DEBIT still sums as asset", () => {
+    const { totalPrimaryMinor, rows } = computeNetWorthRows([
+      input({
+        id: 11,
+        type: "FIAT_DEBIT",
+        locfAmountMinor: 50_000n,
+      }),
+    ]);
+    expect(totalPrimaryMinor).toBe(50_000n);
+    expect(rows[0]!.contributionPrimaryMinor).toBe(50_000n);
   });
 
   it("subtracts credit debt only, never available", () => {

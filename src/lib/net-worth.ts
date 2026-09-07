@@ -2,8 +2,10 @@ import {
   convertOtherMinorToPrimaryMinor,
   creditDebtMinor,
 } from "@/lib/money";
+import { isCreditType } from "@/lib/account-type";
 
 export type NetWorthAccountType =
+  | "ASSET"
   | "FIAT_DEBIT"
   | "FIAT_CREDIT"
   | "CRYPTO"
@@ -84,7 +86,7 @@ function rowFor(account: NetWorthAccountInput): NetWorthRow {
     };
   }
 
-  if (account.type === "FIAT_CREDIT") {
+  if (isCreditType(account.type)) {
     if (account.creditLimitMinor == null) {
       return {
         accountId: account.id,

@@ -2,6 +2,7 @@ import {
   type RangePreset,
   windowStartForPreset,
 } from "@/lib/dates";
+import { isCreditType } from "@/lib/account-type";
 import { locfAmountAsOf, locfRateAsOf } from "@/lib/locf";
 import {
   convertOtherMinorToPrimaryMinor,
@@ -206,7 +207,7 @@ export function buildAccountSeries(
     }
 
     const isCredit =
-      account.type === "FIAT_CREDIT" && account.creditLimitMinor != null;
+      isCreditType(account.type) && account.creditLimitMinor != null;
 
     if (isCredit) {
       const availableMinor = nativeMinor;
