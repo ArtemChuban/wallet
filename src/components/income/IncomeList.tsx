@@ -223,7 +223,7 @@ function PersonGroup({
               {person.stats.nativeLines.map((line) => (
                 <p
                   key={line.currencyCode}
-                  className="font-mono text-base font-semibold text-foreground"
+                  className="break-all font-mono text-base font-semibold text-foreground"
                 >
                   {line.amount}{" "}
                   <span className="text-sm font-normal text-muted-foreground">
@@ -232,7 +232,7 @@ function PersonGroup({
                 </p>
               ))}
               {person.stats.primaryLine ? (
-                <p className="font-mono text-sm text-muted-foreground">
+                <p className="break-all font-mono text-sm text-muted-foreground">
                   {person.stats.primaryLine.amount}{" "}
                   {person.stats.primaryLine.currencyCode}
                 </p>
