@@ -5,16 +5,16 @@ milestone_name: Доходы
 current_phase: 13
 current_phase_name: income-schema-domain-math
 status: ready_to_execute
-stopped_at: Phase 13 planning revised — checker feedback
-last_updated: "2026-09-07T11:18:15.616Z"
+stopped_at: Completed 13-01-PLAN.md
+last_updated: "2026-09-07T11:24:16.294Z"
 last_activity: 2026-09-07
 last_activity_desc: Phase 13 checker revision (RESOLVED Qs, PATTERNS cite, VALIDATION FND-SCHEMA)
-state_head: 04ffb276e74c808ba8ccdcfc30f64a3bf080dd44
+state_head: f78eff321fe67924f5edc05d4ccb4dd75e6e5d38
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 3
-  completed_plans: 0
+  completed_plans: 1
   percent: 0
 ---
 
@@ -47,6 +47,11 @@ Progress: [░░░░░░░░░░] 0% (v1.2)
 **By Phase:** Prior milestone tables retained in git history / prior STATE; v1.2 plans TBD after plan-phase.
 
 *Updated after each plan completion*
+**Per-Plan Metrics:**
+
+| Plan | Duration | Tasks | Files |
+|------|----------|-------|-------|
+| Phase 13 P01 | 3min | 3 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -60,6 +65,8 @@ Recent decisions affecting current work:
 - Reuse Person for counterparties; zero new npm packages; DOM clamp not rrule skip
 - Roadmap order: schema+domain → /income CRUD → actual+overdue → stats → forecast+isolation
 - DestructiveConfirmStep app-wide; agent-driven UAT via OPERATOR.md + Orca
+- [Phase 13]: Four models (CONTEXT D-03/D-04) — auto-selected over polymorphic IncomeSource+enum
+- [Phase 13]: Tracer ignores actuals; freeze-merge deferred to Plan 02
 
 ### Pending Todos
 
@@ -96,6 +103,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T11:15:00.000Z
-Stopped at: Phase 13 planning complete — next /gsd-execute-phase 13
-Resume file: .planning/phases/13-income-schema-domain-math/13-01-PLAN.md
+Last session: 2026-09-07T11:24:16.272Z
+Stopped at: Completed 13-01-PLAN.md
+Resume file: None

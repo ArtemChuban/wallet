@@ -59,12 +59,12 @@ Full detail: [milestones/v1.1-ROADMAP.md](./milestones/v1.1-ROADMAP.md)
   2. Pure domain helpers list virtual plan occurrences with day-of-month clamp (short months never skip)
   3. Vitest covers occurrence identity, overdue predicate inputs, and BigInt money paths without writing BalanceSnapshot
 
-**Plans**: 3 plans
+**Plans**: 1/3 plans executed
 
 Plans:
 **Wave 1**
 
-- [ ] 13-01-PLAN.md — Four-model schema + clampDayOfMonth + listRecurringOccurrences tracer + migrate deploy
+- [x] 13-01-PLAN.md — Four-model schema + clampDayOfMonth + listRecurringOccurrences tracer + migrate deploy
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -141,7 +141,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 13. Income schema + domain math | 0/3 | Planned | - |
+| 13. Income schema + domain math | 1/3 | Planned |  |
 | 14. Доходы CRUD + nav | 0/? | Not started | - |
 | 15. Plan vs actual + overdue | 0/? | Not started | - |
 | 16. Counterparty income stats | 0/? | Not started | - |
