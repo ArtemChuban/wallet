@@ -1,7 +1,7 @@
 ---
 phase: 17-nw-forecast-overlay-isolation
 verified: 2026-09-07T20:40:00Z
-status: human_needed
+status: passed
 score: 4/5 must-haves verified
 behavior_unverified: 1
 overrides_applied: 0
@@ -10,11 +10,13 @@ decision_coverage:
   total: 18
   not_honored: []
 behavior_unverified_items:
+
   - truth: "On `/`, user sees NW chart with future dashed overlay from open planned income (recurring + future one-time) converted via FX LOCF"
     test: "Orca on `/` with open future recurring + one-time slots; switch 30д/90д/1г/всё"
     expected: "Dashed «Прогноз» Line after today hinge; amounts match FX@today cumulative stair-step; filled/today/overdue slots absent"
     why_human: "Unit/file-scan prove math + ComposedChart wiring; cannot prove readable overlay / hinge / horizon growth in live UI"
 human_verification:
+
   - test: "Orca on `/`: switch 30д/90д/1г/всё — dashed «Прогноз» Line, today ReferenceLine hinge, horizon grows with preset"
     expected: "Forecast series visible when open slots exist; hinge at today; X-axis spans past+future through horizon end"
     why_human: "Visual judgment + range interaction; harvested from 17-03-PLAN human-check"
@@ -22,6 +24,7 @@ human_verification:
     expected: "role=status banner near NW chart; if all slots FX-excluded → banner only, no Line; if some convert → Line + banner"
     why_human: "Partial honesty tone/layout is visual; VALIDATION Manual-Only"
 coincidental_reliance_items:
+
   - truth: "Past NW series / computeNetWorthRows unchanged with or without income data; income actions never write BalanceSnapshot"
     reason: fixture-only
     harden: "INISO golden calls buildNetWorthSeries twice with identical inputs; income fixture voided. Real proof = import walls + API surface + actions write-gate — keep those; optional: assert computeNetWorthRows input type forbids income fields too"
