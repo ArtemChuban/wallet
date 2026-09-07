@@ -117,8 +117,16 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
+**Wave 1**
+
 - [ ] 15-01-PLAN.md — Recurring actual upsert tracer + Zod schemas + variance helpers (ACT-01, ACT-03)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 15-02-PLAN.md — Remaining actual actions + RSC overdue/hasActual join (ACT-01, ACT-02)
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
 - [ ] 15-03-PLAN.md — IncomeFactDialog + overdue/variance chrome + suite gate (ACT-02, ACT-03)
 
 **UI hint**: yes

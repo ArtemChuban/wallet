@@ -6,14 +6,14 @@ current_phase: 15
 current_phase_name: Plan vs actual + overdue
 status: planned
 stopped_at: Phase 15 plans created (15-01..15-03)
-last_updated: "2026-09-07T17:10:00.000Z"
+last_updated: "2026-09-07T17:16:17.846Z"
 last_activity: 2026-09-07
 last_activity_desc: Phase 15 PLAN.md files written (3 plans, waves 1–3)
-state_head: 9c998358f23eb17eb7f89df992a8e3a6a6d41f31
+state_head: b9f201b111a46384eff58cd0df661f27ae637cc7
 progress:
   total_phases: 5
   completed_phases: 2
-  total_plans: 6
+  total_plans: 9
   completed_plans: 6
   percent: 40
 ---
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 
 ## Current Position
 
-Phase: 15 — Plan vs actual + overdue
+Phase: 15 (Plan vs actual + overdue) — READY TO EXECUTE
 Plan: 15-01 ready (3 plans)
 Status: Plans created — ready for execute / plan-checker
 Last activity: 2026-09-07 — Phase 15 plans 15-01..15-03 written
@@ -118,6 +118,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T17:00:00.000Z
-Stopped at: Phase 15 UI-SPEC drafted
+Last session: 2026-09-07T17:10:00.000Z
+Stopped at: Phase 15 plans created (15-01..15-03)
 Resume file: /home/artem/Documents/wallet/.planning/phases/15-plan-vs-actual-overdue/15-01-PLAN.md
