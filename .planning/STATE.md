@@ -5,10 +5,10 @@ milestone_name: Доходы
 current_phase: 14
 current_phase_name: Доходы CRUD + nav
 status: planning
-stopped_at: Phase 14 research complete
-last_updated: "2026-09-07T12:24:00.000Z"
+stopped_at: Phase 14 UI-SPEC draft written
+last_updated: "2026-09-07T12:30:00.000Z"
 last_activity: 2026-09-07
-last_activity_desc: Phase 14 RESEARCH.md written
+last_activity_desc: Phase 14 UI-SPEC.md written
 state_head: ef5f894
 progress:
   total_phases: 5
@@ -31,8 +31,8 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 
 Phase: 14 — Доходы CRUD + nav
 Plan: Not started
-Status: Research complete — ready to plan
-Last activity: 2026-09-07 — Phase 14 RESEARCH.md written
+Status: UI-SPEC draft — ready for UI checker / plan
+Last activity: 2026-09-07 — Phase 14 UI-SPEC.md written
 
 Progress: [██░░░░░░░░] 20% (v1.2 — 0/5 phases verified)
 
