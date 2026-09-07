@@ -141,7 +141,12 @@ Plans:
   1. User can view per-Person income totals on «Доходы» converted to primary via FX LOCF as-of
   2. Missing FX rates surface partial honesty (excluded/incomplete), not invented rates or silent zeros
 
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 16-01-PLAN.md — Wave 0 + tracer computePersonIncomeStats + page/header native path (CPTY-01)
+- [ ] 16-02-PLAN.md — Hybrid UI chrome + REQUIREMENTS CPTY-01 sync + VALIDATION gate (CPTY-01)
+
 **UI hint**: yes
 
 ### Phase 17: NW forecast overlay + isolation
@@ -172,7 +177,7 @@ Plans:
 | 13. Income schema + domain math | 3/3 | Plans complete | 2026-09-07 |
 | 14. Доходы CRUD + nav | 3/3 | Not started | 2026-09-07 |
 | 15. Plan vs actual + overdue | 3/3 | Not started |  |
-| 16. Counterparty income stats | 0/? | Not started | - |
+| 16. Counterparty income stats | 0/2 | Planned | - |
 | 17. NW forecast overlay + isolation | 0/? | Not started | - |
 
 *Next: `/gsd-plan-phase 13`*

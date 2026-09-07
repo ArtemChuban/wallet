@@ -2,18 +2,18 @@
 gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Доходы
-current_phase: 15
-current_phase_name: Plan vs actual + overdue
-status: verifying
-stopped_at: Phase 16 UI-SPEC drafted
-last_updated: "2026-09-07T20:34:00.000Z"
+current_phase: 16
+current_phase_name: Counterparty income stats
+status: planned
+stopped_at: Phase 16 plans written (16-01, 16-02)
+last_updated: "2026-09-07T20:50:00.000Z"
 last_activity: 2026-09-07
-last_activity_desc: Phase 16 UI-SPEC written — counterparty income stats contract
+last_activity_desc: Phase 16 PLAN.md created — execute next
 state_head: 7c00d0d
 progress:
   total_phases: 5
   completed_phases: 3
-  total_plans: 9
+  total_plans: 11
   completed_plans: 9
   percent: 60
 ---
@@ -25,16 +25,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 15 — Plan vs actual + overdue
+**Current focus:** Phase 16 — Counterparty income stats
 
 ## Current Position
 
-Phase: 15 (Plan vs actual + overdue) — VERIFICATION PASSED
-Plan: 3 of 3
-Status: 15-VERIFICATION.md status=passed (3/3 roadmap SCs)
-Last activity: 2026-09-07 — gsd-ui-researcher: 16-UI-SPEC.md drafted (CPTY-01 hybrid header)
+Phase: 16 (Counterparty income stats) — PLANNED
+Plan: 0 of 2
+Status: 16-01 + 16-02 PLAN.md ready (CPTY-01 hybrid header stats)
+Last activity: 2026-09-07 — gsd-planner: Phase 16 plans written
 
-Progress: [████░░░░░░] 40% (v1.2 — phase 15 verified; phase 16 UI contract ready for checker)
+Progress: [████░░░░░░] 40% (v1.2 — phase 15 verified; phase 16 planned)
 
 ## Performance Metrics
 
@@ -126,6 +126,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T18:28:30.219Z
-Stopped at: Phase 16 context gathered
-Resume file: .planning/phases/16-counterparty-income-stats/16-CONTEXT.md
+Last session: 2026-09-07T20:50:00.000Z
+Stopped at: Phase 16 plans written — run /gsd-execute-phase 16
+Resume file: .planning/phases/16-counterparty-income-stats/16-01-PLAN.md
