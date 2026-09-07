@@ -26,6 +26,13 @@ describe("forecast chart chrome file-scan", () => {
 
   it("ReferenceLine marks today hinge (D-12) — Plan 03", () => {
     expect(chartSrc).toMatch(/ReferenceLine/);
+    expect(chartSrc).toMatch(/stroke=["']var\(--border\)["']/);
+  });
+
+  it("tooltip fact branch keeps Итого; future branch uses Прогноз only (D-11)", () => {
+    expect(chartSrc).toMatch(/Итого/);
+    // Future tooltip must gate on asOfDate vs today — no fake stack
+    expect(chartSrc).toMatch(/asOfDate\s*>\s*today|today\s*<\s*.*asOfDate/);
   });
 
   it("DashboardChartsShell wires forecastHorizonEnd or buildNetWorthForecastSeries", () => {
