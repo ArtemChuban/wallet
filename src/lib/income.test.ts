@@ -252,6 +252,20 @@ describe("isIncomeOverdue (FND-OVER / D-08 / D-13)", () => {
   });
 });
 
+describe("incomeVarianceMinor / incomeVariancePhrase (ACT-03 / D-14)", () => {
+  it("returns actual − plan as bigint with no FX", () => {
+    expect(incomeVarianceMinor(1200_00n, 1000_00n)).toBe(200_00n);
+    expect(incomeVarianceMinor(800_00n, 1000_00n)).toBe(-200_00n);
+    expect(incomeVarianceMinor(1000_00n, 1000_00n)).toBe(0n);
+  });
+
+  it("maps delta to RU phrases", () => {
+    expect(incomeVariancePhrase(1n)).toBe("больше плана");
+    expect(incomeVariancePhrase(-1n)).toBe("меньше плана");
+    expect(incomeVariancePhrase(0n)).toBe("как план");
+  });
+});
+
 describe("assertOneTimePlanImmutable (D-08)", () => {
   const stored = {
     plannedAsOf: "2026-03-05",
