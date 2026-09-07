@@ -2,12 +2,8 @@ import { z } from "zod";
 
 const accountNameSchema = z.string().trim().min(1).max(120);
 
-const accountTypeSchema = z.enum([
-  "FIAT_DEBIT",
-  "FIAT_CREDIT",
-  "CRYPTO",
-  "CASH",
-]);
+/** Write-path only: new accounts are ASSET or FIAT_CREDIT (D-02 soft-compat). */
+const accountTypeSchema = z.enum(["ASSET", "FIAT_CREDIT"]);
 
 /** Printable currency code matching Currency.code identity. */
 const currencyCodeSchema = z.string().trim().min(1).max(16);

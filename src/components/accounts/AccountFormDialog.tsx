@@ -30,6 +30,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  accountTypeLabel,
+  type AccountTypeSoft,
+} from "@/lib/account-type";
 import { formatMinorToMajor } from "@/lib/money";
 
 type CurrencyOption = {
@@ -41,7 +45,7 @@ type CurrencyOption = {
 type AccountRow = {
   id: number;
   name: string;
-  type: "FIAT_DEBIT" | "FIAT_CREDIT" | "CRYPTO" | "CASH";
+  type: AccountTypeSoft;
   currencyCode: string;
   /** Serialized BigInt string from RSC. */
   creditLimitMinor: string | null;
@@ -65,18 +69,9 @@ type AccountFormDialogProps =
 const initialState: AccountActionState = {};
 
 const TYPE_OPTIONS = [
-  { value: "FIAT_DEBIT", label: "Дебетовый" },
+  { value: "ASSET", label: "Актив" },
   { value: "FIAT_CREDIT", label: "Кредитный" },
-  { value: "CRYPTO", label: "Крипто" },
-  { value: "CASH", label: "Наличные" },
 ] as const;
-
-const TYPE_LABELS: Record<AccountRow["type"], string> = {
-  FIAT_DEBIT: "Дебетовый",
-  FIAT_CREDIT: "Кредитный",
-  CRYPTO: "Крипто",
-  CASH: "Наличные",
-};
 
 function AccountFormBody({
   mode,
@@ -90,7 +85,7 @@ function AccountFormBody({
   onSuccess: () => void;
 }) {
   const [accountType, setAccountType] = useState<string>(
-    mode === "edit" && account ? account.type : "FIAT_DEBIT",
+    mode === "edit" && account ? account.type : "ASSET",
   );
   const [currencyCode, setCurrencyCode] = useState<string>(
     mode === "edit" && account
@@ -174,9 +169,7 @@ function AccountFormBody({
               >
                 <SelectValue>
                   {(value: string | null) =>
-                    value
-                      ? (TYPE_LABELS[value as AccountRow["type"]] ?? value)
-                      : null
+                    value ? accountTypeLabel(value) : null
                   }
                 </SelectValue>
               </SelectTrigger>
@@ -191,7 +184,7 @@ function AccountFormBody({
           </>
         ) : (
           <p className="text-sm text-muted-foreground">
-            {account ? TYPE_LABELS[account.type] : null}
+            {account ? accountTypeLabel(account.type) : null}
           </p>
         )}
         {state.errors?.type?.[0] ? (
