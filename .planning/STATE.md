@@ -5,11 +5,11 @@ milestone_name: Доходы
 current_phase: 14
 current_phase_name: Доходы CRUD + nav
 status: planning
-stopped_at: Phase 13 complete, ready to plan Phase 14
-last_updated: "2026-09-07T11:39:39.229Z"
+stopped_at: Phase 14 context gathered
+last_updated: "2026-09-07T12:08:10.723Z"
 last_activity: 2026-09-07
 last_activity_desc: Phase 13 complete, transitioned to Phase 14
-state_head: 7208cb09552239bbba362c8112bb0476fd62b2ab
+state_head: 9d3d33d3666e5feb6a271f370394ac29ce77054f
 progress:
   total_phases: 5
   completed_phases: 1
@@ -109,6 +109,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T11:34:12.952Z
-Stopped at: Phase 13 complete, ready to plan Phase 14
-Resume file: None
+Last session: 2026-09-07T12:08:10.674Z
+Stopped at: Phase 14 context gathered
+Resume file: /home/artem/Documents/wallet/.planning/phases/14-dohody-crud-nav/14-CONTEXT.md
