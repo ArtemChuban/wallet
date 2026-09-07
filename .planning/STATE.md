@@ -3,38 +3,37 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Доходы
 current_phase: 17
-current_phase_name: NW forecast overlay + isolation
-status: ready_to_execute
-stopped_at: Phase 17 COMPLETE — discuss/plan/execute/UAT smoke done
-last_updated: "2026-09-07T20:45:38.589Z"
+status: completed
+stopped_at: Phase 17 complete — all phases complete
+last_updated: "2026-09-07T21:45:38.453Z"
 last_activity: 2026-09-07
-last_activity_desc: Phase 17 PLAN.md set created (17-01..17-03)
-state_head: 36ff8edc2422b940b0fe0062a7929318caa3d9ad
+last_activity_desc: Phase 17 complete
+state_head: 604bb70c5ccc2977373291f7922500b06ac398e1
 progress:
   total_phases: 5
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 14
   completed_plans: 14
-  percent: 80
+  percent: 100
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
+See: .planning/PROJECT.md (updated 2026-09-07 after Phase 17)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 17 — NW forecast overlay + isolation
+**Current focus:** v1.2 Доходы — all phases complete; ready `/gsd-complete-milestone`
 
 ## Current Position
 
-Phase: 17 (NW forecast overlay + isolation) — plans ready
-Plan: 3 of 3
-Status: Planned — ready for `/gsd-execute-phase 17`
-Last activity: 2026-09-07 — Phase 17 plans written (wave 1→2→3)
+Phase: 17
+Plan: Not started
+Status: All phases complete
+Last activity: 2026-09-07 — Phase 17 complete
 
-Progress: [████████░░] 80% (v1.2 — phase 16 done; phase 17 planned)
+Progress: [████████████████████] 14/14 plans (100%)
 
 ## Performance Metrics
 
@@ -135,6 +134,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-09-07T20:45:38.459Z
-Stopped at: Phase 17 COMPLETE — discuss/plan/execute/UAT smoke done
+Stopped at: Phase 17 complete — all phases complete
 Resume file: 
 .planning/phases/17-nw-forecast-overlay-isolation/17-VERIFICATION.md

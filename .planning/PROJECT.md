@@ -23,10 +23,10 @@ At any moment, see true net worth (assets minus credit-card debt) in the primary
 
 ## Current State
 
-**Shipped:** v1.0 MVP (2026-09-04); **v1.1 Долги людям (2026-09-07)**  
-**Active:** **v1.2 Доходы** (planning)
+**Shipped:** v1.0 MVP (2026-09-04); **v1.1 Долги людям (2026-09-07)**; **v1.2 Доходы (2026-09-07)** — phases 13–17 complete, UAT passed  
+**Active:** milestone ready to archive (`/gsd-complete-milestone`)
 
-Local Dockerized net-worth tracker + personal-debts side ledger: SQLite → currencies/accounts → dated balances → dated FX → NW dashboard/charts → `/debts` people/debts/repayments/size-changes with native stack chart and primary I-owe/they-owe totals. Stack: Next.js 16 App Router, Prisma 7 + SQLite, shadcn/ui, recharts, Vitest. Russian-first UI. Debts never change NW (DISOL-01). Next: income ledger + NW forecast overlay.
+Local Dockerized net-worth tracker + personal-debts side ledger + income ledger: SQLite → currencies/accounts → dated balances → dated FX → NW dashboard/charts with dashed «Прогноз» overlay from open planned pay → `/debts` + `/income`. Stack: Next.js 16 App Router, Prisma 7 + SQLite, shadcn/ui, recharts, Vitest. Russian-first UI. Debts never change NW (DISOL-01). Income never writes BalanceSnapshot / past LOCF (ISO-01).
 
 ## Requirements
 
@@ -55,14 +55,19 @@ Local Dockerized net-worth tracker + personal-debts side ledger: SQLite → curr
 - ✓ Debts mutations refresh `/debts` client+server without touching Капитал `/`; status↔remaining hard-asserted — Phase 12
 - ✓ Shared DestructiveConfirmStep under `components/ui/`; Nyquist VALIDATION closed for phases 10–12 — Phase 12
 
+### Validated (v1.2)
+
+- ✓ User can create recurring monthly income (amount, currency, day-of-month, counterparty) and one-time income — Phases 13–14
+- ✓ User can attach/select a counterparty on income and view per-counterparty income stats — Phases 14+16
+- ✓ User can record planned vs actual income manually (actual does not change account balances in v1.2) — Phase 15
+- ✓ User has a separate «Доходы» page/nav for income CRUD and overdue highlighting — Phases 14–15
+- ✓ On Капитал `/`, user sees NW chart with future projection including recurring + future one-time pay via FX LOCF overlay — Phase 17 (FCST-01)
+- ✓ When a planned income date has passed without an actual, UI highlights it so the user can fill it in — Phase 15
+- ✓ Historical NW / BalanceSnapshot stay income-free (INISO) — Phase 17 (ISO-01)
+
 ### Active
 
-- [ ] User can create recurring monthly income (amount, currency, day-of-month, counterparty) and one-time income
-- [ ] User can attach/select a counterparty on income and view per-counterparty income stats
-- [ ] User can record planned vs actual income manually (actual does not change account balances in v1.2)
-- [ ] User has a separate «Доходы» page/nav for income CRUD and overdue highlighting
-- [ ] On Капитал `/`, user sees NW chart with future projection including recurring salary converted via FX as-of
-- [ ] When a planned income date has passed without an actual, UI highlights it so the user can fill it in
+*(none — v1.2 Доходы complete)*
 
 ### Out of Scope
 
@@ -130,7 +135,8 @@ v1.2 adds income (зарплата + разовые) as another parallel ledger:
 | Destructive confirm = in-dialog second step, never `window.confirm` | Accidental deletes; consistent RU UX; honest cascade copy | Locked Phase 9 — app-wide constitution |
 | Agent-driven UAT (Orca browser + `npm run dev`); human only for subjective/parallel/blocked | Avoid repetitive conversational UAT; same for Cursor / Claude Code / Codex | Locked — see `.planning/OPERATOR.md` |
 | DebtDetailDialog = tabs (Погашение / Изменение / Простить / История), not stacked forms | User approved mock variant 1 over primary-CTA; reduces modal overload | ✓ Good — quick 2026-09-05 |
-| Forgive error surface: deltaMajor + message before opaque; keep confirm on failure | G-10-8 WR-01/CR-01 after P2025 server map | ✓ Good — 2026-09-07 |
+| Income = side ledger; actual ≠ BalanceSnapshot; forecast overlay only | Keep historical NW account-only; ISO-01 | ✓ Good — Phase 17 INISO + Orca |
+| Forecast = dashed «Прогноз» Line + hinge; FX exclude → partial banner | Forecast-not-fact UX; never invent rates | ✓ Good — Phase 17 |
 
 ## Evolution
 
@@ -150,4 +156,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-07 — milestone v1.2 Доходы started*
+*Last updated: 2026-09-07 after Phase 17 (v1.2 phases complete)*

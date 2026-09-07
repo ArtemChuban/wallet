@@ -4,7 +4,7 @@
 
 - ✅ **v1.0 MVP** — Phases 1–7 (shipped 2026-09-04)
 - ✅ **v1.1 Долги людям** — Phases 8–12 (shipped 2026-09-07)
-- 🚧 **v1.2 Доходы** — Phases 13–17 (in progress)
+- 🚧 **v1.2 Доходы** — Phases 13–17 (all phases complete — ready `/gsd-complete-milestone`)
 
 ## Phases
 
@@ -36,7 +36,7 @@ Full detail: [milestones/v1.1-ROADMAP.md](./milestones/v1.1-ROADMAP.md)
 
 </details>
 
-### 🚧 v1.2 Доходы (In Progress)
+### 🚧 v1.2 Доходы (Phases complete)
 
 **Milestone Goal:** Учёт доходов (регулярная зарплата + разовые) с контрагентами, plan vs actual, мульти-валюта; страница «Доходы»; на Капитале — прогноз NW с регулярной зарплатой; просрочка без факта подсвечена.
 
@@ -44,7 +44,7 @@ Full detail: [milestones/v1.1-ROADMAP.md](./milestones/v1.1-ROADMAP.md)
 - [x] **Phase 14: Доходы CRUD + nav** - «Доходы» page/nav; create/edit/delete recurring + one-time income (completed 2026-09-07)
 - [x] **Phase 15: Plan vs actual + overdue** - Record actual; overdue «заполни»; plan vs actual variance on «Доходы» (completed 2026-09-07)
 - [x] **Phase 16: Counterparty income stats** - Per-Person Σ in primary with FX LOCF honesty (completed 2026-09-07)
-- [ ] **Phase 17: NW forecast overlay + isolation** - Капитал dashed forecast from open planned pay (recurring + future one-time); INISO / no BalanceSnapshot writes
+- [x] **Phase 17: NW forecast overlay + isolation** - Капитал dashed forecast from open planned pay (recurring + future one-time); INISO / no BalanceSnapshot writes (completed 2026-09-07)
 
 ## Phase Details
 
@@ -186,6 +186,6 @@ Plans:
 | 14. Доходы CRUD + nav | 3/3 | Not started | 2026-09-07 |
 | 15. Plan vs actual + overdue | 3/3 | Not started | 2026-09-07 |
 | 16. Counterparty income stats | 2/2 | Planned | 2026-09-07 |
-| 17. NW forecast overlay + isolation | 3/3 | Planned |  |
+| 17. NW forecast overlay + isolation | 3/3 | Planned | 2026-09-07 |
 
 *Next: `/gsd-execute-phase 17`*
