@@ -5,16 +5,16 @@ milestone_name: Доходы
 current_phase: 15
 current_phase_name: Plan vs actual + overdue
 status: in_progress
-stopped_at: Completed 15-01-PLAN.md
-last_updated: "2026-09-07T17:22:42.775Z"
+stopped_at: Completed 15-02-PLAN.md
+last_updated: "2026-09-07T17:28:30.658Z"
 last_activity: 2026-09-07
 last_activity_desc: Completed 15-01 ACT-01 tracer + variance helpers
-state_head: 954445bec9614623e2eaa2eab68a145d8536c6b4
+state_head: c2e3e6c6427dd63a5cc1c48af69cbb539e2d2100
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 9
-  completed_plans: 7
+  completed_plans: 8
   percent: 40
 ---
 
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 
 ## Current Position
 
-Phase: 15 (Plan vs actual + overdue) — READY TO EXECUTE
-Plan: 15-01 ready (3 plans)
-Status: Plans created — ready for execute / plan-checker
-Last activity: 2026-09-07 — Phase 15 plans 15-01..15-03 written
+Phase: 15 (Plan vs actual + overdue) — IN PROGRESS
+Plan: 3 of 3
+Status: 15-01 complete — ready for 15-02
+Last activity: 2026-09-07 — Completed 15-01-PLAN.md (upsert actual tracer + variance)
 
 Progress: [████░░░░░░] 40% (v1.2 — 0/5 phases verified)
 
@@ -58,6 +58,7 @@ Progress: [████░░░░░░] 40% (v1.2 — 0/5 phases verified)
 | Phase 14 P02 | 5min | 3 tasks | 6 files |
 | Phase 14 P03 | 5min | 3 tasks | 4 files |
 | Phase 15 P01 | 4min | 3 tasks | 6 files |
+| Phase 15 P02 | 2min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -85,6 +86,8 @@ Recent decisions affecting current work:
 - [Phase 14]: [Phase 14]: Income UI nextPlannedAsOf = nextOpen (recurring) / plannedAsOf (one-time); sort asc in person group
 - [Phase 15]: Future actualAsOf accepted — no repayment today upper bound (D-19)
 - [Phase 15]: Parent findUnique fail-closed before actual upsert; scale from parent currency
+- [Phase 15]: One-time actual upsert asserts plannedAsOf === definition.plannedAsOf (field error on spoof)
+- [Phase 15]: IncomeRow hasActual/overdue plumbed from RSC; chrome deferred to 15-03 (D-20)
 
 ### Pending Todos
 
@@ -121,6 +124,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T17:22:42.683Z
-Stopped at: Completed 15-01-PLAN.md
+Last session: 2026-09-07T17:28:30.571Z
+Stopped at: Completed 15-02-PLAN.md
 Resume file: None

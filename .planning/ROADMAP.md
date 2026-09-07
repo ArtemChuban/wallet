@@ -114,7 +114,7 @@ Plans:
   2. When planned date is before Moscow today and no actual exists, occurrence shows overdue «заполни»
   3. User can see plan vs actual variance (view/chart) on «Доходы»
 
-**Plans**: 1/3 plans executed
+**Plans**: 2/3 plans executed
 
 Plans:
 **Wave 1**
@@ -123,7 +123,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 15-02-PLAN.md — Remaining actual actions + RSC overdue/hasActual join (ACT-01, ACT-02)
+- [x] 15-02-PLAN.md — Remaining actual actions + RSC overdue/hasActual join (ACT-01, ACT-02)
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -171,7 +171,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 13. Income schema + domain math | 3/3 | Plans complete | 2026-09-07 |
 | 14. Доходы CRUD + nav | 3/3 | Not started | 2026-09-07 |
-| 15. Plan vs actual + overdue | 1/3 | Not started |  |
+| 15. Plan vs actual + overdue | 2/3 | Not started |  |
 | 16. Counterparty income stats | 0/? | Not started | - |
 | 17. NW forecast overlay + isolation | 0/? | Not started | - |
 

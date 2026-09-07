@@ -15,7 +15,7 @@ Requirements for milestone v1.2. Each maps to roadmap phases.
 ### Plan vs actual
 
 - [x] **ACT-01**: User can record actual amount and actual date independently from the plan (plan fields stay for variance)
-- [ ] **ACT-02**: When planned date is before Moscow today and no actual exists, UI highlights the occurrence as overdue («заполни»)
+- [x] **ACT-02**: When planned date is before Moscow today and no actual exists, UI highlights the occurrence as overdue («заполни»)
 - [x] **ACT-03**: User can see plan vs actual variance (view/chart) on «Доходы»
 
 ### Counterparties
@@ -73,7 +73,7 @@ Explicit exclusions for this milestone.
 | SRC-01 | Phase 14 | Complete |
 | SRC-02 | Phase 14 | Complete |
 | ACT-01 | Phase 15 | Complete |
-| ACT-02 | Phase 15 | Pending |
+| ACT-02 | Phase 15 | Complete |
 | ACT-03 | Phase 15 | Complete |
 | CPTY-01 | Phase 16 | Pending |
 | UI-01 | Phase 14 | Complete |
