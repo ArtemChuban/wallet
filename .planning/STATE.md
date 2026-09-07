@@ -118,6 +118,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T13:52:58.122Z
-Stopped at: Phase 15 context gathered
-Resume file: /home/artem/Documents/wallet/.planning/phases/15-plan-vs-actual-overdue/15-CONTEXT.md
+Last session: 2026-09-07T17:00:00.000Z
+Stopped at: Phase 15 UI-SPEC drafted
+Resume file: /home/artem/Documents/wallet/.planning/phases/15-plan-vs-actual-overdue/15-UI-SPEC.md
