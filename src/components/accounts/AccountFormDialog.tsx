@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/select";
 import {
   accountTypeLabel,
+  isCreditType,
   type AccountTypeSoft,
 } from "@/lib/account-type";
 import { formatMinorToMajor } from "@/lib/money";
@@ -107,12 +108,12 @@ function AccountFormBody({
 
   const title = mode === "create" ? "Новый счёт" : "Изменить название";
   const submitLabel = mode === "create" ? "Добавить счёт" : "Сохранить";
-  const showCreditLimit = mode === "create" && accountType === "FIAT_CREDIT";
+  const showCreditLimit = mode === "create" && isCreditType(accountType);
 
   const editLimit =
     mode === "edit" &&
     account &&
-    account.type === "FIAT_CREDIT" &&
+    isCreditType(account.type) &&
     account.creditLimitMinor != null
       ? `${formatMinorToMajor(BigInt(account.creditLimitMinor), account.currency.scale)} ${account.currencyCode}`
       : null;

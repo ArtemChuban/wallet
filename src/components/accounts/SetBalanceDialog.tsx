@@ -22,12 +22,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { isCreditType, type AccountTypeSoft } from "@/lib/account-type";
 import { formatAsOfDisplay, parseAsOfDisplay } from "@/lib/dates";
 
 type AccountForBalance = {
   id: number;
   name: string;
-  type: "FIAT_DEBIT" | "FIAT_CREDIT" | "CRYPTO" | "CASH";
+  type: AccountTypeSoft;
   currencyCode: string;
   currency: { code: string; name: string; scale: number };
 };
@@ -66,7 +67,7 @@ function SetBalanceFormBody({
     }
   }, [state, onSuccess]);
 
-  const isCredit = account.type === "FIAT_CREDIT";
+  const isCredit = isCreditType(account.type);
   const title = isCredit ? "Задать доступный лимит" : "Задать баланс";
   const amountLabel = isCredit ? "Доступный лимит" : "Баланс";
 

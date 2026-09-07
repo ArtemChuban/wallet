@@ -41,14 +41,14 @@ async function main() {
   const tinkoff = await prisma.account.create({
     data: {
       name: "Тинькофф рублёвый",
-      type: "FIAT_DEBIT",
+      type: "ASSET",
       currencyCode: "RUB",
     },
   });
   const usdBroker = await prisma.account.create({
     data: {
       name: "Interactive Brokers USD",
-      type: "FIAT_DEBIT",
+      type: "ASSET",
       currencyCode: "USD",
     },
   });
@@ -63,14 +63,14 @@ async function main() {
   const cash = await prisma.account.create({
     data: {
       name: "Наличные",
-      type: "CASH",
+      type: "ASSET",
       currencyCode: "RUB",
     },
   });
   const btc = await prisma.account.create({
     data: {
       name: "Bitcoin холодный",
-      type: "CRYPTO",
+      type: "ASSET",
       currencyCode: "BTC",
     },
   });

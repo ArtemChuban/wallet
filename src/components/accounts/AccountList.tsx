@@ -13,6 +13,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  accountTypeLabel,
+  isCreditType,
+  type AccountTypeSoft,
+} from "@/lib/account-type";
 import { formatAsOfDisplay } from "@/lib/dates";
 import { creditDebtMinor, formatMinorToMajor } from "@/lib/money";
 
@@ -31,7 +36,7 @@ export type BalanceSnapshotHistoryItem = {
 export type AccountListItem = {
   id: number;
   name: string;
-  type: "FIAT_DEBIT" | "FIAT_CREDIT" | "CRYPTO" | "CASH";
+  type: AccountTypeSoft;
   currencyCode: string;
   /** Serialized BigInt for RSC→client props (never treat as NW asset). */
   creditLimitMinor: string | null;
@@ -40,13 +45,6 @@ export type AccountListItem = {
   locf: { asOfDate: string; amountMinor: string } | null;
   /** Newest-first snapshot history (D-14); empty → no expand (E4). */
   snapshots: BalanceSnapshotHistoryItem[];
-};
-
-const TYPE_LABELS: Record<AccountListItem["type"], string> = {
-  FIAT_DEBIT: "Дебетовый",
-  FIAT_CREDIT: "Кредитный",
-  CRYPTO: "Крипто",
-  CASH: "Наличные",
 };
 
 function LocfDisplay({ account }: { account: AccountListItem }) {
@@ -59,10 +57,7 @@ function LocfDisplay({ account }: { account: AccountListItem }) {
   const asOf = formatAsOfDisplay(account.locf.asOfDate);
   const code = account.currencyCode;
 
-  if (
-    account.type === "FIAT_CREDIT" &&
-    account.creditLimitMinor != null
-  ) {
+  if (isCreditType(account.type) && account.creditLimitMinor != null) {
     const available = amount;
     const debt = formatMinorToMajor(
       creditDebtMinor(
@@ -157,9 +152,9 @@ function AccountRow({
   const [isPending, startTransition] = useTransition();
 
   const hasHistory = account.snapshots.length > 0;
-  const typeLabel = TYPE_LABELS[account.type];
+  const typeLabel = accountTypeLabel(account.type);
   const limitText =
-    account.type === "FIAT_CREDIT" && account.creditLimitMinor != null
+    isCreditType(account.type) && account.creditLimitMinor != null
       ? `${formatMinorToMajor(BigInt(account.creditLimitMinor), account.currency.scale)} ${account.currencyCode}`
       : null;
   const confirmDateLabel = confirmSnap
