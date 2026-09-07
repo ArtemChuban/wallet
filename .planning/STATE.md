@@ -2,10 +2,10 @@
 gsd_state_version: 1.0
 milestone: v1.2
 status: Awaiting next milestone
-stopped_at: Verified quick 260908-0i7 ASSET merge (passed)
-last_updated: "2026-09-08T00:50:00Z"
+stopped_at: Verified quick 260908-1dm Docker image shrink (passed 5/5)
+last_updated: "2026-09-07T23:31:17Z"
 last_activity: 2026-09-08
-last_activity_desc: "Completed quick task 260908-0i7: Merge debit/crypto/cash → ASSET"
+last_activity_desc: "Verified quick 260908-1dm: wallet-web ~808MB (passed 5/5)"
 state_head: 788a8eb8b926f4a8373ec1318f6d1dbd9222e898
 progress:
   total_phases: 5
@@ -24,14 +24,14 @@ current_phase: —
 See: .planning/PROJECT.md (updated 2026-09-08 after v1.2)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Quick task `260908-1dm` planned — shrink wallet-web Docker image
+**Current focus:** Quick 260908-1dm verified — wallet-web image ~808MB (bookworm-slim + prisma-cli overlay)
 
 ## Current Position
 
 Phase: Milestone v1.2 complete
 Plan: —
-Status: Quick 260908-1dm PLAN ready (execute next)
-Last activity: 2026-09-08 — Planned quick task 260908-1dm: Shrink wallet-web Docker image
+Status: Quick 260908-1dm verification passed (5/5)
+Last activity: 2026-09-08 — Verified quick 260908-1dm: Docker shrink 2.66GB→808MB
 
 ## Performance Metrics
 
@@ -76,6 +76,7 @@ v1.2 locks carried forward:
 - DestructiveConfirmStep app-wide; agent-driven UAT via OPERATOR.md + Orca
 - [Phase —]: D-01/D-02: ASSET canonical write; soft-compat legacy FIAT_DEBIT/CRYPTO/CASH reads
 - [Phase —]: D-03/D-04: Asset+Credit UI only; ASSET any currency
+- [Quick 260908-1dm]: D-02 alpine fail → ship bookworm-slim; D-01 standalone+prisma-cli overlay; D-03 migrate stays (~235MB CLI tax)
 
 ### Pending Todos
 
@@ -92,6 +93,7 @@ v1.2 locks carried forward:
 | # | Description | Date | Commit | Status | Directory |
 |---|-------------|------|--------|--------|-----------|
 | 260908-0i7 | Merge debit, crypto, and cash account types into one type (asset/debit); keep credit separate; migrate existing data; difference only in currency | 2026-09-08 | 788a8eb | Verified | [260908-0i7-merge-debit-crypto-and-cash-account-type](./quick/260908-0i7-merge-debit-crypto-and-cash-account-type/) |
+| 260908-1dm | Shrink wallet-web Docker image from ~2.66GB | 2026-09-08 | ba8beb3 | Verified | [260908-1dm-shrink-wallet-web-docker-image-from-2-66](./quick/260908-1dm-shrink-wallet-web-docker-image-from-2-66/) |
 
 ### Roadmap Evolution
 
@@ -115,10 +117,10 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-09-07T22:46:30Z
-Stopped at: Verified quick 260908-0i7 ASSET merge (passed)
+Stopped at: Verified quick 260908-1dm Docker shrink (passed 5/5)
 Resume file: None
 
 ## Operator Next Steps
 
-- Quick 260908-0i7 verified — orchestrator may commit docs / close quick
+- Quick 260908-1dm verified — orchestrator may commit VERIFICATION.md / docs
 - `/gsd-new-milestone` when ready
