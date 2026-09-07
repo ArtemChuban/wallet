@@ -68,6 +68,43 @@ export function occurrenceKeyString(k: IncomeOccurrenceKey): string {
   return `${k.parentId}:${k.plannedAsOf}`;
 }
 
+/**
+ * Overdue when plan date is before injected today and no actual exists (FND-OVER / D-08).
+ * Callers pass today — never reads the clock (D-13).
+ */
+export function isIncomeOverdue(
+  plannedAsOf: string,
+  hasActual: boolean,
+  today: string,
+): boolean {
+  return plannedAsOf < today && !hasActual;
+}
+
+export type OneTimePlanFields = {
+  plannedAsOf: string;
+  plannedAmountMinor: bigint;
+};
+
+/**
+ * After an actual exists, one-time plan date/amount are immutable (D-08).
+ * Actual amount/date/note changes are out of scope for this predicate.
+ */
+export function assertOneTimePlanImmutable(
+  hasActual: boolean,
+  stored: OneTimePlanFields,
+  proposed: OneTimePlanFields,
+): void {
+  if (!hasActual) return;
+  if (
+    proposed.plannedAsOf !== stored.plannedAsOf ||
+    proposed.plannedAmountMinor !== stored.plannedAmountMinor
+  ) {
+    throw new Error(
+      "one-time plan fields are immutable after an actual exists",
+    );
+  }
+}
+
 function monthKey(iso: string): string {
   return iso.slice(0, 7);
 }
