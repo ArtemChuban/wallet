@@ -44,7 +44,7 @@ Full detail: [milestones/v1.1-ROADMAP.md](./milestones/v1.1-ROADMAP.md)
 - [x] **Phase 14: Доходы CRUD + nav** - «Доходы» page/nav; create/edit/delete recurring + one-time income (completed 2026-09-07)
 - [x] **Phase 15: Plan vs actual + overdue** - Record actual; overdue «заполни»; plan vs actual variance on «Доходы» (completed 2026-09-07)
 - [x] **Phase 16: Counterparty income stats** - Per-Person Σ in primary with FX LOCF honesty (completed 2026-09-07)
-- [ ] **Phase 17: NW forecast overlay + isolation** - Капитал dashed forecast from recurring; INISO / no BalanceSnapshot writes
+- [ ] **Phase 17: NW forecast overlay + isolation** - Капитал dashed forecast from open planned pay (recurring + future one-time); INISO / no BalanceSnapshot writes
 
 ## Phase Details
 
