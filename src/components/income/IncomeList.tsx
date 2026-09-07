@@ -7,6 +7,7 @@ import {
   IncomeFormDialog,
   type IncomeRow,
 } from "@/components/income/IncomeFormDialog";
+import { IncomeFactDialog } from "@/components/income/IncomeFactDialog";
 import { DestructiveConfirmStep } from "@/components/ui/destructive-confirm-step";
 import { PersonFormDialog } from "@/components/debts/PersonFormDialog";
 import { Button } from "@/components/ui/button";
@@ -17,6 +18,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { formatAsOfDisplay } from "@/lib/dates";
+import {
+  incomeVarianceMinor,
+  incomeVariancePhrase,
+} from "@/lib/income";
 import { formatMinorToMajor } from "@/lib/money";
 
 type CurrencyOption = {
@@ -41,11 +46,60 @@ const KIND_LABELS: Record<"recurring" | "oneTime", string> = {
   oneTime: "Разовый",
 };
 
-function IncomeCompactRow({ income }: { income: IncomeRow }) {
-  const amount = formatMinorToMajor(
-    BigInt(income.plannedAmountMinor),
-    income.currency.scale,
+function formatSignedDelta(deltaMinor: bigint, scale: number): string {
+  const abs = formatMinorToMajor(
+    deltaMinor < 0n ? -deltaMinor : deltaMinor,
+    scale,
   );
+  if (deltaMinor > 0n) return `+${abs}`;
+  if (deltaMinor < 0n) return `−${abs}`;
+  return abs;
+}
+
+function IncomeCompactRow({ income }: { income: IncomeRow }) {
+  const scale = income.currency.scale;
+  const planAmount = formatMinorToMajor(
+    BigInt(income.plannedAmountMinor),
+    scale,
+  );
+  const showOneTimeFilled =
+    income.kind === "oneTime" &&
+    income.hasActual &&
+    income.actualAmountMinor != null;
+
+  let varianceChrome: {
+    actual: string;
+    delta: string;
+    phrase: string;
+    deltaZero: boolean;
+  } | null = null;
+  if (showOneTimeFilled && income.actualAmountMinor != null) {
+    const delta = incomeVarianceMinor(
+      BigInt(income.actualAmountMinor),
+      BigInt(income.plannedAmountMinor),
+    );
+    varianceChrome = {
+      actual: formatMinorToMajor(BigInt(income.actualAmountMinor), scale),
+      delta: formatSignedDelta(delta, scale),
+      phrase: incomeVariancePhrase(delta),
+      deltaZero: delta === 0n,
+    };
+  }
+
+  const factTrigger = income.hasActual ? (
+    <Button type="button" variant="outline" size="sm">
+      Изменить факт
+    </Button>
+  ) : income.overdue ? (
+    <Button type="button" size="sm">
+      Заполни
+    </Button>
+  ) : (
+    <Button type="button" variant="outline" size="sm">
+      Внести факт
+    </Button>
+  );
+
   return (
     <li>
       <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-3">
@@ -53,23 +107,54 @@ function IncomeCompactRow({ income }: { income: IncomeRow }) {
           <span className="text-sm text-muted-foreground">
             {KIND_LABELS[income.kind]}
           </span>
-          <span className="font-mono text-base text-foreground">{amount}</span>
+          {income.overdue ? (
+            <span className="rounded-md bg-warning/15 px-2 py-1 text-sm font-semibold text-warning-foreground">
+              заполни
+            </span>
+          ) : null}
+          {showOneTimeFilled ? (
+            <span className="text-sm font-semibold text-muted-foreground">
+              получено
+            </span>
+          ) : null}
+          <span className="font-mono text-base text-foreground">
+            {planAmount}
+          </span>
           <span className="font-mono text-sm text-muted-foreground">
             {income.currencyCode}
           </span>
           <span className="font-mono text-sm text-muted-foreground">
             {formatAsOfDisplay(income.nextPlannedAsOf)}
           </span>
+          {varianceChrome ? (
+            <>
+              <span className="font-mono text-sm text-foreground">
+                факт {varianceChrome.actual}
+              </span>
+              <span
+                className={
+                  varianceChrome.deltaZero
+                    ? "font-mono text-sm text-muted-foreground"
+                    : "font-mono text-sm text-foreground"
+                }
+              >
+                Δ {varianceChrome.delta} {varianceChrome.phrase}
+              </span>
+            </>
+          ) : null}
         </div>
-        <IncomeFormDialog
-          mode="edit"
-          income={income}
-          trigger={
-            <Button type="button" variant="outline" size="sm">
-              Изменить
-            </Button>
-          }
-        />
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
+          <IncomeFactDialog income={income} trigger={factTrigger} />
+          <IncomeFormDialog
+            mode="edit"
+            income={income}
+            trigger={
+              <Button type="button" variant="outline" size="sm">
+                Изменить
+              </Button>
+            }
+          />
+        </div>
       </div>
     </li>
   );

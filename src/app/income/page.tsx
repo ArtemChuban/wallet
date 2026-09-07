@@ -95,6 +95,7 @@ export default async function IncomePage() {
           ? slotActual.amountMinor.toString()
           : undefined,
         actualAsOf: slotActual?.actualAsOf,
+        actualNote: slotActual?.note ?? null,
         currency: r.currency,
         person: { id: p.id, name: p.name },
       };
@@ -121,6 +122,7 @@ export default async function IncomePage() {
           ? slotActual.amountMinor.toString()
           : undefined,
         actualAsOf: slotActual?.actualAsOf,
+        actualNote: slotActual?.note ?? null,
         currency: o.currency,
         person: { id: p.id, name: p.name },
       };
