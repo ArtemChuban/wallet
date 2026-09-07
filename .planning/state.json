@@ -1,38 +1,12 @@
 {
   "contract": "1.0.0",
   "flavor": "core",
-  "milestone": "v1.1 — Долги людям",
-  "phases": [
-    {
-      "number": "8",
-      "name": "Debts schema + domain math",
-      "status": "complete"
-    },
-    {
-      "number": "9",
-      "name": "People + debts CRUD + nav",
-      "status": "complete"
-    },
-    {
-      "number": "10",
-      "name": "Repayments + close/write-off",
-      "status": "complete"
-    },
-    {
-      "number": "11",
-      "name": "Charts + primary totals",
-      "status": "complete"
-    },
-    {
-      "number": "12",
-      "name": "Address tech debt: debts refresh + Nyquist 10–11",
-      "status": "complete"
-    }
-  ],
+  "milestone": "v1.2",
+  "phases": [],
   "next": {
-    "command": "/gsd:progress",
-    "label": "Show progress",
-    "reason": "Unsure of state — showing progress"
+    "command": "/gsd-discuss-phase",
+    "label": "Discuss the first phase",
+    "reason": "Project initialized — plan your first phase"
   },
-  "updated_at": "2026-09-06T22:54:02.679Z"
+  "updated_at": "2026-09-07T09:57:32.723Z"
 }
