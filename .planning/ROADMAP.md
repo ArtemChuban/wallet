@@ -56,7 +56,12 @@ Full detail: [milestones/v1.1-ROADMAP.md](./milestones/v1.1-ROADMAP.md)
   1. Prisma models persist recurring and one-time income sources with Person + Currency FKs and independent plan vs actual fields
   2. Pure domain helpers list virtual plan occurrences with day-of-month clamp (short months never skip)
   3. Vitest covers occurrence identity, overdue predicate inputs, and BigInt money paths without writing BalanceSnapshot
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 13-01-PLAN.md — Four-model schema + clampDayOfMonth + listRecurringOccurrences tracer + migrate deploy
+- [ ] 13-02-PLAN.md — Freeze-aware recurring + one-time + listAllInRange occurrence API
+- [ ] 13-03-PLAN.md — Overdue/immutability helpers + schema/ISO locks + full suite
 
 ### Phase 14: Доходы CRUD + nav
 **Goal**: User can manage income sources from a dedicated «Доходы» section
@@ -113,7 +118,7 @@ Full detail: [milestones/v1.1-ROADMAP.md](./milestones/v1.1-ROADMAP.md)
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 13. Income schema + domain math | 0/? | Not started | - |
+| 13. Income schema + domain math | 0/3 | Planned | - |
 | 14. Доходы CRUD + nav | 0/? | Not started | - |
 | 15. Plan vs actual + overdue | 0/? | Not started | - |
 | 16. Counterparty income stats | 0/? | Not started | - |
