@@ -4,11 +4,11 @@ milestone: v1.2
 milestone_name: Доходы
 current_phase: 15
 current_phase_name: Plan vs actual + overdue
-status: in_progress
-stopped_at: Completed 15-03-PLAN.md
-last_updated: "2026-09-07T17:36:15.460Z"
+status: verifying
+stopped_at: Phase 15 verification passed (15-VERIFICATION.md)
+last_updated: "2026-09-07T17:44:45.064Z"
 last_activity: 2026-09-07
-last_activity_desc: Completed 15-03 fact dialog + overdue/variance chrome
+last_activity_desc: Phase 15 VERIFICATION passed — ACT-01/02/03 + Orca UAT
 state_head: 0314688
 progress:
   total_phases: 5
@@ -29,12 +29,12 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 
 ## Current Position
 
-Phase: 15 (Plan vs actual + overdue) — READY FOR VERIFICATION
+Phase: 15 (Plan vs actual + overdue) — VERIFICATION PASSED
 Plan: 3 of 3
-Status: 15-03 complete — all phase plans done
-Last activity: 2026-09-07 — Completed 15-03-PLAN.md (fact dialog + overdue chrome)
+Status: 15-VERIFICATION.md status=passed (3/3 roadmap SCs)
+Last activity: 2026-09-07 — gsd-verifier: codegraph + vitest spot-checks + Orca UAT
 
-Progress: [████░░░░░░] 40% (v1.2 — 0/5 phases verified)
+Progress: [████░░░░░░] 40% (v1.2 — verification complete for phase 15; orchestrator advances)
 
 ## Performance Metrics
 
