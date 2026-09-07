@@ -3,13 +3,13 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Доходы
 current_phase: 13
-current_phase_name: v1.2 phases 13–17
+current_phase_name: income-schema-domain-math
 status: ready_to_execute
 stopped_at: Phase 13 planning revised — checker feedback
-last_updated: "2026-09-07T11:20:00.000Z"
+last_updated: "2026-09-07T11:18:15.616Z"
 last_activity: 2026-09-07
 last_activity_desc: Phase 13 checker revision (RESOLVED Qs, PATTERNS cite, VALIDATION FND-SCHEMA)
-state_head: 3298c787136837ecc3e96e9e4a9a1ebb1f6bcc2b
+state_head: 04ffb276e74c808ba8ccdcfc30f64a3bf080dd44
 progress:
   total_phases: 5
   completed_phases: 0
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 
 ## Current Position
 
-Phase: 13 of 17 (Income schema + domain math) — v1.2 phases 13–17
+Phase: 13 (income-schema-domain-math) — READY TO EXECUTE
 Plan: 13-01 (next)
 Status: Ready to execute (3 plans)
 Last activity: 2026-09-07 — Phase 13 checker revision applied

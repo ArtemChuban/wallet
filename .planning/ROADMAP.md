@@ -49,62 +49,85 @@ Full detail: [milestones/v1.1-ROADMAP.md](./milestones/v1.1-ROADMAP.md)
 ## Phase Details
 
 ### Phase 13: Income schema + domain math
+
 **Goal**: Income domain exists as a side ledger — sources, actuals, virtual plan slots, and day-of-month rules ready for UI
 **Depends on**: Phase 12 (v1.1 shipped)
 **Requirements**: (foundation — no v1.2 REQ-IDs; enables SRC/ACT/CPTY/FCST/ISO)
 **Success Criteria** (what must be TRUE):
+
   1. Prisma models persist recurring and one-time income sources with Person + Currency FKs and independent plan vs actual fields
   2. Pure domain helpers list virtual plan occurrences with day-of-month clamp (short months never skip)
   3. Vitest covers occurrence identity, overdue predicate inputs, and BigInt money paths without writing BalanceSnapshot
+
 **Plans**: 3 plans
 
 Plans:
+**Wave 1**
+
 - [ ] 13-01-PLAN.md — Four-model schema + clampDayOfMonth + listRecurringOccurrences tracer + migrate deploy
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 13-02-PLAN.md — Freeze-aware recurring + one-time + listAllInRange occurrence API
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
 - [ ] 13-03-PLAN.md — Overdue/immutability helpers + schema/ISO locks + full suite
 
 ### Phase 14: Доходы CRUD + nav
+
 **Goal**: User can manage income sources from a dedicated «Доходы» section
 **Depends on**: Phase 13
 **Requirements**: SRC-01, SRC-02, UI-01
 **Success Criteria** (what must be TRUE):
+
   1. User can create recurring monthly income (day-of-month, planned amount, currency, Person counterparty)
   2. User can create one-time income (planned date, amount, currency, Person, optional note)
   3. User reaches income via nav «Доходы» and can edit/delete sources; deletes use DestructiveConfirmStep
   4. Recording or listing income never changes account balances (RU copy / behavior matches lock)
+
 **Plans**: TBD
 **UI hint**: yes
 
 ### Phase 15: Plan vs actual + overdue
+
 **Goal**: User can fill facts against plans and see overdue + variance on «Доходы»
 **Depends on**: Phase 14
 **Requirements**: ACT-01, ACT-02, ACT-03
 **Success Criteria** (what must be TRUE):
+
   1. User can record actual amount and actual date independently; plan fields stay for variance
   2. When planned date is before Moscow today and no actual exists, occurrence shows overdue «заполни»
   3. User can see plan vs actual variance (view/chart) on «Доходы»
+
 **Plans**: TBD
 **UI hint**: yes
 
 ### Phase 16: Counterparty income stats
+
 **Goal**: User can see how much income came from each Person in primary currency
 **Depends on**: Phase 15
 **Requirements**: CPTY-01
 **Success Criteria** (what must be TRUE):
+
   1. User can view per-Person income totals on «Доходы» converted to primary via FX LOCF as-of
   2. Missing FX rates surface partial honesty (excluded/incomplete), not invented rates or silent zeros
+
 **Plans**: TBD
 **UI hint**: yes
 
 ### Phase 17: NW forecast overlay + isolation
+
 **Goal**: Капитал shows forward NW projection from recurring pay; historical NW stays account-only
 **Depends on**: Phase 16
 **Requirements**: FCST-01, ISO-01
 **Success Criteria** (what must be TRUE):
+
   1. On `/`, user sees NW chart with future dashed overlay from recurring planned income converted via FX LOCF
   2. One-time income is not included in the Капитал forecast overlay
   3. Past NW series / `computeNetWorthRows` unchanged with or without income data; income actions never write BalanceSnapshot
   4. Isolation regressions (file-scan / property) and Nyquist validation for v1.2 income phases are green
+
 **Plans**: TBD
 **UI hint**: yes
 
