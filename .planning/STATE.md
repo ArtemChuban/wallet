@@ -4,11 +4,11 @@ milestone: v1.2
 milestone_name: Доходы
 current_phase: 15
 current_phase_name: Plan vs actual + overdue
-status: planned
+status: in_progress
 stopped_at: Completed 15-01-PLAN.md
 last_updated: "2026-09-07T17:22:42.775Z"
 last_activity: 2026-09-07
-last_activity_desc: Phase 15 PLAN.md files written (3 plans, waves 1–3)
+last_activity_desc: Completed 15-01 ACT-01 tracer + variance helpers
 state_head: 954445bec9614623e2eaa2eab68a145d8536c6b4
 progress:
   total_phases: 5
