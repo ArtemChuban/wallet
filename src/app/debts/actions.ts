@@ -165,6 +165,7 @@ export async function createPerson(
   }
 
   revalidatePath("/debts");
+  revalidatePath("/income");
   return { success: true, message: "Сохранено" };
 }
 
@@ -200,12 +201,13 @@ export async function renamePerson(
   }
 
   revalidatePath("/debts");
+  revalidatePath("/income");
   return { success: true, message: "Сохранено" };
 }
 
 /**
- * Delete person only when debt count is 0 (PERSON-02 / D-07).
- * Never cascade-deletes debts from this action.
+ * Delete person only when debt and income counts are 0 (PERSON-02 / D-16).
+ * Never cascade-deletes debts or income from this action.
  */
 export async function deletePerson(
   formData: FormData,
@@ -224,11 +226,16 @@ export async function deletePerson(
 
   try {
     await ensureSqlitePragmas();
-    const debtCount = await prisma.debt.count({
-      where: { personId },
-    });
-    if (debtCount > 0) {
-      return { message: "Нельзя удалить человека, пока есть долги" };
+    const [debtCount, recurringIncomeCount, oneTimeIncomeCount] =
+      await Promise.all([
+        prisma.debt.count({ where: { personId } }),
+        prisma.recurringIncome.count({ where: { personId } }),
+        prisma.oneTimeIncome.count({ where: { personId } }),
+      ]);
+    if (debtCount > 0 || recurringIncomeCount > 0 || oneTimeIncomeCount > 0) {
+      return {
+        message: "Нельзя удалить человека, пока есть долги или доходы",
+      };
     }
     await prisma.person.delete({
       where: { id: personId },
@@ -243,6 +250,7 @@ export async function deletePerson(
   }
 
   revalidatePath("/debts");
+  revalidatePath("/income");
   return { success: true, message: "Удалено" };
 }
 

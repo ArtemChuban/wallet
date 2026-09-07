@@ -49,6 +49,12 @@ export default async function DebtsPage() {
               },
             },
           },
+          _count: {
+            select: {
+              recurringIncomes: true,
+              oneTimeIncomes: true,
+            },
+          },
         },
       }),
       prisma.currency.findMany({
@@ -81,6 +87,7 @@ export default async function DebtsPage() {
     id: p.id,
     name: p.name,
     debtCount: p.debts.length,
+    incomeCount: p._count.recurringIncomes + p._count.oneTimeIncomes,
     debts: p.debts.map((d) => {
       const remaining = remainingMinor(
         d.initialAmountMinor,

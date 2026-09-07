@@ -30,10 +30,12 @@ export type PersonListItem = {
   id: number;
   name: string;
   debtCount: number;
+  incomeCount: number;
   debts: DebtRow[];
 };
 
-const BLOCKED_DELETE_MESSAGE = "Нельзя удалить человека, пока есть долги";
+const BLOCKED_DELETE_MESSAGE =
+  "Нельзя удалить человека, пока есть долги или доходы";
 
 const DIRECTION_LABELS: Record<"I_OWE" | "THEY_OWE", string> = {
   I_OWE: "Я должен",
@@ -115,7 +117,7 @@ function PersonGroup({
 
   function handleDeleteClick() {
     setDeleteError(null);
-    if (person.debtCount > 0) {
+    if (person.debtCount > 0 || person.incomeCount > 0) {
       setDeleteError(BLOCKED_DELETE_MESSAGE);
       return;
     }
