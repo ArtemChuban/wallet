@@ -9,7 +9,7 @@ stopped_at: Completed 15-03-PLAN.md
 last_updated: "2026-09-07T17:36:15.460Z"
 last_activity: 2026-09-07
 last_activity_desc: Completed 15-03 fact dialog + overdue/variance chrome
-state_head: a2cdc50
+state_head: 0314688
 progress:
   total_phases: 5
   completed_phases: 2
