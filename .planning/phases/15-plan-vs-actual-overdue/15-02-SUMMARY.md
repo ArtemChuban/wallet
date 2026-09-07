@@ -107,7 +107,7 @@ Each task was committed atomically:
 1. **Task 1: One-time upsert + delete actual actions** — `4894e7e` (test) → `6407dec` (feat)
 2. **Task 2: Page join actuals + IncomeRow overdue props** — `c2e3e6c` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `9d4edc6` (docs: complete plan)
 
 ## Files Created/Modified
 
