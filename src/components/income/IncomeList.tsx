@@ -1,11 +1,21 @@
 "use client";
 
+import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { deletePerson } from "@/app/debts/actions";
 import {
   IncomeFormDialog,
   type IncomeRow,
 } from "@/components/income/IncomeFormDialog";
+import { DestructiveConfirmStep } from "@/components/ui/destructive-confirm-step";
 import { PersonFormDialog } from "@/components/debts/PersonFormDialog";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { formatAsOfDisplay } from "@/lib/dates";
 import { formatMinorToMajor } from "@/lib/money";
 
@@ -22,6 +32,9 @@ export type PersonIncomeListItem = {
   incomeCount: number;
   incomes: IncomeRow[];
 };
+
+const BLOCKED_DELETE_MESSAGE =
+  "Нельзя удалить человека, пока есть долги или доходы";
 
 const KIND_LABELS: Record<"recurring" | "oneTime", string> = {
   recurring: "Ежемесячный",
@@ -48,6 +61,15 @@ function IncomeCompactRow({ income }: { income: IncomeRow }) {
             {formatAsOfDisplay(income.nextPlannedAsOf)}
           </span>
         </div>
+        <IncomeFormDialog
+          mode="edit"
+          income={income}
+          trigger={
+            <Button type="button" variant="outline" size="sm">
+              Изменить
+            </Button>
+          }
+        />
       </div>
     </li>
   );
@@ -64,6 +86,37 @@ function PersonGroup({
   peopleOptions: { id: number; name: string }[];
   primaryCurrencyCode: string;
 }) {
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
+  function handleDeleteClick() {
+    setDeleteError(null);
+    if (person.debtCount > 0 || person.incomeCount > 0) {
+      setDeleteError(BLOCKED_DELETE_MESSAGE);
+      return;
+    }
+    setConfirmOpen(true);
+  }
+
+  function handleConfirmDelete() {
+    startTransition(async () => {
+      const formData = new FormData();
+      formData.set("personId", String(person.id));
+      const result = await deletePerson(formData);
+      if (!result.success) {
+        setConfirmOpen(false);
+        setDeleteError(
+          result.message ?? "Не удалось удалить. Попробуйте снова.",
+        );
+        return;
+      }
+      setConfirmOpen(false);
+      router.refresh();
+    });
+  }
+
   return (
     <li className="border-b border-border last:border-b-0">
       <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
@@ -80,8 +133,22 @@ function PersonGroup({
               </Button>
             }
           />
+          <Button
+            type="button"
+            variant="destructive"
+            size="sm"
+            disabled={isPending}
+            onClick={handleDeleteClick}
+          >
+            Удалить человека
+          </Button>
         </div>
       </div>
+      {deleteError ? (
+        <p className="px-4 pb-3 text-sm text-destructive" role="alert">
+          {deleteError}
+        </p>
+      ) : null}
 
       {person.incomes.length === 0 ? (
         <div className="flex flex-col items-start gap-3 border-t border-border bg-muted/30 px-4 py-4">
@@ -109,6 +176,26 @@ function PersonGroup({
           ))}
         </ul>
       )}
+
+      <Dialog
+        open={confirmOpen}
+        onOpenChange={(next) => {
+          if (!isPending) setConfirmOpen(next);
+        }}
+      >
+        <DialogContent className="sm:max-w-md" showCloseButton={!isPending}>
+          <DialogHeader>
+            <DialogTitle>Удалить человека</DialogTitle>
+          </DialogHeader>
+          <DestructiveConfirmStep
+            message={`Удалить человека «${person.name}»? Это нельзя отменить.`}
+            confirmLabel="Удалить человека"
+            pending={isPending}
+            onConfirm={handleConfirmDelete}
+            onBack={() => setConfirmOpen(false)}
+          />
+        </DialogContent>
+      </Dialog>
     </li>
   );
 }
