@@ -2,6 +2,8 @@ import { existsSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
   assertOneTimePlanImmutable,
+  incomeVarianceMinor,
+  incomeVariancePhrase,
   isIncomeOverdue,
   listAllInRange,
   listOneTimeOccurrences,
