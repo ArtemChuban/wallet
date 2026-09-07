@@ -105,7 +105,6 @@ Recent decisions affecting current work:
 ### Blockers/Concerns
 
 - Person-as-employer UX copy — validate in Phase 14 discuss if mixing debts+income people confuses
-- FCST-01 docs still stale (recurring-only) until Plan 17-02 docs-sync — CONTEXT D-01 wins (recurring + future one-time)
 
 ### Roadmap Evolution
 

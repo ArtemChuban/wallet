@@ -28,7 +28,7 @@ Requirements for milestone v1.2. Each maps to roadmap phases.
 
 ### Капитал forecast
 
-- [x] **FCST-01**: On `/`, user sees NW chart with future dashed overlay from recurring planned income converted via FX LOCF (one-time income not included in forecast)
+- [x] **FCST-01**: On `/`, user sees NW chart with future dashed overlay from open planned income (recurring + future one-time) converted via FX LOCF (D-01)
 
 ### Isolation
 
@@ -46,7 +46,6 @@ Deferred beyond v1.2. Tracked but not in current roadmap.
 - Credit account grace / statement forecasting
 - Merge debit+crypto+cash account types
 - Local AI agent via subprocess
-- One-time income included in NW forecast overlay
 - Variance chart refinements beyond ACT-03 MVP
 
 ## Out of Scope
@@ -59,7 +58,6 @@ Explicit exclusions for this milestone.
 | Biweekly / RRULE / last-weekday schedules | Complexity; locked to monthly DOM + one-time |
 | Separate Employer entity | Reuse `Person` |
 | Feeding income into historical LOCF / `computeNetWorthRows` | Breaks trust; ISO-01 |
-| One-time amounts in Капитал forecast | User chose FCST recurring-only |
 | Monte Carlo / multi-year retirement forecast | Wrong product shape |
 | Bank/CSV import, auto FX APIs | Manual-only app |
 | Spending / burn / budgeting categories | Not Core Value |
