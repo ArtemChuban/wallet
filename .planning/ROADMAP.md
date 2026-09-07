@@ -41,7 +41,7 @@ Full detail: [milestones/v1.1-ROADMAP.md](./milestones/v1.1-ROADMAP.md)
 **Milestone Goal:** Учёт доходов (регулярная зарплата + разовые) с контрагентами, plan vs actual, мульти-валюта; страница «Доходы»; на Капитале — прогноз NW с регулярной зарплатой; просрочка без факта подсвечена.
 
 - [x] **Phase 13: Income schema + domain math** - Persist sources/actuals; virtual occurrences; DOM clamp; plan≠actual fields (completed 2026-09-07)
-- [ ] **Phase 14: Доходы CRUD + nav** - «Доходы» page/nav; create/edit/delete recurring + one-time income
+- [x] **Phase 14: Доходы CRUD + nav** - «Доходы» page/nav; create/edit/delete recurring + one-time income (completed 2026-09-07)
 - [ ] **Phase 15: Plan vs actual + overdue** - Record actual; overdue «заполни»; plan vs actual variance on «Доходы»
 - [ ] **Phase 16: Counterparty income stats** - Per-Person Σ in primary with FX LOCF honesty
 - [ ] **Phase 17: NW forecast overlay + isolation** - Капитал dashed forecast from recurring; INISO / no BalanceSnapshot writes
@@ -86,7 +86,7 @@ Plans:
   3. User reaches income via nav «Доходы» and can edit/delete sources; deletes use DestructiveConfirmStep
   4. Recording or listing income never changes account balances (RU copy / behavior matches lock)
 
-**Plans:** 3/3 plans executed
+**Plans:** 3/3 plans complete
 
 Plans:
 **Wave 1**
@@ -156,7 +156,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 13. Income schema + domain math | 3/3 | Plans complete | 2026-09-07 |
-| 14. Доходы CRUD + nav | 3/3 | Not started |  |
+| 14. Доходы CRUD + nav | 3/3 | Not started | 2026-09-07 |
 | 15. Plan vs actual + overdue | 0/? | Not started | - |
 | 16. Counterparty income stats | 0/? | Not started | - |
 | 17. NW forecast overlay + isolation | 0/? | Not started | - |

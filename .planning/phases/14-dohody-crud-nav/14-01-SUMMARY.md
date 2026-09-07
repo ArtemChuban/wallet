@@ -114,7 +114,7 @@ status: complete
 2. **Task 2: Zod income validations (SRC-01, SRC-02)** - `ee6018e` (test) → `9372ccb` (feat)
 3. **Task 3: nextOpenPlannedAsOf helper (D-02, D-09, D-10)** - `29057aa` (test) → `f368887` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `ae85692` (docs: complete plan)
 
 ## Files Created/Modified
 

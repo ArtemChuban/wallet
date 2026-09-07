@@ -2,20 +2,20 @@
 gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Доходы
-current_phase: 14
-current_phase_name: Доходы CRUD + nav
-status: executing
-stopped_at: Completed 14-03-PLAN.md
-last_updated: "2026-09-07T13:12:01.870Z"
+current_phase: 15
+current_phase_name: Plan vs actual + overdue
+status: planning
+stopped_at: Phase 14 complete, ready to plan Phase 15
+last_updated: "2026-09-07T13:23:18.584Z"
 last_activity: 2026-09-07
-last_activity_desc: Phase 14 plan 01 executed (nav + Zod + nextOpen)
-state_head: 45d36745c1fbf38ba2203c90f3e441a20f034bdb
+last_activity_desc: Phase 14 complete, transitioned to Phase 15
+state_head: d891f5c14ff8309c3fc714a0861fb6d424a75a47
 progress:
   total_phases: 5
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 6
   completed_plans: 6
-  percent: 20
+  percent: 40
 ---
 
 # Project State
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 
 ## Current Position
 
-Phase: 14 (Доходы CRUD + nav) — IN PROGRESS
-Plan: 3 of 03 (14-01 complete)
-Status: Executing — next `/gsd-execute-phase` continues with 14-02
-Last activity: 2026-09-07 — Completed 14-01 (nav + /income shell + Zod + nextOpenPlannedAsOf)
+Phase: 15 — Plan vs actual + overdue
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-09-07 — Phase 14 complete, transitioned to Phase 15
 
 Progress: [██░░░░░░░░] 20% (v1.2 — 0/5 phases verified)
 
@@ -119,5 +119,5 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-09-07T13:12:01.818Z
-Stopped at: Completed 14-03-PLAN.md
+Stopped at: Phase 14 complete, ready to plan Phase 15
 Resume file: None
