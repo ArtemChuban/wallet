@@ -1,19 +1,19 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.2
-milestone_name: Доходы
 status: Awaiting next milestone
-stopped_at: Milestone v1.2 archived — awaiting /gsd-new-milestone
-last_updated: "2026-09-08T00:35:00Z"
+stopped_at: Verified quick 260908-0i7 ASSET merge (passed)
+last_updated: "2026-09-08T00:50:00Z"
 last_activity: 2026-09-08
-last_activity_desc: Quick 260908-0i7 ASSET merge — plan created
-state_head: 9330b39
+last_activity_desc: "Completed quick task 260908-0i7: Merge debit/crypto/cash → ASSET"
+state_head: 788a8eb8b926f4a8373ec1318f6d1dbd9222e898
 progress:
   total_phases: 5
   completed_phases: 5
   total_plans: 14
   completed_plans: 14
   percent: 100
+milestone_name: Доходы
 current_phase: —
 ---
 
@@ -24,14 +24,14 @@ current_phase: —
 See: .planning/PROJECT.md (updated 2026-09-08 after v1.2)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Quick task `260908-0i7` — merge debit/crypto/cash → ASSET (plan ready)
+**Current focus:** Quick task `260908-0i7` verified passed — ASSET merge goal achieved
 
 ## Current Position
 
 Phase: Milestone v1.2 complete
 Plan: —
-Status: Quick task in progress — 260908-0i7 plan ready for execute
-Last activity: 2026-09-08 — Planned quick ASSET account-type merge (`260908-0i7-PLAN.md`)
+Status: Quick 260908-0i7 verification passed (4/4 must-haves)
+Last activity: 2026-09-08 — Completed quick task 260908-0i7: Merge debit/crypto/cash → ASSET
 
 ## Performance Metrics
 
@@ -74,17 +74,24 @@ v1.2 locks carried forward:
 - Reuse Person for counterparties; DOM clamp not rrule skip
 - Forecast = dashed «Прогноз» + hinge + FX partial banner
 - DestructiveConfirmStep app-wide; agent-driven UAT via OPERATOR.md + Orca
+- [Phase —]: D-01/D-02: ASSET canonical write; soft-compat legacy FIAT_DEBIT/CRYPTO/CASH reads
+- [Phase —]: D-03/D-04: Asset+Credit UI only; ASSET any currency
 
 ### Pending Todos
 
 - Add timezone selection to settings (general, minor)
 - Integrate local AI agent via subprocess (general, minor)
-- Merge debit/crypto/cash account types (database, minor)
 - Improve credit account type — grace / statement forecasting (general, major)
 
 ### Blockers/Concerns
 
 *(none open)*
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Status | Directory |
+|---|-------------|------|--------|--------|-----------|
+| 260908-0i7 | Merge debit, crypto, and cash account types into one type (asset/debit); keep credit separate; migrate existing data; difference only in currency | 2026-09-08 | 788a8eb | Verified | [260908-0i7-merge-debit-crypto-and-cash-account-type](./quick/260908-0i7-merge-debit-crypto-and-cash-account-type/) |
 
 ### Roadmap Evolution
 
@@ -107,11 +114,11 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-08T00:35:00Z
-Stopped at: Quick 260908-0i7 plan ready (ASSET merge)
-Resume file: .planning/quick/260908-0i7-merge-debit-crypto-and-cash-account-type/260908-0i7-PLAN.md
+Last session: 2026-09-07T22:46:30Z
+Stopped at: Verified quick 260908-0i7 ASSET merge (passed)
+Resume file: None
 
 ## Operator Next Steps
 
-- Execute quick 260908-0i7 (orchestrator /gsd-quick continue) or resume that plan
-- After quick: `/gsd-new-milestone` when ready
+- Quick 260908-0i7 verified — orchestrator may commit docs / close quick
+- `/gsd-new-milestone` when ready
