@@ -153,4 +153,7 @@ None — empty shell intentionally omits IncomeList/IncomeFormDialog (Plan 03).
 
 None beyond plan threat model (Zod `.strict` + positive major; no new endpoints/actions this plan).
 
-## Self-Check: PENDING
+## Self-Check: PASSED
+
+- Files: page.tsx, validations/income.ts(+test), nav.tsx, income.ts — FOUND
+- Commits: 918efe6, ee6018e, 9372ccb, 29057aa, f368887 — FOUND
