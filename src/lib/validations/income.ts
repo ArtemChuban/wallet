@@ -174,3 +174,39 @@ export const upsertRecurringIncomeActualSchema = z
 export type UpsertRecurringIncomeActualInput = z.infer<
   typeof upsertRecurringIncomeActualSchema
 >;
+
+/** Upsert one-time income actual for a plan slot (ACT-01 / D-02 / D-19). */
+export const upsertOneTimeIncomeActualSchema = z
+  .object({
+    oneTimeIncomeId: z.coerce.number().int().positive(),
+    plannedAsOf: asOfDateSchema,
+    actualAmountMajor: actualAmountMajorField,
+    actualAsOf: asOfDateSchema,
+    note: optionalNoteSchema,
+  })
+  .strict()
+  .superRefine(refinePositiveActualMajor);
+
+/** Delete a single RecurringIncomeActual by id (D-04). */
+export const deleteRecurringIncomeActualSchema = z
+  .object({
+    id: z.coerce.number().int().positive(),
+  })
+  .strict();
+
+/** Delete a single OneTimeIncomeActual by id (D-04). */
+export const deleteOneTimeIncomeActualSchema = z
+  .object({
+    id: z.coerce.number().int().positive(),
+  })
+  .strict();
+
+export type UpsertOneTimeIncomeActualInput = z.infer<
+  typeof upsertOneTimeIncomeActualSchema
+>;
+export type DeleteRecurringIncomeActualInput = z.infer<
+  typeof deleteRecurringIncomeActualSchema
+>;
+export type DeleteOneTimeIncomeActualInput = z.infer<
+  typeof deleteOneTimeIncomeActualSchema
+>;
