@@ -12,6 +12,7 @@ import {
   createRecurringIncomeWithNewPersonSchema,
   updateOneTimeIncomeSchema,
   updateRecurringIncomeSchema,
+  upsertRecurringIncomeActualSchema,
 } from "@/lib/validations/income";
 
 export type IncomeActionState = {
@@ -20,9 +21,13 @@ export type IncomeActionState = {
     name?: string[];
     currencyCode?: string[];
     plannedAmountMajor?: string[];
+    actualAmountMajor?: string[];
     dayOfMonth?: string[];
     startAsOf?: string[];
     plannedAsOf?: string[];
+    actualAsOf?: string[];
+    recurringIncomeId?: string[];
+    oneTimeIncomeId?: string[];
     note?: string[];
     id?: string[];
   };
@@ -491,4 +496,101 @@ export async function deleteOneTimeIncome(
 
   revalidatePath("/income");
   return { success: true, message: "Удалено" };
+}
+
+/**
+ * Upsert recurring income actual for a plan slot (ACT-01 / D-04 / D-19).
+ * Slot key = plannedAsOf; never mutates definition plan columns.
+ * Future actualAsOf allowed — no repayment-style today upper bound.
+ * revalidatePath("/income") only — never dashboard root or NW ledger writes.
+ */
+export async function upsertRecurringIncomeActual(
+  _prev: IncomeActionState,
+  formData: FormData,
+): Promise<IncomeActionState> {
+  const validated = upsertRecurringIncomeActualSchema.safeParse({
+    recurringIncomeId: formData.get("recurringIncomeId"),
+    plannedAsOf: formData.get("plannedAsOf"),
+    actualAmountMajor: formData.get("actualAmountMajor"),
+    actualAsOf: formData.get("actualAsOf"),
+    note: formData.get("note") ?? undefined,
+  });
+
+  if (!validated.success) {
+    return { errors: validated.error.flatten().fieldErrors };
+  }
+
+  const {
+    recurringIncomeId,
+    plannedAsOf,
+    actualAmountMajor,
+    actualAsOf,
+    note,
+  } = validated.data;
+
+  try {
+    await ensureSqlitePragmas();
+
+    const parent = await prisma.recurringIncome.findUnique({
+      where: { id: recurringIncomeId },
+      include: { currency: { select: { scale: true } } },
+    });
+    if (!parent) {
+      return {
+        message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+      };
+    }
+
+    if (fracDigitCount(actualAmountMajor) > parent.currency.scale) {
+      return {
+        errors: {
+          actualAmountMajor: [
+            `Не больше ${parent.currency.scale} знаков после запятой`,
+          ],
+        },
+      };
+    }
+
+    let amountMinor: bigint;
+    try {
+      amountMinor = parseMajorToMinor(
+        actualAmountMajor,
+        parent.currency.scale,
+      );
+    } catch (err) {
+      const msg =
+        err instanceof Error && err.message === "too many fractional digits"
+          ? `Не больше ${parent.currency.scale} знаков после запятой`
+          : "Некорректная сумма";
+      return { errors: { actualAmountMajor: [msg] } };
+    }
+
+    await prisma.recurringIncomeActual.upsert({
+      where: {
+        recurringIncomeId_plannedAsOf: {
+          recurringIncomeId,
+          plannedAsOf,
+        },
+      },
+      update: {
+        amountMinor,
+        actualAsOf,
+        note: note ?? null,
+      },
+      create: {
+        recurringIncomeId,
+        plannedAsOf,
+        amountMinor,
+        actualAsOf,
+        note: note ?? null,
+      },
+    });
+  } catch {
+    return {
+      message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/income");
+  return { success: true, message: "Сохранено" };
 }

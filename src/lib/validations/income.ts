@@ -140,3 +140,37 @@ export type UpdateRecurringIncomeInput = z.infer<
   typeof updateRecurringIncomeSchema
 >;
 export type UpdateOneTimeIncomeInput = z.infer<typeof updateOneTimeIncomeSchema>;
+
+function refinePositiveActualMajor(
+  val: { actualAmountMajor: string },
+  ctx: z.RefinementCtx,
+) {
+  if (!isStrictlyPositiveMajor(val.actualAmountMajor)) {
+    ctx.addIssue({
+      code: "custom",
+      path: ["actualAmountMajor"],
+      message: "Введите сумму больше 0",
+    });
+  }
+}
+
+const actualAmountMajorField = z
+  .string()
+  .trim()
+  .min(1, "Введите корректную сумму");
+
+/** Upsert recurring income actual for a plan slot (ACT-01 / D-02 / D-19). */
+export const upsertRecurringIncomeActualSchema = z
+  .object({
+    recurringIncomeId: z.coerce.number().int().positive(),
+    plannedAsOf: asOfDateSchema,
+    actualAmountMajor: actualAmountMajorField,
+    actualAsOf: asOfDateSchema,
+    note: optionalNoteSchema,
+  })
+  .strict()
+  .superRefine(refinePositiveActualMajor);
+
+export type UpsertRecurringIncomeActualInput = z.infer<
+  typeof upsertRecurringIncomeActualSchema
+>;
