@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Доходы
-current_phase: 15
-current_phase_name: Plan vs actual + overdue
-status: planning
-stopped_at: Phase 16 complete, ready to plan Phase 15
-last_updated: "2026-09-07T19:10:56.930Z"
+current_phase: 17
+current_phase_name: NW forecast overlay + isolation
+status: executing
+stopped_at: Phase 16 complete — ready for Phase 17 discuss
+last_updated: "2026-09-07T19:11:45.497Z"
 last_activity: 2026-09-07
-last_activity_desc: Phase 16 complete, transitioned to Phase 15
-state_head: 7ae0346fab37c41337ae0e7910a363cf6985efb0
+last_activity_desc: Phase 17 execution started
+state_head: 096805a3d618198a564f7a343e1518d90a9af75b
 progress:
   total_phases: 5
   completed_phases: 4
@@ -25,14 +25,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 16 — Counterparty income stats
+**Current focus:** Phase 17 — NW forecast overlay + isolation
 
 ## Current Position
 
-Phase: 15 — Plan vs actual + overdue
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-09-07 — Phase 16 complete, transitioned to Phase 15
+Phase: 17 (NW forecast overlay + isolation) — EXECUTING
+Plan: 1 of ?
+Status: Executing Phase 17
+Last activity: 2026-09-07 — Phase 17 execution started
 
 Progress: [████░░░░░░] 40% (v1.2 — phase 15 verified; phase 16 planned)
 
@@ -126,6 +126,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T19:03:52.310Z
-Stopped at: Phase 16 complete, ready to plan Phase 15
-Resume file: .planning/phases/16-counterparty-income-stats/16-02-SUMMARY.md
+Last session: 2026-09-07T19:11:45.361Z
+Stopped at: Phase 16 complete — ready for Phase 17 discuss
+Resume file: .planning/phases/16-counterparty-income-stats/16-VERIFICATION.md

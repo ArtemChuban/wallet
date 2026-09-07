@@ -42,7 +42,7 @@ Full detail: [milestones/v1.1-ROADMAP.md](./milestones/v1.1-ROADMAP.md)
 
 - [x] **Phase 13: Income schema + domain math** - Persist sources/actuals; virtual occurrences; DOM clamp; plan≠actual fields (completed 2026-09-07)
 - [x] **Phase 14: Доходы CRUD + nav** - «Доходы» page/nav; create/edit/delete recurring + one-time income (completed 2026-09-07)
-- [ ] **Phase 15: Plan vs actual + overdue** - Record actual; overdue «заполни»; plan vs actual variance on «Доходы»
+- [x] **Phase 15: Plan vs actual + overdue** - Record actual; overdue «заполни»; plan vs actual variance on «Доходы» (completed 2026-09-07)
 - [x] **Phase 16: Counterparty income stats** - Per-Person Σ in primary with FX LOCF honesty (completed 2026-09-07)
 - [ ] **Phase 17: NW forecast overlay + isolation** - Капитал dashed forecast from recurring; INISO / no BalanceSnapshot writes
 
@@ -141,7 +141,7 @@ Plans:
   1. User can view per-Person income totals on «Доходы» converted to primary via FX LOCF as-of
   2. Missing FX rates surface partial honesty (excluded/incomplete), not invented rates or silent zeros
 
-**Plans**: 2/2 plans executed
+**Plans**: 2/2 plans complete
 
 Plans:
 
@@ -177,7 +177,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 13. Income schema + domain math | 3/3 | Plans complete | 2026-09-07 |
 | 14. Доходы CRUD + nav | 3/3 | Not started | 2026-09-07 |
-| 15. Plan vs actual + overdue | 3/3 | Not started |  |
+| 15. Plan vs actual + overdue | 3/3 | Not started | 2026-09-07 |
 | 16. Counterparty income stats | 2/2 | Planned | 2026-09-07 |
 | 17. NW forecast overlay + isolation | 0/? | Not started | - |
 
