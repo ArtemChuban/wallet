@@ -1,0 +1,36 @@
+import { readFileSync } from "node:fs";
+import { describe, expect, it } from "vitest";
+
+const chartSrc = readFileSync(
+  "src/components/dashboard/NetWorthHistoryChart.tsx",
+  "utf8",
+);
+const shellSrc = readFileSync(
+  "src/components/dashboard/DashboardChartsShell.tsx",
+  "utf8",
+);
+
+/** Wave 0 chart file-scan — full chrome greens in Plan 03; tracer may partially satisfy. */
+describe("forecast chart chrome file-scan", () => {
+  it("NetWorthHistoryChart uses ComposedChart (D-09)", () => {
+    expect(chartSrc).toMatch(/ComposedChart/);
+  });
+
+  it("forecast Line uses strokeDasharray (D-09)", () => {
+    expect(chartSrc).toMatch(/strokeDasharray/);
+  });
+
+  it("legend/series name includes Прогноз (D-10)", () => {
+    expect(chartSrc).toMatch(/Прогноз/);
+  });
+
+  it("ReferenceLine marks today hinge (D-12) — Plan 03", () => {
+    expect(chartSrc).toMatch(/ReferenceLine/);
+  });
+
+  it("DashboardChartsShell wires forecastHorizonEnd or buildNetWorthForecastSeries", () => {
+    expect(shellSrc).toMatch(
+      /forecastHorizonEnd|buildNetWorthForecastSeries/,
+    );
+  });
+});
