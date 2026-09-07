@@ -5,10 +5,10 @@ milestone_name: Доходы
 current_phase: 13
 current_phase_name: v1.2 phases 13–17
 status: planning
-stopped_at: Phase 13 context gathered
-last_updated: "2026-09-07T10:51:37.954Z"
+stopped_at: Phase 13 research complete
+last_updated: "2026-09-07T10:56:00.000Z"
 last_activity: 2026-09-07
-last_activity_desc: Roadmap created for v1.2 Доходы (phases 13–17)
+last_activity_desc: Phase 13 RESEARCH.md written (income schema + domain math)
 state_head: 3298c787136837ecc3e96e9e4a9a1ebb1f6bcc2b
 progress:
   total_phases: 5
@@ -31,8 +31,8 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 
 Phase: 13 of 17 (Income schema + domain math) — v1.2 phases 13–17
 Plan: —
-Status: Ready to plan
-Last activity: 2026-09-07 — Roadmap created for v1.2 Доходы (phases 13–17)
+Status: Ready to plan (research done)
+Last activity: 2026-09-07 — Phase 13 RESEARCH.md complete
 
 Progress: [░░░░░░░░░░] 0% (v1.2)
 
@@ -96,6 +96,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T10:51:37.907Z
-Stopped at: Phase 13 context gathered
-Resume file: .planning/phases/13-income-schema-domain-math/13-CONTEXT.md
+Last session: 2026-09-07T10:56:00.000Z
+Stopped at: Phase 13 research complete — next /gsd-plan-phase planner
+Resume file: .planning/phases/13-income-schema-domain-math/13-RESEARCH.md
