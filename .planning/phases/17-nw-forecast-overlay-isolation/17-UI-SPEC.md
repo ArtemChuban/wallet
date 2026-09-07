@@ -58,7 +58,7 @@ Declared values (must be multiples of 4):
 
 | Token | Value | Usage |
 |-------|-------|-------|
-| xs | 4px | Tooltip row gaps (`gap-1` / `gap-1.5`); legend/swatch gaps |
+| xs | 4px | Tooltip/legend gaps (`gap-1` = 4px only); legend/swatch gaps |
 | sm | 8px | Chart margins (`left/right/top: 8`); compact chrome gaps (`gap-2`) |
 | md | 16px | Partial banner padding `p-4`; default element spacing |
 | lg | 24px | Section internal rhythm |
