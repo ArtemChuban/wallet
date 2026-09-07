@@ -5,17 +5,17 @@ milestone_name: Доходы
 current_phase: 15
 current_phase_name: Plan vs actual + overdue
 status: verifying
-stopped_at: Phase 15 verification passed (15-VERIFICATION.md)
-last_updated: "2026-09-07T17:44:45.064Z"
+stopped_at: Phase 16 context gathered
+last_updated: "2026-09-07T18:28:30.381Z"
 last_activity: 2026-09-07
 last_activity_desc: Phase 15 VERIFICATION passed — ACT-01/02/03 + Orca UAT
-state_head: 0314688
+state_head: feb613e604394ee800fadaf0bc034f7278e99393
 progress:
   total_phases: 5
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 9
   completed_plans: 9
-  percent: 40
+  percent: 60
 ---
 
 # Project State
@@ -126,6 +126,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T17:36:15.373Z
-Stopped at: Completed 15-03-PLAN.md
-Resume file: None
+Last session: 2026-09-07T18:28:30.219Z
+Stopped at: Phase 16 context gathered
+Resume file: .planning/phases/16-counterparty-income-stats/16-CONTEXT.md
