@@ -46,6 +46,8 @@ created: "2026-09-07"
 | FND-OVER | 01+ | 1+ | FND-OVER | — | N/A | unit | `npx vitest run src/lib/income.test.ts` | ❌ W0 | ⬜ pending |
 | FND-MONEY | 01+ | 1+ | FND-MONEY | — | N/A | unit | `npx vitest run src/lib/income.test.ts` | ❌ W0 | ⬜ pending |
 | FND-MIG | 01+ | 1+ | FND-MIG | — | N/A | integration | `npx vitest run src/lib/foundation.test.ts` | ⚠️ allowlist | ⬜ pending |
+| FND-SCHEMA | 03 | 3 | FND-SCHEMA | — | N/A | unit (file-lock) | `npx vitest run src/lib/income.test.ts` | ❌ W0 | ⬜ pending |
+| FND-ISO | 03 | 3 | ISO-01 | — | no NW/historical cross-import | unit file-scan | `npx vitest run src/lib/income.test.ts` | ❌ optional | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 

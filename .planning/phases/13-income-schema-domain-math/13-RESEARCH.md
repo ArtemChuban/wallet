@@ -464,19 +464,19 @@ expect(schema).toMatch(/@@unique\(\[recurringIncomeId,\s*plannedAsOf\]\)/);
 
 **If discuss needed:** A2 only if planner wants dual-slot months after DOM change.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **D-07 freeze granularity**
+1. **D-07 freeze granularity** — RESOLVED: month-keyed single slot (A2 / Pattern 3); Plan 02 implements freeze-aware merge (no dual-row months).
    - What we know: frozen keys must survive DOM change; empty months use current DOM.
    - What's unclear: whether a month may show two rows (old actual key + new candidate).
    - Recommendation: **month-keyed single slot** (Pattern 3) — document in PLAN; escalate only if product wants both visible.
 
-2. **FCST-01 text vs D-12**
+2. **FCST-01 text vs D-12** — RESOLVED: Phase 17 REQ/roadmap edit; Phase 13 ships schema/data readiness only (no REQUIREMENTS.md edit).
    - What we know: CONTEXT revises forecast to include future one-time.
    - What's unclear: when REQUIREMENTS.md updates (explicitly Phase 17).
    - Recommendation: Phase 13 no REQ edit; note in PLAN risks for Phase 17.
 
-3. **`node_modules` missing on research host**
+3. **`node_modules` missing on research host** — RESOLVED: `npm install` from lockfile in Plan 01 tracer (Wave 0) before migrate/test.
    - What we know: cannot run `prisma validate` / Vitest here without install.
    - Recommendation: Wave 0 `npm install` before migrate/test tasks.
 
