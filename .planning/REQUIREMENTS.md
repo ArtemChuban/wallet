@@ -9,8 +9,8 @@ Requirements for milestone v1.2. Each maps to roadmap phases.
 
 ### Sources
 
-- [ ] **SRC-01**: User can create recurring monthly income with day-of-month, planned amount, currency, and Person counterparty
-- [ ] **SRC-02**: User can create one-time income with planned date, amount, currency, Person counterparty, and optional note
+- [x] **SRC-01**: User can create recurring monthly income with day-of-month, planned amount, currency, and Person counterparty
+- [x] **SRC-02**: User can create one-time income with planned date, amount, currency, Person counterparty, and optional note
 
 ### Plan vs actual
 
@@ -24,7 +24,7 @@ Requirements for milestone v1.2. Each maps to roadmap phases.
 
 ### Доходы UI
 
-- [ ] **UI-01**: User has «Доходы» page + nav with income CRUD; deletes use DestructiveConfirmStep; recording actual does not change account balances
+- [x] **UI-01**: User has «Доходы» page + nav with income CRUD; deletes use DestructiveConfirmStep; recording actual does not change account balances
 
 ### Капитал forecast
 
@@ -70,13 +70,13 @@ Explicit exclusions for this milestone.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SRC-01 | Phase 14 | Pending |
-| SRC-02 | Phase 14 | Pending |
+| SRC-01 | Phase 14 | Complete |
+| SRC-02 | Phase 14 | Complete |
 | ACT-01 | Phase 15 | Pending |
 | ACT-02 | Phase 15 | Pending |
 | ACT-03 | Phase 15 | Pending |
 | CPTY-01 | Phase 16 | Pending |
-| UI-01 | Phase 14 | Pending |
+| UI-01 | Phase 14 | Complete |
 | FCST-01 | Phase 17 | Pending |
 | ISO-01 | Phase 17 | Pending |
 

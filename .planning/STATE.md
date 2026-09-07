@@ -4,17 +4,17 @@ milestone: v1.2
 milestone_name: Доходы
 current_phase: 14
 current_phase_name: Доходы CRUD + nav
-status: planning
-stopped_at: Phase 14 plans written — ready for execute
-last_updated: "2026-09-07T12:49:47.942Z"
+status: executing
+stopped_at: Completed 14-01-PLAN.md
+last_updated: "2026-09-07T12:55:32.559Z"
 last_activity: 2026-09-07
-last_activity_desc: Phase 14 PLAN.md ×3 written
-state_head: 5d2515b027e10a97244c432f9f1b142f400ce204
+last_activity_desc: Phase 14 plan 01 executed (nav + Zod + nextOpen)
+state_head: f36888749c258671849fa92d44ced5181e126378
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 6
-  completed_plans: 3
+  completed_plans: 4
   percent: 20
 ---
 
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 
 ## Current Position
 
-Phase: 14 (Доходы CRUD + nav) — READY TO EXECUTE
-Plan: 01 ready (3 plans, waves 1–3)
-Status: Planned — ready for `/gsd-execute-phase 14`
-Last activity: 2026-09-07 — Phase 14 plans written (14-01..14-03)
+Phase: 14 (Доходы CRUD + nav) — IN PROGRESS
+Plan: 02 of 03 (14-01 complete)
+Status: Executing — next `/gsd-execute-phase` continues with 14-02
+Last activity: 2026-09-07 — Completed 14-01 (nav + /income shell + Zod + nextOpenPlannedAsOf)
 
 Progress: [██░░░░░░░░] 20% (v1.2 — 0/5 phases verified)
 
@@ -54,6 +54,7 @@ Progress: [██░░░░░░░░] 20% (v1.2 — 0/5 phases verified)
 | Phase 13 P01 | 3min | 3 tasks | 7 files |
 | Phase 13 P02 | 2min | 2 tasks | 2 files |
 | Phase 13 P03 | 2min | 2 tasks | 2 files |
+| Phase 14 P01 | 4min | 3 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -73,6 +74,8 @@ Recent decisions affecting current work:
 - [Phase 13]: listAllInRange requires explicit from/to; no default horizon
 - [Phase 13]: assertOneTimePlanImmutable throws when hasActual and plan date/amount differ
 - [Phase 13]: ISO-01 light: bidirectional income↔NW/historical file-scan + UI-00 existsSync
+- [Phase 14]: Empty /income shell: PersonFormDialog only; IncomeFormDialog deferred to Plan 03
+- [Phase 14]: nextOpenPlannedAsOf fallback = startAsOf when 400d horizon fully filled (A3)
 
 ### Pending Todos
 
@@ -109,6 +112,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T12:08:10.674Z
-Stopped at: Phase 14 context gathered
-Resume file: /home/artem/Documents/wallet/.planning/phases/14-dohody-crud-nav/14-CONTEXT.md
+Last session: 2026-09-07T12:55:32.503Z
+Stopped at: Completed 14-01-PLAN.md
+Resume file: None
