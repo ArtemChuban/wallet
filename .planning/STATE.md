@@ -5,11 +5,11 @@ milestone_name: Доходы
 current_phase: 17
 current_phase_name: NW forecast overlay + isolation
 status: executing
-stopped_at: Phase 16 COMPLETE — next discuss Phase 17
-last_updated: "2026-09-07T19:12:12.533Z"
+stopped_at: Phase 17 context gathered
+last_updated: "2026-09-07T19:50:22.383Z"
 last_activity: 2026-09-07
 last_activity_desc: Phase 17 execution started
-state_head: 9f42ac3aab4a9b01f0610f99687b55181fa12f0b
+state_head: 6e91b8093e1d0a452bfc3bd1ee81f94ae71c1c2a
 progress:
   total_phases: 5
   completed_phases: 4
@@ -126,6 +126,7 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T19:11:53.141Z
-Stopped at: Phase 16 COMPLETE — next discuss Phase 17
+Last session: 2026-09-07T19:50:22.172Z
+Stopped at: Phase 17 context gathered
 Resume file: 
+.planning/phases/17-nw-forecast-overlay-isolation/17-CONTEXT.md
