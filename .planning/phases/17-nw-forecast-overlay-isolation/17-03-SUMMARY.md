@@ -111,7 +111,7 @@ status: complete
 4. **Task 2 GREEN: Banner + showForecast wiring** - `00c5eb9` (feat)
 5. **Task 3: VALIDATION map + suite gate** - `0fe4734` (docs)
 
-**Plan metadata:** (pending final docs commit)
+**Plan metadata:** `1681a2f` (docs: complete plan)
 
 ## Files Created/Modified
 - `src/components/dashboard/NetWorthHistoryChart.tsx` — ReferenceLine, tooltip split, legend D-10
