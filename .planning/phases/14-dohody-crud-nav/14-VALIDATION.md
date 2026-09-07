@@ -38,16 +38,19 @@ created: "2026-09-07"
 
 ## Per-Task Verification Map
 
+Aligned to executable PLAN task IDs and their `<automated>` commands (Wave 0 scaffolds folded into wave-1+ tasks — see Wave 0 note below).
+
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 14-W0-01 | 01 | 0 | UI-01 | — | Flip UI-00 absence assertion before route create | unit | `npx vitest run src/lib/income.test.ts` | ✅ must change | ⬜ pending |
-| 14-W0-02 | 01 | 0 | SRC-01, SRC-02 | — | Zod income validations | unit | `npx vitest run src/lib/validations/income.test.ts` | ❌ W0 | ⬜ pending |
-| 14-01-01 | 01 | 1 | UI-01 | — | Nav order `/income` after accounts | unit | `npx vitest run src/components/nav.test.ts` | ✅ | ⬜ pending |
-| 14-01-02 | 01 | 1 | D-02/D-10 | — | nextOpenPlannedAsOf past unfilled slot | unit | `npx vitest run src/lib/income.test.ts` | ❌ W0 | ⬜ pending |
-| 14-02-01 | 02 | 2 | SRC-01, SRC-02 | — | Create/edit Zod + actions | unit | `npx vitest run src/lib/validations/income.test.ts src/app/income/actions.test.ts` | ❌ W0 | ⬜ pending |
-| 14-02-02 | 02 | 2 | UI-01 / ISO | T-14-01 | income actions never mention BalanceSnapshot | file-scan | `npx vitest run src/app/income/actions.test.ts` | ❌ W0 | ⬜ pending |
-| 14-03-01 | 03 | 3 | UI-01 | — | DestructiveConfirmStep; no window.confirm | file-scan/unit | vitest on income components | ❌ W0 | ⬜ pending |
-| 14-03-02 | 03 | 3 | D-16 | — | deletePerson blocked when income refs | unit | extend `src/app/debts/actions.test.ts` | ✅ extend | ⬜ pending |
+| 14-01-T1 | 01 | 1 | UI-01 | — | Flip UI-00; nav «Доходы» + `/income` shell + D-11 copy | unit + file-scan | `npx vitest run src/lib/income.test.ts src/components/nav.test.ts && test -f src/app/income/page.tsx && grep -q 'Доходы' src/components/nav.tsx && grep -q 'href: "/income"' src/components/nav.tsx && grep -q 'Учёт доходов не меняет остатки на счетах.' src/app/income/page.tsx` | ✅ partial | ⬜ pending |
+| 14-01-T2 | 01 | 1 | SRC-01, SRC-02 | — | Zod recurring + one-time create/update schemas | unit | `npx vitest run src/lib/validations/income.test.ts` | ❌ create | ⬜ pending |
+| 14-01-T3 | 01 | 1 | D-02, D-09, D-10 | — | nextOpenPlannedAsOf past-unfilled + skip-filled | unit + file-scan | `npx vitest run src/lib/income.test.ts && grep -q 'nextOpenPlannedAsOf' src/lib/income.ts` | ✅ extend | ⬜ pending |
+| 14-02-T1 | 02 | 2 | SRC-01, UI-01 | T-14-01 | createRecurringIncome + isolation scan scaffold | unit + file-scan | `npx vitest run src/app/income/actions.test.ts && test -f src/app/income/actions.ts && grep -q 'createRecurringIncome' src/app/income/actions.ts && grep -q 'revalidatePath("/income")' src/app/income/actions.ts` | ❌ create | ⬜ pending |
+| 14-02-T2 | 02 | 2 | SRC-02, UI-01 | T-14-01 | One-time + update/delete + assertOneTimePlanImmutable | unit + file-scan | `npx vitest run src/app/income/actions.test.ts && grep -q 'createOneTimeIncome' src/app/income/actions.ts && grep -q 'assertOneTimePlanImmutable' src/app/income/actions.ts && grep -q 'deleteRecurringIncome\|deleteOneTimeIncome' src/app/income/actions.ts` | ❌ create | ⬜ pending |
+| 14-02-T3 | 02 | 2 | D-16 | — | Person Restrict spans income + dual revalidatePath | unit + file-scan | `npx vitest run src/app/debts/actions.test.ts && grep -q 'долги или доходы' src/app/debts/actions.ts && grep -q 'revalidatePath("/income")' src/app/debts/actions.ts && grep -q 'долги или доходы' src/components/debts/DebtsList.tsx` | ✅ extend | ⬜ pending |
+| 14-03-T1 | 03 | 3 | D-01..D-08, D-15 | — | Person-grouped list + create dialog + nextPlannedAsOf map | file-scan + unit | `test -f src/components/income/IncomeList.tsx && test -f src/components/income/IncomeFormDialog.tsx && grep -q 'defaultPersonId' src/components/income/IncomeList.tsx && grep -q 'primaryCurrencyCode' src/components/income/IncomeFormDialog.tsx && grep -q 'IncomeList' src/app/income/page.tsx && grep -q 'Новый доход' src/app/income/page.tsx && npx vitest run src/lib/validations/income.test.ts src/app/income/actions.test.ts src/components/nav.test.ts` | ❌ create | ⬜ pending |
+| 14-03-T2 | 03 | 3 | D-12, D-16, UI-01 | — | DestructiveConfirmStep edit/delete; «Изменить» | unit + file-scan | `npx vitest run src/components/income/income-ui.test.ts && grep -q 'DestructiveConfirmStep' src/components/income/IncomeFormDialog.tsx && grep -q 'DestructiveConfirmStep' src/components/income/IncomeList.tsx && grep -q 'Изменить' src/components/income/IncomeList.tsx` | ❌ create | ⬜ pending |
+| 14-03-T3 | 03 | 3 | UI-01 | — | Empty/error polish + full suite gate | full suite | `npm test` | ✅ | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -55,12 +58,14 @@ created: "2026-09-07"
 
 ## Wave 0 Requirements
 
-- [ ] Replace UI-00 in `src/lib/income.test.ts` (blocker for creating `src/app/income`)
-- [ ] `src/lib/validations/income.ts` + `.test.ts`
-- [ ] `nextOpenPlannedAsOf` (or chosen name) + tests in `income.test.ts`
-- [ ] Update `nav.test.ts` expectations for Доходы
-- [ ] `src/app/income/actions.test.ts` — isolation file-scan + happy-path validation errors
-- [ ] Extend `deletePerson` tests for income Restrict
+**Folded into wave 1+ executable plans** (no separate Wave 0 plan tasks). Former Wave 0 gaps map as follows:
+
+- [x] Replace UI-00 in `src/lib/income.test.ts` — **14-01-T1**
+- [x] `src/lib/validations/income.ts` + `.test.ts` — **14-01-T2**
+- [x] `nextOpenPlannedAsOf` + tests in `income.test.ts` — **14-01-T3**
+- [x] Update `nav.test.ts` expectations for Доходы — **14-01-T1**
+- [x] `src/app/income/actions.test.ts` isolation + validation errors — **14-02-T1 / T2**
+- [x] Extend `deletePerson` tests for income Restrict — **14-02-T3**
 
 ---
 

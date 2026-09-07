@@ -403,21 +403,24 @@ Mirror `updateDebtMeta` (direction/due/note only — not principal/currency/pers
 | A4 | RU type labels «Ежемесячный» / «Разовый» | D-04 row | Copy tweak only |
 | A5 | PersonFormDialog may keep debts-oriented description or soften copy | Integration | UX wording only |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Shared Person actions home**
    - What we know: `PersonFormDialog` imports `@/app/debts/actions`; delete only checks debts.
    - What's unclear: Move to `src/app/people/actions.ts` vs extend debts actions in place.
    - Recommendation: **Extend in place** (minimal churn); dual revalidate + income counts. Extract later if painful.
+   - **RESOLVED:** Extend Person actions in `debts/actions` in place — dual `revalidatePath` (`/debts` + `/income`) + income reference counts on delete (matches Plan 02).
 
 2. **Next-open helper API name / null behavior**
    - What we know: D-02/D-10 rules; `listRecurringOccurrences` needs explicit range.
    - What's unclear: Exact horizon and null fallback.
    - Recommendation: Helper + unit tests in Wave 0; page always passes explicit `to`.
+   - **RESOLVED:** Helper named `nextOpenPlannedAsOf`; horizon ≈ today+400d via `addCalendarDays`; page passes explicit `to` (matches Plan 01 Task 3 + Plan 03 page mapping).
 
 3. **PersonFormDialog description string**
    - What we know: Create copy mentions долги.
    - Recommendation: Soften to neutral «чтобы вести учёт» if touching file for revalidate — else leave (A5).
+   - **RESOLVED:** A5 — leave PersonFormDialog «долги» copy unless the file is already touched for other reasons (Plan 02 touches DebtsList copy only; no mandatory PersonFormDialog wording change).
 
 ## Environment Availability
 
