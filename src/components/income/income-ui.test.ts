@@ -75,15 +75,46 @@ describe("counterparty stats", () => {
     expect(listSrc).toMatch(/за всё время/);
   });
 
-  it("partial honesty copy present (Итог неполный or нет курса)", () => {
-    expect(
-      /Итог неполный|нет курса/.test(listSrc),
-    ).toBe(true);
+  it("hybrid typography: native semibold base mono + primary muted sm mono", () => {
+    expect(listSrc).toMatch(/font-mono text-base font-semibold/);
+    expect(listSrc).toMatch(/font-mono text-sm text-muted-foreground/);
   });
 
-  it("page wires computePersonIncomeStats and fxRate load", () => {
+  it("stats amounts use break-all for long money overflow (UI-SPEC)", () => {
+    expect(listSrc).toMatch(
+      /break-all[^"'`\n]*font-mono|font-mono[^"'`\n]*break-all/,
+    );
+  });
+
+  it("partial honesty: compact Итог неполный · нет курса with role=status", () => {
+    expect(listSrc).toMatch(/Итог неполный/);
+    expect(listSrc).toMatch(/нет курса/);
+    expect(listSrc).toMatch(/·/);
+    expect(listSrc).toMatch(/role=["']status["']/);
+    expect(listSrc).not.toMatch(/Задайте курсы/);
+    expect(listSrc).not.toMatch(/Не все долги/);
+  });
+
+  it("partial chrome avoids warning/destructive/success-green tokens", () => {
+    const partialBlock = listSrc.match(
+      /isPartial[\s\S]{0,400}?role=["']status["'][\s\S]{0,200}/,
+    );
+    expect(partialBlock).not.toBeNull();
+    expect(partialBlock![0]).not.toMatch(/bg-warning|text-warning|text-destructive|text-green|bg-green|amber/);
+  });
+
+  it("header layout uses gap-4 / text-right stats; no debts hero sizes", () => {
+    expect(listSrc).toMatch(/justify-between gap-4/);
+    expect(listSrc).toMatch(/items-end gap-2 text-right|text-right[\s\S]{0,80}gap-2/);
+    expect(listSrc).not.toMatch(/text-3xl/);
+    expect(listSrc).not.toMatch(/@\/components\/ui\/chart/);
+  });
+
+  it("page wires computePersonIncomeStats, fxRate, and identity-omit", () => {
     expect(pageSrc).toMatch(/computePersonIncomeStats/);
     expect(pageSrc).toMatch(/fxRate/);
+    expect(pageSrc).toMatch(/identityOmit/);
+    expect(pageSrc).toMatch(/!domainStats\.isPartial|!.*isPartial/);
   });
 
   it("forbids DebtsPrimaryTotalsHero on income page (no page hero)", () => {
