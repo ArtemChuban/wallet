@@ -114,7 +114,13 @@ Plans:
   2. When planned date is before Moscow today and no actual exists, occurrence shows overdue «заполни»
   3. User can see plan vs actual variance (view/chart) on «Доходы»
 
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 15-01-PLAN.md — Recurring actual upsert tracer + Zod schemas + variance helpers (ACT-01, ACT-03)
+- [ ] 15-02-PLAN.md — Remaining actual actions + RSC overdue/hasActual join (ACT-01, ACT-02)
+- [ ] 15-03-PLAN.md — IncomeFactDialog + overdue/variance chrome + suite gate (ACT-02, ACT-03)
+
 **UI hint**: yes
 
 ### Phase 16: Counterparty income stats
