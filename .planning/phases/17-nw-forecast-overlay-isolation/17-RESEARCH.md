@@ -471,21 +471,11 @@ model RecurringIncome { ... }
 | A4 | Exact RU partial banner copy «Прогноз неполный · нет курса» | Discretion | Copy tweak in UI-SPEC / UAT |
 | A5 | No Prisma schema change required this phase | Structure | Only if currency join forces new query shape (unlikely) |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Exact RU strings for forecast partial + empty**
-   - What we know: CPTY uses «Итог неполный · нет курса»; Debts/Капитал use bordered `role="status"` cards.
-   - What's unclear: Forecast-specific wording vs reuse «Итог неполный».
-   - Recommendation: «Прогноз неполный · нет курса» near chart; hide series when no includable slots without empty-state toast (D-08).
-
-2. **Legend when single account + forecast**
-   - What we know: Today legend only if `accounts.length > 1` [VERIFIED: `NetWorthHistoryChart.tsx:166-168`].
-   - What's unclear: With forecast, need «Прогноз» even for 1 account (D-10).
-   - Recommendation: Show legend when `accounts.length > 1 || showForecast`.
-
-3. **Should `nw-forecast` call `listAllInRange` internally?**
-   - What we know: income.ts must stay free of nw-forecast; reverse import OK.
-   - Recommendation: **No** — accept `ForecastSlot[]` only so membership tests stay explicit and currency enrichment stays at boundary.
+1. **Exact RU strings for forecast partial + empty** — RESOLVED: «Прогноз неполный · нет курса» near chart (UI-SPEC + Plan 03); hide series when no includable slots; no empty-state toast (D-08).
+2. **Legend when single account + forecast** — RESOLVED: Show legend when `accounts.length > 1 || showForecast` (D-10; Plan 03 / UI-SPEC).
+3. **Should `nw-forecast` call `listAllInRange` internally?** — RESOLVED: **No** — accept `ForecastSlot[]` only; currency enrichment at page/shell boundary (Plan 01).
 
 ## Environment Availability
 
