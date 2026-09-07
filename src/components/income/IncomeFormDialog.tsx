@@ -71,6 +71,8 @@ export type IncomeRow = {
   /** Serialized BigInt string from RSC when hasActual. */
   actualAmountMinor?: string;
   actualAsOf?: string;
+  /** Actual fact note when hasActual (distinct from definition note). */
+  actualNote?: string | null;
   currency: { code: string; name: string; scale: number };
   person: { id: number; name: string };
 };
