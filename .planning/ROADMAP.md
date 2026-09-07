@@ -4,6 +4,7 @@
 
 - ✅ **v1.0 MVP** — Phases 1–7 (shipped 2026-09-04)
 - ✅ **v1.1 Долги людям** — Phases 8–12 (shipped 2026-09-07)
+- 🚧 **v1.2 Доходы** — Phases 13–17 (in progress)
 
 ## Phases
 
@@ -35,11 +36,87 @@ Full detail: [milestones/v1.1-ROADMAP.md](./milestones/v1.1-ROADMAP.md)
 
 </details>
 
+### 🚧 v1.2 Доходы (In Progress)
+
+**Milestone Goal:** Учёт доходов (регулярная зарплата + разовые) с контрагентами, plan vs actual, мульти-валюта; страница «Доходы»; на Капитале — прогноз NW с регулярной зарплатой; просрочка без факта подсвечена.
+
+- [ ] **Phase 13: Income schema + domain math** - Persist sources/actuals; virtual occurrences; DOM clamp; plan≠actual fields
+- [ ] **Phase 14: Доходы CRUD + nav** - «Доходы» page/nav; create/edit/delete recurring + one-time income
+- [ ] **Phase 15: Plan vs actual + overdue** - Record actual; overdue «заполни»; plan vs actual variance on «Доходы»
+- [ ] **Phase 16: Counterparty income stats** - Per-Person Σ in primary with FX LOCF honesty
+- [ ] **Phase 17: NW forecast overlay + isolation** - Капитал dashed forecast from recurring; INISO / no BalanceSnapshot writes
+
+## Phase Details
+
+### Phase 13: Income schema + domain math
+**Goal**: Income domain exists as a side ledger — sources, actuals, virtual plan slots, and day-of-month rules ready for UI
+**Depends on**: Phase 12 (v1.1 shipped)
+**Requirements**: (foundation — no v1.2 REQ-IDs; enables SRC/ACT/CPTY/FCST/ISO)
+**Success Criteria** (what must be TRUE):
+  1. Prisma models persist recurring and one-time income sources with Person + Currency FKs and independent plan vs actual fields
+  2. Pure domain helpers list virtual plan occurrences with day-of-month clamp (short months never skip)
+  3. Vitest covers occurrence identity, overdue predicate inputs, and BigInt money paths without writing BalanceSnapshot
+**Plans**: TBD
+
+### Phase 14: Доходы CRUD + nav
+**Goal**: User can manage income sources from a dedicated «Доходы» section
+**Depends on**: Phase 13
+**Requirements**: SRC-01, SRC-02, UI-01
+**Success Criteria** (what must be TRUE):
+  1. User can create recurring monthly income (day-of-month, planned amount, currency, Person counterparty)
+  2. User can create one-time income (planned date, amount, currency, Person, optional note)
+  3. User reaches income via nav «Доходы» and can edit/delete sources; deletes use DestructiveConfirmStep
+  4. Recording or listing income never changes account balances (RU copy / behavior matches lock)
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 15: Plan vs actual + overdue
+**Goal**: User can fill facts against plans and see overdue + variance on «Доходы»
+**Depends on**: Phase 14
+**Requirements**: ACT-01, ACT-02, ACT-03
+**Success Criteria** (what must be TRUE):
+  1. User can record actual amount and actual date independently; plan fields stay for variance
+  2. When planned date is before Moscow today and no actual exists, occurrence shows overdue «заполни»
+  3. User can see plan vs actual variance (view/chart) on «Доходы»
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 16: Counterparty income stats
+**Goal**: User can see how much income came from each Person in primary currency
+**Depends on**: Phase 15
+**Requirements**: CPTY-01
+**Success Criteria** (what must be TRUE):
+  1. User can view per-Person income totals on «Доходы» converted to primary via FX LOCF as-of
+  2. Missing FX rates surface partial honesty (excluded/incomplete), not invented rates or silent zeros
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 17: NW forecast overlay + isolation
+**Goal**: Капитал shows forward NW projection from recurring pay; historical NW stays account-only
+**Depends on**: Phase 16
+**Requirements**: FCST-01, ISO-01
+**Success Criteria** (what must be TRUE):
+  1. On `/`, user sees NW chart with future dashed overlay from recurring planned income converted via FX LOCF
+  2. One-time income is not included in the Капитал forecast overlay
+  3. Past NW series / `computeNetWorthRows` unchanged with or without income data; income actions never write BalanceSnapshot
+  4. Isolation regressions (file-scan / property) and Nyquist validation for v1.2 income phases are green
+**Plans**: TBD
+**UI hint**: yes
+
 ## Progress
 
 | Milestone | Phases | Plans | Status |
 |-----------|--------|-------|--------|
 | v1.0 | 1–7 | 24/24 | Shipped 2026-09-04 |
 | v1.1 | 8–12 | 18/18 | Shipped 2026-09-07 |
+| v1.2 | 13–17 | 0/? | In progress |
 
-*Next: `/gsd-new-milestone`*
+| Phase | Plans Complete | Status | Completed |
+|-------|----------------|--------|-----------|
+| 13. Income schema + domain math | 0/? | Not started | - |
+| 14. Доходы CRUD + nav | 0/? | Not started | - |
+| 15. Plan vs actual + overdue | 0/? | Not started | - |
+| 16. Counterparty income stats | 0/? | Not started | - |
+| 17. NW forecast overlay + isolation | 0/? | Not started | - |
+
+*Next: `/gsd-plan-phase 13`*

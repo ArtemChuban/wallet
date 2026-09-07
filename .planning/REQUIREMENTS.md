@@ -70,14 +70,14 @@ Explicit exclusions for this milestone.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SRC-01 | — | Pending |
-| SRC-02 | — | Pending |
-| ACT-01 | — | Pending |
-| ACT-02 | — | Pending |
-| ACT-03 | — | Pending |
-| CPTY-01 | — | Pending |
-| UI-01 | — | Pending |
-| FCST-01 | — | Pending |
-| ISO-01 | — | Pending |
+| SRC-01 | Phase 14 | Pending |
+| SRC-02 | Phase 14 | Pending |
+| ACT-01 | Phase 15 | Pending |
+| ACT-02 | Phase 15 | Pending |
+| ACT-03 | Phase 15 | Pending |
+| CPTY-01 | Phase 16 | Pending |
+| UI-01 | Phase 14 | Pending |
+| FCST-01 | Phase 17 | Pending |
+| ISO-01 | Phase 17 | Pending |
 
-*Filled by roadmapper when phases are created.*
+*Mapped 2026-09-07 — roadmap phases 13–17 (Phase 13 foundation, no REQ-IDs).*
