@@ -138,19 +138,14 @@ function mergeFactAndForecast(
     const existing = byDate.get(fp.asOfDate);
     if (existing) {
       existing.forecast = fp.forecast;
-    } else if (fp.asOfDate > today) {
+    } else if (fp.asOfDate >= today) {
+      // D-07/D-12: today hinge + horizonEnd + future pay dates must stay on axis
       byDate.set(fp.asOfDate, {
         asOfDate: fp.asOfDate,
+        nw: fp.asOfDate === today ? fp.forecast : Number.NaN,
         forecast: fp.forecast,
       } as NetWorthChartPoint);
     }
-  }
-
-  // Hinge: today fact row must carry forecast === nw when series shown
-  const todayRow = byDate.get(today);
-  const todayForecast = forecastPoints.find((p) => p.asOfDate === today);
-  if (todayRow && todayForecast) {
-    todayRow.forecast = todayForecast.forecast;
   }
 
   return [...byDate.values()].sort((a, b) =>
@@ -328,7 +323,11 @@ export function DashboardChartsShell({
     primaryScale,
   ]);
 
+  // D-08 / D-16: hide Line when no includable slots; keep banner if FX exclusions
   const showForecast = forecastMeta.includedSlotCount > 0;
+  const showPartialBanner =
+    forecastMeta.isPartialForecast || forecastMeta.excludedMissingFxCount > 0;
+
   const points = useMemo(
     () =>
       mergeFactAndForecast(
@@ -348,7 +347,7 @@ export function DashboardChartsShell({
 
   return (
     <>
-      <section className="flex flex-col">
+      <section className="flex flex-col gap-2">
         <DashboardRangeControl value={range} onChange={setRange} />
         <NetWorthHistoryChart
           data={points}
@@ -357,6 +356,17 @@ export function DashboardChartsShell({
           today={today}
           showForecast={showForecast}
         />
+        {showPartialBanner ? (
+          <p
+            className="rounded-lg border border-border bg-muted/60 p-4 text-sm"
+            role="status"
+          >
+            <span className="font-semibold text-foreground">
+              Прогноз неполный
+            </span>
+            <span className="text-muted-foreground"> · нет курса</span>
+          </p>
+        ) : null}
       </section>
       <DashboardAccountList
         accounts={listAccounts}
