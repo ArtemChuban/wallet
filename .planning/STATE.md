@@ -24,14 +24,14 @@ current_phase: —
 See: .planning/PROJECT.md (updated 2026-09-08 after v1.2)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Quick task `260908-0i7` verified passed — ASSET merge goal achieved
+**Current focus:** Quick task `260908-1dm` planned — shrink wallet-web Docker image
 
 ## Current Position
 
 Phase: Milestone v1.2 complete
 Plan: —
-Status: Quick 260908-0i7 verification passed (4/4 must-haves)
-Last activity: 2026-09-08 — Completed quick task 260908-0i7: Merge debit/crypto/cash → ASSET
+Status: Quick 260908-1dm PLAN ready (execute next)
+Last activity: 2026-09-08 — Planned quick task 260908-1dm: Shrink wallet-web Docker image
 
 ## Performance Metrics
 
