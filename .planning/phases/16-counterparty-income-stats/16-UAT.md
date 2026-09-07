@@ -1,18 +1,50 @@
-# Phase 16 — UAT
+---
+status: complete
+phase: 16-counterparty-income-stats
+source: [16-VERIFICATION.md]
+started: 2026-09-07T19:00:00Z
+updated: 2026-09-07T21:58:00Z
+driver: agent
+---
 
-**Date:** 2026-09-07  
-**Driver:** agent (OPERATOR.md)  
-**App:** `http://localhost:3000/income` (npm run dev)
+## Current Test
 
-## Checkpoints
+number: —
+name: suite complete
+expected: |
+  all UAT checkpoints complete
+awaiting: none
 
-| # | Check | Result | Evidence |
-|---|--------|--------|----------|
-| 1 | Person with actuals shows «за всё время» + native Σ | pass | SSR HTML: `за всё время`, `55 000 RUB` / `10 000 RUB` with `font-semibold` |
-| 2 | Identity-omit when single-ccy === primary && !partial | pass | RSC props: `primaryLine: null` for RUB-primary persons |
-| 3 | Plan / structure: no page hero «всего получено» | pass | No DebtsPrimaryTotalsHero; per-Person header only |
-| 4 | Visual hierarchy native > primary | pass* | Classes match UI-SPEC (`text-base font-semibold` native; hint `text-sm text-muted-foreground`). *Subjective polish not re-checked in browser chrome |
-| 5 | Orca browser drive | skipped | `orca-ide open` → `runtime_open_timeout`; status `app.running:false` after retry |
+## Tests
+
+### 1. Person with actuals shows «за всё время» + native Σ
+expected: Person header shows lifetime label and native currency sum
+result: pass
+notes: |
+  SSR HTML: `за всё время`, `55 000 RUB` / `10 000 RUB` with `font-semibold`
+
+### 2. Identity-omit when single-ccy === primary && !partial
+expected: primaryLine null when native === primary and not partial
+result: pass
+notes: |
+  RSC props: `primaryLine: null` for RUB-primary persons
+
+### 3. Plan / structure: no page hero «всего получено»
+expected: No DebtsPrimaryTotalsHero; per-Person header only
+result: pass
+
+### 4. Visual hierarchy native > primary
+expected: Classes match UI-SPEC (text-base font-semibold native; hint text-sm text-muted-foreground)
+result: pass
+notes: |
+  Subjective polish not re-checked in browser chrome
+
+### 5. Orca browser drive
+expected: Drive /income via orca-ide
+result: skipped
+notes: |
+  `orca-ide open` → `runtime_open_timeout`; status `app.running:false` after retry.
+  SSR + Vitest (104/104) cover checkpoints; multi-ccy/partial covered by unit + file-scan.
 
 ## Notes
 
@@ -22,4 +54,4 @@
 
 ## Verdict
 
-**UAT pass with Orca skipped** — proceed to mark phase verification passed.
+**UAT complete** (Orca skipped — SSR agent evidence + Vitest) — phase verification passed.

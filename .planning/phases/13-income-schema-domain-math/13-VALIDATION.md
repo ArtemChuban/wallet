@@ -1,12 +1,11 @@
 ---
 phase: "13"
 slug: "income-schema-domain-math"
-# status lifecycle: draft (seeded by plan-phase) → validated (set by validate-phase §6)
-# audit-milestone §5.5 distinguishes NOT-VALIDATED (draft) from PARTIAL (validated + nyquist_compliant: false) (#2117)
-status: draft
-nyquist_compliant: false
-wave_0_complete: false
+status: validated
+nyquist_compliant: true
+wave_0_complete: true
 created: "2026-09-07"
+validated: "2026-09-07"
 ---
 
 # Phase 13 — Validation Strategy
@@ -40,14 +39,14 @@ created: "2026-09-07"
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 13-W0 | 01 | 0 | FND-* | — | N/A | unit stubs | `npx vitest run src/lib/income.test.ts` | ❌ W0 | ⬜ pending |
-| FND-OCC | 01+ | 1+ | FND-OCC | — | N/A | unit | `npx vitest run src/lib/income.test.ts` | ❌ W0 | ⬜ pending |
-| FND-CLAMP | 01+ | 1+ | FND-CLAMP | — | N/A | unit | `npx vitest run src/lib/dates.test.ts` | ⚠️ extend | ⬜ pending |
-| FND-OVER | 01+ | 1+ | FND-OVER | — | N/A | unit | `npx vitest run src/lib/income.test.ts` | ❌ W0 | ⬜ pending |
-| FND-MONEY | 01+ | 1+ | FND-MONEY | — | N/A | unit | `npx vitest run src/lib/income.test.ts` | ❌ W0 | ⬜ pending |
-| FND-MIG | 01+ | 1+ | FND-MIG | — | N/A | integration | `npx vitest run src/lib/foundation.test.ts` | ⚠️ allowlist | ⬜ pending |
-| FND-SCHEMA | 03 | 3 | FND-SCHEMA | — | N/A | unit (file-lock) | `npx vitest run src/lib/income.test.ts` | ❌ W0 | ⬜ pending |
-| FND-ISO | 03 | 3 | ISO-01 | — | no NW/historical cross-import | unit file-scan | `npx vitest run src/lib/income.test.ts` | ❌ optional | ⬜ pending |
+| 13-W0 | 01 | 0 | FND-* | — | N/A | unit stubs | `npx vitest run src/lib/income.test.ts` | ✅ | ✅ green |
+| FND-OCC | 01+ | 1+ | FND-OCC | — | N/A | unit | `npx vitest run src/lib/income.test.ts` | ✅ | ✅ green |
+| FND-CLAMP | 01+ | 1+ | FND-CLAMP | — | N/A | unit | `npx vitest run src/lib/dates.test.ts` | ✅ | ✅ green |
+| FND-OVER | 01+ | 1+ | FND-OVER | — | N/A | unit | `npx vitest run src/lib/income.test.ts` | ✅ | ✅ green |
+| FND-MONEY | 01+ | 1+ | FND-MONEY | — | N/A | unit | `npx vitest run src/lib/income.test.ts` | ✅ | ✅ green |
+| FND-MIG | 01+ | 1+ | FND-MIG | — | N/A | integration | `npx vitest run src/lib/foundation.test.ts` | ✅ | ✅ green |
+| FND-SCHEMA | 03 | 3 | FND-SCHEMA | — | N/A | unit (file-lock) | `npx vitest run src/lib/income.test.ts` | ✅ | ✅ green |
+| FND-ISO | 03 | 3 | ISO-01 | — | no NW/historical cross-import | unit file-scan | `npx vitest run src/lib/income.test.ts` | ✅ | ✅ green |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -55,10 +54,10 @@ created: "2026-09-07"
 
 ## Wave 0 Requirements
 
-- [ ] `src/lib/income.ts` + `src/lib/income.test.ts` — FND-OCC / OVER / MONEY / freeze stubs
-- [ ] Extend `src/lib/dates.test.ts` — clamp matrix (31×Feb leap/non-leap, 31×Apr)
-- [ ] Update `src/lib/foundation.test.ts` — add income table names to migrate allowlist
-- [ ] `npm install` — restore `node_modules` before migrate/test
+- [x] `src/lib/income.ts` + `src/lib/income.test.ts` — FND-OCC / OVER / MONEY / freeze
+- [x] Extend `src/lib/dates.test.ts` — clamp matrix (31×Feb leap/non-leap, 31×Apr)
+- [x] Update `src/lib/foundation.test.ts` — income table names in migrate allowlist
+- [x] `npm install` — restored before migrate/test
 
 ---
 
@@ -72,11 +71,21 @@ created: "2026-09-07"
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 30s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 covers all MISSING references
+- [x] No watch-mode flags
+- [x] Feedback latency < 30s
+- [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** validated 2026-09-07 — vitest green (dates + income + foundation)
+
+## Validation Audit 2026-09-07
+
+| Metric | Count |
+|--------|-------|
+| Gaps found | 0 |
+| Resolved | 0 |
+| Escalated | 0 |
+
+Reconcile: plan-seeded `draft` map; all automated commands already green post-execute. No new tests required.

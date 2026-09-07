@@ -1,10 +1,11 @@
 ---
 phase: "16"
 slug: "counterparty-income-stats"
-status: draft
+status: validated
 nyquist_compliant: true
 wave_0_complete: true
 created: "2026-09-07"
+validated: "2026-09-07"
 ---
 
 # Phase 16 — Validation Strategy
@@ -38,7 +39,7 @@ created: "2026-09-07"
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 16-01-T1 | 01 | 1 | CPTY-01 | T-16-01 | Wave 0 RED scaffolds — never invent FX | unit | `npx vitest run -t "computePersonIncomeStats" src/lib/income.test.ts` (expect fail RED) | ✅ | ✅ green |
+| 16-01-T1 | 01 | 1 | CPTY-01 | T-16-01 | Wave 0 RED scaffolds — never invent FX | unit | `npx vitest run -t "computePersonIncomeStats" src/lib/income.test.ts` | ✅ | ✅ green |
 | 16-01-T2 | 01 | 1 | CPTY-01 | T-16-01 / T-16-02 | `computePersonIncomeStats` + page/header; no debts bleed | unit + file-scan | `npx vitest run src/lib/income.test.ts src/components/income/income-ui.test.ts` | ✅ | ✅ green |
 | 16-01-T3 | 01 | 1 | CPTY-01 | T-16-01 | Mixed no_fx partial + isolation | unit | `npx vitest run -t "computePersonIncomeStats" src/lib/income.test.ts && npx vitest run -t "income isolation" src/lib/income.test.ts` | ✅ | ✅ green |
 | 16-02-T1 | 02 | 2 | CPTY-01 | T-16-01 / T-16-02 | Hybrid chrome; partial «Итог неполный · нет курса»; no Debts hero | file-scan | `npx vitest run -t "counterparty stats" src/components/income/income-ui.test.ts` | ✅ | ✅ green |
@@ -78,4 +79,14 @@ created: "2026-09-07"
 - [x] Feedback latency < 90s
 - [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending (executor filled map; auditor/verify-work confirms)
+**Approval:** validated 2026-09-07 — map already green; frontmatter promoted draft→validated
+
+## Validation Audit 2026-09-07
+
+| Metric | Count |
+|--------|-------|
+| Gaps found | 0 |
+| Resolved | 0 |
+| Escalated | 0 |
+
+Reconcile: executor had filled green map + `nyquist_compliant: true` but left `status: draft`. Promoted to `validated` for audit-milestone §5.5.

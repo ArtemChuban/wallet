@@ -1,9 +1,9 @@
 ---
-status: passed
+status: complete
 phase: 14-dohody-crud-nav
 source: [14-VERIFICATION.md]
 started: 2026-09-07T13:16:00Z
-updated: 2026-09-07T13:30:00Z
+updated: 2026-09-07T21:58:00Z
 driver: orca-ide
 ---
 

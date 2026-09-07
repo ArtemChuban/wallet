@@ -1,10 +1,11 @@
 ---
 phase: "17"
 slug: "nw-forecast-overlay-isolation"
-status: complete
+status: validated
 nyquist_compliant: true
 wave_0_complete: true
 created: "2026-09-07"
+validated: "2026-09-07"
 ---
 
 # Phase 17 — Validation Strategy

@@ -7,7 +7,7 @@ status: completed
 stopped_at: Phase 17 complete — all phases complete
 last_updated: "2026-09-07T21:45:38.453Z"
 last_activity: 2026-09-07
-last_activity_desc: Phase 17 complete
+last_activity_desc: Nyquist validate-phase 13–17 reconciled (compliant)
 state_head: 604bb70c5ccc2977373291f7922500b06ac398e1
 progress:
   total_phases: 5
@@ -24,7 +24,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-07 after Phase 17)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** v1.2 Доходы — all phases complete; ready `/gsd-complete-milestone`
+**Current focus:** v1.2 Доходы — Nyquist compliant; ready `/gsd-complete-milestone v1.2`
 
 ## Current Position
 
@@ -133,7 +133,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T20:45:38.459Z
-Stopped at: Phase 17 complete — all phases complete
-Resume file: 
-.planning/phases/17-nw-forecast-overlay-isolation/17-VERIFICATION.md
+Last session: 2026-09-07T22:10:00Z
+Stopped at: Nyquist 13–17 validated — ready `/gsd-complete-milestone v1.2`
+Resume file: None
