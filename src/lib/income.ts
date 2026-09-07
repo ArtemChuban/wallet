@@ -1,5 +1,5 @@
 /**
- * Income side-ledger domain (Phase 13 tracer).
+ * Income side-ledger domain (Phase 13).
  * Pure TypeScript — no Prisma, no net-worth / historical-series imports (ISO-01).
  */
 
@@ -17,7 +17,7 @@ export type RecurringIncomeDef = {
   startAsOf: string;
 };
 
-/** Actual row shape for later freeze-merge (Plan 02); tracer may pass empty. */
+/** Actual row shape for freeze-merge (D-06 / D-07). */
 export type RecurringIncomeActualSlot = {
   recurringIncomeId: number;
   plannedAsOf: string;
@@ -31,6 +31,10 @@ export type RecurringOccurrence = {
 
 export function occurrenceKeyString(k: IncomeOccurrenceKey): string {
   return `${k.parentId}:${k.plannedAsOf}`;
+}
+
+function monthKey(iso: string): string {
+  return iso.slice(0, 7);
 }
 
 function* monthsOverlapping(
@@ -51,27 +55,75 @@ function* monthsOverlapping(
 
 /**
  * Virtual recurring plan slots in inclusive [from, to] (D-13, D-15).
- * Tracer path: empty/ignored actuals; current DOM clamped per month (D-16).
- * Freeze-merge lands in Plan 02.
+ * Month-keyed freeze: actual plannedAsOf in YYYY-MM wins over differing candidate (D-06, D-07, A2).
  */
 export function listRecurringOccurrences(
   defs: readonly RecurringIncomeDef[],
-  _actuals: readonly RecurringIncomeActualSlot[],
+  actuals: readonly RecurringIncomeActualSlot[],
   from: string,
   to: string,
 ): RecurringOccurrence[] {
-  const out: RecurringOccurrence[] = [];
+  const byKey = new Map<string, RecurringOccurrence>();
+
+  const actualsByParentMonth = new Map<string, string>();
+  for (const a of actuals) {
+    const mk = `${a.recurringIncomeId}:${monthKey(a.plannedAsOf)}`;
+    actualsByParentMonth.set(mk, a.plannedAsOf);
+  }
+
   for (const def of defs) {
     for (const { y, m } of monthsOverlapping(from, to)) {
+      const ym = `${y}-${String(m).padStart(2, "0")}`;
+      const freezeKey = `${def.id}:${ym}`;
+      const frozen = actualsByParentMonth.get(freezeKey);
       const candidate = clampDayOfMonth(y, m, def.dayOfMonth);
-      if (candidate < def.startAsOf) continue;
-      if (candidate < from || candidate > to) continue;
-      out.push({
+
+      let plannedAsOf: string | null = null;
+      if (frozen !== undefined) {
+        if (frozen >= from && frozen <= to) {
+          plannedAsOf = frozen;
+        }
+      } else if (candidate >= def.startAsOf && candidate >= from && candidate <= to) {
+        plannedAsOf = candidate;
+      }
+
+      if (plannedAsOf === null) continue;
+      const key = occurrenceKeyString({
         parentId: def.id,
-        plannedAsOf: candidate,
-        plannedAmountMinor: def.plannedAmountMinor,
+        plannedAsOf,
       });
+      if (!byKey.has(key)) {
+        byKey.set(key, {
+          parentId: def.id,
+          plannedAsOf,
+          plannedAmountMinor: def.plannedAmountMinor,
+        });
+      }
+    }
+
+    // Orphaned actuals in range (same parent) not covered by month walk edge cases
+    for (const a of actuals) {
+      if (a.recurringIncomeId !== def.id) continue;
+      if (a.plannedAsOf < from || a.plannedAsOf > to) continue;
+      const key = occurrenceKeyString({
+        parentId: def.id,
+        plannedAsOf: a.plannedAsOf,
+      });
+      if (!byKey.has(key)) {
+        byKey.set(key, {
+          parentId: def.id,
+          plannedAsOf: a.plannedAsOf,
+          plannedAmountMinor: def.plannedAmountMinor,
+        });
+      }
     }
   }
-  return out;
+
+  return [...byKey.values()].sort((a, b) =>
+    a.plannedAsOf < b.plannedAsOf
+      ? -1
+      : a.plannedAsOf > b.plannedAsOf
+        ? 1
+        : a.parentId - b.parentId,
+  );
 }
