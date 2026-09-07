@@ -5,16 +5,16 @@ milestone_name: Доходы
 current_phase: 17
 current_phase_name: NW forecast overlay + isolation
 status: ready_to_execute
-stopped_at: Completed 17-02-PLAN.md
-last_updated: "2026-09-07T20:32:14.225Z"
+stopped_at: Completed 17-03-PLAN.md
+last_updated: "2026-09-07T20:37:00.013Z"
 last_activity: 2026-09-07
 last_activity_desc: Phase 17 PLAN.md set created (17-01..17-03)
-state_head: 15f690f981289c2b45af0d65e35b78790203a1b9
+state_head: 0fe4734f484bc7154cc17da0dcc1cd7160b508db
 progress:
   total_phases: 5
   completed_phases: 4
   total_plans: 14
-  completed_plans: 13
+  completed_plans: 14
   percent: 80
 ---
 
@@ -62,6 +62,7 @@ Progress: [████████░░] 80% (v1.2 — phase 16 done; phase 17
 | Phase 15 P03 | 4min | 3 tasks | 6 files |
 | Phase 17 P01 | 7min | 3 tasks | 7 files |
 | Phase 17 P02 | 2min | 3 tasks | 4 files |
+| Phase 17 P03 | 3min | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -96,6 +97,9 @@ Recent decisions affecting current work:
 - [Phase 17]: Forecast Line: stepAfter dashed muted-foreground «Прогноз»; ReferenceLine deferred Plan 03
 - [Phase 17]: Enforce full INISO suite permanently (D-17)
 - [Phase 17]: FCST-01 docs = recurring + future one-time (D-01)
+- [Phase 17]: Future tooltip omits stack + Итого; fact filters forecast payload row
+- [Phase 17]: Partial banner after chart; hide Line when includedSlotCount=0 keep banner on FX exclude
+- [Phase 17]: Merge promotes today hinge + horizonEnd even when fact row missing
 
 ### Pending Todos
 
@@ -130,7 +134,7 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T20:31:53.881Z
-Stopped at: Completed 17-02-PLAN.md
+Last session: 2026-09-07T20:36:59.894Z
+Stopped at: Completed 17-03-PLAN.md
 Resume file: 
 None
