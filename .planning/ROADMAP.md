@@ -86,7 +86,13 @@ Plans:
   3. User reaches income via nav «Доходы» and can edit/delete sources; deletes use DestructiveConfirmStep
   4. Recording or listing income never changes account balances (RU copy / behavior matches lock)
 
-**Plans**: TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 14-01-PLAN.md — Nav + /income shell, Zod validations, nextOpenPlannedAsOf
+- [ ] 14-02-PLAN.md — Income Server Actions + Person Restrict dual revalidate
+- [ ] 14-03-PLAN.md — IncomeList + IncomeFormDialog full CRUD UI
+
 **UI hint**: yes
 
 ### Phase 15: Plan vs actual + overdue
