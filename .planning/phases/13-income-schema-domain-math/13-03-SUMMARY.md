@@ -110,7 +110,7 @@ Each task was committed atomically:
 1. **Task 1: isIncomeOverdue + one-time plan immutability helper** - `653fd7d` (test) → `e14aafd` (feat)
 2. **Task 2: Schema file locks + light ISO isolation scan + full suite** - `ef5654e` (test)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `a7ed039` (docs: complete plan)
 
 _Note: TDD tasks may have multiple commits (test → feat → refactor)_
 
