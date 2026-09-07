@@ -5,16 +5,16 @@ milestone_name: Доходы
 current_phase: 15
 current_phase_name: Plan vs actual + overdue
 status: planned
-stopped_at: Phase 15 plans created (15-01..15-03)
-last_updated: "2026-09-07T17:16:17.846Z"
+stopped_at: Completed 15-01-PLAN.md
+last_updated: "2026-09-07T17:22:42.775Z"
 last_activity: 2026-09-07
 last_activity_desc: Phase 15 PLAN.md files written (3 plans, waves 1–3)
-state_head: b9f201b111a46384eff58cd0df661f27ae637cc7
+state_head: 954445bec9614623e2eaa2eab68a145d8536c6b4
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 9
-  completed_plans: 6
+  completed_plans: 7
   percent: 40
 ---
 
@@ -34,7 +34,7 @@ Plan: 15-01 ready (3 plans)
 Status: Plans created — ready for execute / plan-checker
 Last activity: 2026-09-07 — Phase 15 plans 15-01..15-03 written
 
-Progress: [██░░░░░░░░] 20% (v1.2 — 0/5 phases verified)
+Progress: [████░░░░░░] 40% (v1.2 — 0/5 phases verified)
 
 ## Performance Metrics
 
@@ -57,6 +57,7 @@ Progress: [██░░░░░░░░] 20% (v1.2 — 0/5 phases verified)
 | Phase 14 P01 | 4min | 3 tasks | 7 files |
 | Phase 14 P02 | 5min | 3 tasks | 6 files |
 | Phase 14 P03 | 5min | 3 tasks | 4 files |
+| Phase 15 P01 | 4min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -82,6 +83,8 @@ Recent decisions affecting current work:
 - [Phase 14]: [Phase 14]: deletePerson Restrict spans debts+income; dual revalidatePath /debts+/income
 - [Phase 14]: [Phase 14]: create/update dispatch by hidden kind to six Plan-02 actions
 - [Phase 14]: [Phase 14]: Income UI nextPlannedAsOf = nextOpen (recurring) / plannedAsOf (one-time); sort asc in person group
+- [Phase 15]: Future actualAsOf accepted — no repayment today upper bound (D-19)
+- [Phase 15]: Parent findUnique fail-closed before actual upsert; scale from parent currency
 
 ### Pending Todos
 
@@ -118,6 +121,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T17:10:00.000Z
-Stopped at: Phase 15 plans created (15-01..15-03)
-Resume file: /home/artem/Documents/wallet/.planning/phases/15-plan-vs-actual-overdue/15-01-PLAN.md
+Last session: 2026-09-07T17:22:42.683Z
+Stopped at: Completed 15-01-PLAN.md
+Resume file: None
