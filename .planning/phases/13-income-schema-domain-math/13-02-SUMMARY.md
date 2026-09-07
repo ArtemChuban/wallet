@@ -113,7 +113,7 @@ Each task was committed atomically:
 1. **Task 1: Freeze-aware recurring occurrences + inclusive range** - `e937807` (test) → `6cee0cb` (feat)
 2. **Task 2: listOneTimeOccurrences + listAllInRange merge** - `b3a493c` (test) → `85e79f8` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `247186e` (docs: complete plan)
 
 ## Files Created/Modified
 - `src/lib/income.ts` — freeze-merge `listRecurringOccurrences`; `listOneTimeOccurrences`; `listAllInRange`
