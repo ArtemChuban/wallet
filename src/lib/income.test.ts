@@ -580,6 +580,51 @@ describe("computePersonIncomeStats", () => {
     expect(stats.nativeByCurrency[0]!.totalMinor).toBe(60_00n);
     expect(stats.primaryTotalMinor).toBe(60_00n);
   });
+
+  it("mixed: convertible + no_fx → partial primary sum only convertible; native both", () => {
+    const rate = 90_00000000n;
+    const converted = convertOtherMinorToPrimaryMinor(10_00n, rate, 2, primaryScale);
+    const byPerson = computePersonIncomeStats(
+      [
+        factInput({
+          personId: 6,
+          currencyCode: "USD",
+          amountMinor: 10_00n,
+          actualAsOf: "2026-01-15",
+          isPrimaryCurrency: false,
+        }),
+        factInput({
+          personId: 6,
+          currencyCode: "EUR",
+          amountMinor: 20_00n,
+          actualAsOf: "2026-01-20",
+          isPrimaryCurrency: false,
+        }),
+      ],
+      [
+        {
+          currencyCode: "USD",
+          asOfDate: "2026-01-01",
+          rateToPrimaryScaled: rate,
+        },
+      ],
+      primaryScale,
+    );
+    const stats = byPerson.get(6)!;
+    expect(stats.nativeByCurrency.map((n) => n.currencyCode)).toEqual([
+      "EUR",
+      "USD",
+    ]);
+    expect(stats.nativeByCurrency.find((n) => n.currencyCode === "USD")!.totalMinor).toBe(
+      10_00n,
+    );
+    expect(stats.nativeByCurrency.find((n) => n.currencyCode === "EUR")!.totalMinor).toBe(
+      20_00n,
+    );
+    expect(stats.primaryTotalMinor).toBe(converted);
+    expect(stats.isPartial).toBe(true);
+    expect(stats.excludedFactCount).toBe(1);
+  });
 });
 
 describe("income isolation (ISO-01 light)", () => {
