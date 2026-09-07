@@ -5,11 +5,11 @@ milestone_name: Доходы
 current_phase: 14
 current_phase_name: Доходы CRUD + nav
 status: planning
-stopped_at: Phase 14 context gathered
-last_updated: "2026-09-07T12:08:10.723Z"
+stopped_at: Phase 14 research complete
+last_updated: "2026-09-07T12:24:00.000Z"
 last_activity: 2026-09-07
-last_activity_desc: Phase 13 complete, transitioned to Phase 14
-state_head: 9d3d33d3666e5feb6a271f370394ac29ce77054f
+last_activity_desc: Phase 14 RESEARCH.md written
+state_head: ef5f894
 progress:
   total_phases: 5
   completed_phases: 1
@@ -25,14 +25,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 13 — Income schema + domain math
+**Current focus:** Phase 14 — Доходы CRUD + nav
 
 ## Current Position
 
 Phase: 14 — Доходы CRUD + nav
 Plan: Not started
-Status: Ready to plan
-Last activity: 2026-09-07 — Phase 13 complete, transitioned to Phase 14
+Status: Research complete — ready to plan
+Last activity: 2026-09-07 — Phase 14 RESEARCH.md written
 
 Progress: [██░░░░░░░░] 20% (v1.2 — 0/5 phases verified)
 
