@@ -3,7 +3,7 @@
  * Pure TypeScript — no Prisma, no net-worth / historical-series imports (ISO-01).
  */
 
-import { clampDayOfMonth } from "@/lib/dates";
+import { addCalendarDays, clampDayOfMonth } from "@/lib/dates";
 
 export type IncomeOccurrenceKey = {
   parentId: number;
@@ -198,6 +198,42 @@ export function listRecurringOccurrences(
         ? 1
         : a.parentId - b.parentId,
   );
+}
+
+/**
+ * Earliest unfilled recurring plan slot for list sort/display (D-02, D-09, D-10).
+ * Horizon: addCalendarDays(max(todayAsOf, startAsOf), 400). Past unfilled slots count.
+ * If every slot in the window is filled, returns startAsOf as sort fallback (A3).
+ */
+export function nextOpenPlannedAsOf(
+  def: RecurringIncomeDef,
+  actuals: readonly RecurringIncomeActualSlot[],
+  todayAsOf: string,
+): string {
+  const from = def.startAsOf;
+  const horizonBase = todayAsOf > def.startAsOf ? todayAsOf : def.startAsOf;
+  const to = addCalendarDays(horizonBase, 400);
+  const filled = new Set(
+    actuals
+      .filter((a) => a.recurringIncomeId === def.id)
+      .map((a) =>
+        occurrenceKeyString({
+          parentId: a.recurringIncomeId,
+          plannedAsOf: a.plannedAsOf,
+        }),
+      ),
+  );
+  const slots = listRecurringOccurrences([def], actuals, from, to);
+  for (const slot of slots) {
+    const key = occurrenceKeyString({
+      parentId: slot.parentId,
+      plannedAsOf: slot.plannedAsOf,
+    });
+    if (!filled.has(key)) {
+      return slot.plannedAsOf;
+    }
+  }
+  return def.startAsOf;
 }
 
 /**
