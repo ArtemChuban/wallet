@@ -2,27 +2,31 @@
 
 ## What This Is
 
-A local, single-user personal finance site for tracking net worth across accounts (fiat debit, fiat credit, crypto USDT, cash) plus a parallel «Долги» side ledger (people, debts, repayments, native principal charts, primary totals). Runs in Docker with SQLite on the host; no cloud accounts. Not budgeting or transaction categorization.
+A local, single-user personal finance site for tracking net worth across accounts (fiat debit, fiat credit, crypto USDT, cash), a parallel «Долги» side ledger, and (v1.2) a «Доходы» income ledger with plan vs actual and NW forecast from recurring pay. Runs in Docker with SQLite on the host; no cloud accounts. Not budgeting or transaction categorization.
 
 ## Core Value
 
 At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
 
+## Current Milestone: v1.2 Доходы
+
+**Goal:** Учёт доходов (регулярная зарплата + разовые) с контрагентами, plan vs actual, мульти-валюта; отдельная страница «Доходы»; на Капитале — прогноз NW с регулярной зарплатой; просрочка без факта подсвечена.
+
+**Target features:**
+- Регулярные доходы (ежемесячно в дату) + разовые
+- Контрагент у дохода + статистика по контрагентам
+- Факт вручную; баланс счёта пока не меняется
+- Доход в разных валютах
+- Отдельная страница «Доходы» (nav)
+- На `/` (Капитал): график NW + проекция вперёд с учётом регулярной зарплаты и FX
+- Если дата плана прошла, а факта нет — подсветка «заполни»
+
 ## Current State
 
-**Shipped:** v1.0 MVP (2026-09-04); **v1.1 Долги людям (2026-09-07)**
+**Shipped:** v1.0 MVP (2026-09-04); **v1.1 Долги людям (2026-09-07)**  
+**Active:** **v1.2 Доходы** (planning)
 
-Local Dockerized net-worth tracker + personal-debts side ledger: SQLite → currencies/accounts → dated balances → dated FX → NW dashboard/charts → `/debts` people/debts/repayments/size-changes with native stack chart and primary I-owe/they-owe totals. Stack: Next.js 16 App Router, Prisma 7 + SQLite, shadcn/ui, recharts, Vitest. Russian-first UI. Debts never change NW (DISOL-01).
-
-## Next Milestone Goals
-
-Define via `/gsd-new-milestone`. Candidate backlog (deferred at v1.1 close):
-- Salary/income tracking with plan vs actual + forecast
-- Timezone selection in settings
-- Credit account: limit / grace / statement forecasting
-- Merge debit+crypto+cash account types
-- Local AI agent via subprocess
-- Residual: nav «Валюты» discoverability; RateList still `window.confirm`; ACCT-04 account delete
+Local Dockerized net-worth tracker + personal-debts side ledger: SQLite → currencies/accounts → dated balances → dated FX → NW dashboard/charts → `/debts` people/debts/repayments/size-changes with native stack chart and primary I-owe/they-owe totals. Stack: Next.js 16 App Router, Prisma 7 + SQLite, shadcn/ui, recharts, Vitest. Russian-first UI. Debts never change NW (DISOL-01). Next: income ledger + NW forecast overlay.
 
 ## Requirements
 
@@ -53,22 +57,33 @@ Define via `/gsd-new-milestone`. Candidate backlog (deferred at v1.1 close):
 
 ### Active
 
-(none — define in `/gsd-new-milestone`)
+- [ ] User can create recurring monthly income (amount, currency, day-of-month, counterparty) and one-time income
+- [ ] User can attach/select a counterparty on income and view per-counterparty income stats
+- [ ] User can record planned vs actual income manually (actual does not change account balances in v1.2)
+- [ ] User has a separate «Доходы» page/nav for income CRUD and overdue highlighting
+- [ ] On Капитал `/`, user sees NW chart with future projection including recurring salary converted via FX as-of
+- [ ] When a planned income date has passed without an actual, UI highlights it so the user can fill it in
 
 ### Out of Scope
 
-- Transaction history / income-expense posting — still periodic balance snapshots only
+- Auto-updating account balance snapshots when income is marked received — deferred (manual balances stay source of truth)
+- Transaction history / expense posting / full double-entry — still periodic balance snapshots only
 - Spending analytics, monthly burn, category cash-flow — deferred
-- Long-term savings goals with target dates — deferred (not this milestone)
-- Interest / penalties on personal debts — principal only in v1.1
+- Long-term savings goals with target dates — deferred
+- Interest / penalties on personal debts — principal only
 - Debt list filters / search — deferred (single list)
 - Repayments in a different currency than the debt — deferred
 - Debts affecting net worth — explicitly excluded; tracking alongside capital only
+- Income amounts flowing into `computeNetWorthRows` historical LOCF (projection is forecast overlay, not rewriting past NW) — locked for v1.2 unless research says otherwise
 - Credit-card payment due date / minimum payment reminders — deferred
 - Bank/CSV import or API sync — deferred; manual only
 - Automatic FX from external APIs — deferred; manual rates only
 - FX between arbitrary non-primary pairs — primary ↔ other only
 - Multi-user / auth / cloud sync — single local user
+- Timezone selection in settings — deferred (Moscow calendar still default unless promoted)
+- Credit account grace / statement forecasting — deferred
+- Merge debit+crypto+cash account types — deferred
+- Local AI agent via subprocess — deferred
 - Nav «Валюты» discoverability / account delete (ACCT-04) — residual v1 debt, not this milestone unless promoted later
 
 ## Context
@@ -76,6 +91,8 @@ Define via `/gsd-new-milestone`. Candidate backlog (deferred at v1.1 close):
 Shipped v1.0: capital visibility across disconnected money places (bank, USDT, cash, credit debt) in one local Docker + SQLite app. UI Russian-first. Residual audit tech debt: some human-only FieldControl/restart smoke checks; nav «Валюты» lands on rates not currency list.
 
 v1.1 adds personal debts (people ↔ money owed) as a parallel domain: same money/FX primitives for primary totals and charts, but debt balances must not flow into `computeNetWorthRows` or NW charts.
+
+v1.2 adds income (зарплата + разовые) as another parallel ledger: plan vs actual, counterparties + stats, multi-currency; Капитал shows forward NW projection from recurring pay. Marking actual does not bump account balances yet.
 
 **UI constitution — destructive actions:** Never use `window.confirm` (or equivalent browser confirm) for deletes or other irreversible actions. Always use an in-app second step inside the dialog/flow (explicit «точно удалить?» / equivalent) with Russian copy that states what will be lost. Applies app-wide from Phase 9 onward (debts, people, balance snapshots, and any future destructive UX).
 
@@ -133,4 +150,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-07 after v1.1 milestone*
+*Last updated: 2026-09-07 — milestone v1.2 Доходы started*

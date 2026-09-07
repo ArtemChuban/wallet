@@ -1,19 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.1
-milestone_name: Долги людям
-status: Awaiting next milestone
-stopped_at: Phase 12 complete — all phases complete
-last_updated: "2026-09-06T22:54:02.654Z"
+milestone: v1.2
+milestone_name: Доходы
+status: planning
+last_updated: "2026-09-07T09:57:32.720Z"
 last_activity: 2026-09-07
-last_activity_desc: Milestone v1.1 completed and archived
-state_head: ef65ec4459e367fb7b5ff2f3ae67be1e0d98e9da
 progress:
-  total_phases: 5
-  completed_phases: 5
-  total_plans: 18
-  completed_plans: 18
-current_phase: 12
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -27,10 +24,10 @@ See: .planning/PROJECT.md (updated 2026-09-07 after v1.1)
 
 ## Current Position
 
-Phase: Milestone v1.1 complete
+Phase: Not started (defining requirements)
 Plan: —
-Status: Awaiting next milestone
-Last activity: 2026-09-07 — Milestone v1.1 completed and archived
+Status: Defining requirements
+Last activity: 2026-09-07 — Milestone v1.2 started
 
 ## Performance Metrics
 
