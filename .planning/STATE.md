@@ -5,15 +5,15 @@ milestone_name: Доходы
 current_phase: 14
 current_phase_name: Доходы CRUD + nav
 status: planning
-stopped_at: Phase 14 UI-SPEC draft written
-last_updated: "2026-09-07T12:30:00.000Z"
+stopped_at: Phase 14 plans written — ready for execute
+last_updated: "2026-09-07T14:45:00.000Z"
 last_activity: 2026-09-07
-last_activity_desc: Phase 14 UI-SPEC.md written
+last_activity_desc: Phase 14 PLAN.md ×3 written
 state_head: ef5f894
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 3
+  total_plans: 6
   completed_plans: 3
   percent: 20
 ---
@@ -30,9 +30,9 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 ## Current Position
 
 Phase: 14 — Доходы CRUD + nav
-Plan: Not started
-Status: UI-SPEC draft — ready for UI checker / plan
-Last activity: 2026-09-07 — Phase 14 UI-SPEC.md written
+Plan: 01 ready (3 plans, waves 1–3)
+Status: Planned — ready for `/gsd-execute-phase 14`
+Last activity: 2026-09-07 — Phase 14 plans written (14-01..14-03)
 
 Progress: [██░░░░░░░░] 20% (v1.2 — 0/5 phases verified)
 
