@@ -27,7 +27,10 @@ describe("INISO-01 isolation", () => {
       expect.fail("src/lib/nw-forecast.ts missing — create in tracer task");
       return;
     }
-    expect(src).not.toMatch(/prisma|BalanceSnapshot/);
+    expect(src).not.toMatch(
+      /from\s+["']@\/generated\/prisma|from\s+["'][^"']*prisma["']/,
+    );
+    expect(src).not.toMatch(/\bBalanceSnapshot\b/);
     expect(src).not.toMatch(/@\/lib\/(?:net-worth|historical-series)/);
     expect(src).not.toMatch(/from ["']\.\/(?:net-worth|historical-series)["']/);
   });

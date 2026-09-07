@@ -16,35 +16,72 @@ export default async function Home() {
     await ensureSqlitePragmas();
     const today = calendarDateToday("Europe/Moscow");
 
-    const [accounts, primaryCurrency, snapshotsLteToday, ratesLteToday] =
-      await Promise.all([
-        prisma.account.findMany({
-          include: { currency: true },
-          orderBy: { name: "asc" },
-        }),
-        prisma.currency.findFirst({
-          where: { isPrimary: true },
-          select: { code: true, scale: true },
-        }),
-        prisma.balanceSnapshot.findMany({
-          where: { asOfDate: { lte: today } },
-          orderBy: { asOfDate: "desc" },
-          select: {
-            accountId: true,
-            asOfDate: true,
-            amountMinor: true,
+    const [
+      accounts,
+      primaryCurrency,
+      snapshotsLteToday,
+      ratesLteToday,
+      recurringIncomes,
+      oneTimeIncomes,
+      recurringActuals,
+      oneTimeActuals,
+    ] = await Promise.all([
+      prisma.account.findMany({
+        include: { currency: true },
+        orderBy: { name: "asc" },
+      }),
+      prisma.currency.findFirst({
+        where: { isPrimary: true },
+        select: { code: true, scale: true },
+      }),
+      prisma.balanceSnapshot.findMany({
+        where: { asOfDate: { lte: today } },
+        orderBy: { asOfDate: "desc" },
+        select: {
+          accountId: true,
+          asOfDate: true,
+          amountMinor: true,
+        },
+      }),
+      prisma.fxRate.findMany({
+        where: { asOfDate: { lte: today } },
+        orderBy: { asOfDate: "desc" },
+        select: {
+          currencyCode: true,
+          asOfDate: true,
+          rateToPrimaryScaled: true,
+        },
+      }),
+      // Max 1y income window for forecast overlay (D-05); shell slices by range.
+      prisma.recurringIncome.findMany({
+        include: {
+          currency: {
+            select: { code: true, scale: true, isPrimary: true },
           },
-        }),
-        prisma.fxRate.findMany({
-          where: { asOfDate: { lte: today } },
-          orderBy: { asOfDate: "desc" },
-          select: {
-            currencyCode: true,
-            asOfDate: true,
-            rateToPrimaryScaled: true,
+        },
+      }),
+      prisma.oneTimeIncome.findMany({
+        include: {
+          currency: {
+            select: { code: true, scale: true, isPrimary: true },
           },
-        }),
-      ]);
+        },
+      }),
+      prisma.recurringIncomeActual.findMany({
+        select: {
+          recurringIncomeId: true,
+          plannedAsOf: true,
+        },
+      }),
+      prisma.oneTimeIncomeActual.findMany({
+        select: {
+          oneTimeIncomeId: true,
+          plannedAsOf: true,
+          amountMinor: true,
+          actualAsOf: true,
+        },
+      }),
+    ]);
 
     const locfByAccount = firstHitLocfMap(
       snapshotsLteToday,
@@ -211,6 +248,36 @@ export default async function Home() {
             today={today}
             listAccounts={listRows}
             primaryCode={primaryCode}
+            anchorPrimaryMinor={totalPrimaryMinor.toString()}
+            forecastIncome={{
+              recurring: recurringIncomes.map((r) => ({
+                id: r.id,
+                plannedAmountMinor: r.plannedAmountMinor.toString(),
+                dayOfMonth: r.dayOfMonth,
+                startAsOf: r.startAsOf,
+                currencyCode: r.currency.code,
+                currencyScale: r.currency.scale,
+                isPrimaryCurrency: r.currency.isPrimary,
+              })),
+              recurringActuals: recurringActuals.map((a) => ({
+                recurringIncomeId: a.recurringIncomeId,
+                plannedAsOf: a.plannedAsOf,
+              })),
+              oneTime: oneTimeIncomes.map((o) => ({
+                id: o.id,
+                plannedAmountMinor: o.plannedAmountMinor.toString(),
+                plannedAsOf: o.plannedAsOf,
+                currencyCode: o.currency.code,
+                currencyScale: o.currency.scale,
+                isPrimaryCurrency: o.currency.isPrimary,
+              })),
+              oneTimeActuals: oneTimeActuals.map((a) => ({
+                oneTimeIncomeId: a.oneTimeIncomeId,
+                plannedAsOf: a.plannedAsOf,
+                amountMinor: a.amountMinor.toString(),
+                actualAsOf: a.actualAsOf,
+              })),
+            }}
           />
         ) : (
           <DashboardAccountList accounts={listRows} primaryCode={primaryCode} />

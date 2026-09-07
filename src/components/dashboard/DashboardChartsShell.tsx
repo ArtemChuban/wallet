@@ -5,15 +5,27 @@ import { useMemo, useState } from "react";
 import { DashboardAccountList } from "@/components/dashboard/DashboardAccountList";
 import type { DashboardAccountRow } from "@/components/dashboard/DashboardAccountList";
 import { DashboardRangeControl } from "@/components/dashboard/DashboardRangeControl";
-import { NetWorthHistoryChart } from "@/components/dashboard/NetWorthHistoryChart";
-import { windowStartForPreset, type RangePreset } from "@/lib/dates";
+import {
+  NetWorthHistoryChart,
+  type NetWorthChartPoint,
+} from "@/components/dashboard/NetWorthHistoryChart";
+import { addCalendarDays, windowStartForPreset, type RangePreset } from "@/lib/dates";
 import {
   buildNetWorthSeries,
   type SeriesAccount,
   type SeriesRate,
   type SeriesSnapshot,
 } from "@/lib/historical-series";
+import {
+  listAllInRange,
+  occurrenceKeyString,
+} from "@/lib/income";
 import type { NetWorthAccountType } from "@/lib/net-worth";
+import {
+  buildNetWorthForecastSeries,
+  forecastHorizonEnd,
+  type ForecastSlot,
+} from "@/lib/nw-forecast";
 
 export type ChartAccountPayload = {
   id: number;
@@ -37,6 +49,36 @@ export type ChartRatePayload = {
   rateToPrimaryScaled: string;
 };
 
+export type ForecastIncomePayload = {
+  recurring: {
+    id: number;
+    plannedAmountMinor: string;
+    dayOfMonth: number;
+    startAsOf: string;
+    currencyCode: string;
+    currencyScale: number;
+    isPrimaryCurrency: boolean;
+  }[];
+  recurringActuals: {
+    recurringIncomeId: number;
+    plannedAsOf: string;
+  }[];
+  oneTime: {
+    id: number;
+    plannedAmountMinor: string;
+    plannedAsOf: string;
+    currencyCode: string;
+    currencyScale: number;
+    isPrimaryCurrency: boolean;
+  }[];
+  oneTimeActuals: {
+    oneTimeIncomeId: number;
+    plannedAsOf: string;
+    amountMinor: string;
+    actualAsOf: string;
+  }[];
+};
+
 type DashboardChartsShellProps = {
   accounts: ChartAccountPayload[];
   snapshots: ChartSnapshotPayload[];
@@ -45,6 +87,8 @@ type DashboardChartsShellProps = {
   today: string;
   listAccounts: DashboardAccountRow[];
   primaryCode: string;
+  anchorPrimaryMinor: string;
+  forecastIncome: ForecastIncomePayload;
 };
 
 function reviveAccounts(rows: ChartAccountPayload[]): SeriesAccount[] {
@@ -75,6 +119,45 @@ function reviveRates(rows: ChartRatePayload[]): SeriesRate[] {
   }));
 }
 
+function mergeFactAndForecast(
+  fact: NetWorthChartPoint[],
+  forecastPoints: { asOfDate: string; forecast: number }[],
+  today: string,
+  showForecast: boolean,
+): NetWorthChartPoint[] {
+  if (!showForecast || forecastPoints.length === 0) {
+    return fact;
+  }
+
+  const byDate = new Map<string, NetWorthChartPoint>();
+  for (const p of fact) {
+    byDate.set(p.asOfDate, { ...p });
+  }
+
+  for (const fp of forecastPoints) {
+    const existing = byDate.get(fp.asOfDate);
+    if (existing) {
+      existing.forecast = fp.forecast;
+    } else if (fp.asOfDate > today) {
+      byDate.set(fp.asOfDate, {
+        asOfDate: fp.asOfDate,
+        forecast: fp.forecast,
+      } as NetWorthChartPoint);
+    }
+  }
+
+  // Hinge: today fact row must carry forecast === nw when series shown
+  const todayRow = byDate.get(today);
+  const todayForecast = forecastPoints.find((p) => p.asOfDate === today);
+  if (todayRow && todayForecast) {
+    todayRow.forecast = todayForecast.forecast;
+  }
+
+  return [...byDate.values()].sort((a, b) =>
+    a.asOfDate < b.asOfDate ? -1 : a.asOfDate > b.asOfDate ? 1 : 0,
+  );
+}
+
 export function DashboardChartsShell({
   accounts,
   snapshots,
@@ -83,6 +166,8 @@ export function DashboardChartsShell({
   today,
   listAccounts,
   primaryCode,
+  anchorPrimaryMinor,
+  forecastIncome,
 }: DashboardChartsShellProps) {
   const [range, setRange] = useState<RangePreset>("30d");
 
@@ -92,8 +177,12 @@ export function DashboardChartsShell({
     [snapshots],
   );
   const seriesRates = useMemo(() => reviveRates(rates), [rates]);
+  const anchorMinor = useMemo(
+    () => BigInt(anchorPrimaryMinor),
+    [anchorPrimaryMinor],
+  );
 
-  const points = useMemo(
+  const factPoints = useMemo(
     () =>
       buildNetWorthSeries({
         accounts: seriesAccounts,
@@ -117,6 +206,134 @@ export function DashboardChartsShell({
     ],
   );
 
+  const forecastMeta = useMemo(() => {
+    const horizonEnd = forecastHorizonEnd(range, today);
+    const from = addCalendarDays(today, 1);
+
+    const recurringDefs = forecastIncome.recurring.map((r) => ({
+      id: r.id,
+      plannedAmountMinor: BigInt(r.plannedAmountMinor),
+      dayOfMonth: r.dayOfMonth,
+      startAsOf: r.startAsOf,
+    }));
+    const recurringActuals = forecastIncome.recurringActuals.map((a) => ({
+      recurringIncomeId: a.recurringIncomeId,
+      plannedAsOf: a.plannedAsOf,
+    }));
+    const oneTimeDefs = forecastIncome.oneTime.map((o) => ({
+      id: o.id,
+      plannedAmountMinor: BigInt(o.plannedAmountMinor),
+      plannedAsOf: o.plannedAsOf,
+    }));
+    const oneTimeActuals = forecastIncome.oneTimeActuals.map((a) => ({
+      oneTimeIncomeId: a.oneTimeIncomeId,
+      plannedAsOf: a.plannedAsOf,
+      amountMinor: BigInt(a.amountMinor),
+      actualAsOf: a.actualAsOf,
+    }));
+
+    const currencyByRecurring = new Map(
+      forecastIncome.recurring.map((r) => [
+        r.id,
+        {
+          currencyCode: r.currencyCode,
+          currencyScale: r.currencyScale,
+          isPrimaryCurrency: r.isPrimaryCurrency,
+        },
+      ]),
+    );
+    const currencyByOneTime = new Map(
+      forecastIncome.oneTime.map((o) => [
+        o.id,
+        {
+          currencyCode: o.currencyCode,
+          currencyScale: o.currencyScale,
+          isPrimaryCurrency: o.isPrimaryCurrency,
+        },
+      ]),
+    );
+
+    const filledRecurring = new Set(
+      recurringActuals.map((a) =>
+        occurrenceKeyString({
+          parentId: a.recurringIncomeId,
+          plannedAsOf: a.plannedAsOf,
+        }),
+      ),
+    );
+
+    const raw = listAllInRange(
+      {
+        recurring: recurringDefs,
+        recurringActuals,
+        oneTime: oneTimeDefs,
+        oneTimeActuals,
+      },
+      from,
+      horizonEnd,
+    );
+
+    const openSlots: ForecastSlot[] = [];
+    for (const o of raw) {
+      if (!(o.plannedAsOf > today)) continue;
+      if (o.kind === "oneTime") {
+        if (o.actual != null) continue;
+        const cur = currencyByOneTime.get(o.parentId);
+        if (!cur) continue;
+        openSlots.push({
+          parentId: o.parentId,
+          plannedAsOf: o.plannedAsOf,
+          plannedAmountMinor: o.plannedAmountMinor,
+          ...cur,
+        });
+        continue;
+      }
+      const key = occurrenceKeyString({
+        parentId: o.parentId,
+        plannedAsOf: o.plannedAsOf,
+      });
+      if (filledRecurring.has(key)) continue;
+      const cur = currencyByRecurring.get(o.parentId);
+      if (!cur) continue;
+      openSlots.push({
+        parentId: o.parentId,
+        plannedAsOf: o.plannedAsOf,
+        plannedAmountMinor: o.plannedAmountMinor,
+        ...cur,
+      });
+    }
+
+    const built = buildNetWorthForecastSeries({
+      anchorPrimaryMinor: anchorMinor,
+      slots: openSlots,
+      rates: seriesRates,
+      primaryScale,
+      today,
+      horizonEnd,
+    });
+
+    return built;
+  }, [
+    forecastIncome,
+    range,
+    today,
+    anchorMinor,
+    seriesRates,
+    primaryScale,
+  ]);
+
+  const showForecast = forecastMeta.includedSlotCount > 0;
+  const points = useMemo(
+    () =>
+      mergeFactAndForecast(
+        factPoints,
+        forecastMeta.points,
+        today,
+        showForecast,
+      ),
+    [factPoints, forecastMeta.points, today, showForecast],
+  );
+
   const windowStart = windowStartForPreset(range, today);
   const stackAccounts = useMemo(
     () => accounts.map((a) => ({ id: a.id, name: a.name })),
@@ -132,6 +349,7 @@ export function DashboardChartsShell({
           accounts={stackAccounts}
           windowStart={windowStart}
           today={today}
+          showForecast={showForecast}
         />
       </section>
       <DashboardAccountList

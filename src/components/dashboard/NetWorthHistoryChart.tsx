@@ -3,8 +3,9 @@
 import type { TooltipContentProps } from "recharts";
 import {
   Area,
-  AreaChart,
   CartesianGrid,
+  ComposedChart,
+  Line,
   XAxis,
   YAxis,
 } from "recharts";
@@ -28,6 +29,8 @@ const CHART_COLORS = [
   "var(--chart-5)",
 ] as const;
 
+const FORECAST_KEY = "forecast";
+
 export type NetWorthStackAccount = {
   id: number;
   name: string;
@@ -36,7 +39,7 @@ export type NetWorthStackAccount = {
 export type NetWorthChartPoint = {
   asOfDate: string;
   nw: number;
-  /** Flattened stack majors keyed by accountStackKey(id). */
+  /** Flattened stack majors keyed by accountStackKey(id); optional forecast major. */
   [stackKey: string]: string | number;
 };
 
@@ -46,6 +49,8 @@ type NetWorthHistoryChartProps = {
   /** Inclusive window start ISO, or null for all — used for empty-axes X ticks (D-13). */
   windowStart: string | null;
   today: string;
+  /** When true, paint dashed «Прогноз» Line (D-09 / D-10). */
+  showForecast?: boolean;
 };
 
 function NetWorthChartTooltip({
@@ -57,16 +62,22 @@ function NetWorthChartTooltip({
   if (!active || !payload?.length) return null;
 
   const point = payload[0]?.payload as NetWorthChartPoint | undefined;
-  const total = typeof point?.nw === "number" ? point.nw : null;
+  const total = typeof point?.nw === "number" && !Number.isNaN(point.nw)
+    ? point.nw
+    : null;
   const labelText =
     typeof label === "string" ? formatAsOfDisplay(label) : String(label ?? "");
 
   const nameByKey = new Map(
     accounts.map((a) => [accountStackKey(a.id), a.name]),
   );
+  nameByKey.set(FORECAST_KEY, "Прогноз");
 
   const rows = payload.filter(
-    (item) => item.type !== "none" && item.value != null,
+    (item) =>
+      item.type !== "none" &&
+      item.value != null &&
+      !(typeof item.value === "number" && Number.isNaN(item.value)),
   );
 
   return (
@@ -111,6 +122,7 @@ export function NetWorthHistoryChart({
   accounts,
   windowStart,
   today,
+  showForecast = false,
 }: NetWorthHistoryChartProps) {
   const empty = data.length === 0;
   const xTicks =
@@ -120,21 +132,32 @@ export function NetWorthHistoryChart({
         ? [today]
         : undefined;
 
-  const chartConfig = Object.fromEntries(
-    accounts.map((account, index) => [
-      accountStackKey(account.id),
-      {
-        label: account.name,
-        color: CHART_COLORS[index % CHART_COLORS.length],
-      },
-    ]),
-  ) satisfies ChartConfig;
+  const chartConfig = {
+    ...Object.fromEntries(
+      accounts.map((account, index) => [
+        accountStackKey(account.id),
+        {
+          label: account.name,
+          color: CHART_COLORS[index % CHART_COLORS.length],
+        },
+      ]),
+    ),
+    ...(showForecast
+      ? {
+          [FORECAST_KEY]: {
+            label: "Прогноз",
+            color: "var(--muted-foreground)",
+          },
+        }
+      : {}),
+  } satisfies ChartConfig;
 
   const stackKeys = accounts.map((a) => accountStackKey(a.id));
+  const showLegend = !empty && (accounts.length > 1 || showForecast);
 
   return (
     <ChartContainer config={chartConfig} className="h-[200px] w-full">
-      <AreaChart
+      <ComposedChart
         accessibilityLayer
         data={data}
         margin={{ left: 8, right: 8, top: 8, bottom: 0 }}
@@ -163,7 +186,7 @@ export function NetWorthHistoryChart({
             <NetWorthChartTooltip {...props} accounts={accounts} />
           )}
         />
-        {!empty && accounts.length > 1 ? (
+        {showLegend ? (
           <ChartLegend content={<ChartLegendContent />} />
         ) : null}
         {stackKeys.map((key) => (
@@ -182,7 +205,20 @@ export function NetWorthHistoryChart({
             activeDot={{ r: 3 }}
           />
         ))}
-      </AreaChart>
+        {showForecast ? (
+          <Line
+            dataKey={FORECAST_KEY}
+            type="stepAfter"
+            stroke="var(--muted-foreground)"
+            strokeDasharray="5 5"
+            strokeWidth={1.5}
+            dot={false}
+            connectNulls={false}
+            name="Прогноз"
+            isAnimationActive={false}
+          />
+        ) : null}
+      </ComposedChart>
     </ChartContainer>
   );
 }
