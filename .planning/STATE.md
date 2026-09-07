@@ -2,9 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Доходы
+current_phase: 13
+current_phase_name: v1.2 phases 13–17
 status: planning
-last_updated: "2026-09-07T12:15:00.000Z"
+stopped_at: Phase 13 context gathered
+last_updated: "2026-09-07T10:51:37.954Z"
 last_activity: 2026-09-07
+last_activity_desc: Roadmap created for v1.2 Доходы (phases 13–17)
+state_head: 3298c787136837ecc3e96e9e4a9a1ebb1f6bcc2b
 progress:
   total_phases: 5
   completed_phases: 0
@@ -91,6 +96,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07
-Stopped at: v1.2 ROADMAP.md written (phases 13–17); ready for `/gsd-plan-phase 13`
-Resume file: None
+Last session: 2026-09-07T10:51:37.907Z
+Stopped at: Phase 13 context gathered
+Resume file: .planning/phases/13-income-schema-domain-math/13-CONTEXT.md
