@@ -5,11 +5,11 @@ milestone_name: Доходы
 current_phase: 17
 current_phase_name: NW forecast overlay + isolation
 status: ready_to_execute
-stopped_at: Phase 17 executed — Orca UAT pending
-last_updated: "2026-09-07T20:41:05.621Z"
+stopped_at: Phase 17 COMPLETE — discuss/plan/execute/UAT smoke done
+last_updated: "2026-09-07T20:45:38.589Z"
 last_activity: 2026-09-07
 last_activity_desc: Phase 17 PLAN.md set created (17-01..17-03)
-state_head: 2f1d6865833b0ebda2e659b2bb4189e67235ca6f
+state_head: 36ff8edc2422b940b0fe0062a7929318caa3d9ad
 progress:
   total_phases: 5
   completed_phases: 4
@@ -134,7 +134,7 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-07T20:41:05.480Z
-Stopped at: Phase 17 executed — Orca UAT pending
+Last session: 2026-09-07T20:45:38.459Z
+Stopped at: Phase 17 COMPLETE — discuss/plan/execute/UAT smoke done
 Resume file: 
 .planning/phases/17-nw-forecast-overlay-isolation/17-VERIFICATION.md
