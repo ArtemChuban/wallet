@@ -4,8 +4,11 @@ import {
   createOneTimeIncomeWithNewPersonSchema,
   createRecurringIncomeSchema,
   createRecurringIncomeWithNewPersonSchema,
+  deleteOneTimeIncomeActualSchema,
+  deleteRecurringIncomeActualSchema,
   updateOneTimeIncomeSchema,
   updateRecurringIncomeSchema,
+  upsertOneTimeIncomeActualSchema,
   upsertRecurringIncomeActualSchema,
 } from "./income";
 
@@ -309,5 +312,84 @@ describe("upsertRecurringIncomeActualSchema (ACT-01 / D-19)", () => {
       actualAsOf: "2099-12-31",
     });
     expect(result.success).toBe(true);
+  });
+});
+
+describe("upsertOneTimeIncomeActualSchema (ACT-01 / D-19)", () => {
+  const base = {
+    oneTimeIncomeId: "2",
+    plannedAsOf: "2026-09-15",
+    actualAmountMajor: "50",
+    actualAsOf: "2026-09-16",
+  };
+
+  it("accepts positive major + dates + optional note", () => {
+    const result = upsertOneTimeIncomeActualSchema.safeParse({
+      ...base,
+      note: "бонус",
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.oneTimeIncomeId).toBe(2);
+      expect(result.data.plannedAsOf).toBe("2026-09-15");
+      expect(result.data.actualAmountMajor).toBe("50");
+      expect(result.data.actualAsOf).toBe("2026-09-16");
+      expect(result.data.note).toBe("бонус");
+    }
+  });
+
+  it("rejects zero/negative/empty actualAmountMajor", () => {
+    for (const actualAmountMajor of ["0", "-1", ""] as const) {
+      expect(
+        upsertOneTimeIncomeActualSchema.safeParse({
+          ...base,
+          actualAmountMajor,
+        }).success,
+      ).toBe(false);
+    }
+  });
+
+  it("rejects invalid actualAsOf", () => {
+    expect(
+      upsertOneTimeIncomeActualSchema.safeParse({
+        ...base,
+        actualAsOf: "2026/09/16",
+      }).success,
+    ).toBe(false);
+  });
+
+  it("accepts future actualAsOf", () => {
+    expect(
+      upsertOneTimeIncomeActualSchema.safeParse({
+        ...base,
+        actualAsOf: "2099-01-01",
+      }).success,
+    ).toBe(true);
+  });
+});
+
+describe("deleteRecurringIncomeActualSchema / deleteOneTimeIncomeActualSchema (D-04)", () => {
+  it("accepts positive int id via coerce", () => {
+    expect(
+      deleteRecurringIncomeActualSchema.safeParse({ id: "7" }).success,
+    ).toBe(true);
+    expect(deleteOneTimeIncomeActualSchema.safeParse({ id: 3 }).success).toBe(
+      true,
+    );
+    const parsed = deleteRecurringIncomeActualSchema.safeParse({ id: "7" });
+    if (parsed.success) {
+      expect(parsed.data.id).toBe(7);
+    }
+  });
+
+  it("rejects zero/negative/non-int id", () => {
+    for (const id of [0, -1, "0", "abc"] as const) {
+      expect(deleteRecurringIncomeActualSchema.safeParse({ id }).success).toBe(
+        false,
+      );
+      expect(deleteOneTimeIncomeActualSchema.safeParse({ id }).success).toBe(
+        false,
+      );
+    }
   });
 });
