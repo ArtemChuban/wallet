@@ -141,3 +141,5 @@ _Note: TDD Wave 0 RED then GREEN; Task 3 added mixed-partial coverage on already
 ## Threat Flags
 
 None beyond plan threat model — no new endpoints/auth; RSC→client display strings only; isolation file-scan green.
+
+## Self-Check: PASSED

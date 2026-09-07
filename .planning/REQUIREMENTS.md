@@ -20,7 +20,7 @@ Requirements for milestone v1.2. Each maps to roadmap phases.
 
 ### Counterparties
 
-- [ ] **CPTY-01**: User can view per-Person income stats — hybrid native-first Σ (by currency) plus primary secondary via FX LOCF as-of each fact's actualAsOf, with partial honesty («итог неполный» / нет курса) when rates are missing
+- [x] **CPTY-01**: User can view per-Person income stats — hybrid native-first Σ (by currency) plus primary secondary via FX LOCF as-of each fact's actualAsOf, with partial honesty («итог неполный» / нет курса) when rates are missing
 
 ### Доходы UI
 
@@ -75,7 +75,7 @@ Explicit exclusions for this milestone.
 | ACT-01 | Phase 15 | Complete |
 | ACT-02 | Phase 15 | Complete |
 | ACT-03 | Phase 15 | Complete |
-| CPTY-01 | Phase 16 | Pending |
+| CPTY-01 | Phase 16 | Complete |
 | UI-01 | Phase 14 | Complete |
 | FCST-01 | Phase 17 | Pending |
 | ISO-01 | Phase 17 | Pending |

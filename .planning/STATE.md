@@ -2,20 +2,20 @@
 gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Доходы
-current_phase: 16
-current_phase_name: Counterparty income stats
-status: planned
-stopped_at: Phase 16 plans executed — awaiting verification
-last_updated: "2026-09-07T19:03:52.440Z"
+current_phase: 15
+current_phase_name: Plan vs actual + overdue
+status: planning
+stopped_at: Phase 16 complete, ready to plan Phase 15
+last_updated: "2026-09-07T19:10:56.930Z"
 last_activity: 2026-09-07
-last_activity_desc: Phase 16 PLAN.md created — execute next
-state_head: a6ec244651af0f1f85f6f9178e5fd3798d9d51be
+last_activity_desc: Phase 16 complete, transitioned to Phase 15
+state_head: 7ae0346fab37c41337ae0e7910a363cf6985efb0
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 11
   completed_plans: 11
-  percent: 60
+  percent: 80
 ---
 
 # Project State
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-09-07 — milestone v1.2 Доходы)
 
 ## Current Position
 
-Phase: 16 (Counterparty income stats) — PLANNED
-Plan: 2 of 2
-Status: 16-01 + 16-02 PLAN.md ready (CPTY-01 hybrid header stats)
-Last activity: 2026-09-07 — gsd-planner: Phase 16 plans written
+Phase: 15 — Plan vs actual + overdue
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-09-07 — Phase 16 complete, transitioned to Phase 15
 
 Progress: [████░░░░░░] 40% (v1.2 — phase 15 verified; phase 16 planned)
 
@@ -127,5 +127,5 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-09-07T19:03:52.310Z
-Stopped at: Phase 16 plans executed — awaiting verification
+Stopped at: Phase 16 complete, ready to plan Phase 15
 Resume file: .planning/phases/16-counterparty-income-stats/16-02-SUMMARY.md
