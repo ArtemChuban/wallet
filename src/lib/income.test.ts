@@ -6,6 +6,7 @@ import {
   listAllInRange,
   listOneTimeOccurrences,
   listRecurringOccurrences,
+  nextOpenPlannedAsOf,
 } from "@/lib/income";
 
 describe("listRecurringOccurrences tracer (FND-OCC / D-13 / D-15 / D-16)", () => {
@@ -286,6 +287,45 @@ describe("assertOneTimePlanImmutable (D-08)", () => {
         plannedAmountMinor: 1n,
       }),
     ).not.toThrow();
+  });
+});
+
+describe("nextOpenPlannedAsOf (D-02 / D-09 / D-10)", () => {
+  const def = {
+    id: 1,
+    plannedAmountMinor: 100_00n,
+    dayOfMonth: 15,
+    startAsOf: "2026-01-01",
+  };
+
+  it("returns earliest past unfilled slot when today is after start (D-10)", () => {
+    const next = nextOpenPlannedAsOf(def, [], "2026-03-10");
+    expect(next).toBe("2026-01-15");
+  });
+
+  it("skips filled earliest slot and returns next open (D-09)", () => {
+    const next = nextOpenPlannedAsOf(
+      def,
+      [{ recurringIncomeId: 1, plannedAsOf: "2026-01-15" }],
+      "2026-03-10",
+    );
+    expect(next).toBe("2026-02-15");
+  });
+
+  it("falls back to startAsOf when every slot in horizon is filled (A3)", () => {
+    // Fill a long window so none remain open in the ~400d horizon.
+    const actuals = [];
+    for (let y = 2026; y <= 2028; y++) {
+      for (let m = 1; m <= 12; m++) {
+        const mm = String(m).padStart(2, "0");
+        actuals.push({
+          recurringIncomeId: 1,
+          plannedAsOf: `${y}-${mm}-15`,
+        });
+      }
+    }
+    const next = nextOpenPlannedAsOf(def, actuals, "2026-03-10");
+    expect(next).toBe("2026-01-01");
   });
 });
 
