@@ -28,6 +28,12 @@ vi.mock("@/lib/db", () => ({
       delete: vi.fn(),
       findUnique: vi.fn(),
     },
+    recurringIncome: {
+      count: vi.fn(),
+    },
+    oneTimeIncome: {
+      count: vi.fn(),
+    },
     currency: {
       findUnique: vi.fn(),
     },
@@ -74,7 +80,7 @@ describe("createPerson (PERSON-01)", () => {
     vi.mocked(prisma.person.create).mockResolvedValue({} as never);
   });
 
-  it("validates, creates trimmed name, revalidates /debts only", async () => {
+  it("validates, creates trimmed name, revalidates /debts and /income", async () => {
     const formData = new FormData();
     formData.set("name", "  Иван  ");
 
@@ -86,6 +92,7 @@ describe("createPerson (PERSON-01)", () => {
       data: { name: "Иван" },
     });
     expect(revalidatePath).toHaveBeenCalledWith("/debts");
+    expect(revalidatePath).toHaveBeenCalledWith("/income");
     expect(revalidatePath).not.toHaveBeenCalledWith("/");
   });
 
@@ -118,7 +125,7 @@ describe("renamePerson (PERSON-01)", () => {
     vi.mocked(prisma.person.update).mockResolvedValue({} as never);
   });
 
-  it("validates, updates trimmed name only, revalidates /debts only", async () => {
+  it("validates, updates trimmed name only, revalidates /debts and /income", async () => {
     const formData = new FormData();
     formData.set("personId", "7");
     formData.set("name", "  Петр  ");
@@ -132,6 +139,7 @@ describe("renamePerson (PERSON-01)", () => {
       data: { name: "Петр" },
     });
     expect(revalidatePath).toHaveBeenCalledWith("/debts");
+    expect(revalidatePath).toHaveBeenCalledWith("/income");
     expect(revalidatePath).not.toHaveBeenCalledWith("/");
   });
 
@@ -158,11 +166,13 @@ describe("renamePerson (PERSON-01)", () => {
   });
 });
 
-describe("deletePerson (PERSON-02)", () => {
+describe("deletePerson (PERSON-02 / D-16)", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
     vi.mocked(prisma.debt.count).mockResolvedValue(0);
+    vi.mocked(prisma.recurringIncome.count).mockResolvedValue(0);
+    vi.mocked(prisma.oneTimeIncome.count).mockResolvedValue(0);
     vi.mocked(prisma.person.delete).mockResolvedValue({} as never);
   });
 
@@ -175,7 +185,27 @@ describe("deletePerson (PERSON-02)", () => {
     const result = await deletePerson(formData);
 
     expect(result.success).toBeUndefined();
-    expect(result.message).toBe("Нельзя удалить человека, пока есть долги");
+    expect(result.message).toBe(
+      "Нельзя удалить человека, пока есть долги или доходы",
+    );
+    expect(prisma.person.delete).not.toHaveBeenCalled();
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  it("blocks delete when income remains even if debt count is 0", async () => {
+    vi.mocked(prisma.debt.count).mockResolvedValue(0);
+    vi.mocked(prisma.recurringIncome.count).mockResolvedValue(1);
+    vi.mocked(prisma.oneTimeIncome.count).mockResolvedValue(0);
+
+    const formData = new FormData();
+    formData.set("personId", "3");
+
+    const result = await deletePerson(formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBe(
+      "Нельзя удалить человека, пока есть долги или доходы",
+    );
     expect(prisma.person.delete).not.toHaveBeenCalled();
     expect(revalidatePath).not.toHaveBeenCalled();
   });
@@ -189,13 +219,19 @@ describe("deletePerson (PERSON-02)", () => {
     const first = await deletePerson(formData);
     const second = await deletePerson(formData);
 
-    expect(first.message).toBe("Нельзя удалить человека, пока есть долги");
-    expect(second.message).toBe("Нельзя удалить человека, пока есть долги");
+    expect(first.message).toBe(
+      "Нельзя удалить человека, пока есть долги или доходы",
+    );
+    expect(second.message).toBe(
+      "Нельзя удалить человека, пока есть долги или доходы",
+    );
     expect(prisma.person.delete).not.toHaveBeenCalled();
   });
 
-  it("deletes person when debt count is 0 and revalidates /debts", async () => {
+  it("deletes person when debt and income counts are 0 and dual-revalidates", async () => {
     vi.mocked(prisma.debt.count).mockResolvedValue(0);
+    vi.mocked(prisma.recurringIncome.count).mockResolvedValue(0);
+    vi.mocked(prisma.oneTimeIncome.count).mockResolvedValue(0);
 
     const formData = new FormData();
     formData.set("personId", "3");
@@ -207,10 +243,17 @@ describe("deletePerson (PERSON-02)", () => {
     expect(prisma.debt.count).toHaveBeenCalledWith({
       where: { personId: 3 },
     });
+    expect(prisma.recurringIncome.count).toHaveBeenCalledWith({
+      where: { personId: 3 },
+    });
+    expect(prisma.oneTimeIncome.count).toHaveBeenCalledWith({
+      where: { personId: 3 },
+    });
     expect(prisma.person.delete).toHaveBeenCalledWith({
       where: { id: 3 },
     });
     expect(revalidatePath).toHaveBeenCalledWith("/debts");
+    expect(revalidatePath).toHaveBeenCalledWith("/income");
     expect(revalidatePath).not.toHaveBeenCalledWith("/");
   });
 
