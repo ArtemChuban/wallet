@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 6
+open_count: 10
 waived_count: 0
 fixed_count: 3
-total_count: 9
-last_updated: 2026-09-05T12:12:38.149Z
+total_count: 13
+last_updated: 2026-09-07T20:27:54.406Z
 ---
 
 # Broken Windows Ledger
@@ -24,6 +24,10 @@ last_updated: 2026-09-05T12:12:38.149Z
 | 7 | 10 | stub | src/lib/validations/debts.ts |  | deleteSizeChangeSchema only; action in Plan 03 | open |  | 2026-09-05T12:12:37.785Z |  |
 | 8 | 10 | stub | src/components/debts/DebtDetailDialog.tsx |  | size-change rows lack delete UI until Plan 03 | open |  | 2026-09-05T12:12:37.927Z |  |
 | 9 | 10 | stub | src/components/debts/DebtDetailDialog.tsx |  | Списание label waits Plan 03 isForgive | open |  | 2026-09-05T12:12:38.149Z |  |
+| 10 | 17 | stub | src/lib/iniso.test.ts |  | it.todo past-series identity with/without income — Plan 02 | open |  | 2026-09-07T20:27:54.043Z |  |
+| 11 | 17 | stub | src/components/dashboard/NetWorthHistoryChart.tsx |  | ReferenceLine today hinge deferred to Plan 03 | open |  | 2026-09-07T20:27:54.165Z |  |
+| 12 | 17 | stub | src/components/dashboard/DashboardChartsShell.tsx |  | Partial forecast banner deferred to Plan 03 (D-15) | open |  | 2026-09-07T20:27:54.284Z |  |
+| 13 | 17 | skipped-test | src/lib/iniso.test.ts |  | past buildNetWorthSeries golden identity it.todo | open |  | 2026-09-07T20:27:54.406Z |  |
 
 ````json
 [
@@ -133,6 +137,54 @@ last_updated: 2026-09-05T12:12:38.149Z
     "status": "open",
     "reason": "",
     "recorded_at": "2026-09-05T12:12:38.149Z",
+    "resolved_at": null
+  },
+  {
+    "id": 10,
+    "kind": "stub",
+    "phase": "17",
+    "file": "src/lib/iniso.test.ts",
+    "line": null,
+    "description": "it.todo past-series identity with/without income — Plan 02",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-07T20:27:54.043Z",
+    "resolved_at": null
+  },
+  {
+    "id": 11,
+    "kind": "stub",
+    "phase": "17",
+    "file": "src/components/dashboard/NetWorthHistoryChart.tsx",
+    "line": null,
+    "description": "ReferenceLine today hinge deferred to Plan 03",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-07T20:27:54.165Z",
+    "resolved_at": null
+  },
+  {
+    "id": 12,
+    "kind": "stub",
+    "phase": "17",
+    "file": "src/components/dashboard/DashboardChartsShell.tsx",
+    "line": null,
+    "description": "Partial forecast banner deferred to Plan 03 (D-15)",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-07T20:27:54.284Z",
+    "resolved_at": null
+  },
+  {
+    "id": 13,
+    "kind": "skipped-test",
+    "phase": "17",
+    "file": "src/lib/iniso.test.ts",
+    "line": null,
+    "description": "past buildNetWorthSeries golden identity it.todo",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-07T20:27:54.406Z",
     "resolved_at": null
   }
 ]

@@ -28,11 +28,11 @@ Requirements for milestone v1.2. Each maps to roadmap phases.
 
 ### Капитал forecast
 
-- [ ] **FCST-01**: On `/`, user sees NW chart with future dashed overlay from recurring planned income converted via FX LOCF (one-time income not included in forecast)
+- [x] **FCST-01**: On `/`, user sees NW chart with future dashed overlay from recurring planned income converted via FX LOCF (one-time income not included in forecast)
 
 ### Isolation
 
-- [ ] **ISO-01**: Income never mutates historical NW LOCF / `computeNetWorthRows`; income actions never write `BalanceSnapshot`
+- [x] **ISO-01**: Income never mutates historical NW LOCF / `computeNetWorthRows`; income actions never write `BalanceSnapshot`
 
 ## Future Requirements
 
@@ -77,7 +77,7 @@ Explicit exclusions for this milestone.
 | ACT-03 | Phase 15 | Complete |
 | CPTY-01 | Phase 16 | Complete |
 | UI-01 | Phase 14 | Complete |
-| FCST-01 | Phase 17 | Pending |
-| ISO-01 | Phase 17 | Pending |
+| FCST-01 | Phase 17 | Complete |
+| ISO-01 | Phase 17 | Complete |
 
 *Mapped 2026-09-07 — roadmap phases 13–17 (Phase 13 foundation, no REQ-IDs).*

@@ -1,12 +1,38 @@
 {
   "contract": "1.0.0",
   "flavor": "core",
-  "milestone": "v1.2",
-  "phases": [],
+  "milestone": "v1.2 — Доходы",
+  "phases": [
+    {
+      "number": "13",
+      "name": "Income schema + domain math",
+      "status": "pending"
+    },
+    {
+      "number": "14",
+      "name": "Доходы CRUD + nav",
+      "status": "pending"
+    },
+    {
+      "number": "15",
+      "name": "Plan vs actual + overdue",
+      "status": "pending"
+    },
+    {
+      "number": "16",
+      "name": "Counterparty income stats",
+      "status": "pending"
+    },
+    {
+      "number": "17",
+      "name": "NW forecast overlay + isolation",
+      "status": "pending"
+    }
+  ],
   "next": {
-    "command": "/gsd-discuss-phase",
-    "label": "Discuss the first phase",
-    "reason": "Project initialized — plan your first phase"
+    "command": "/gsd:progress",
+    "label": "Show progress",
+    "reason": "Unsure of state — showing progress"
   },
-  "updated_at": "2026-09-07T09:57:32.723Z"
+  "updated_at": "2026-09-07T20:27:54.667Z"
 }
