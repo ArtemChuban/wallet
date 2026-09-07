@@ -114,7 +114,7 @@ status: complete
 2. **Task 2: Edit/delete income + person delete via DestructiveConfirmStep** - `45d3674` (feat)
 3. **Task 3: UI-SPEC empty/error polish + full suite gate** - verification only (no code delta; suite already green)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `ba58774` (docs: complete plan)
 
 ## Files Created/Modified
 
