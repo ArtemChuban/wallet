@@ -6,6 +6,7 @@ import {
   CartesianGrid,
   ComposedChart,
   Line,
+  ReferenceLine,
   XAxis,
   YAxis,
 } from "recharts";
@@ -58,24 +59,60 @@ function NetWorthChartTooltip({
   payload,
   label,
   accounts,
-}: TooltipContentProps & { accounts: NetWorthStackAccount[] }) {
+  today,
+}: TooltipContentProps & {
+  accounts: NetWorthStackAccount[];
+  today: string;
+}) {
   if (!active || !payload?.length) return null;
 
   const point = payload[0]?.payload as NetWorthChartPoint | undefined;
-  const total = typeof point?.nw === "number" && !Number.isNaN(point.nw)
-    ? point.nw
-    : null;
-  const labelText =
-    typeof label === "string" ? formatAsOfDisplay(label) : String(label ?? "");
+  const asOfDate =
+    typeof point?.asOfDate === "string"
+      ? point.asOfDate
+      : typeof label === "string"
+        ? label
+        : "";
+  const labelText = asOfDate
+    ? formatAsOfDisplay(asOfDate)
+    : String(label ?? "");
+
+  // D-11: future dates → «Прогноз» + amount only (no fake account stack / Итого)
+  if (asOfDate > today) {
+    const forecastVal =
+      typeof point?.[FORECAST_KEY] === "number" &&
+      !Number.isNaN(point[FORECAST_KEY])
+        ? (point[FORECAST_KEY] as number)
+        : null;
+    if (forecastVal == null) return null;
+    return (
+      <div className="grid min-w-40 items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl">
+        <div className="font-medium">{labelText}</div>
+        <div className="flex w-full items-center gap-2">
+          <div
+            className="h-2.5 w-2.5 shrink-0 rounded-[2px]"
+            style={{ backgroundColor: "var(--muted-foreground)" }}
+          />
+          <span className="flex-1 text-muted-foreground">Прогноз</span>
+          <span className="font-mono font-medium text-foreground tabular-nums">
+            {formatChartNumber(forecastVal)}
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  const total =
+    typeof point?.nw === "number" && !Number.isNaN(point.nw) ? point.nw : null;
 
   const nameByKey = new Map(
     accounts.map((a) => [accountStackKey(a.id), a.name]),
   );
-  nameByKey.set(FORECAST_KEY, "Прогноз");
 
   const rows = payload.filter(
     (item) =>
       item.type !== "none" &&
+      item.dataKey !== FORECAST_KEY &&
       item.value != null &&
       !(typeof item.value === "number" && Number.isNaN(item.value)),
   );
@@ -153,6 +190,7 @@ export function NetWorthHistoryChart({
   } satisfies ChartConfig;
 
   const stackKeys = accounts.map((a) => accountStackKey(a.id));
+  // D-10: legend when multi-account OR forecast shown (single account still needs «Прогноз»)
   const showLegend = !empty && (accounts.length > 1 || showForecast);
 
   return (
@@ -183,11 +221,18 @@ export function NetWorthHistoryChart({
         />
         <ChartTooltip
           content={(props) => (
-            <NetWorthChartTooltip {...props} accounts={accounts} />
+            <NetWorthChartTooltip
+              {...props}
+              accounts={accounts}
+              today={today}
+            />
           )}
         />
         {showLegend ? (
           <ChartLegend content={<ChartLegendContent />} />
+        ) : null}
+        {showForecast ? (
+          <ReferenceLine x={today} stroke="var(--border)" />
         ) : null}
         {stackKeys.map((key) => (
           <Area
