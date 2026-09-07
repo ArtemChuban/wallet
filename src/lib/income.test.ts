@@ -25,6 +25,97 @@ describe("listRecurringOccurrences tracer (FND-OCC / D-13 / D-15 / D-16)", () =>
   });
 });
 
+describe("listRecurringOccurrences freeze + inclusive range (D-06 / D-07 / D-15)", () => {
+  it("keeps Jan frozen plannedAsOf after DOM change; Feb uses new clamp (A2)", () => {
+    const slots = listRecurringOccurrences(
+      [
+        {
+          id: 1,
+          plannedAmountMinor: 50_000n,
+          dayOfMonth: 28,
+          startAsOf: "2026-01-01",
+        },
+      ],
+      [{ recurringIncomeId: 1, plannedAsOf: "2026-01-31" }],
+      "2026-01-01",
+      "2026-02-28",
+    );
+    const byMonth = Object.fromEntries(
+      slots.map((s) => [s.plannedAsOf.slice(0, 7), s.plannedAsOf]),
+    );
+    expect(byMonth["2026-01"]).toBe("2026-01-31");
+    expect(byMonth["2026-02"]).toBe("2026-02-28");
+    expect(slots).toHaveLength(2);
+    expect(slots.every((s) => typeof s.plannedAmountMinor === "bigint")).toBe(
+      true,
+    );
+    expect(slots[0]?.plannedAmountMinor).toBe(50_000n);
+  });
+
+  it("empty month without actual uses current dayOfMonth clamp", () => {
+    const slots = listRecurringOccurrences(
+      [
+        {
+          id: 2,
+          plannedAmountMinor: 10_00n,
+          dayOfMonth: 15,
+          startAsOf: "2026-03-01",
+        },
+      ],
+      [],
+      "2026-03-01",
+      "2026-03-31",
+    );
+    expect(slots).toEqual([
+      {
+        parentId: 2,
+        plannedAsOf: "2026-03-15",
+        plannedAmountMinor: 10_00n,
+      },
+    ]);
+  });
+
+  it("from==to includes single day when plannedAsOf equals it", () => {
+    const slots = listRecurringOccurrences(
+      [
+        {
+          id: 3,
+          plannedAmountMinor: 1n,
+          dayOfMonth: 10,
+          startAsOf: "2026-01-01",
+        },
+      ],
+      [],
+      "2026-04-10",
+      "2026-04-10",
+    );
+    expect(slots).toHaveLength(1);
+    expect(slots[0]?.plannedAsOf).toBe("2026-04-10");
+    expect(typeof slots[0]?.plannedAmountMinor).toBe("bigint");
+  });
+
+  it("includes boundary plannedAsOf == from and == to; excludes outside", () => {
+    const slots = listRecurringOccurrences(
+      [
+        {
+          id: 4,
+          plannedAmountMinor: 99n,
+          dayOfMonth: 5,
+          startAsOf: "2026-01-01",
+        },
+      ],
+      [],
+      "2026-05-05",
+      "2026-06-05",
+    );
+    const dates = slots.map((s) => s.plannedAsOf);
+    expect(dates).toContain("2026-05-05");
+    expect(dates).toContain("2026-06-05");
+    expect(dates).not.toContain("2026-04-05");
+    expect(dates).not.toContain("2026-07-05");
+  });
+});
+
 describe("income schema conventions (D-01..D-05, D-09..D-11)", () => {
   const schema = readFileSync("prisma/schema.prisma", "utf8");
 
