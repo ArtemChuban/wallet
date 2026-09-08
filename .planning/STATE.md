@@ -97,6 +97,5 @@ Resume file: .planning/phases/18-bank-contract-study-discuss-locks/18-CONTEXT.md
 
 ## Operator Next Steps
 
-- Review ROADMAP.md phases 18–22
-- Supply bank contract notes for Phase 18
-- Next: `/gsd-discuss-phase 18` or `/gsd-plan-phase 18`
+- Next: `/gsd-plan-phase 18` (context ready)
+- Then execute Phase 18 plans (docs/CONT-01 close-out) → Phase 19 schema
