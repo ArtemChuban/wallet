@@ -4,18 +4,18 @@ milestone: v1.3
 milestone_name: Кредитка
 current_phase: 18
 current_phase_name: bank-contract-study-discuss-locks
-status: ready_for_verification
-stopped_at: Completed 18-02-PLAN.md
-last_updated: "2026-09-08T12:45:44.049Z"
+status: phase_complete
+stopped_at: Phase 18 verification passed — CONT-01 Complete
+last_updated: "2026-09-08T12:51:10Z"
 last_activity: 2026-09-08
-last_activity_desc: Completed 18-02 dual DOM + A′ docs sync + credit todo fold
+last_activity_desc: Phase 18 VERIFICATION passed; CONT-01 flipped Complete
 state_head: 259d11771cc8f2b93be17459734f6fee71e93716
 progress:
   total_phases: 5
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 2
   completed_plans: 2
-  percent: 100
+  percent: 20
 ---
 
 # Project State
@@ -29,12 +29,12 @@ See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 
 ## Current Position
 
-Phase: 18 (bank-contract-study-discuss-locks) — READY FOR VERIFICATION
+Phase: 18 (bank-contract-study-discuss-locks) — COMPLETE (verified)
 Plan: 2 of 2
-Status: 18-02 complete; both plans done — await verify/UAT (CONT-01 checkbox still open)
-Last activity: 2026-09-08 — Completed 18-02 dual DOM + A′ docs sync + credit todo fold
+Status: Verification passed (8/8); CONT-01 Complete; next = Phase 19
+Last activity: 2026-09-08 — 18-VERIFICATION.md passed; CONT-01 flipped
 
-Progress: [██████████] 100%
+Progress: [██░░░░░░░░] 20% (1/5 phases)
 
 ## Performance Metrics
 
@@ -68,7 +68,7 @@ v1.3 locks from Phase 18 (see `18-CONTEXT.md`):
 - [Phase 18]: CONT-01 checklist cites CONTEXT SoT; dual DOM (D-02) + A′ (D-11) product truth over stale ROADMAP SC
 - [Phase 18]: Phase 18 Plan 01 docs-only — no prisma/src; Plan 02 owns wording sync
 - [Phase 18]: Plan 02 confirmed dual DOM + A′ as planning SoT; CYCLE-01/ROADMAP/PROJECT synced; credit todo folded
-- [Phase 18]: CONT-01 checkbox stays open until verify/UAT (restored from premature Complete)
+- [Phase 18]: CONT-01 verified Complete (18-VERIFICATION.md 8/8 structural)
 
 ### Pending Todos
 
@@ -101,11 +101,10 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-08T12:45:44.025Z
-Stopped at: Completed 18-02-PLAN.md
+Last session: 2026-09-08T12:51:10Z
+Stopped at: Phase 18 verification passed
 Resume file: None
 
 ## Operator Next Steps
 
-- Finish Phase 18 verify/UAT (CONT-01 checkbox still open until verify)
-- Then Phase 19 schema (dual DOM ints + clamp; A′ from CONTEXT / checklist)
+- Phase 19 schema (dual DOM ints + clamp; A′ from CONTEXT / checklist)
