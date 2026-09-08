@@ -5,10 +5,10 @@ milestone_name: Кредитка
 current_phase: 18
 current_phase_name: Bank contract study + discuss locks
 status: planning
-stopped_at: Phase 18 context gathered
-last_updated: "2026-09-08T12:02:30.996Z"
+stopped_at: Phase 18 research complete
+last_updated: "2026-09-08T12:11:00.000Z"
 last_activity: 2026-09-08
-last_activity_desc: Roadmap created for v1.3 (phases 18–22)
+last_activity_desc: Phase 18 RESEARCH.md written (CONT-01 gate)
 state_head: 55ddb2eae8e1eb4fc8f9778b66d48bc026a450f7
 progress:
   total_phases: 5
@@ -32,7 +32,7 @@ See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 Phase: 18 of 22 (Bank contract study + discuss locks)
 Plan: —
 Status: Ready to plan
-Last activity: 2026-09-08 — Roadmap created for v1.3 (phases 18–22)
+Last activity: 2026-09-08 — Phase 18 RESEARCH.md complete
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -91,11 +91,11 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-08T12:02:30.975Z
-Stopped at: Phase 18 context gathered
-Resume file: .planning/phases/18-bank-contract-study-discuss-locks/18-CONTEXT.md
+Last session: 2026-09-08T12:11:00.000Z
+Stopped at: Phase 18 research complete
+Resume file: .planning/phases/18-bank-contract-study-discuss-locks/18-RESEARCH.md
 
 ## Operator Next Steps
 
-- Next: `/gsd-plan-phase 18` (context ready)
+- Next: continue `/gsd-plan-phase 18` (research ready → planner)
 - Then execute Phase 18 plans (docs/CONT-01 close-out) → Phase 19 schema
