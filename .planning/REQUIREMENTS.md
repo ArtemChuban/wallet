@@ -66,22 +66,22 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CONT-01 | — | Pending |
-| CYCLE-01 | — | Pending |
-| CYCLE-02 | — | Pending |
-| OBL-01 | — | Pending |
-| OBL-02 | — | Pending |
-| OBL-03 | — | Pending |
-| GRFCST-01 | — | Pending |
-| GRFCST-02 | — | Pending |
-| GRISO-01 | — | Pending |
-| UX-01 | — | Pending |
+| CONT-01 | Phase 18 | Pending |
+| CYCLE-01 | Phase 19 | Pending |
+| CYCLE-02 | Phase 20 | Pending |
+| OBL-01 | Phase 20 | Pending |
+| OBL-02 | Phase 20 | Pending |
+| OBL-03 | Phase 20 | Pending |
+| UX-01 | Phase 20 | Pending |
+| GRFCST-01 | Phase 21 | Pending |
+| GRFCST-02 | Phase 21 | Pending |
+| GRISO-01 | Phase 22 | Pending |
 
 **Coverage:**
 - v1.3 requirements: 10 total
-- Mapped to phases: 0
-- Unmapped: 10 (filled by roadmapper)
+- Mapped to phases: 10
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-09-08*
-*Last updated: 2026-09-08 after v1.3 requirements confirmation*
+*Last updated: 2026-09-08 after v1.3 roadmap (phases 18–22)*
