@@ -101,7 +101,7 @@ status: complete
 2. **Task 2: Sync CYCLE-01 / ROADMAP / PROJECT** - `8d66687` (docs)
 3. **Task 3: Fold credit todo + STATE + VALIDATION** - `259d117` (docs)
 
-**Plan metadata:** (pending final docs commit)
+**Plan metadata:** `e155952` (docs: complete plan)
 
 ## Files Created/Modified
 
@@ -140,7 +140,7 @@ status: complete
 - **Issue:** Same SDK progress clobber as Plan 01 — `completed_plans: 2` but `percent: 0` / empty bar.
 - **Fix:** Manual frontmatter percent 100 + Current Position READY FOR VERIFICATION prose.
 - **Files modified:** `.planning/STATE.md`
-- **Commit:** (final docs close-out)
+- **Commit:** `e155952`
 
 ---
 

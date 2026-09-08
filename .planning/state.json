@@ -1,12 +1,53 @@
 {
   "contract": "1.0.0",
   "flavor": "core",
-  "milestone": "v1.3",
-  "phases": [],
+  "milestone": "v1.3 — Кредитка",
+  "phases": [
+    {
+      "number": "1",
+      "name": "7",
+      "status": "complete"
+    },
+    {
+      "number": "8",
+      "name": "12",
+      "status": "complete"
+    },
+    {
+      "number": "13",
+      "name": "17",
+      "status": "complete"
+    },
+    {
+      "number": "18",
+      "name": "Bank contract study + discuss locks",
+      "status": "complete"
+    },
+    {
+      "number": "19",
+      "name": "Schema + pure grace domain math",
+      "status": "pending"
+    },
+    {
+      "number": "20",
+      "name": "Obligation CRUD + cycle UI",
+      "status": "pending"
+    },
+    {
+      "number": "21",
+      "name": "Капитал forecast integration",
+      "status": "pending"
+    },
+    {
+      "number": "22",
+      "name": "GRACEISO regression + polish",
+      "status": "pending"
+    }
+  ],
   "next": {
-    "command": "/gsd:discuss-phase",
-    "label": "Discuss the first phase",
-    "reason": "Project initialized — plan your first phase"
+    "command": "/gsd:progress --next",
+    "label": "Advance to the next step (plan phase 19)",
+    "reason": "Phase 19 of 5 — needs a plan"
   },
-  "updated_at": "2026-09-08T10:01:27.374Z"
+  "updated_at": "2026-09-08T12:53:40.313Z"
 }

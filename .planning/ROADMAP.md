@@ -54,7 +54,7 @@ Full detail: [milestones/v1.2-ROADMAP.md](./milestones/v1.2-ROADMAP.md)
 
 **Milestone Goal:** Track monthly credit-card grace schedules (statement DOM + due DOM), manually record amount owed / early close, and show open obligations on Капитал «Прогноз» (A′ NW-neutral) without rewriting historical NW.
 
-- [ ] **Phase 18: Bank contract study + discuss locks** - Document bank grace rules; lock cycle/overlay decisions before schema
+- [x] **Phase 18: Bank contract study + discuss locks** - Document bank grace rules; lock cycle/overlay decisions before schema (completed 2026-09-08)
 - [ ] **Phase 19: Schema + pure grace domain math** - Persist grace config + obligation model; trustworthy due-date math
 - [ ] **Phase 20: Obligation CRUD + cycle UI** - Amount due, early close, cycle list, overdue highlight, debt≠grace copy
 - [ ] **Phase 21: Капитал forecast integration** - «Прогноз» includes open grace obligations with FX LOCF honesty
@@ -147,7 +147,7 @@ Plans:
 | 1–7 | v1.0 | — | Complete | 2026-09-04 |
 | 8–12 | v1.1 | — | Complete | 2026-09-07 |
 | 13–17 | v1.2 | — | Complete | 2026-09-08 |
-| 18. Bank contract study + discuss locks | v1.3 | 2/2 | In Progress|  |
+| 18. Bank contract study + discuss locks | v1.3 | 2/2 | Complete    | 2026-09-08 |
 | 19. Schema + pure grace domain math | v1.3 | 0/TBD | Not started | - |
 | 20. Obligation CRUD + cycle UI | v1.3 | 0/TBD | Not started | - |
 | 21. Капитал forecast integration | v1.3 | 0/TBD | Not started | - |
