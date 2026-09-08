@@ -153,6 +153,12 @@ None beyond progress-bar SDK clobber (known from 18-01).
 ## User Setup Required
 None.
 
+## Auth Gates
+None.
+
+## Threat Flags
+None new — no prisma/src; no new endpoints.
+
 ## Next Phase Readiness
 - Phase 19 planner reads dual DOM + A′ from ROADMAP/REQUIREMENTS/PROJECT (no re-open bank discuss)
 - CONT-01 evidence = checklist + CONTEXT; checkbox flips at verify/UAT
