@@ -52,24 +52,22 @@ Progress: [░░░░░░░░░░] 0%
 
 ### Decisions
 
-Decisions are logged in PROJECT.md Key Decisions table.
-v1.3 pending locks (Phase 18 discuss):
+Decisions are logged in PROJECT.md Key Decisions table and Phase 18 CONTEXT.
 
-- Credit grace amount due = manual entry (not derived from snapshots)
-- Credit grace obligations = forecast overlay only (GRISO twin of ISO-01)
-- Bank contract study before grace-rule lock
-- Overlay Option A vs B still open until Phase 18
+v1.3 locks from Phase 18 (see `18-CONTEXT.md`):
+
+- Manual «Платёж для беспроцентного»; dual DOM 21→15 next; A′ NW-neutral overlay
+- GRISO overlay-only; no APR / min / cash modeling
+- Contract notes: T-Bank Platinum ТП 7.90 in phase dir
 
 ### Pending Todos
 
 - Add timezone selection to settings (general, minor)
 - Integrate local AI agent via subprocess (general, minor)
-- Improve credit account type — grace / statement forecasting → **active milestone v1.3**
 
 ### Blockers/Concerns
 
-- Phase 18 needs user bank contract (PDF/notes) before cycle-rule plan lock
-- Phase 21 research flag: stock/flow Option A vs B + same-day income+grace UX
+- Phase 21: implement A′ NW-neutral + same-day income/grace tooltip (locked in 18-CONTEXT; was open research flag)
 
 ### Roadmap Evolution
 
