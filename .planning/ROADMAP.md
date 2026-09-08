@@ -72,7 +72,10 @@ Full detail: [milestones/v1.2-ROADMAP.md](./milestones/v1.2-ROADMAP.md)
   2. Locked decisions exist for: cycle start definition, duration-in-days, monthly repeat/clamp, interest-free vs revolving OOS
   3. Overlay NW semantics Option A vs B is decided (or explicitly deferred with default A) before Phase 19 plan lock
   4. Vocabulary locked in Russian: льготный период ≠ долг по снимку ≠ минимум платежа
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 18-01-PLAN.md — CONT-01 checklist + artifact structural proof (tracer)
+- [ ] 18-02-PLAN.md — Sync CYCLE-01 / ROADMAP / PROJECT to dual DOM + A′; fold credit todo
 
 ### Phase 19: Schema + pure grace domain math
 
@@ -129,7 +132,7 @@ Full detail: [milestones/v1.2-ROADMAP.md](./milestones/v1.2-ROADMAP.md)
 | 1–7 | v1.0 | — | Complete | 2026-09-04 |
 | 8–12 | v1.1 | — | Complete | 2026-09-07 |
 | 13–17 | v1.2 | — | Complete | 2026-09-08 |
-| 18. Bank contract study + discuss locks | v1.3 | 0/TBD | Not started | - |
+| 18. Bank contract study + discuss locks | v1.3 | 0/2 | Planned | - |
 | 19. Schema + pure grace domain math | v1.3 | 0/TBD | Not started | - |
 | 20. Obligation CRUD + cycle UI | v1.3 | 0/TBD | Not started | - |
 | 21. Капитал forecast integration | v1.3 | 0/TBD | Not started | - |

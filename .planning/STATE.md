@@ -5,10 +5,10 @@ milestone_name: Кредитка
 current_phase: 18
 current_phase_name: Bank contract study + discuss locks
 status: planning
-stopped_at: Phase 18 research complete
-last_updated: "2026-09-08T12:11:00.000Z"
+stopped_at: Phase 18 plans written (18-01 CONT-01 tracer + 18-02 docs sync)
+last_updated: "2026-09-08T12:20:00.000Z"
 last_activity: 2026-09-08
-last_activity_desc: Phase 18 RESEARCH.md written (CONT-01 gate)
+last_activity_desc: Phase 18 PLAN.md files created (CONT-01 close-out)
 state_head: 55ddb2eae8e1eb4fc8f9778b66d48bc026a450f7
 progress:
   total_phases: 5
@@ -31,8 +31,8 @@ See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 
 Phase: 18 of 22 (Bank contract study + discuss locks)
 Plan: —
-Status: Ready to plan
-Last activity: 2026-09-08 — Phase 18 RESEARCH.md complete
+Status: Ready to execute
+Last activity: 2026-09-08 — Phase 18 plans written (18-01, 18-02)
 
 Progress: [░░░░░░░░░░] 0%
 
