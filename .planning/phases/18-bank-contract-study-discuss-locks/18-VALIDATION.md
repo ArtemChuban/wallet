@@ -43,7 +43,9 @@ created: "2026-09-08"
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
 | 18-01-T1 | 01 | 1 | CONT-01 | T-18-01, T-18-03 | Docs-only; CONTEXT/notes SoT over PDF | structural | `test -f` CONTEXT/NOTES/PDF/txt + checklist; `rg -c '^\- \*\*D-(0[1-9]\|1[0-9]):' 18-CONTEXT.md` = 19; checklist cites CONT-01/D-02/D-11 | ✅ `18-CONT-01-CHECKLIST.md` | ✅ green |
 | 18-01-T2 | 01 | 1 | CONT-01 | T-18-03 | No `src/` CONT-01 tests; smoke only | structural | `rg -q '18-01-T1' 18-VALIDATION.md` + CONT-01 + `18-CONT-01-CHECKLIST`; `npm test -- src/lib/dates.test.ts` | ✅ this file | ✅ green |
-| 18-02-* | 02 | 2 | CONT-01 | — | Wording sync dual DOM + A′ | docs-grep | see 18-02-PLAN.md verify | ⬜ pending Plan 02 | ⬜ pending |
+| 18-02-T1 | 02 | 2 | CONT-01 | T-18-04 | Decision gate: dual DOM + A′ planning SoT | decision | Auto-selected `confirm-dual-dom-a-prime` (AUTO_CHAIN) | ✅ 18-02-PLAN checkpoint | ✅ green |
+| 18-02-T2 | 02 | 2 | CONT-01 | T-18-04, T-18-06 | CYCLE-01 / Phase 18 A′ / Phase 19 dual DOM wording | docs-grep | `rg` CYCLE-01 DOM/statement/due; Phase 18 A′/NW-neutral; Phase 19 statementDayOfMonth/dueDayOfMonth/clamp; PROJECT Active DOM; 18-01/18-02 plan list | ✅ REQUIREMENTS/ROADMAP/PROJECT | ✅ green |
+| 18-02-T3 | 02 | 2 | CONT-01 | T-18-05 | Credit todo fold + STATE + VALIDATION rows | docs-grep | completed todo + fold note; no pending twin; `rg 18-02-T` VALIDATION; STATE A′/dual DOM/CONT-01 | ✅ todo + STATE + this file | ✅ green |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -53,10 +55,10 @@ created: "2026-09-08"
 
 - [x] `18-CONT-01-CHECKLIST.md` or PLAN acceptance section — maps SC1–4 → D-IDs + file paths
 - [ ] Optional structural assert for required artifacts (only if planner wants CI-hard gate)
-- [ ] Task to amend ROADMAP Phase 18 SC3 / Phase 19 due-math wording / CYCLE-01 for dual DOM + A′ where needed
+- [x] Task to amend ROADMAP Phase 18 SC3 / Phase 19 due-math wording / CYCLE-01 for dual DOM + A′ where needed
 - [ ] Framework install: none
 
-*Existing app tests do not cover CONT-01; expected for a docs gate. Checklist present as of 18-01-T1.*
+*Existing app tests do not cover CONT-01; expected for a docs gate. Checklist present as of 18-01-T1. ROADMAP/CYCLE-01 amend done in 18-02-T2.*
 
 ---
 
