@@ -3,6 +3,7 @@ created: 2026-09-05T12:35:50.289Z
 title: Improve credit account type (limit, grace period, statement-date forecasting)
 area: general
 severity: major
+resolves_phase: 18
 files: []
 audit_acknowledged:
   milestone: v1.1
