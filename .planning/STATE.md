@@ -1,20 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.2
-status: Awaiting next milestone
-stopped_at: Verified quick 260908-1dm Docker image shrink (passed 5/5)
-last_updated: "2026-09-07T23:31:17Z"
+milestone: v1.3
+milestone_name: Кредитка
+status: planning
+last_updated: "2026-09-08T10:01:27.369Z"
 last_activity: 2026-09-08
-last_activity_desc: "Verified quick 260908-1dm: wallet-web ~808MB (passed 5/5)"
-state_head: 788a8eb8b926f4a8373ec1318f6d1dbd9222e898
 progress:
-  total_phases: 5
-  completed_phases: 5
-  total_plans: 14
-  completed_plans: 14
-  percent: 100
-milestone_name: Доходы
-current_phase: —
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -28,10 +24,10 @@ See: .planning/PROJECT.md (updated 2026-09-08 after v1.2)
 
 ## Current Position
 
-Phase: Milestone v1.2 complete
+Phase: Not started (defining requirements)
 Plan: —
-Status: Quick 260908-1dm verification passed (5/5)
-Last activity: 2026-09-08 — Verified quick 260908-1dm: Docker shrink 2.66GB→808MB
+Status: Defining requirements
+Last activity: 2026-09-08 — Milestone v1.3 started
 
 ## Performance Metrics
 

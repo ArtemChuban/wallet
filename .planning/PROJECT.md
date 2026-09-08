@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A local, single-user personal finance site for tracking net worth across accounts (fiat debit, fiat credit, crypto USDT, cash), a parallel «Долги» side ledger, and (v1.2) a «Доходы» income ledger with plan vs actual and NW forecast from recurring pay. Runs in Docker with SQLite on the host; no cloud accounts. Not budgeting or transaction categorization.
+A local, single-user personal finance site for tracking net worth across accounts (asset + credit), a parallel «Долги» side ledger, a «Доходы» income ledger with plan vs actual and NW forecast from recurring pay, and (v1.3) credit-card grace-period tracking with payment amounts on the NW forecast overlay. Runs in Docker with SQLite on the host; no cloud accounts. Not budgeting or transaction categorization.
 
 ## Core Value
 
@@ -10,20 +10,20 @@ At any moment, see true net worth (assets minus credit-card debt) in the primary
 
 ## Current State
 
-**Shipped:** v1.0 MVP (2026-09-04); **v1.1 Долги людям (2026-09-07)**; **v1.2 Доходы (2026-09-08)** — income side ledger + Капитал forecast overlay archived.
+**Shipped:** v1.0 MVP (2026-09-04); **v1.1 Долги людям (2026-09-07)**; **v1.2 Доходы (2026-09-08)**. **Active:** v1.3 Кредитка — credit grace periods + forecast obligations.
 
-Local Dockerized net-worth tracker + personal-debts side ledger + income ledger: SQLite → currencies/accounts → dated balances → dated FX → NW dashboard/charts with dashed «Прогноз» overlay from open planned pay → `/debts` + `/income`. Stack: Next.js 16 App Router, Prisma 7 + SQLite, shadcn/ui, recharts, Vitest. Russian-first UI. Debts never change NW (DISOL-01). Income never writes BalanceSnapshot / past LOCF (ISO-01).
+Local Dockerized net-worth tracker + personal-debts + income ledgers: SQLite → currencies/accounts → dated balances → dated FX → NW dashboard/charts with dashed «Прогноз» from income and (v1.3) credit grace obligations → `/debts` + `/income`. Stack: Next.js 16 App Router, Prisma 7 + SQLite, shadcn/ui, recharts, Vitest. Russian-first UI. Debts never change NW (DISOL-01). Income never writes BalanceSnapshot / past LOCF (ISO-01).
 
-## Next Milestone Goals
+## Current Milestone: v1.3 Кредитка
 
-*(Define via `/gsd-new-milestone` — questioning → research → requirements → roadmap.)*
+**Goal:** Track monthly credit-card grace periods (start date + days until due), manually record amount owed by the interest-free deadline and earlier repayment, and reflect those obligations on the Капитал NW forecast overlay.
 
-Candidates from backlog / Out of Scope (not committed):
-- Auto-apply income actual → account balance snapshot
-- Timezone selection in settings
-- Credit account grace / statement forecasting
-- Account delete (ACCT-04 residual)
-- Local AI agent / merge account types
+**Target features:**
+- Credit account: grace-period start date + duration in days, repeating monthly
+- When a period ends: manual entry of amount due by end of interest-free window
+- That amount appears on Капитал «Прогноз» from the due date
+- Earlier repayment: manual close entry; forecast stops carrying that obligation
+- Bank contract study before detailed planning (user supplies contract → document grace rules)
 
 ## Requirements
 
@@ -64,11 +64,18 @@ Candidates from backlog / Out of Scope (not committed):
 
 ### Active
 
-*(none — awaiting `/gsd-new-milestone`)*
+- [ ] User can set credit grace-period start date and duration (days); period repeats monthly
+- [ ] User can manually enter amount due by end of interest-free period when a cycle closes
+- [ ] User can record earlier repayment/close of that obligation
+- [ ] Капитал «Прогноз» includes open credit-period obligations from their due dates (FX LOCF honesty)
+- [ ] Historical NW / BalanceSnapshot stay unaffected by grace-period entries (forecast overlay only)
+- [ ] Grace rules documented from the user's bank contract before implementation locks
 
 ### Out of Scope
 
 - Auto-updating account balance snapshots when income is marked received — deferred (manual balances stay source of truth)
+- Deriving amount due from balance-snapshot history — v1.3 is manual entry only
+- Full revolving interest / penalty calculation engine — grace tracking + forecast only unless contract study forces more
 - Transaction history / expense posting / full double-entry — still periodic balance snapshots only
 - Spending analytics, monthly burn, category cash-flow — deferred
 - Long-term savings goals with target dates — deferred
@@ -76,15 +83,12 @@ Candidates from backlog / Out of Scope (not committed):
 - Debt list filters / search — deferred (single list)
 - Repayments in a different currency than the debt — deferred
 - Debts affecting net worth — explicitly excluded; tracking alongside capital only
-- Income amounts flowing into `computeNetWorthRows` historical LOCF (projection is forecast overlay, not rewriting past NW) — locked for v1.2 unless research says otherwise
-- Credit-card payment due date / minimum payment reminders — deferred
+- Income amounts flowing into `computeNetWorthRows` historical LOCF (projection is forecast overlay, not rewriting past NW) — locked
 - Bank/CSV import or API sync — deferred; manual only
 - Automatic FX from external APIs — deferred; manual rates only
 - FX between arbitrary non-primary pairs — primary ↔ other only
 - Multi-user / auth / cloud sync — single local user
 - Timezone selection in settings — deferred (Moscow calendar still default unless promoted)
-- Credit account grace / statement forecasting — deferred
-- Merge debit+crypto+cash account types — deferred
 - Local AI agent via subprocess — deferred
 - Nav «Валюты» discoverability / account delete (ACCT-04) — residual v1 debt, not this milestone unless promoted later
 
@@ -95,6 +99,8 @@ Shipped v1.0: capital visibility across disconnected money places (bank, USDT, c
 v1.1 adds personal debts (people ↔ money owed) as a parallel domain: same money/FX primitives for primary totals and charts, but debt balances must not flow into `computeNetWorthRows` or NW charts.
 
 v1.2 adds income (зарплата + разовые) as another parallel ledger: plan vs actual, counterparties + stats, multi-currency; Капитал shows forward NW projection from open planned pay (recurring + future one-time). Marking actual does not bump account balances yet. Milestone archived 2026-09-08.
+
+v1.3 extends credit accounts with monthly grace-period tracking: start + days-to-due, manual amount due / early close, and forecast overlay on Капитал. Contract study with the user's bank agreement informs the exact cycle rules before plan lock.
 
 **UI constitution — destructive actions:** Never use `window.confirm` (or equivalent browser confirm) for deletes or other irreversible actions. Always use an in-app second step inside the dialog/flow (explicit «точно удалить?» / equivalent) with Russian copy that states what will be lost. Applies app-wide from Phase 9 onward (debts, people, balance snapshots, and any future destructive UX).
 
@@ -134,6 +140,9 @@ v1.2 adds income (зарплата + разовые) as another parallel ledger:
 | DebtDetailDialog = tabs (Погашение / Изменение / Простить / История), not stacked forms | User approved mock variant 1 over primary-CTA; reduces modal overload | ✓ Good — quick 2026-09-05 |
 | Income = side ledger; actual ≠ BalanceSnapshot; forecast overlay only | Keep historical NW account-only; ISO-01 | ✓ Good — Phase 17 INISO + Orca |
 | Forecast = dashed «Прогноз» Line + hinge; FX exclude → partial banner | Forecast-not-fact UX; never invent rates | ✓ Good — Phase 17 |
+| Credit grace amount due = manual entry (not derived from snapshots) | User lock for v1.3; snapshot history stays balance source of truth | — Pending v1.3 |
+| Credit grace obligations = forecast overlay only (no historical NW rewrite) | Same isolation pattern as income ISO-01 | — Pending v1.3 |
+| Bank contract study before grace-rule lock | User supplies contract; avoid guessing revolving/grace semantics | — Pending v1.3 |
 
 ## Evolution
 
@@ -153,4 +162,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-08 after v1.2 milestone*
+*Last updated: 2026-09-08 after starting v1.3 Кредитка*
