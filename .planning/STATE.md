@@ -4,17 +4,17 @@ milestone: v1.3
 milestone_name: Кредитка
 current_phase: 18
 current_phase_name: bank-contract-study-discuss-locks
-status: planning
-stopped_at: Phase 18 plans written (18-01 CONT-01 tracer + 18-02 docs sync)
-last_updated: "2026-09-08T12:33:16.574Z"
+status: executing
+stopped_at: Completed 18-01-PLAN.md
+last_updated: "2026-09-08T12:39:28.508Z"
 last_activity: 2026-09-08
-last_activity_desc: Phase 18 PLAN.md files created (CONT-01 close-out)
-state_head: bf1b08a9ee7d24b93c6342b95f91e6aad760b593
+last_activity_desc: Completed 18-01 CONT-01 checklist + VALIDATION map
+state_head: 65ba439786cc376a0e9e3cd294929565036a1a3a
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 2
-  completed_plans: 0
+  completed_plans: 1
   percent: 0
 ---
 
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 
 ## Current Position
 
-Phase: 18 (bank-contract-study-discuss-locks) — READY TO EXECUTE
-Plan: —
-Status: Ready to execute
-Last activity: 2026-09-08 — Phase 18 plans written (18-01, 18-02)
+Phase: 18 (bank-contract-study-discuss-locks) — EXECUTING
+Plan: 2 of 2
+Status: 18-01 complete; next 18-02 docs sync
+Last activity: 2026-09-08 — Completed 18-01 CONT-01 checklist + VALIDATION map
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -47,6 +47,11 @@ Progress: [░░░░░░░░░░] 0%
 **By Phase:** v1.3 not started. Prior per-plan metrics in git history / prior STATE.
 
 *Updated after each plan completion*
+**Per-Plan Metrics:**
+
+| Plan | Duration | Tasks | Files |
+|------|----------|-------|-------|
+| Phase 18 P01 | 3min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -59,6 +64,8 @@ v1.3 locks from Phase 18 (see `18-CONTEXT.md`):
 - Manual «Платёж для беспроцентного»; dual DOM 21→15 next; A′ NW-neutral overlay
 - GRISO overlay-only; no APR / min / cash modeling
 - Contract notes: T-Bank Platinum ТП 7.90 in phase dir
+- [Phase 18]: CONT-01 checklist cites CONTEXT SoT; dual DOM (D-02) + A′ (D-11) product truth over stale ROADMAP SC
+- [Phase 18]: Phase 18 Plan 01 docs-only — no prisma/src; Plan 02 owns wording sync
 
 ### Pending Todos
 
@@ -91,11 +98,11 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-08T12:20:00.000Z
-Stopped at: Phase 18 plans written
-Resume file: .planning/phases/18-bank-contract-study-discuss-locks/18-01-PLAN.md
+Last session: 2026-09-08T12:38:52.508Z
+Stopped at: Completed 18-01-PLAN.md
+Resume file: None
 
 ## Operator Next Steps
 
-- Next: `/gsd-execute-phase 18` (docs/CONT-01 close-out)
+- Next: execute `18-02-PLAN.md` (ROADMAP/REQUIREMENTS/PROJECT dual DOM + A′ sync)
 - Then Phase 19 schema (dual DOM + A′ from CONTEXT)

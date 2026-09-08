@@ -30,7 +30,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Contract gate
 
-- [ ] **CONT-01**: Bank contract studied and grace rules documented in phase CONTEXT before plan lock
+- [x] **CONT-01**: Bank contract studied and grace rules documented in phase CONTEXT before plan lock
 
 ## Future Requirements
 
@@ -66,7 +66,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CONT-01 | Phase 18 | Pending |
+| CONT-01 | Phase 18 | Complete |
 | CYCLE-01 | Phase 19 | Pending |
 | CYCLE-02 | Phase 20 | Pending |
 | OBL-01 | Phase 20 | Pending |
@@ -78,6 +78,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | GRISO-01 | Phase 22 | Pending |
 
 **Coverage:**
+
 - v1.3 requirements: 10 total
 - Mapped to phases: 10
 - Unmapped: 0
