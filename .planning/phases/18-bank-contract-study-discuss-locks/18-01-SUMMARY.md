@@ -91,9 +91,10 @@ Each task was committed atomically:
 1. **Task 1: End-to-end CONT-01 proof — checklist + artifact gates** - `6b27f0e` (docs)
 2. **Task 2: Fill 18-VALIDATION map for Plan 01 structural gates** - `65ba439` (docs)
 
-**Plan metadata:** (pending final docs commit)
+**Plan metadata:** `9124f6f` (docs: complete plan)
 
-## Files Created/Modified
+_Note: TDD tasks may have multiple commits (test → feat → refactor)_
+
 - `.planning/phases/18-bank-contract-study-discuss-locks/18-CONT-01-CHECKLIST.md` — CONT-01 acceptance + SC↔D map
 - `.planning/phases/18-bank-contract-study-discuss-locks/18-VALIDATION.md` — Per-Task Verification Map for 18-01
 
