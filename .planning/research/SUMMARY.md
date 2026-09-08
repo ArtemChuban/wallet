@@ -1,185 +1,171 @@
 # Project Research Summary
 
-**Project:** Wallet v1.2 Доходы
-**Domain:** Income/salary plan-vs-actual ledger + NW forecast overlay on existing LOCF snapshot / dated-FX capital app
-**Researched:** 2026-09-07
+**Project:** Wallet (v1.3 Кредитка)
+**Domain:** Credit-card grace-period tracking + NW forecast obligation overlay (local single-user SQLite app)
+**Researched:** 2026-09-08
 **Confidence:** HIGH
 
 ## Executive Summary
 
-Wallet v1.2 adds a third parallel domain — income — beside Accounts/NW and Debts. Experts build this as a **side ledger** (template → virtual occurrences → optional actual), not as YNAB-style register posting. Plan and actual stay first-class; overdue is calendar hygiene («заполни»); forecast is a **short forward overlay** on Капитал, never a rewrite of historical LOCF NW.
+Wallet v1.3 extends an already-shipping capital tracker: FIAT_CREDIT accounts already carry limit + debt via snapshots; Капитал already draws a dashed «Прогноз» Line from open income slots (v1.2). Experts in this niche (manual bill/grace apps + PocketSmith-style “adjust when statement arrives”) separate **cycle template**, **statement amount due**, and **live card debt**. Wallet locks the same honesty: grace START + duration DAYS monthly, **manual** amount due, early close, and forecast overlay only — never snapshot-derived dues, never BalanceSnapshot writes, never historical LOCF rewrite (GRACEISO-01 twin of ISO-01).
 
-**Recommended approach:** zero new npm packages. Extend Prisma (`IncomeSource` + `IncomeActual`, reuse `Person`), pure libs (`income.ts`, `nw-forecast.ts`, day-of-month clamp in `@/lib/dates`), `/income` App Router page mirroring `/debts`, and dual-series recharts (solid fact + dashed forecast) on existing `NetWorthHistoryChart`. Virtual slots on read — persist definitions + actuals only. INISO-01 isolation mirrors DISOL-01: `net-worth.ts` / `historical-series.ts` never import income; actions never write `BalanceSnapshot`.
+**Recommended approach:** add **zero npm packages**. Extend Prisma (`Account.grace*` + child `CreditGraceObligation`), pure `@/lib/credit-grace.ts` (due = `addCalendarDays(start, days)`), signed slots in `@/lib/nw-forecast`, merge into existing `DashboardChartsShell` / one dashed Line. UX stays on credit account + Капитал — not a parallel `/grace` or «Долги» coupling. Bank contract notes gate cycle-rule lock before PLAN precision.
 
-**Key risks:** (1) folding income into historical LOCF — kill trust; (2) auto-bump balances on actual — out of scope; (3) DOM 31 skip months via rrule semantics; (4) double-count plan+actual in forecast; (5) chart that looks like measured NW past today. Mitigate with schema/math-first phases, clamp policy + Vitest matrix, occurrence-key forecast rules, dual series + RU legend, and isolation regressions at milestone close.
+**Key risks:** (1) stock/flow double-count — subtracting amount-due while credit debt already reduces NW; lock Option A (cash-out dip) vs B (markers / parallel series) in discuss before chart polish. (2) calendar operator mix-up — start uses DOM clamp, due uses +days, not one helper for both. (3) shipping APR/revolving or auto-derive from snapshots — out of scope until contract forces. Mitigate with contract phase-zero, GRACEISO tests, Vitest due-date matrix, and RU copy that debt snapshot ≠ льготный amount.
 
 ## Key Findings
 
 ### Recommended Stack
 
-Add **no** dependencies. Reuse Next.js 16.3.4 App Router, Prisma 7.10.0 + SQLite, React 19.2.8, Zod 4.5.4, recharts 3.10.1, Vitest 4.1.11, shadcn/ui + Tailwind 4. Domain work = migration + TypeScript modules + chart series extension. Reject rrule/date-fns/luxon, cron workers, new chart libs, decimal money packages.
+Reuse the pinned app stack; v1.3 is schema + TypeScript only. See [STACK.md](./STACK.md).
 
 **Core technologies:**
-- Next.js 16.3.4 — `/income` RSC + Server Actions; same CRUD/revalidate as debts
-- Prisma 7.10.0 + better-sqlite3 — IncomeSource/IncomeActual; BigInt minor; Person FK
-- recharts 3.10.1 — forecast via `strokeDasharray` / dual series / optional `ComposedChart`; no new chart lib
-- Zod 4.5.4 — dayOfMonth 1–31, amounts, dates at action boundary
-- Vitest 4.1.11 — occurrence clamp, overdue, forecast overlay math (pure, no Prisma)
-- `@/lib/dates` + money + fx/locf — Moscow calendar, DOM clamp, FX LOCF as-of plan/projection
+- Next.js 16.3.4 App Router — Server Actions + `revalidatePath` for grace config / amount-due / early close (same as accounts/income)
+- Prisma 7.10.0 + better-sqlite3 — `String` YYYY-MM-DD + `BigInt` minor on Account + obligation child; no second DB
+- `@/lib/dates` + new `@/lib/credit-grace*.ts` — `addCalendarDays` for due; month walk + clamp for cycle starts; keep Prisma out of unit math
+- `@/lib/nw-forecast` + recharts 3.10.1 — signed forecast slots (−grace); one dashed «Прогноз» Line; no new chart lib
+- Zod 4.5.4 + Vitest 4.1.11 + shadcn Dialog / DestructiveConfirmStep — validate graceDays > 0; pure cycle/open-set tests; no `window.confirm`
 
-Details: [STACK.md](./STACK.md)
+**Do not install:** date-fns / luxon / dayjs, rrule, cron/job queues, money npm libs, interest engines, OCR/PDF parsers.
 
 ### Expected Features
 
-Industry pattern: schedule → occurrence → plan≠actual → overdue → forecast from **planned** future only; accounts stay manual snapshots. Wallet locks: projection = overlay; actual ≠ balance post.
+Manual local NW tracker extending credit + income-forecast patterns — not YNAB funding, not Monarch sync, not swipe optimizers. See [FEATURES.md](./FEATURES.md).
 
 **Must have (table stakes):**
-- Recurring monthly income (DOM, amount, currency, Person) + one-time
-- Plan vs actual (independent amount + date)
-- Overdue «заполни» when plan date < Moscow today and no actual
-- «Доходы» page + nav; DestructiveConfirmStep on deletes
-- Multi-currency + FX LOCF for stats/projection; partial honesty
-- Actual does **not** change account balances
-- Капитал forward projection from recurring (+ future one-time) + FX
-- Per-counterparty income stats (basic Σ primary)
+- Grace cycle on credit account (start date + duration days, monthly) — cycle template
+- Cycle instances + manual amount due for interest-free window — never from snapshots
+- Early close / paid — removes open obligation from forecast
+- Капитал «Прогноз» includes open obligations from due date (FX LOCF honesty / partial banner)
+- Historical NW / BalanceSnapshot unaffected (overlay only)
+- Bank contract notes before rule lock (may be doc-only)
 
 **Should have (competitive):**
-- Plan≠actual as first-class variance (not silent overwrite)
-- NW forecast dashed overlay on existing Капитал chart
-- Side-ledger isolation (DISOL-style; never mutates account LOCF)
-- Shared `Person` for debts + income
-- Dated FX LOCF on projected salary points
+- Debt (snapshot) vs grace due (cycle) side-by-side with clear RU labels
+- GRACEISO isolation as trust differentiator (same as income)
+- Overdue / «заполни» highlight when due passed without close (P2 after first real miss)
 
-**Defer (v1.x / v2+):**
-- Optional account note/link (still no auto-post); variance chart; nav overdue badge; pause/end template; Person debts+income tabs
-- Auto-suggest balance snapshot; biweekly/RRULE; burn/budget; Monte Carlo; bank import — out / later
-
-Details: [FEATURES.md](./FEATURES.md)
+**Defer (v2+ / never in v1.3):**
+- Derive due from BalanceSnapshot history; bank/CSV sync; APR/penalty engine
+- Min vs statement vs full-debt triad; per-purchase grace; which-card optimizer
+- Auto BalanceSnapshot on pay; push reminders; YNAB payment categories
 
 ### Architecture Approach
 
-Income is a third parallel domain: same SQLite/Currency/FX/money — **no** writes into Account/BalanceSnapshot; **no** mutation of historical LOCF. Persist source + actuals; generate plan slots in pure code. Forecast = today NW anchor + cumulative converted future plans in `nw-forecast.ts`; historical path unchanged. Dashboard may import forecast (unlike debts↔page DISOL); overlay is intentional capital UX.
+Grace is **not** a fourth parallel ledger like Долги/Доходы. Config lives on `Account` (FIAT_CREDIT); amount/status lives on child `CreditGraceObligation` keyed by `cycleStartAsOf`. Historical path (`net-worth` / `historical-series`) stays untouched; `/` merges income + grace open slots into one signed forecast series. See [ARCHITECTURE.md](./ARCHITECTURE.md).
 
 **Major components:**
-1. `IncomeSource` / `IncomeActual` — plan definition + fact per `(sourceId, plannedAsOf)`
-2. `src/lib/income.ts` — virtual occurrences, overdue, counterparty stats
-3. `src/lib/nw-forecast.ts` — forward NW overlay only (not LOCF rewrite)
-4. `/income` + income components — CRUD, overdue list, stats (debts UX mirror)
-5. `NetWorthHistoryChart` / `DashboardChartsShell` — dual series fact/forecast join at today
-6. INISO-01 tests — file-scan + property: past NW identical with/without income data
+1. `Account.graceAnchorAsOf` + `graceDurationDays` — schedule metadata (both null or both set)
+2. `CreditGraceObligation` — per-cycle manual `amountMinor`, `dueAsOf` stored at create, OPEN|CLOSED, unique `(accountId, cycleStartAsOf)`
+3. `src/lib/credit-grace.ts` — cycle candidates, due math, open membership, overdue (pure + Vitest)
+4. `nw-forecast.ts` + `DashboardChartsShell` — signed `deltaMinor` slots; merge with income; FX LOCF as-of today
+5. Account UI + `grace-actions.ts` — config, amount entry, early close; **forbidden** BalanceSnapshot writes
 
-Details: [ARCHITECTURE.md](./ARCHITECTURE.md)
+**Default overlay semantics (discuss lock):** Option A — negative delta at due date (cash-out approximation until user updates balances). Escalate to Option B if UAT confuses double-count vs existing credit debt.
 
 ### Critical Pitfalls
 
-1. **Income in historical LOCF / `computeNetWorthRows`** — keep account-only history; separate forecast builder; INISO-01
-2. **Auto-bump BalanceSnapshot on actual** — actions touch income tables only; RU copy; snapshot regression
-3. **Mutating plan to match actual** — immutable plan fields; actual optional; separate plan-edit action
-4. **DOM 29/30/31 skip months** — clamp to last day of month; Vitest matrix; never rrule skip
-5. **Double-count plan+actual / chart as fact** — future open plans only; dual dashed series + «Прогноз» legend
+Top risks from [PITFALLS.md](./PITFALLS.md):
 
-Also watch: FX invent/silent zero; extend `buildNetWorthSeries` past today; wrong Moscow overdue key; Person delete without Restrict; float money.
-
-Details: [PITFALLS.md](./PITFALLS.md)
+1. **Stock/flow double-count** — never treat amount-due as a second liability on top of LOCF debt without an explicit model + golden test (pay from own assets ≈ NW-neutral in truth)
+2. **Bake grace into historical LOCF / snapshots** — GRACEISO-01: no import into `net-worth`/`historical-series`; actions never write BalanceSnapshot
+3. **Wrong calendar operators** — start = `clampDayOfMonth`; due = `addCalendarDays(start, graceDays)`; Moscow `calendarDateToday`
+4. **Unsigned ForecastSlot collision** — extend signed/direction slots before shoving credit into income-only adder
+5. **Skip contract study** — do not lock schema/cycle math on generic bank articles; user contract → CONTEXT before PLAN lock
 
 ## Implications for Roadmap
 
-Based on research, suggested phase structure (5–6 phases; mirror v1.1 debts side-ledger order):
+Based on research, suggested phase structure (renumber to continue after v1.2 Phase 17):
 
-### Phase 1: Income schema + domain math
-**Rationale:** All features hang on occurrence identity, DOM clamp, BigInt, plan≠actual fields — UI without this reworks later.
-**Delivers:** Prisma `IncomeSource`/`IncomeActual` + Person/Currency relations; migration; `income.ts` (`listPlanOccurrences`, overdue, stats helpers); DOM clamp in `@/lib/dates`; Vitest matrix; validations/Zod.
-**Addresses:** Recurring + one-time model; plan vs actual fields; Person reuse; multi-currency storage
-**Avoids:** Plan mutate on actual; DOM skip; IEEE float; materialize-all-future-rows; new Employer table
+### Phase 18: Bank contract study + discuss locks
+**Rationale:** PROJECT gate — cycle start semantics, monthly repeat/clamp, interest-free vs revolving OOS, overlay Option A vs B must precede plan precision.
+**Delivers:** CONTEXT / contract notes; locked decisions (start definition, duration, NW-semantics A|B, vocabulary: льготный ≠ долг по снимку ≠ минимум).
+**Addresses:** Contract research (P1); anti-features (no APR engine, no sync).
+**Avoids:** Pitfalls 3, 10 (wrong grace model / premature schema lock).
 
-### Phase 2: Доходы CRUD + nav
-**Rationale:** Ledger discoverability before forecast; debts patterns already proven.
-**Delivers:** `/income` page, nav «Доходы», source create/edit/delete (RECURRING/ONE_TIME), Person pick, list with virtual slots, DestructiveConfirmStep, RU copy.
-**Uses:** Next Server Actions, shadcn Dialog, existing PersonFormDialog patterns
-**Implements:** Income UI shell; revalidate `/income`
-**Avoids:** window.confirm; BalanceSnapshot writes; English user strings
+### Phase 19: Schema + pure grace domain math
+**Rationale:** Data model + calendar operators before any UI; isolation boundary at schema (Account vs Долги).
+**Delivers:** Prisma migration (`Account.grace*` + `CreditGraceObligation`); `credit-grace.ts` + Vitest (Feb/31, +days across month, open membership); Zod validations.
+**Addresses:** Cycle config; obligation instance identity; BigInt minor.
+**Avoids:** Pitfalls 5, 7, 8 (calendar, orphan periods, Person/Debt coupling); no amount-due derivation (Pitfall 4).
 
-### Phase 3: Record actual + overdue polish
-**Rationale:** Overdue and variance need actual join; forecast needs occurrence satisfaction rules.
-**Delivers:** Record/update actual dialog (amount + date); unique slot; overdue «заполни» (Moscow today, occurrence key, early/late clears); helper text «факт не меняет баланс».
-**Addresses:** Plan vs actual UX; overdue hygiene; honesty lock
-**Avoids:** Auto balance bump; plan overwrite; UTC today; exact-date-only overdue match
+### Phase 20: Amount-due + early-close actions/UI
+**Rationale:** Manual obligation CRUD must exist before forecast wiring; GRACEISO write-path lock here.
+**Delivers:** Account grace fields UI; create obligation / early close / list open|closed; DestructiveConfirmStep; RU copy that snapshots unchanged.
+**Addresses:** Manual amount due; early close; keep limit+debt snapshots independent.
+**Avoids:** Pitfalls 2, 4, 7 (snapshot writes, auto-derive, close bugs).
 
-### Phase 4: Counterparty stats
-**Rationale:** Depends on actuals + FX; independent of chart; ships locked target feature without blocking capital UX.
-**Delivers:** Per-Person Σ on `/income` (actual primary; optional plan secondary); LOCF as-of; partial banner; Person delete Restrict if income refs.
-**Addresses:** Per-counterparty income stats; multi-currency honesty
-**Avoids:** Mix debt direction into income stats; invent FX rates; cascade-delete history
+### Phase 21: Капитал forecast integration (signed slots + FX)
+**Rationale:** Depends on open obligations + signed `nw-forecast`; highest integration risk (stock/flow + income coexistence).
+**Delivers:** Extend `ForecastSlot` with signed `deltaMinor`; `page.tsx` + `DashboardChartsShell` merge; partial FX banner for credit; early close clears dip; golden no double-liability test.
+**Addresses:** Прогноз from due date; FX honesty; income coexistence.
+**Avoids:** Pitfalls 1, 6, 9 (double-count, unsigned slots, FX invent).
 
-### Phase 5: NW forecast overlay + chart
-**Rationale:** Needs sources + occurrence rules; capital differentiator last so ledger MVP not blocked.
-**Delivers:** `nw-forecast.ts` (anchor + cumulative future plans, ~90d horizon, sparse dates); page payload; dual series on `NetWorthHistoryChart` (`strokeDasharray`, join at today, «Факт»/«Прогноз»); FX partial banner; INISO-01 isolation tests.
-**Addresses:** Капитал forward projection; forecast overlay differentiator
-**Avoids:** LOCF pollution; series > today in historical builder; double-count; one-time in recurring loop; solid Area past today; forecast math in `page.tsx`
-
-### Phase 6 (optional / closure): Isolation + Nyquist
-**Rationale:** Catch late coupling; mirror debts milestone gates.
-**Delivers:** `iniso.test.ts` file-scan; historical golden fixtures unchanged with income fixtures; VALIDATION green; “looks done” checklist from PITFALLS.
-**Avoids:** Silent income imports into `net-worth.ts` / `historical-series.ts`
+### Phase 22: GRACEISO regression + UAT polish
+**Rationale:** Catch late coupling; legend/copy/overdue after core math green.
+**Delivers:** File-scan like `iniso.test.ts`; past-series golden identity; overdue highlight; chart legend (доходы / обязательства); Orca UAT path config→amount→forecast→close→history unchanged.
+**Addresses:** Isolation SoT; overdue P2; Russian-first chrome.
+**Avoids:** Pitfall 2 residual; UX panic from unexplained dip.
 
 ### Phase Ordering Rationale
 
-- Domain math before UI — generator/clamp/occurrence key is the hard contract
-- CRUD → actual → stats → forecast — dependency DAG from FEATURES.md
-- Forecast last — needs schedules; chart dual-series is high-complexity UX
-- Isolation last (or inside Phase 5 + closure) — DISOL-class gates catch late coupling
-- Zero new services — Docker/SQLite unchanged
+- Contract/discuss before schema — bank rule mismatch = high recovery cost
+- Pure schedule math before CRUD — due dates must be trustworthy before users enter amounts
+- Obligation write path before chart — open-set membership is the forecast input
+- Overlay semantics + signed slots before polish — stock/flow is the milestone’s sharpest pitfall
+- Isolation + UAT last — mirrors v1.2 INISO closure pattern
 
 ### Research Flags
 
-Phases likely needing deeper research during planning:
-- **Phase 1:** Day-of-month / short-month clamp algorithm (light — lock clamp vs «последний день»)
-- **Phase 5:** Forecast horizon vs range preset (discuss — recommend independent 90d forward); Chart Area vs Line / `ComposedChart` (UI-SPEC)
-- **Phase 1–2 discuss:** Person reuse vs employer split if UX confuses
+Phases likely needing deeper research during planning (`/gsd-plan-phase --research` or discuss):
+- **Phase 18:** User bank contract specifics (statement day vs purchase day; weekend shifts; cash-advance carve-outs) — sparse until user supplies PDF/notes
+- **Phase 21:** Overlay Option A vs B UX + same-day income+grace tooltip/netting — ecosystem analogies only MEDIUM; needs product lock
 
-Phases with standard patterns (skip research-phase):
-- **Phase 2:** App Router CRUD + debts dialog mirror — well-documented in-repo
-- **Phase 3:** Actual write + overdue boolean — pure lib patterns settled
-- **Phase 4:** FX LOCF totals — reuse debts/NW honesty patterns
-- **Phase 6:** Isolation file-scan — copy DISOL-01 shape
+Phases with standard patterns (skip heavy research-phase):
+- **Phase 19:** Prisma + pure dates — well-documented in-repo (`dates.ts`, income month walk)
+- **Phase 20:** Server Actions + Dialogs + DestructiveConfirm — copy income/debt patterns
+- **Phase 22:** INISO-style file-scan + Orca UAT — established milestone closure
 
 ## Confidence Assessment
 
 | Area | Confidence | Notes |
 |------|------------|-------|
-| Stack | HIGH | Repo pins + explicit “add zero packages”; recharts APIs cross-checked |
-| Features | HIGH | PROJECT.md locks + side-ledger precedent; competitor UX MEDIUM only |
-| Architecture | HIGH | Codebase integration clear; chart dual-series UX MEDIUM |
-| Pitfalls | HIGH | Codebase + v1.1 DISOL lessons; schedule/FX ecosystem MEDIUM |
+| Stack | HIGH | Repo pins + codebase; reject date-fns/rrule with clear fit reasons |
+| Features | HIGH | PROJECT locks + domain norms; ecosystem UX MEDIUM but does not change MVP |
+| Architecture | HIGH | Clear integration with income forecast + ISO walls; NW-semantics Option A/B still discuss |
+| Pitfalls | HIGH | Codebase stock/flow + calendar traps verified; bank revolving details MEDIUM pending contract |
 
 **Overall confidence:** HIGH
 
 ### Gaps to Address
 
-- **Forecast horizon vs chart range presets:** Discuss/lock 90d (or N months) independent of past lookback during Phase 5 plan
-- **Person as employer UX:** Validate copy/empty states; only split tables if discuss-phase forbids mixing
-- **One-time in NW projection:** Default out of recurring sum unless future-dated and opted in — confirm in plan-phase
-- **ComposedChart vs AreaChart children:** Validate at UI-SPEC; stay on recharts 3.10.1 either way
-- **Pause/end recurring without delete history:** Deferred to v1.x — do not bloack v1.2 schema if `active`/`endAsOf` cheap now (Architecture already suggests fields)
+- **Bank contract content:** User must supply agreement; until then keep schema flexible (anchor + durationDays + manual amount) — handle in Phase 18
+- **NW overlay semantics A vs B:** Architecture defaults A; Pitfalls prefers explicit netting/markers if double-count confuses — lock in discuss before Phase 21 plan
+- **Month-advance clamp for next cycle start:** Product must lock end-of-month behavior after contract (reuse income clamp vs bank rule)
+- **Past-due open in forecast:** Architecture says `dueAsOf > today` → UI only; confirm policy if product wants overdue still on dashed line
+- **Partial pay / edit amount after entry:** P2/P3 — promote only if UAT demands
 
 ## Sources
 
 ### Primary (HIGH confidence)
+- `.planning/PROJECT.md` — v1.3 locks (manual amount, overlay only, contract study, OOS revolving)
 - `package.json` pins — Next 16.3.4, Prisma 7.10.0, recharts 3.10.1, Zod 4.5.4, Vitest 4.1.11
-- `.planning/PROJECT.md` v1.2 locks — no auto balance; forecast ≠ historical LOCF
-- Codebase — `net-worth.ts`, `historical-series.ts`, `disol.test.ts`, `dates.ts`, `prisma/schema.prisma` (Person), `NetWorthHistoryChart.tsx`, debts side-ledger
-- Todo `2026-09-05-add-salary-income-tracking-with-forecast.md`
+- Codebase — `dates.ts`, `nw-forecast.ts`, `DashboardChartsShell.tsx`, `NetWorthHistoryChart.tsx`, `iniso.test.ts`, `prisma/schema.prisma`, income occurrence patterns
+- Todo `2026-09-05-improve-credit-account-type-with-limit-grace-period-and-fore.md` — problem statement / derive-from-spend risk
 
 ### Secondary (MEDIUM confidence)
-- Recharts dual-series + `strokeDasharray` / `ReferenceLine` community pattern
-- YNAB / Monarch / Simplifi / COUNT — plan vs actual, pending/overdue, forecast horizons (Wallet stays short overlay)
-- RFC 5545 / rrule DOM skip — reason to reject rrule for salary clamp
-- Plan-vs-actual variance guides — do not mutate plan on actual
+- PocketSmith / Monarch Bill Sync / YNAB credit models — manual adjust vs sync vs category funding
+- TodayKa / Swipeity / BillWise — cycle-date focus
+- T-Bank / VTB / Sovcombank / Raiffeisen explainers — расчётный → льготный; min ≠ full payoff
+- Centinel / Simplifi / BudgetLabs — cash-out vs double-count guidance for card payments on forecasts
+- Prior v1.2 PITFALLS — ISO, DOM, FX, chart fact/forecast patterns reused
 
 ### Tertiary (LOW confidence)
-- Isolated webfetch of recharts API pages without pin cross-check
-- npm version checks for rejected libs (rrule, date-fns) — informational only
+- npm registry versions for rejected libs (date-fns, rrule, cron-parser) — confirm-only
+- Experian / Wealthsimple / WalletHub grace-void-on-carry articles — not a substitute for user contract
+- EV–equity double-count metaphor — UI metaphor only
 
 ---
-*Research completed: 2026-09-07*
+*Research completed: 2026-09-08*
 *Ready for roadmap: yes*
+*Milestone: v1.3 Кредитка*
