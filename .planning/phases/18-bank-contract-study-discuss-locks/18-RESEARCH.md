@@ -332,21 +332,24 @@ const isOverdue = status === "OPEN" && today > dueAsOf; // dueAsOf === "...-15" 
 
 **If empty beyond A1–A3:** Core CONT-01 / dual DOM / A′ claims are CONTEXT- or PDF-backed.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Amend CYCLE-01 / PROJECT / Phase 19 ROADMAP SC in Phase 18 vs 19?**
    - What we know: CONTEXT D-02 overrides duration-days wording.
    - What's unclear: whether Phase 18 plan should edit REQUIREMENTS.md now or leave a “blocked for 19” note.
    - Recommendation: Phase 18 plan includes a small docs task to update CYCLE-01 + Phase 19 success criteria text to dual DOM / A′ so Phase 19 research does not re-litigate.
+   - RESOLVED: Amend in Phase 18 Plan 02 — dual-DOM / A′ docs sync for CYCLE-01, PROJECT Active, and Phase 18–19 ROADMAP SC (not deferred to Phase 19).
 
 2. **Past-due open obligations on dashed «Прогноз»?**
    - What we know: SUMMARY flagged policy open; D-04 defines overdue highlight; D-11 visibility at due.
    - What's unclear: whether slots with `dueAsOf ≤ today` stay in forecast series or UI-list only.
    - Recommendation: defer explicit lock to Phase 21 discuss/plan; default = UI highlight + keep open membership for tooltip until closed (ASSUMED until 21 locks).
+   - RESOLVED: Defer to Phase 21 discuss/plan; Phase 18 does not lock forecast-series vs UI-list membership.
 
 3. **Optional `graceDurationDays` derived display column?**
    - Claude discretion allows duration for display.
    - Recommendation: do **not** persist as SoT; compute for UI only if needed.
+   - RESOLVED: Display-only derived days if UI needs them; not planning/schema SoT (dual DOM remains SoT).
 
 ## Environment Availability
 
