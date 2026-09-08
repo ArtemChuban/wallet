@@ -41,20 +41,22 @@ created: "2026-09-08"
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 18-*-* | TBD | TBD | CONT-01 | — | N/A (docs) | structural | see RESEARCH Validation Architecture | ✅ CONTEXT/NOTES | ⬜ pending |
+| 18-01-T1 | 01 | 1 | CONT-01 | T-18-01, T-18-03 | Docs-only; CONTEXT/notes SoT over PDF | structural | `test -f` CONTEXT/NOTES/PDF/txt + checklist; `rg -c '^\- \*\*D-(0[1-9]\|1[0-9]):' 18-CONTEXT.md` = 19; checklist cites CONT-01/D-02/D-11 | ✅ `18-CONT-01-CHECKLIST.md` | ✅ green |
+| 18-01-T2 | 01 | 1 | CONT-01 | T-18-03 | No `src/` CONT-01 tests; smoke only | structural | `rg -q '18-01-T1' 18-VALIDATION.md` + CONT-01 + `18-CONT-01-CHECKLIST`; `npm test -- src/lib/dates.test.ts` | ✅ this file | ✅ green |
+| 18-02-* | 02 | 2 | CONT-01 | — | Wording sync dual DOM + A′ | docs-grep | see 18-02-PLAN.md verify | ⬜ pending Plan 02 | ⬜ pending |
 
-*Filled by planner when PLAN.md tasks land. Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
+*Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
 ---
 
 ## Wave 0 Requirements
 
-- [ ] `18-CONT-01-CHECKLIST.md` or PLAN acceptance section — maps SC1–4 → D-IDs + file paths
+- [x] `18-CONT-01-CHECKLIST.md` or PLAN acceptance section — maps SC1–4 → D-IDs + file paths
 - [ ] Optional structural assert for required artifacts (only if planner wants CI-hard gate)
 - [ ] Task to amend ROADMAP Phase 18 SC3 / Phase 19 due-math wording / CYCLE-01 for dual DOM + A′ where needed
 - [ ] Framework install: none
 
-*Existing app tests do not cover CONT-01; expected for a docs gate.*
+*Existing app tests do not cover CONT-01; expected for a docs gate. Checklist present as of 18-01-T1.*
 
 ---
 
