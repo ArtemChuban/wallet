@@ -16,12 +16,12 @@ Local Dockerized net-worth tracker + personal-debts + income ledgers: SQLite →
 
 ## Current Milestone: v1.3 Кредитка
 
-**Goal:** Track monthly credit-card grace periods (start date + days until due), manually record amount owed by the interest-free deadline and earlier repayment, and reflect those obligations on the Капитал NW forecast overlay.
+**Goal:** Track monthly credit-card grace schedules (statement DOM + due DOM next month), manually record «Платёж для беспроцентного», and reflect open obligations on Капитал «Прогноз» as A′ NW-neutral slots (visible @ due, ΔNW=0).
 
 **Target features:**
-- Credit account: grace-period start date + duration in days, repeating monthly
-- When a period ends: manual entry of amount due by end of interest-free window
-- That amount appears on Капитал «Прогноз» from the due date
+- Credit account: statement day-of-month + due day-of-month (monthly dual DOM; clamp on statement)
+- Manual entry of amount due («Платёж для беспроцентного») for a cycle
+- That obligation appears on Капитал «Прогноз» at due (A′ NW-neutral — visible, no second chart series)
 - Earlier repayment: manual close entry; forecast stops carrying that obligation
 - Bank contract study before detailed planning (user supplies contract → document grace rules)
 
@@ -64,10 +64,10 @@ Local Dockerized net-worth tracker + personal-debts + income ledgers: SQLite →
 
 ### Active
 
-- [ ] User can set credit grace-period start date and duration (days); period repeats monthly
-- [ ] User can manually enter amount due by end of interest-free period when a cycle closes
+- [ ] User can set credit statement DOM + due DOM (monthly dual DOM schedule; clamp on statement)
+- [ ] User can manually enter «Платёж для беспроцентного» when a cycle closes
 - [ ] User can record earlier repayment/close of that obligation
-- [ ] Капитал «Прогноз» includes open credit-period obligations from their due dates (FX LOCF honesty)
+- [ ] Капитал «Прогноз» shows open credit obligations at due as A′ NW-neutral (visible, ΔNW=0 + tooltip; FX LOCF honesty)
 - [ ] Historical NW / BalanceSnapshot stay unaffected by grace-period entries (forecast overlay only)
 - [ ] Grace rules documented from the user's bank contract before implementation locks
 
@@ -100,7 +100,7 @@ v1.1 adds personal debts (people ↔ money owed) as a parallel domain: same mone
 
 v1.2 adds income (зарплата + разовые) as another parallel ledger: plan vs actual, counterparties + stats, multi-currency; Капитал shows forward NW projection from open planned pay (recurring + future one-time). Marking actual does not bump account balances yet. Milestone archived 2026-09-08.
 
-v1.3 extends credit accounts with monthly grace-period tracking: start + days-to-due, manual amount due / early close, and forecast overlay on Капитал. Contract study with the user's bank agreement informs the exact cycle rules before plan lock.
+v1.3 extends credit accounts with monthly dual-DOM grace schedules (statement + due), manual «Платёж для беспроцентного» / early close, and A′ NW-neutral forecast overlay on Капитал. Contract study with the user's bank agreement informs the exact cycle rules before plan lock.
 
 **UI constitution — destructive actions:** Never use `window.confirm` (or equivalent browser confirm) for deletes or other irreversible actions. Always use an in-app second step inside the dialog/flow (explicit «точно удалить?» / equivalent) with Russian copy that states what will be lost. Applies app-wide from Phase 9 onward (debts, people, balance snapshots, and any future destructive UX).
 

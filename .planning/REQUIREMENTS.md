@@ -9,7 +9,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Cycle
 
-- [ ] **CYCLE-01**: User can set grace-period start date and duration (days) on a credit account; the cycle repeats monthly
+- [ ] **CYCLE-01**: User can set statement day-of-month and due day-of-month on a credit account (monthly repeat); statement DOM uses `clampDayOfMonth` (D-03); due is next-month DOM (this bank: 15) per dual-DOM SoT (D-02) — prefer `statementDayOfMonth` + `dueDayOfMonth` over sole `graceDurationDays`
 - [ ] **CYCLE-02**: User can see cycle instances for a credit account (current / next due)
 
 ### Obligation
@@ -30,7 +30,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Contract gate
 
-- [x] **CONT-01**: Bank contract studied and grace rules documented in phase CONTEXT before plan lock
+- [ ] **CONT-01**: Bank contract studied and grace rules documented in phase CONTEXT before plan lock
 
 ## Future Requirements
 
@@ -51,9 +51,12 @@ Explicit exclusions for this milestone.
 | Item | Reason |
 |------|--------|
 | Derive amount due from balance-snapshot history | Manual entry lock for v1.3 |
-| Full APR / penalty / revolving interest engine | Grace track + forecast only unless contract study forces more |
+| Full APR / penalty / revolving interest engine | D-07/D-10 — overdue highlight + RU hint only; no APR/penalty math |
+| Cash / cash-like ops (59.9%) modeling | D-08 — fully OOS |
+| Bank rule «missed minimum voids next interest-free» | D-09 — not modeled (needs min/triad UI) |
+| Penalty 20%, overlimit fee, insurance % | D-10 — all OOS; grace payoff + forecast visibility only |
 | Auto-update BalanceSnapshot when grace obligation closed | Snapshot remains source of truth |
-| Minimum vs statement vs full-debt triad UI | One manual «сумма к оплате до конца льготного» field |
+| Minimum vs statement vs full-debt triad UI | D-09/D-16 — one manual «Платёж для беспроцентного» field; min hidden |
 | Bank / CSV / API sync of statements | Manual-only app |
 | Per-purchase grace windows | Needs transaction ledger Wallet does not have |
 | Feeding grace into historical `computeNetWorthRows` / LOCF | GRISO-01; forecast overlay only |
@@ -66,7 +69,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CONT-01 | Phase 18 | Complete |
+| CONT-01 | Phase 18 | Pending |
 | CYCLE-01 | Phase 19 | Pending |
 | CYCLE-02 | Phase 20 | Pending |
 | OBL-01 | Phase 20 | Pending |

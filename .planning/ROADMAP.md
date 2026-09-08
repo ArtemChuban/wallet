@@ -52,7 +52,7 @@ Full detail: [milestones/v1.2-ROADMAP.md](./milestones/v1.2-ROADMAP.md)
 
 ### 🚧 v1.3 Кредитка (In Progress)
 
-**Milestone Goal:** Track monthly credit-card grace periods (start + days), manually record amount owed / early close, and show open obligations on Капитал «Прогноз» without rewriting historical NW.
+**Milestone Goal:** Track monthly credit-card grace schedules (statement DOM + due DOM), manually record amount owed / early close, and show open obligations on Капитал «Прогноз» (A′ NW-neutral) without rewriting historical NW.
 
 - [ ] **Phase 18: Bank contract study + discuss locks** - Document bank grace rules; lock cycle/overlay decisions before schema
 - [ ] **Phase 19: Schema + pure grace domain math** - Persist grace config + obligation model; trustworthy due-date math
@@ -70,11 +70,11 @@ Full detail: [milestones/v1.2-ROADMAP.md](./milestones/v1.2-ROADMAP.md)
 **Success Criteria** (what must be TRUE):
 
   1. User-supplied bank contract (or notes) is studied and grace rules are written into phase CONTEXT
-  2. Locked decisions exist for: cycle start definition, duration-in-days, monthly repeat/clamp, interest-free vs revolving OOS
-  3. Overlay NW semantics Option A vs B is decided (or explicitly deferred with default A) before Phase 19 plan lock
-  4. Vocabulary locked in Russian: льготный период ≠ долг по снимку ≠ минимум платежа
+  2. Locked decisions exist for: dual DOM (statement day + due day next month), statement clamp via `clampDayOfMonth`, interest-free vs revolving OOS (D-01…D-10) — not sole duration-days SoT
+  3. Overlay **A′** NW-neutral locked (visible @ due, ΔNW=0 + tooltip) before Phase 19 plan lock (D-11…D-13) — not open Option A vs B deferral
+  4. Vocabulary locked in Russian: «Задолженность» ≠ «Платёж для беспроцентного» ≠ минимум (D-14…D-19)
 
-**Plans**: 1/2 plans executed
+**Plans**: 2 plans
 Plans:
 **Wave 1**
 
@@ -91,8 +91,8 @@ Plans:
 **Requirements**: CYCLE-01
 **Success Criteria** (what must be TRUE):
 
-  1. Credit account can store grace-period start date and duration (days); both null or both set
-  2. Pure helpers compute monthly cycle candidates and due dates via `addCalendarDays(start, days)` (month-edge / Feb cases covered)
+  1. Credit account can store dual DOM ints (`statementDayOfMonth` + `dueDayOfMonth`); both null or both set
+  2. Pure helpers compute due via next-month DOM + statement advance via `clampDayOfMonth` (month-edge / Feb); do not treat sole `addCalendarDays(start, days)` as authoritative due engine
   3. Obligation model can persist per-cycle amount/status keyed by cycle start without deriving dues from BalanceSnapshot
 
 **Plans**: TBD
