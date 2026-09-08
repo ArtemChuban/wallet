@@ -104,7 +104,20 @@ _Note: TDD tasks may have multiple commits (test → feat → refactor)_
 
 ## Deviations from Plan
 
-None - plan executed exactly as written.
+### Auto-fixed Issues
+
+**1. [Rule 3 - Blocking] `state.advance-plan` could not parse Current Position**
+- **Found during:** Close-out
+- **Issue:** STATE.md used prose position (`Plan: —`) without `Current Plan`/`Total Plans in Phase` fields SDK expects
+- **Fix:** Manual Current Position → Plan 2 of 2, 50% progress; fixed after `update-progress` clobber
+- **Files modified:** `.planning/STATE.md`
+- **Verification:** Position shows 18-01 complete / next 18-02
+- **Committed in:** `373b471`
+
+---
+
+**Total deviations:** 1 auto-fixed (1 blocking)
+**Impact on plan:** Close-out only; CONT-01 deliverables unchanged.
 
 ## Issues Encountered
 - Agent-shim `rg` on PATH briefly failed decision-count gate; re-ran with `/usr/bin` first — verify green
