@@ -4,18 +4,18 @@ milestone: v1.3
 milestone_name: Кредитка
 current_phase: 18
 current_phase_name: bank-contract-study-discuss-locks
-status: executing
-stopped_at: Completed 18-01-PLAN.md
-last_updated: "2026-09-08T12:39:28.508Z"
+status: ready_for_verification
+stopped_at: Completed 18-02-PLAN.md
+last_updated: "2026-09-08T12:45:44.049Z"
 last_activity: 2026-09-08
-last_activity_desc: Completed 18-01 CONT-01 checklist + VALIDATION map
-state_head: 9124f6f
+last_activity_desc: Completed 18-02 dual DOM + A′ docs sync + credit todo fold
+state_head: 259d11771cc8f2b93be17459734f6fee71e93716
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 2
-  completed_plans: 1
-  percent: 50
+  completed_plans: 2
+  percent: 100
 ---
 
 # Project State
@@ -29,12 +29,12 @@ See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 
 ## Current Position
 
-Phase: 18 (bank-contract-study-discuss-locks) — EXECUTING
+Phase: 18 (bank-contract-study-discuss-locks) — READY FOR VERIFICATION
 Plan: 2 of 2
-Status: 18-01 complete; next 18-02 docs sync
-Last activity: 2026-09-08 — Completed 18-01 CONT-01 checklist + VALIDATION map
+Status: 18-02 complete; both plans done — await verify/UAT (CONT-01 checkbox still open)
+Last activity: 2026-09-08 — Completed 18-02 dual DOM + A′ docs sync + credit todo fold
 
-Progress: [█████░░░░░] 50%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -52,6 +52,7 @@ Progress: [█████░░░░░] 50%
 | Plan | Duration | Tasks | Files |
 |------|----------|-------|-------|
 | Phase 18 P01 | 3min | 2 tasks | 2 files |
+| Phase 18 P02 | 3min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -67,6 +68,7 @@ v1.3 locks from Phase 18 (see `18-CONTEXT.md`):
 - [Phase 18]: CONT-01 checklist cites CONTEXT SoT; dual DOM (D-02) + A′ (D-11) product truth over stale ROADMAP SC
 - [Phase 18]: Phase 18 Plan 01 docs-only — no prisma/src; Plan 02 owns wording sync
 - [Phase 18]: Plan 02 confirmed dual DOM + A′ as planning SoT; CYCLE-01/ROADMAP/PROJECT synced; credit todo folded
+- [Phase 18]: CONT-01 checkbox stays open until verify/UAT (restored from premature Complete)
 
 ### Pending Todos
 
@@ -99,8 +101,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-08T12:38:52.508Z
-Stopped at: Completed 18-01-PLAN.md
+Last session: 2026-09-08T12:45:44.025Z
+Stopped at: Completed 18-02-PLAN.md
 Resume file: None
 
 ## Operator Next Steps

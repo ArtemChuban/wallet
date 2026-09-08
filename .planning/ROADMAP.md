@@ -74,7 +74,7 @@ Full detail: [milestones/v1.2-ROADMAP.md](./milestones/v1.2-ROADMAP.md)
   3. Overlay **A′** NW-neutral locked (visible @ due, ΔNW=0 + tooltip) before Phase 19 plan lock (D-11…D-13) — not open Option A vs B deferral
   4. Vocabulary locked in Russian: «Задолженность» ≠ «Платёж для беспроцентного» ≠ минимум (D-14…D-19)
 
-**Plans**: 2 plans
+**Plans**: 2/2 plans executed
 Plans:
 **Wave 1**
 
@@ -82,7 +82,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 18-02-PLAN.md — Sync CYCLE-01 / ROADMAP / PROJECT to dual DOM + A′; fold credit todo
+- [x] 18-02-PLAN.md — Sync CYCLE-01 / ROADMAP / PROJECT to dual DOM + A′; fold credit todo
 
 ### Phase 19: Schema + pure grace domain math
 
@@ -147,7 +147,7 @@ Plans:
 | 1–7 | v1.0 | — | Complete | 2026-09-04 |
 | 8–12 | v1.1 | — | Complete | 2026-09-07 |
 | 13–17 | v1.2 | — | Complete | 2026-09-08 |
-| 18. Bank contract study + discuss locks | v1.3 | 1/2 | In Progress|  |
+| 18. Bank contract study + discuss locks | v1.3 | 2/2 | In Progress|  |
 | 19. Schema + pure grace domain math | v1.3 | 0/TBD | Not started | - |
 | 20. Obligation CRUD + cycle UI | v1.3 | 0/TBD | Not started | - |
 | 21. Капитал forecast integration | v1.3 | 0/TBD | Not started | - |
