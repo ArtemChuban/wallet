@@ -68,13 +68,20 @@ Full detail: [milestones/v1.2-ROADMAP.md](./milestones/v1.2-ROADMAP.md)
 **Depends on**: Phase 17 (v1.2 shipped)
 **Requirements**: CONT-01
 **Success Criteria** (what must be TRUE):
+
   1. User-supplied bank contract (or notes) is studied and grace rules are written into phase CONTEXT
   2. Locked decisions exist for: cycle start definition, duration-in-days, monthly repeat/clamp, interest-free vs revolving OOS
   3. Overlay NW semantics Option A vs B is decided (or explicitly deferred with default A) before Phase 19 plan lock
   4. Vocabulary locked in Russian: льготный период ≠ долг по снимку ≠ минимум платежа
+
 **Plans**: 2 plans
 Plans:
+**Wave 1**
+
 - [ ] 18-01-PLAN.md — CONT-01 checklist + artifact structural proof (tracer)
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 18-02-PLAN.md — Sync CYCLE-01 / ROADMAP / PROJECT to dual DOM + A′; fold credit todo
 
 ### Phase 19: Schema + pure grace domain math
@@ -83,9 +90,11 @@ Plans:
 **Depends on**: Phase 18
 **Requirements**: CYCLE-01
 **Success Criteria** (what must be TRUE):
+
   1. Credit account can store grace-period start date and duration (days); both null or both set
   2. Pure helpers compute monthly cycle candidates and due dates via `addCalendarDays(start, days)` (month-edge / Feb cases covered)
   3. Obligation model can persist per-cycle amount/status keyed by cycle start without deriving dues from BalanceSnapshot
+
 **Plans**: TBD
 
 ### Phase 20: Obligation CRUD + cycle UI
@@ -94,11 +103,13 @@ Plans:
 **Depends on**: Phase 19
 **Requirements**: CYCLE-02, OBL-01, OBL-02, OBL-03, UX-01
 **Success Criteria** (what must be TRUE):
+
   1. User can see cycle instances for a credit account (current / next due)
   2. User can manually enter amount due by end of interest-free window for a cycle
   3. User can record early repayment / close of that obligation (DestructiveConfirmStep; no `window.confirm`)
   4. When due date has passed without close, UI highlights the obligation so the user can act
   5. UI clearly distinguishes snapshot credit debt from grace amount due (Russian copy)
+
 **Plans**: TBD
 **UI hint**: yes
 
@@ -108,9 +119,11 @@ Plans:
 **Depends on**: Phase 20
 **Requirements**: GRFCST-01, GRFCST-02
 **Success Criteria** (what must be TRUE):
+
   1. On Капитал `/`, dashed «Прогноз» includes open credit grace obligations from their due dates
   2. Forecast credit slots use FX LOCF honesty; missing rate shows partial banner (never invents rates)
   3. Early-closed obligations no longer move the forecast; income + grace coexist on one signed series
+
 **Plans**: TBD
 **UI hint**: yes
 
@@ -120,9 +133,11 @@ Plans:
 **Depends on**: Phase 21
 **Requirements**: GRISO-01
 **Success Criteria** (what must be TRUE):
+
   1. Grace config / amount-due / early-close actions never write BalanceSnapshot
   2. Historical NW / past LOCF series stay identical with vs without grace data (golden / identity check)
   3. Isolation is covered by automated regression (file-scan / suite twin of INISO) suitable for milestone close
+
 **Plans**: TBD
 
 ## Progress

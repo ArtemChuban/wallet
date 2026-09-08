@@ -3,17 +3,17 @@ gsd_state_version: 1.0
 milestone: v1.3
 milestone_name: Кредитка
 current_phase: 18
-current_phase_name: Bank contract study + discuss locks
+current_phase_name: bank-contract-study-discuss-locks
 status: planning
 stopped_at: Phase 18 plans written (18-01 CONT-01 tracer + 18-02 docs sync)
-last_updated: "2026-09-08T12:20:00.000Z"
+last_updated: "2026-09-08T12:33:16.574Z"
 last_activity: 2026-09-08
 last_activity_desc: Phase 18 PLAN.md files created (CONT-01 close-out)
-state_head: 55ddb2eae8e1eb4fc8f9778b66d48bc026a450f7
+state_head: bf1b08a9ee7d24b93c6342b95f91e6aad760b593
 progress:
   total_phases: 5
   completed_phases: 0
-  total_plans: 0
+  total_plans: 2
   completed_plans: 0
   percent: 0
 ---
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 
 ## Current Position
 
-Phase: 18 of 22 (Bank contract study + discuss locks)
+Phase: 18 (bank-contract-study-discuss-locks) — READY TO EXECUTE
 Plan: —
 Status: Ready to execute
 Last activity: 2026-09-08 — Phase 18 plans written (18-01, 18-02)
@@ -91,11 +91,11 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-08T12:11:00.000Z
-Stopped at: Phase 18 research complete
-Resume file: .planning/phases/18-bank-contract-study-discuss-locks/18-RESEARCH.md
+Last session: 2026-09-08T12:20:00.000Z
+Stopped at: Phase 18 plans written
+Resume file: .planning/phases/18-bank-contract-study-discuss-locks/18-01-PLAN.md
 
 ## Operator Next Steps
 
-- Next: continue `/gsd-plan-phase 18` (research ready → planner)
-- Then execute Phase 18 plans (docs/CONT-01 close-out) → Phase 19 schema
+- Next: `/gsd-execute-phase 18` (docs/CONT-01 close-out)
+- Then Phase 19 schema (dual DOM + A′ from CONTEXT)
