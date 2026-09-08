@@ -2,9 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.3
 milestone_name: Кредитка
+current_phase: 18
+current_phase_name: Bank contract study + discuss locks
 status: planning
-last_updated: "2026-09-08T12:53:00.000Z"
+stopped_at: Phase 18 context gathered
+last_updated: "2026-09-08T12:02:30.996Z"
 last_activity: 2026-09-08
+last_activity_desc: Roadmap created for v1.3 (phases 18–22)
+state_head: 55ddb2eae8e1eb4fc8f9778b66d48bc026a450f7
 progress:
   total_phases: 5
   completed_phases: 0
@@ -88,9 +93,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-08
-Stopped at: Roadmap written for v1.3 (phases 18–22); awaiting approval
-Resume file: None
+Last session: 2026-09-08T12:02:30.975Z
+Stopped at: Phase 18 context gathered
+Resume file: .planning/phases/18-bank-contract-study-discuss-locks/18-CONTEXT.md
 
 ## Operator Next Steps
 
