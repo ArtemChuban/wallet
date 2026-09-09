@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 
@@ -10,6 +11,10 @@ type DestructiveConfirmStepProps = {
   confirmLabel: string;
   backLabel?: string;
   pending?: boolean;
+  /** Optional body between message and footer (e.g. close date field). */
+  children?: ReactNode;
+  /** Pending button label; defaults to «Удаление…». */
+  pendingLabel?: string;
   onConfirm: () => void;
   onBack: () => void;
 };
@@ -23,12 +28,15 @@ export function DestructiveConfirmStep({
   confirmLabel,
   backLabel = "Назад",
   pending = false,
+  children,
+  pendingLabel,
   onConfirm,
   onBack,
 }: DestructiveConfirmStepProps) {
   return (
     <div className="grid gap-4">
       <p className="text-base text-foreground">{message}</p>
+      {children}
       <DialogFooter>
         <Button
           type="button"
@@ -44,7 +52,7 @@ export function DestructiveConfirmStep({
           disabled={pending}
           onClick={onConfirm}
         >
-          {pending ? "Удаление…" : confirmLabel}
+          {pending ? (pendingLabel ?? "Удаление…") : confirmLabel}
         </Button>
       </DialogFooter>
     </div>
