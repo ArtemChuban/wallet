@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 10
+open_count: 11
 waived_count: 0
 fixed_count: 3
-total_count: 13
-last_updated: 2026-09-07T20:27:54.406Z
+total_count: 14
+last_updated: 2026-09-09T20:35:11.165Z
 ---
 
 # Broken Windows Ledger
@@ -28,6 +28,7 @@ last_updated: 2026-09-07T20:27:54.406Z
 | 11 | 17 | stub | src/components/dashboard/NetWorthHistoryChart.tsx |  | ReferenceLine today hinge deferred to Plan 03 | open |  | 2026-09-07T20:27:54.165Z |  |
 | 12 | 17 | stub | src/components/dashboard/DashboardChartsShell.tsx |  | Partial forecast banner deferred to Plan 03 (D-15) | open |  | 2026-09-07T20:27:54.284Z |  |
 | 13 | 17 | skipped-test | src/lib/iniso.test.ts |  | past buildNetWorthSeries golden identity it.todo | open |  | 2026-09-07T20:27:54.406Z |  |
+| 14 | 21 | skipped-test | src/components/dashboard/nw-forecast-ui.test.ts |  | Plan 03 tooltip RU describe.skip / it.todo retained for Plan 03 owner | open |  | 2026-09-09T20:35:11.165Z |  |
 
 ````json
 [
@@ -185,6 +186,18 @@ last_updated: 2026-09-07T20:27:54.406Z
     "status": "open",
     "reason": "",
     "recorded_at": "2026-09-07T20:27:54.406Z",
+    "resolved_at": null
+  },
+  {
+    "id": 14,
+    "kind": "skipped-test",
+    "phase": "21",
+    "file": "src/components/dashboard/nw-forecast-ui.test.ts",
+    "line": null,
+    "description": "Plan 03 tooltip RU describe.skip / it.todo retained for Plan 03 owner",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-09T20:35:11.165Z",
     "resolved_at": null
   }
 ]

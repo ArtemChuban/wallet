@@ -5,11 +5,11 @@ milestone_name: Кредитка
 current_phase: 21
 current_phase_name: Капитал forecast integration
 status: executing
-stopped_at: Completed 21-01-PLAN.md
-last_updated: "2026-09-09T20:29:35.917Z"
+stopped_at: Completed 21-02-PLAN.md
+last_updated: "2026-09-09T20:35:12.422Z"
 last_activity: 2026-09-09
-last_activity_desc: Completed 21-01 A′ forecast math tracer
-state_head: b47773d132c03a4aab27bf5b2d4b4019ded50fe5
+last_activity_desc: Completed 21-02 forecastGrace shell + banner codes
+state_head: 7d305c0b5a278dcaba02467cc7868195b168ada6
 progress:
   total_phases: 5
   completed_phases: 2
@@ -30,9 +30,9 @@ See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 ## Current Position
 
 Phase: 21 — Капитал forecast integration
-Plan: 21-02 (Wave 2) — next
+Plan: 21-03 (Wave 3) — next
 Status: Executing
-Last activity: 2026-09-09 — Completed 21-01 (A′ math + membership)
+Last activity: 2026-09-09 — Completed 21-02 (forecastGrace shell + banner codes)
 
 Progress: [████░░░░░░] 40%
 
@@ -57,6 +57,7 @@ Progress: [████░░░░░░] 40%
 | Phase 20 P02 | 6 | 2 tasks | 5 files |
 | Phase 20 P03 | 5min | 2 tasks | 5 files |
 | Phase 21 P01 | 4min | 3 tasks | 6 files |
+| Phase 21 P02 | 3min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -85,6 +86,8 @@ v1.3 locks from Phase 18 (see `18-CONTEXT.md`):
 - [Phase 21]: A′ grace = FX gate then += 0n (not paired ± offset)
 - [Phase 21]: openGraceForecastMembership folds overdue OPEN onto today; CLOSED out
 - [Phase 21]: Builder returns excludedMissingFxCurrencies unique alphabetical
+- [Phase 21]: Lean OPEN findMany on / for forecastGrace (not nested CLOSED include)
+- [Phase 21]: Banner unique FX codes via excludedMissingFxCurrencies.join; no доходы/грейс tags
 
 ### Pending Todos
 
@@ -117,8 +120,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-09T20:29:35.818Z
-Stopped at: Completed 21-01-PLAN.md
+Last session: 2026-09-09T20:35:12.320Z
+Stopped at: Completed 21-02-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
