@@ -55,22 +55,43 @@ describe("plan-02 close/reopen confirm + collapsed CLOSED (OBL-02)", () => {
   });
 });
 
-describe.skip("plan-03 overdue + UX-01 (OBL-03 / UX-01)", () => {
+describe("plan-03 overdue chrome (OBL-03 / D-07)", () => {
+  it("grace dialog has overdue interest hint via isGraceOverdue", () => {
+    const src = readFileSync(
+      "src/components/accounts/CreditGraceDialog.tsx",
+      "utf8",
+    );
+    expect(src).toMatch(/isGraceOverdue/);
+    expect(src).toMatch(/Срок оплаты прошёл/);
+    expect(src).toMatch(/bg-warning\/15/);
+    expect(src).toMatch(/text-warning-foreground/);
+  });
+
+  it("просрочено chip near Грейс; no warning on account name", () => {
+    const listSrc = readFileSync(
+      "src/components/accounts/AccountList.tsx",
+      "utf8",
+    );
+    expect(listSrc).toMatch(/просрочено/);
+    expect(listSrc).toMatch(/Грейс/);
+    const nameBlock = listSrc.match(
+      /title=\{account\.name\}[\s\S]{0,120}/,
+    )?.[0];
+    expect(nameBlock).toBeTruthy();
+    expect(nameBlock).not.toMatch(/warning/);
+    expect(listSrc).not.toMatch(
+      /title=\{account\.name\}[\s\S]{0,200}bg-warning/,
+    );
+  });
+});
+
+describe.skip("plan-03 UX-01 + clear schedule (owned by task 2)", () => {
   it("AccountList credit debt label is Задолженность", () => {
     const listSrc = readFileSync(
       "src/components/accounts/AccountList.tsx",
       "utf8",
     );
     expect(listSrc).toMatch(/Задолженность/);
-  });
-
-  it("grace UI has overdue interest hint and просрочено mark", () => {
-    const src = readFileSync(
-      "src/components/accounts/CreditGraceDialog.tsx",
-      "utf8",
-    );
-    expect(src).toMatch(/Срок оплаты прошёл/);
-    expect(src).toMatch(/просрочено/);
   });
 
   it("amount dialog shows UX-01 disclaimer", () => {
@@ -81,6 +102,36 @@ describe.skip("plan-03 overdue + UX-01 (OBL-03 / UX-01)", () => {
       "src/components/accounts/CreditGraceAmountDialog.tsx",
       "utf8",
     );
-    expect(src.length).toBeGreaterThan(0);
+    expect(src).toMatch(/Платёж для беспроцентного/);
+    expect(src).toMatch(/Это не/);
+    expect(src).toMatch(/Задолженность/);
+  });
+
+  it("clear schedule control + no DOM autofill 21/15", () => {
+    const src = readFileSync(
+      "src/components/accounts/CreditGraceDialog.tsx",
+      "utf8",
+    );
+    expect(src).toMatch(/Очистить расписание/);
+    expect(src).not.toMatch(/defaultValue=\{?["']?21/);
+    expect(src).not.toMatch(/defaultValue=\{?["']?15/);
+    expect(src).not.toMatch(/defaultValue=.15/);
+  });
+
+  it("grace button gated to FIAT_CREDIT; no native confirm in grace files", () => {
+    const listSrc = readFileSync(
+      "src/components/accounts/AccountList.tsx",
+      "utf8",
+    );
+    expect(listSrc).toMatch(/FIAT_CREDIT/);
+    expect(listSrc).toMatch(/CreditGraceDialog/);
+    for (const file of [
+      "src/components/accounts/CreditGraceDialog.tsx",
+      "src/components/accounts/CreditGraceAmountDialog.tsx",
+    ]) {
+      const src = readFileSync(file, "utf8");
+      expect(src).not.toMatch(/\bconfirm\s*\(/);
+      expect(src).not.toMatch(/window\.confirm/);
+    }
   });
 });
