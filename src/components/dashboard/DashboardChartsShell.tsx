@@ -278,6 +278,7 @@ export function DashboardChartsShell({
         const cur = currencyByOneTime.get(o.parentId);
         if (!cur) continue;
         openSlots.push({
+          kind: "income",
           parentId: o.parentId,
           plannedAsOf: o.plannedAsOf,
           plannedAmountMinor: o.plannedAmountMinor,
@@ -295,6 +296,7 @@ export function DashboardChartsShell({
       const cur = currencyByRecurring.get(o.parentId);
       if (!cur) continue;
       openSlots.push({
+        kind: "income",
         parentId: o.parentId,
         plannedAsOf: o.plannedAsOf,
         plannedAmountMinor: o.plannedAmountMinor,

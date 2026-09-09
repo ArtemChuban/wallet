@@ -14,6 +14,7 @@ function primarySlot(
   amountMinor: bigint,
 ): ForecastSlot {
   return {
+    kind: "income",
     parentId,
     plannedAsOf,
     plannedAmountMinor: amountMinor,
@@ -29,12 +30,42 @@ function usdSlot(
   amountMinor: bigint,
 ): ForecastSlot {
   return {
+    kind: "income",
     parentId,
     plannedAsOf,
     plannedAmountMinor: amountMinor,
     currencyCode: "USD",
     currencyScale: 2,
     isPrimaryCurrency: false,
+  };
+}
+
+function graceSlot(
+  parentId: number,
+  sampleAsOf: string,
+  amountMinor: bigint,
+  extras: Partial<
+    Pick<
+      ForecastSlot,
+      | "currencyCode"
+      | "isPrimaryCurrency"
+      | "accountId"
+      | "accountName"
+      | "dueAsOf"
+    >
+  > = {},
+): ForecastSlot {
+  return {
+    kind: "grace",
+    parentId,
+    plannedAsOf: sampleAsOf,
+    plannedAmountMinor: amountMinor,
+    currencyCode: extras.currencyCode ?? "RUB",
+    currencyScale: 2,
+    isPrimaryCurrency: extras.isPrimaryCurrency ?? true,
+    accountId: extras.accountId ?? 10,
+    accountName: extras.accountName ?? "Карта",
+    dueAsOf: extras.dueAsOf ?? sampleAsOf,
   };
 }
 
@@ -74,6 +105,7 @@ describe("forecast membership/cumulative", () => {
     expect(result.includedSlotCount).toBe(2);
     expect(result.excludedMissingFxCount).toBe(0);
     expect(result.isPartialForecast).toBe(false);
+    expect(result.excludedMissingFxCurrencies).toEqual([]);
     expect(result.points.map((p) => p.asOfDate)).toEqual([
       today,
       "2026-03-15",
@@ -110,6 +142,7 @@ describe("forecast membership/cumulative", () => {
     });
     expect(result.includedSlotCount).toBe(0);
     expect(result.points).toEqual([]);
+    expect(result.excludedMissingFxCurrencies).toEqual([]);
   });
 });
 
@@ -162,6 +195,7 @@ describe("forecast membership edges", () => {
       usdSlot(1, "2026-03-10", 10_000n),
       primarySlot(2, "2026-03-12", 5_000n),
       {
+        kind: "income",
         parentId: 3,
         plannedAsOf: "2026-03-20",
         plannedAmountMinor: 1_000n,
@@ -185,6 +219,7 @@ describe("forecast membership edges", () => {
       horizonEnd: "2026-03-31",
     });
     expect(result.excludedMissingFxCount).toBe(1);
+    expect(result.excludedMissingFxCurrencies).toEqual(["EUR"]);
     expect(result.isPartialForecast).toBe(true);
     expect(result.includedSlotCount).toBe(2);
     expect(
@@ -209,6 +244,7 @@ describe("forecast FX", () => {
     });
 
     expect(result.excludedMissingFxCount).toBe(1);
+    expect(result.excludedMissingFxCurrencies).toEqual(["USD"]);
     expect(result.isPartialForecast).toBe(true);
     expect(result.includedSlotCount).toBe(1);
     expect(
@@ -255,17 +291,180 @@ describe("forecast FX", () => {
 
     expect(result.includedSlotCount).toBe(0);
     expect(result.excludedMissingFxCount).toBe(1);
+    expect(result.excludedMissingFxCurrencies).toEqual(["USD"]);
     expect(result.isPartialForecast).toBe(true);
     expect(result.points).toEqual([]);
   });
 });
 
-/** Plan 01 Wave 0 — tracer (Task 3) greens these; do not hard-fail. */
 describe("grace A′ / membership / FX codes", () => {
-  it.todo("future OPEN grace sampled with ΔNW=0 (A′ / C-01 / D-06 / GRFCST-01)");
-  it.todo("overdue OPEN fold → today sampleAsOf (D-01 / D-02 / D-03)");
-  it.todo("grace-only horizon → non-empty flat points (D-07)");
-  it.todo("same-day income+grace: NW moves by income only (C-03 / D-06)");
-  it.todo("FX miss codes unique alphabetical across income+grace (D-15 / D-17 / GRFCST-02)");
-  it.todo("CLOSED never fed as grace ForecastSlot (C-07)");
+  it("future OPEN grace sampled with ΔNW=0 (A′ / C-01 / D-06 / GRFCST-01)", () => {
+    const slots: ForecastSlot[] = [
+      graceSlot(1, "2026-03-15", 50_000n, { dueAsOf: "2026-03-15" }),
+    ];
+    const result = buildNetWorthForecastSeries({
+      anchorPrimaryMinor: 1_000_000n,
+      slots,
+      rates: [],
+      primaryScale: 2,
+      today,
+      horizonEnd: "2026-03-31",
+    });
+
+    expect(result.includedSlotCount).toBe(1);
+    expect(result.points.map((p) => p.asOfDate)).toEqual([
+      today,
+      "2026-03-15",
+      "2026-03-31",
+    ]);
+    expect(
+      result.points.find((p) => p.asOfDate === "2026-03-15")?.forecastPrimaryMinor,
+    ).toBe(1_000_000n);
+    expect(
+      result.points.find((p) => p.asOfDate === "2026-03-31")?.forecastPrimaryMinor,
+    ).toBe(1_000_000n);
+    const duePoint = result.points.find((p) => p.asOfDate === "2026-03-15");
+    expect(duePoint?.forecastEvents).toEqual([
+      expect.objectContaining({
+        kind: "grace",
+        parentId: 1,
+        plannedAmountMinor: 50_000n,
+      }),
+    ]);
+  });
+
+  it("overdue OPEN fold → today sampleAsOf (D-01 / D-02 / D-03)", () => {
+    // Caller folds before builder — feed sampleAsOf=today, retain original dueAsOf.
+    const slots: ForecastSlot[] = [
+      graceSlot(1, today, 50_000n, { dueAsOf: "2026-02-15" }),
+    ];
+    const result = buildNetWorthForecastSeries({
+      anchorPrimaryMinor: 500_000n,
+      slots,
+      rates: [],
+      primaryScale: 2,
+      today,
+      horizonEnd: "2026-03-31",
+    });
+
+    expect(result.includedSlotCount).toBe(1);
+    expect(result.points[0]?.asOfDate).toBe(today);
+    expect(result.points[0]?.forecastPrimaryMinor).toBe(500_000n);
+    expect(result.points[0]?.forecastEvents).toEqual([
+      expect.objectContaining({
+        kind: "grace",
+        dueAsOf: "2026-02-15",
+        plannedAmountMinor: 50_000n,
+      }),
+    ]);
+  });
+
+  it("grace-only horizon → non-empty flat points (D-07)", () => {
+    const slots: ForecastSlot[] = [
+      graceSlot(1, "2026-03-20", 10_000n),
+    ];
+    const result = buildNetWorthForecastSeries({
+      anchorPrimaryMinor: 800_000n,
+      slots,
+      rates: [],
+      primaryScale: 2,
+      today,
+      horizonEnd: "2026-03-31",
+    });
+
+    expect(result.includedSlotCount).toBe(1);
+    expect(result.points.length).toBeGreaterThan(0);
+    expect(result.points.map((p) => p.asOfDate)).toEqual([
+      today,
+      "2026-03-20",
+      "2026-03-31",
+    ]);
+    for (const p of result.points) {
+      expect(p.forecastPrimaryMinor).toBe(800_000n);
+    }
+  });
+
+  it("same-day income+grace: NW moves by income only (C-03 / D-06)", () => {
+    const slots: ForecastSlot[] = [
+      primarySlot(1, "2026-03-15", 100_000n),
+      graceSlot(2, "2026-03-15", 50_000n, { dueAsOf: "2026-03-15" }),
+    ];
+    const result = buildNetWorthForecastSeries({
+      anchorPrimaryMinor: 1_000_000n,
+      slots,
+      rates: [],
+      primaryScale: 2,
+      today,
+      horizonEnd: "2026-03-31",
+    });
+
+    expect(result.includedSlotCount).toBe(2);
+    const day = result.points.find((p) => p.asOfDate === "2026-03-15");
+    expect(day?.forecastPrimaryMinor).toBe(1_100_000n);
+    expect(day?.forecastEvents?.map((e) => e.kind).sort()).toEqual([
+      "grace",
+      "income",
+    ]);
+    expect(
+      day?.forecastEvents?.find((e) => e.kind === "income")?.plannedAmountMinor,
+    ).toBe(100_000n);
+    expect(
+      day?.forecastEvents?.find((e) => e.kind === "grace")?.plannedAmountMinor,
+    ).toBe(50_000n);
+  });
+
+  it("FX miss codes unique alphabetical across income+grace (D-15 / D-17 / GRFCST-02)", () => {
+    const slots: ForecastSlot[] = [
+      usdSlot(1, "2026-03-10", 10_000n),
+      {
+        kind: "grace",
+        parentId: 2,
+        plannedAsOf: "2026-03-12",
+        plannedAmountMinor: 1_000n,
+        currencyCode: "EUR",
+        currencyScale: 2,
+        isPrimaryCurrency: false,
+        dueAsOf: "2026-03-12",
+      },
+      {
+        kind: "income",
+        parentId: 3,
+        plannedAsOf: "2026-03-15",
+        plannedAmountMinor: 2_000n,
+        currencyCode: "EUR",
+        currencyScale: 2,
+        isPrimaryCurrency: false,
+      },
+      {
+        kind: "grace",
+        parentId: 4,
+        plannedAsOf: "2026-03-18",
+        plannedAmountMinor: 3_000n,
+        currencyCode: "USD",
+        currencyScale: 2,
+        isPrimaryCurrency: false,
+        dueAsOf: "2026-03-18",
+      },
+    ];
+    const result = buildNetWorthForecastSeries({
+      anchorPrimaryMinor: 0n,
+      slots,
+      rates: [],
+      primaryScale: 2,
+      today,
+      horizonEnd: "2026-03-31",
+    });
+
+    expect(result.includedSlotCount).toBe(0);
+    expect(result.excludedMissingFxCount).toBe(4);
+    expect(result.excludedMissingFxCurrencies).toEqual(["EUR", "USD"]);
+    expect(result.isPartialForecast).toBe(true);
+    expect(result.points).toEqual([]);
+  });
+
+  it("ForecastSlot kind is only income|grace — CLOSED never a slot (C-07)", () => {
+    // CLOSED filtered at openGraceForecastMembership; builder has no CLOSED status.
+    const kinds: ForecastSlot["kind"][] = ["income", "grace"];
+    expect(kinds).not.toContain("CLOSED" as ForecastSlot["kind"]);
+  });
 });

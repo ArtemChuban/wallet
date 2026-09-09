@@ -1,7 +1,8 @@
 /**
- * Pure NW forecast overlay (Phase 17).
- * Cumulative stair-step from accounts-only today anchor + open future planned income.
- * Import wall (D-18): money / locf / dates only — never NW history or DB clients.
+ * Pure NW forecast overlay (Phase 17+21).
+ * Cumulative stair-step from accounts-only today anchor + open future planned income
+ * and A′ NW-neutral OPEN grace slots (ΔNW=0 after FX gate).
+ * Import wall (D-18): money / locf / dates only — never NW history, credit-grace, or DB clients.
  */
 
 import {
@@ -14,19 +15,39 @@ import {
   minorToMajorNumber,
 } from "@/lib/money";
 
+export type ForecastSlotKind = "income" | "grace";
+
 export type ForecastSlot = {
+  kind: ForecastSlotKind;
   parentId: number;
+  /** Sample date after membership fold (income: due > today; grace: today or future due). */
   plannedAsOf: string;
   plannedAmountMinor: bigint;
   currencyCode: string;
   currencyScale: number;
   isPrimaryCurrency: boolean;
+  /** Grace tooltip metadata (optional on income). */
+  accountId?: number;
+  accountName?: string;
+  /** Original due before fold. */
+  dueAsOf?: string;
+};
+
+export type ForecastEvent = {
+  kind: ForecastSlotKind;
+  parentId: number;
+  plannedAmountMinor: bigint;
+  currencyCode: string;
+  accountId?: number;
+  accountName?: string;
+  dueAsOf?: string;
 };
 
 export type ForecastPoint = {
   asOfDate: string;
   forecastPrimaryMinor: bigint;
   forecast: number;
+  forecastEvents?: ForecastEvent[];
 };
 
 export type BuildNetWorthForecastSeriesResult = {
@@ -34,6 +55,8 @@ export type BuildNetWorthForecastSeriesResult = {
   isPartialForecast: boolean;
   includedSlotCount: number;
   excludedMissingFxCount: number;
+  /** Unique missing FX codes, alphabetical (D-15 / D-17). */
+  excludedMissingFxCurrencies: string[];
 };
 
 /** Horizon mirrors dashboard lookback magnitudes; all → 1y cap (D-05). */
@@ -53,9 +76,23 @@ export function forecastHorizonEnd(preset: RangePreset, today: string): string {
   }
 }
 
+function slotInWindow(
+  kind: ForecastSlotKind,
+  plannedAsOf: string,
+  today: string,
+  horizonEnd: string,
+): boolean {
+  if (plannedAsOf > horizonEnd) return false;
+  if (kind === "income") {
+    return plannedAsOf > today;
+  }
+  // grace: allows today after overdue fold (D-01, D-04)
+  return plannedAsOf >= today;
+}
+
 /**
  * Cumulative sparse forecast from today's NW anchor through horizon end.
- * Caller passes already-open slots in (today, horizonEnd] — no listAllInRange here (D-18).
+ * Caller passes membership-filtered slots — income open future; grace OPEN with fold (D-18).
  */
 export function buildNetWorthForecastSeries(input: {
   anchorPrimaryMinor: bigint;
@@ -74,36 +111,58 @@ export function buildNetWorthForecastSeries(input: {
     horizonEnd,
   } = input;
 
-  type Converted = { plannedAsOf: string; primaryMinor: bigint };
+  type Converted = {
+    plannedAsOf: string;
+    /** NW cumulative addend — 0n for grace (A′ / C-01). */
+    primaryMinor: bigint;
+    event: ForecastEvent;
+  };
   const converted: Converted[] = [];
   let excludedMissingFxCount = 0;
+  const missingFxCodes = new Set<string>();
 
   for (const slot of slots) {
-    if (!(slot.plannedAsOf > today) || slot.plannedAsOf > horizonEnd) {
+    if (!slotInWindow(slot.kind, slot.plannedAsOf, today, horizonEnd)) {
       continue;
     }
 
-    let primaryMinor: bigint;
+    let displayPrimaryMinor: bigint;
     if (slot.isPrimaryCurrency) {
-      primaryMinor = slot.plannedAmountMinor;
+      displayPrimaryMinor = slot.plannedAmountMinor;
     } else {
       const rate = locfRateAsOf(rates, slot.currencyCode, today);
       if (rate === null) {
         excludedMissingFxCount += 1;
+        missingFxCodes.add(slot.currencyCode);
         continue;
       }
-      primaryMinor = convertOtherMinorToPrimaryMinor(
+      displayPrimaryMinor = convertOtherMinorToPrimaryMinor(
         slot.plannedAmountMinor,
         rate,
         slot.currencyScale,
         primaryScale,
       );
     }
-    converted.push({ plannedAsOf: slot.plannedAsOf, primaryMinor });
+
+    const primaryMinor = slot.kind === "grace" ? 0n : displayPrimaryMinor;
+    converted.push({
+      plannedAsOf: slot.plannedAsOf,
+      primaryMinor,
+      event: {
+        kind: slot.kind,
+        parentId: slot.parentId,
+        plannedAmountMinor: slot.plannedAmountMinor,
+        currencyCode: slot.currencyCode,
+        accountId: slot.accountId,
+        accountName: slot.accountName,
+        dueAsOf: slot.dueAsOf,
+      },
+    });
   }
 
   const includedSlotCount = converted.length;
   const isPartialForecast = excludedMissingFxCount > 0;
+  const excludedMissingFxCurrencies = [...missingFxCodes].sort();
 
   if (includedSlotCount === 0) {
     return {
@@ -111,6 +170,7 @@ export function buildNetWorthForecastSeries(input: {
       isPartialForecast,
       includedSlotCount,
       excludedMissingFxCount,
+      excludedMissingFxCurrencies,
     };
   }
 
@@ -133,13 +193,16 @@ export function buildNetWorthForecastSeries(input: {
     .filter((d) => d >= today && d <= horizonEnd)
     .sort();
 
-  // Cumulative additions by date (same-day slots sum)
   const addByDate = new Map<string, bigint>();
+  const eventsByDate = new Map<string, ForecastEvent[]>();
   for (const c of converted) {
     addByDate.set(
       c.plannedAsOf,
       (addByDate.get(c.plannedAsOf) ?? 0n) + c.primaryMinor,
     );
+    const list = eventsByDate.get(c.plannedAsOf) ?? [];
+    list.push(c.event);
+    eventsByDate.set(c.plannedAsOf, list);
   }
 
   let running = anchorPrimaryMinor;
@@ -147,10 +210,12 @@ export function buildNetWorthForecastSeries(input: {
   for (const asOfDate of sampleDates) {
     const add = addByDate.get(asOfDate) ?? 0n;
     running += add;
+    const events = eventsByDate.get(asOfDate);
     points.push({
       asOfDate,
       forecastPrimaryMinor: running,
       forecast: minorToMajorNumber(running, primaryScale),
+      ...(events && events.length > 0 ? { forecastEvents: events } : {}),
     });
   }
 
@@ -159,5 +224,6 @@ export function buildNetWorthForecastSeries(input: {
     isPartialForecast,
     includedSlotCount,
     excludedMissingFxCount,
+    excludedMissingFxCurrencies,
   };
 }
