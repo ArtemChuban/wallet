@@ -9,7 +9,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Cycle
 
-- [ ] **CYCLE-01**: User can set statement day-of-month and due day-of-month on a credit account (monthly repeat); statement DOM uses `clampDayOfMonth` (D-03); due is next-month DOM (this bank: 15) per dual-DOM SoT (D-02) — prefer `statementDayOfMonth` + `dueDayOfMonth` over sole `graceDurationDays`
+- [x] **CYCLE-01**: User can set statement day-of-month and due day-of-month on a credit account (monthly repeat); statement DOM uses `clampDayOfMonth` (D-03); due is next-month DOM (this bank: 15) per dual-DOM SoT (D-02) — prefer `statementDayOfMonth` + `dueDayOfMonth` over sole `graceDurationDays`
 - [ ] **CYCLE-02**: User can see cycle instances for a credit account (current / next due)
 
 ### Obligation
@@ -70,7 +70,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | Requirement | Phase | Status |
 |-------------|-------|--------|
 | CONT-01 | Phase 18 | Complete |
-| CYCLE-01 | Phase 19 | Pending |
+| CYCLE-01 | Phase 19 | Complete |
 | CYCLE-02 | Phase 20 | Pending |
 | OBL-01 | Phase 20 | Pending |
 | OBL-02 | Phase 20 | Pending |
