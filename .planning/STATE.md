@@ -122,10 +122,10 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-09T23:09:11.904Z
-Stopped at: Phase 22 context gathered
-Resume file: .planning/phases/22-graceiso-regression-polish/22-CONTEXT.md
+Last session: 2026-09-10T01:15:00.000Z
+Stopped at: Phase 22 research complete
+Resume file: .planning/phases/22-graceiso-regression-polish/22-RESEARCH.md
 
 ## Operator Next Steps
 
-- `/gsd-execute-phase 21` — Wave 1 (21-01) → Wave 2 (21-02) → Wave 3 (21-03)
+- `/gsd-plan-phase 22` — create PLAN.md from RESEARCH + CONTEXT
