@@ -111,7 +111,7 @@ status: complete
 3. **Task 2 RED:** `aaaa953` — test(19-03): add failing tests for updateGraceSchedule action
 4. **Task 2 GREEN:** `3badc92` — feat(19-03): implement updateGraceSchedule + credit-grace Zod
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `c44e780` (docs: complete plan)
 
 ## Files Created/Modified
 
