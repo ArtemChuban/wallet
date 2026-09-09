@@ -5,11 +5,11 @@ milestone_name: Кредитка
 current_phase: 21
 current_phase_name: Капитал forecast integration
 status: planning
-stopped_at: Phase 20 complete, ready to plan Phase 21
-last_updated: "2026-09-09T13:50:48.292Z"
+stopped_at: Phase 21 context gathered
+last_updated: "2026-09-09T19:50:55.410Z"
 last_activity: 2026-09-09
 last_activity_desc: Phase 20 complete, transitioned to Phase 21
-state_head: 5e63abc0233e45f547a86b74cf118bce69a41eae
+state_head: 32b9919f5ee985e30eecf04dad449695d139ff16
 progress:
   total_phases: 5
   completed_phases: 2
@@ -113,9 +113,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-09T12:46:49.264Z
-Stopped at: Phase 20 complete, ready to plan Phase 21
-Resume file: .planning/phases/20-obligation-crud-cycle-ui/20-VERIFICATION.md
+Last session: 2026-09-09T19:50:55.286Z
+Stopped at: Phase 21 context gathered
+Resume file: /home/artem/Documents/wallet/.planning/phases/21-kapital-forecast-integration/21-CONTEXT.md
 
 ## Operator Next Steps
 
