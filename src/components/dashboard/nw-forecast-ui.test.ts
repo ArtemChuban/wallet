@@ -64,8 +64,22 @@ describe("plan-02 banner FX codes (GRFCST-02 / D-15)", () => {
   });
 });
 
-/** Plan 03 owner — locked tooltip RU from C-04. */
-describe.skip("plan-03 tooltip RU (C-04 / GRFCST-01)", () => {
-  it.todo("tooltip includes «Платёж для беспроцентного»");
-  it.todo("tooltip includes «NW без изменения (оплата карты)»");
+/** Plan 03 owner — locked tooltip RU from C-04; single dashed series (D-08). */
+describe("plan-03 tooltip RU (C-04 / GRFCST-01)", () => {
+  it("tooltip includes «Платёж для беспроцентного»", () => {
+    expect(chartSrc).toMatch(/Платёж для беспроцентного/);
+  });
+
+  it("tooltip includes «NW без изменения (оплата карты)»", () => {
+    expect(chartSrc).toMatch(/NW без изменения \(оплата карты\)/);
+  });
+
+  it("single dashed Line pattern retained (D-08 / C-02)", () => {
+    const dashMatches = chartSrc.match(/strokeDasharray/g) ?? [];
+    expect(dashMatches.length).toBeGreaterThanOrEqual(1);
+    // Exactly one Line with strokeDasharray in paint path
+    expect(chartSrc).toMatch(
+      /<Line[\s\S]*?strokeDasharray=["']5 5["'][\s\S]*?\/>/,
+    );
+  });
 });

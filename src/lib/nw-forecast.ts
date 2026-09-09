@@ -37,6 +37,8 @@ export type ForecastEvent = {
   kind: ForecastSlotKind;
   parentId: number;
   plannedAmountMinor: bigint;
+  /** Primary major after FX gate — tooltip amount even when ΔNW=0 (D-11). */
+  displayPrimaryMajor: number;
   currencyCode: string;
   accountId?: number;
   accountName?: string;
@@ -152,6 +154,10 @@ export function buildNetWorthForecastSeries(input: {
         kind: slot.kind,
         parentId: slot.parentId,
         plannedAmountMinor: slot.plannedAmountMinor,
+        displayPrimaryMajor: minorToMajorNumber(
+          displayPrimaryMinor,
+          primaryScale,
+        ),
         currencyCode: slot.currencyCode,
         accountId: slot.accountId,
         accountName: slot.accountName,

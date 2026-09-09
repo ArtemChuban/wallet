@@ -59,6 +59,34 @@ type NetWorthHistoryChartProps = {
   showForecast?: boolean;
 };
 
+/** Grace block B — C-04 / D-10…D-13; omit when no FX-included grace events. */
+function ForecastGraceTooltipBlock({ events }: { events: ForecastEvent[] }) {
+  const graceRows = events.filter((e) => e.kind === "grace");
+  if (graceRows.length === 0) return null;
+
+  return (
+    <div className="mt-1 grid gap-1 border-t border-border/50 pt-1">
+      <span className="text-muted-foreground">Платёж для беспроцентного</span>
+      <span className="text-muted-foreground">
+        NW без изменения (оплата карты)
+      </span>
+      {graceRows.map((ev) => (
+        <div
+          key={`${ev.parentId}-${ev.dueAsOf ?? ""}-${ev.accountId ?? ""}`}
+          className="flex w-full items-start gap-2"
+        >
+          <span className="min-w-0 flex-1 break-words text-muted-foreground">
+            {ev.accountName ?? `обязательство ${ev.parentId}`}
+          </span>
+          <span className="shrink-0 font-mono font-semibold text-foreground tabular-nums">
+            {formatChartNumber(ev.displayPrimaryMajor)}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function NetWorthChartTooltip({
   active,
   payload,
@@ -81,8 +109,9 @@ function NetWorthChartTooltip({
   const labelText = asOfDate
     ? formatAsOfDisplay(asOfDate)
     : String(label ?? "");
+  const forecastEvents = point?.forecastEvents ?? [];
 
-  // D-11: future dates → «Прогноз» + amount only (no fake account stack / Итого)
+  // D-10/D-11: future → «Прогноз» aggregate first; grace block below when events
   if (asOfDate > today) {
     const forecastVal =
       typeof point?.[FORECAST_KEY] === "number" &&
@@ -103,6 +132,7 @@ function NetWorthChartTooltip({
             {formatChartNumber(forecastVal)}
           </span>
         </div>
+        <ForecastGraceTooltipBlock events={forecastEvents} />
       </div>
     );
   }
@@ -155,6 +185,8 @@ function NetWorthChartTooltip({
           </div>
         ) : null}
       </div>
+      {/* D-09: folded overdue / due-today grace beside stack */}
+      <ForecastGraceTooltipBlock events={forecastEvents} />
     </div>
   );
 }
