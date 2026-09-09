@@ -415,15 +415,15 @@ const dayOfMonthSchema = z.coerce.number().int().min(1).max(31);
 | A2 | Gap-day “current vs next” table above matches product intent | Pattern 3 | Phase 20 UI labels wrong — fix tests early |
 | A3 | CYCLE-01 satisfied by action+schema without full AccountFormDialog fields in Phase 19 | Summary | Planner may need one plan task for minimal form inputs |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Minimal UI for CYCLE-01 in Phase 19?**
-   - What we know: CONTEXT allows form UI in Phase 20; SC emphasizes storage + math.
-   - What's unclear: Whether “User can set” needs dialog fields now.
-   - Recommendation: Plan Wave with schema + pure tests + Server Action + Zod; optional thin form fields if planner wants demoable set/clear without Phase 20.
+1. **Minimal UI for CYCLE-01 in Phase 19?** — **RESOLVED**
+   - Plans: no form UI / dialog chrome in Phase 19 (UI-SPEC + Deferred → Phase 20).
+   - CYCLE-01 write-path = Zod `updateGraceScheduleSchema` + Server Action `updateGraceSchedule` only (Plan 03); schema + pure math (Plans 01–02).
 
-2. **Obligation status CHECK name / CLOSED+null closedAsOf**
-   - Recommendation: Add SQLite CHECK `(OPEN∧closedAsOf IS NULL)∨(CLOSED∧closedAsOf NOT NULL)` in same migrate as table create.
+2. **Obligation status CHECK name / CLOSED+null closedAsOf** — **RESOLVED**
+   - Same `credit_grace_dual_dom` migrate as Account dual-DOM CHECK (Plan 01 tracer).
+   - SQLite CHECK: OPEN ⇒ `closedAsOf` null; CLOSED ⇒ `closedAsOf` set (name discretionary; semantics locked D-07/D-08).
 
 ## Environment Availability
 
