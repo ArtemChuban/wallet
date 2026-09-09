@@ -5,17 +5,17 @@ milestone_name: Кредитка
 current_phase: 22
 current_phase_name: GRACEISO regression + polish
 status: planning
-stopped_at: Phase 21 complete, ready to plan Phase 22
-last_updated: "2026-09-09T21:22:40.596Z"
+stopped_at: Phase 22 context gathered
+last_updated: "2026-09-09T23:09:12.036Z"
 last_activity: 2026-09-09
 last_activity_desc: Phase 21 complete, transitioned to Phase 22
-state_head: 3756f21914d555aaed43656b2a639db9d4e94485
+state_head: a2965a852c0e55a9a270f2540fe6944cc32a3f2c
 progress:
   total_phases: 5
-  completed_phases: 3
+  completed_phases: 4
   total_plans: 11
   completed_plans: 11
-  percent: 60
+  percent: 80
 ---
 
 # Project State
@@ -122,9 +122,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-09T20:57:17.896Z
-Stopped at: Phase 21 complete, ready to plan Phase 22
-Resume file: .planning/phases/21-kapital-forecast-integration/21-UAT.md
+Last session: 2026-09-09T23:09:11.904Z
+Stopped at: Phase 22 context gathered
+Resume file: .planning/phases/22-graceiso-regression-polish/22-CONTEXT.md
 
 ## Operator Next Steps
 
