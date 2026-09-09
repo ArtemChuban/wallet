@@ -95,7 +95,17 @@ Plans:
   2. Pure helpers compute due via next-month DOM + statement advance via `clampDayOfMonth` (month-edge / Feb); do not treat sole `addCalendarDays(start, days)` as authoritative due engine
   3. Obligation model can persist per-cycle amount/status keyed by cycle start without deriving dues from BalanceSnapshot
 
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+**Wave 1**
+
+- [ ] 19-01-PLAN.md — Dual-DOM schema + obligation model + cycleStart/dueAsOf tracer + migrate
+
+**Wave 2** *(parallel after Wave 1)*
+
+- [ ] 19-02-PLAN.md — listCycleWindows / current-next / overdue pure math
+- [ ] 19-03-PLAN.md — updateGraceSchedule Zod+action + obligation Zod ready
 
 ### Phase 20: Obligation CRUD + cycle UI
 

@@ -40,15 +40,15 @@ created: "2026-09-08"
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 19-01-T1 | 01 | 1 | CYCLE-01 | T-19-01 | Dual DOM both-null-or-both + FIAT_CREDIT-only | unit | `npx vitest run src/lib/validations/account.test.ts` | ❌ W0 | ⬜ pending |
-| 19-01-T2 | 01 | 1 | CYCLE-01 | T-19-01 | Schema CHECKs reject partial / non-credit DOM | migration/sqlite | discretionary probe after migrate | ❌ W0 | ⬜ pending |
-| 19-02-T1 | 02 | 2 | CYCLE-01 | T-19-02 | due = next-month DOM not sole addCalendarDays | unit | `npx vitest run src/lib/credit-grace.test.ts` | ❌ W0 | ⬜ pending |
-| 19-02-T2 | 02 | 2 | CYCLE-01 | — | statement clamp Feb/31; null schedule empty | unit | `npx vitest run src/lib/credit-grace.test.ts src/lib/dates.test.ts` | ❌ / ✅ dates | ⬜ pending |
-| 19-02-T3 | 02 | 2 | CYCLE-01 | T-19-03 | overdue after inclusive due; no NW import | unit | `npx vitest run src/lib/credit-grace.test.ts` | ❌ W0 | ⬜ pending |
+| 19-01-T1 | 01 | 1 | CYCLE-01 | — | Decision gate D-03/D-09 one-way schema doors | checkpoint | n/a (human) | — | ⬜ pending |
+| 19-01-T2 | 01 | 1 | CYCLE-01 | T-19-01 | Dual DOM + obligation Cascade + due next-month tracer | unit + schema | `npx vitest run src/lib/credit-grace.test.ts` + schema/migration greps | ❌ W0 | ⬜ pending |
+| 19-01-T3 | 01 | 1 | CYCLE-01 | T-19-01 | Host migrate + foundation CreditGraceObligation allowlist | migrate + unit | `DATABASE_URL=file:./data/wallet.db npx prisma migrate deploy` + `npx vitest run src/lib/foundation.test.ts` | ❌ W0 | ⬜ pending |
+| 19-02-T1 | 02 | 2 | CYCLE-01 | T-19-02 | listCycleWindows / resolveCurrentAndNext; null empty | unit | `npx vitest run src/lib/credit-grace.test.ts` | ❌ W0 | ⬜ pending |
+| 19-02-T2 | 02 | 2 | CYCLE-01 | T-19-03 | overdue after inclusive due; NW isolation | unit + grep | `npx vitest run src/lib/credit-grace.test.ts` + isolation grep | ❌ W0 | ⬜ pending |
+| 19-03-T1 | 03 | 2 | CYCLE-01 | T-19-01 | Dual DOM Zod both-null-or-both | unit | `npx vitest run src/lib/validations/account.test.ts` | ✅ extend | ⬜ pending |
+| 19-03-T2 | 03 | 2 | CYCLE-01 | T-19-01/02 | updateGraceSchedule + D-14 OPEN clear + obligation Zod | unit + grep | `npx vitest run src/lib/validations/account.test.ts` + action greps | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
-
-*Planner may renumber task IDs; update this map when plans finalize.*
 
 ---
 
