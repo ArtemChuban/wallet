@@ -5,11 +5,11 @@ milestone_name: Кредитка
 current_phase: 21
 current_phase_name: Капитал forecast integration
 status: planning
-stopped_at: Phase 21 context gathered
-last_updated: "2026-09-09T19:50:55.410Z"
+stopped_at: Phase 21 UI-SPEC drafted — awaiting checker
+last_updated: "2026-09-09T20:05:00.000Z"
 last_activity: 2026-09-09
-last_activity_desc: Phase 20 complete, transitioned to Phase 21
-state_head: 32b9919f5ee985e30eecf04dad449695d139ff16
+last_activity_desc: Phase 21 UI-SPEC.md written (auto from CONTEXT + chart chrome)
+state_head: a1b3d88
 progress:
   total_phases: 5
   completed_phases: 2
