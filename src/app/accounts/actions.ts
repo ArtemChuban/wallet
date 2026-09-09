@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { Prisma } from "@/generated/prisma/client";
 import { calendarDateToday } from "@/lib/balances";
 import { ensureSqlitePragmas, prisma } from "@/lib/db";
-import { parseMajorToMinor } from "@/lib/money";
+import { formatMinorToMajorExact, parseMajorToMinor } from "@/lib/money";
 import { dueAsOfForCycle } from "@/lib/credit-grace";
 import {
   assertGraceDomAllowedForType,
@@ -19,6 +19,7 @@ import {
 import {
   assertAccountHasGraceSchedule,
   createCreditGraceObligationSchema,
+  updateCreditGraceObligationSchema,
 } from "@/lib/validations/credit-grace";
 
 export type AccountActionState = {
@@ -28,6 +29,7 @@ export type AccountActionState = {
     currencyCode?: string[];
     creditLimitMajor?: string[];
     accountId?: string[];
+    id?: string[];
     statementDayOfMonth?: string[];
     dueDayOfMonth?: string[];
     amountMajor?: string[];
@@ -367,6 +369,243 @@ export async function createCreditGraceObligation(
     if (isUniqueNameViolation(error)) {
       return { message: DUPLICATE_CYCLE_MESSAGE };
     }
+    return {
+      message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/accounts");
+  revalidatePath("/");
+  return { success: true, message: "Сохранено" };
+}
+
+/**
+ * Update OPEN obligation amount/note only — cycleStartAsOf/dueAsOf frozen (D-10).
+ * Never writes BalanceSnapshot (T-20-03 / GRISO).
+ */
+export async function updateCreditGraceObligation(
+  _prev: AccountActionState,
+  formData: FormData,
+): Promise<AccountActionState> {
+  const validated = updateCreditGraceObligationSchema.safeParse({
+    id: formData.get("id"),
+    amountMajor: formData.get("amountMajor"),
+    status: "OPEN",
+    closedAsOf: undefined,
+    note: formData.get("note") || undefined,
+  });
+
+  if (!validated.success) {
+    return { errors: validated.error.flatten().fieldErrors };
+  }
+
+  const { id, amountMajor, note } = validated.data;
+
+  try {
+    await ensureSqlitePragmas();
+
+    const obligation = await prisma.creditGraceObligation.findUnique({
+      where: { id },
+      include: { account: { include: { currency: true } } },
+    });
+    if (!obligation) {
+      return {
+        message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+      };
+    }
+
+    if (obligation.account.type !== "FIAT_CREDIT") {
+      return { message: "Обязательства грейса только для кредитного счёта" };
+    }
+
+    if (obligation.status !== "OPEN") {
+      return {
+        message: "Изменить сумму можно только для обязательства «К оплате»",
+      };
+    }
+
+    const scale = obligation.account.currency.scale;
+    if (fracDigitCount(amountMajor) > scale) {
+      return {
+        errors: {
+          amountMajor: [`Не больше ${scale} знаков после запятой`],
+        },
+      };
+    }
+
+    let amountMinor: bigint;
+    try {
+      amountMinor = parseMajorToMinor(amountMajor, scale);
+    } catch (err) {
+      const msg =
+        err instanceof Error && err.message === "too many fractional digits"
+          ? `Не больше ${scale} знаков после запятой`
+          : "Некорректная сумма";
+      return { errors: { amountMajor: [msg] } };
+    }
+
+    if (amountMinor <= 0n) {
+      return { errors: { amountMajor: ["Введите сумму больше 0"] } };
+    }
+
+    await prisma.creditGraceObligation.update({
+      where: { id },
+      data: {
+        amountMinor,
+        note: note ?? null,
+      },
+    });
+  } catch {
+    return {
+      message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/accounts");
+  revalidatePath("/");
+  return { success: true, message: "Сохранено" };
+}
+
+/**
+ * Early close OPEN → CLOSED with editable closedAsOf (D-11 / OBL-02).
+ * Thin wrapper over update semantics; never writes BalanceSnapshot.
+ */
+export async function closeCreditGraceObligation(
+  _prev: AccountActionState,
+  formData: FormData,
+): Promise<AccountActionState> {
+  const idProbe = updateCreditGraceObligationSchema.safeParse({
+    id: formData.get("id"),
+    amountMajor: "1",
+    status: "CLOSED",
+    closedAsOf: formData.get("closedAsOf") || undefined,
+  });
+
+  if (!idProbe.success) {
+    return { errors: idProbe.error.flatten().fieldErrors };
+  }
+
+  const { id, closedAsOf } = idProbe.data;
+
+  try {
+    await ensureSqlitePragmas();
+
+    const obligation = await prisma.creditGraceObligation.findUnique({
+      where: { id },
+      include: { account: { include: { currency: true } } },
+    });
+    if (!obligation) {
+      return {
+        message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+      };
+    }
+
+    if (obligation.account.type !== "FIAT_CREDIT") {
+      return { message: "Обязательства грейса только для кредитного счёта" };
+    }
+
+    if (obligation.status !== "OPEN") {
+      return {
+        message: "Отметить оплаченным можно только обязательство «К оплате»",
+      };
+    }
+
+    const amountMajor = formatMinorToMajorExact(
+      obligation.amountMinor,
+      obligation.account.currency.scale,
+    );
+    const validated = updateCreditGraceObligationSchema.safeParse({
+      id,
+      amountMajor,
+      status: "CLOSED",
+      closedAsOf,
+      note: obligation.note ?? undefined,
+    });
+    if (!validated.success) {
+      return { errors: validated.error.flatten().fieldErrors };
+    }
+
+    await prisma.creditGraceObligation.update({
+      where: { id },
+      data: {
+        status: "CLOSED",
+        closedAsOf: validated.data.closedAsOf!,
+      },
+    });
+  } catch {
+    return {
+      message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/accounts");
+  revalidatePath("/");
+  return { success: true, message: "Сохранено" };
+}
+
+/**
+ * Reopen CLOSED → OPEN clearing closedAsOf (D-12 / OBL-02).
+ * Never writes BalanceSnapshot.
+ */
+export async function reopenCreditGraceObligation(
+  _prev: AccountActionState,
+  formData: FormData,
+): Promise<AccountActionState> {
+  const idRaw = formData.get("id");
+  const idNum =
+    typeof idRaw === "string" || typeof idRaw === "number"
+      ? Number(idRaw)
+      : Number.NaN;
+  if (!Number.isInteger(idNum) || idNum <= 0) {
+    return { errors: { id: ["Укажите обязательство"] } };
+  }
+
+  try {
+    await ensureSqlitePragmas();
+
+    const obligation = await prisma.creditGraceObligation.findUnique({
+      where: { id: idNum },
+      include: { account: { include: { currency: true } } },
+    });
+    if (!obligation) {
+      return {
+        message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+      };
+    }
+
+    if (obligation.account.type !== "FIAT_CREDIT") {
+      return { message: "Обязательства грейса только для кредитного счёта" };
+    }
+
+    if (obligation.status !== "CLOSED") {
+      return {
+        message: "Вернуть к оплате можно только оплаченное обязательство",
+      };
+    }
+
+    const amountMajor = formatMinorToMajorExact(
+      obligation.amountMinor,
+      obligation.account.currency.scale,
+    );
+    const validated = updateCreditGraceObligationSchema.safeParse({
+      id: idNum,
+      amountMajor,
+      status: "OPEN",
+      closedAsOf: undefined,
+      note: obligation.note ?? undefined,
+    });
+    if (!validated.success) {
+      return { errors: validated.error.flatten().fieldErrors };
+    }
+
+    await prisma.creditGraceObligation.update({
+      where: { id: idNum },
+      data: {
+        status: "OPEN",
+        closedAsOf: null,
+      },
+    });
+  } catch {
     return {
       message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
     };
