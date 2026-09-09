@@ -5,16 +5,16 @@ milestone_name: Кредитка
 current_phase: 22
 current_phase_name: GRACEISO regression + polish
 status: planning
-stopped_at: Phase 22 plan-check FAIL — awaiting planner revision
-last_updated: "2026-09-10T01:25:00.000Z"
+stopped_at: Completed 22-01-PLAN.md
+last_updated: "2026-09-09T23:27:43.246Z"
 last_activity: 2026-09-10
-last_activity_desc: Phase 22 PLAN-CHECK FAIL — missing VALIDATION.md + Open Questions unresolved markers
-state_head: bc13404fcf7aa6603ca978cebfcac6481f5626b1
+last_activity_desc: Phase 22 PLAN-CHECK PASS — VALIDATION.md + Open Questions RESOLVED + fails_when
+state_head: 56efcfe67890ea485f3d8873563eff6180d46ef1
 progress:
   total_phases: 5
   completed_phases: 4
   total_plans: 13
-  completed_plans: 11
+  completed_plans: 12
   percent: 80
 ---
 
@@ -30,9 +30,9 @@ See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 ## Current Position
 
 Phase: 22 — GRACEISO regression + polish
-Plan: 22-01 next (of 2) — blocked on plan revision
-Status: Plan-check FAILED — revise then re-check
-Last activity: 2026-09-10 — 22-PLAN-CHECK.md FAIL (VALIDATION.md + Open Questions)
+Plan: 22-01 next (of 2)
+Status: Plan-check PASSED — ready for `/gsd-execute-phase 22`
+Last activity: 2026-09-10 — 22-PLAN-CHECK.md PASS (re-verify after revision)
 
 Progress: [████████░░] 80%
 
@@ -59,6 +59,7 @@ Progress: [████████░░] 80%
 | Phase 21 P01 | 4min | 3 tasks | 6 files |
 | Phase 21 P02 | 3min | 2 tasks | 5 files |
 | Phase 21 P03 | 6min | 2 tasks | 3 files |
+| Phase 22 P01 | 2min | 3 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -90,6 +91,8 @@ v1.3 locks from Phase 18 (see `18-CONTEXT.md`):
 - [Phase 21]: Lean OPEN findMany on / for forecastGrace (not nested CLOSED include)
 - [Phase 21]: Banner unique FX codes via excludedMissingFxCurrencies.join; no доходы/грейс tags
 - [Phase 21]: Tooltip: C-04 subcopy once under grace heading; displayPrimaryMajor on ForecastEvent for D-11
+- [Phase 22]: Left credit-grace.test.ts GRISO smokes intact (D-03); twin lives in griso.test.ts
+- [Phase 22]: GRISO write-gates describe lists five mutations; schedule never-calls cover DOM set + clear
 
 ### Pending Todos
 
@@ -122,9 +125,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-10T01:15:00.000Z
-Stopped at: Phase 22 research complete
-Resume file: .planning/phases/22-graceiso-regression-polish/22-RESEARCH.md
+Last session: 2026-09-09T23:27:43.116Z
+Stopped at: Completed 22-01-PLAN.md
+Resume file: None
 
 ## Operator Next Steps
 

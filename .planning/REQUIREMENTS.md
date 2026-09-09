@@ -25,7 +25,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Isolation / clarity
 
-- [ ] **GRISO-01**: Grace actions never write `BalanceSnapshot` or change historical NW LOCF
+- [x] **GRISO-01**: Grace actions never write `BalanceSnapshot` or change historical NW LOCF
 - [x] **UX-01**: UI clearly distinguishes snapshot credit debt from grace amount due (Russian copy)
 
 ### Contract gate
@@ -78,7 +78,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | UX-01 | Phase 20 | Complete |
 | GRFCST-01 | Phase 21 | Complete |
 | GRFCST-02 | Phase 21 | Complete |
-| GRISO-01 | Phase 22 | Pending |
+| GRISO-01 | Phase 22 | Complete |
 
 **Coverage:**
 
