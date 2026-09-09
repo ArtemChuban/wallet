@@ -2,20 +2,20 @@
 gsd_state_version: 1.0
 milestone: v1.3
 milestone_name: Кредитка
-current_phase: 21
-current_phase_name: Капитал forecast integration
-status: phase_complete
-stopped_at: Phase 21 executed; UAT human_needed (agent partial)
-last_updated: "2026-09-09T20:57:18.128Z"
+current_phase: 22
+current_phase_name: GRACEISO regression + polish
+status: planning
+stopped_at: Phase 21 complete, ready to plan Phase 22
+last_updated: "2026-09-09T21:22:40.596Z"
 last_activity: 2026-09-09
-last_activity_desc: Completed 21-03 tooltip two-block grace chrome
-state_head: ba751da0138a7887f07acb8edd7d71e4ad7df26f
+last_activity_desc: Phase 21 complete, transitioned to Phase 22
+state_head: 3756f21914d555aaed43656b2a639db9d4e94485
 progress:
   total_phases: 5
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 11
   completed_plans: 11
-  percent: 40
+  percent: 60
 ---
 
 # Project State
@@ -25,16 +25,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 21 — Капитал forecast integration
+**Current focus:** Phase 22 — GRACEISO regression + polish
 
 ## Current Position
 
-Phase: 21 — Капитал forecast integration
-Plan: 21-03 of 03 — complete (all phase plans done)
-Status: Phase plans complete — ready for verify-work
-Last activity: 2026-09-09 — Completed 21-03 (tooltip C-04 grace chrome)
+Phase: 22 — GRACEISO regression + polish
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-09-09 — Phase 21 UAT + security complete; transitioned to Phase 22
 
-Progress: [████░░░░░░] 40%
+Progress: [██████░░░░] 60%
 
 ## Performance Metrics
 
@@ -123,7 +123,7 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-09-09T20:57:17.896Z
-Stopped at: Phase 21 executed; UAT human_needed (agent partial)
+Stopped at: Phase 21 complete, ready to plan Phase 22
 Resume file: .planning/phases/21-kapital-forecast-integration/21-UAT.md
 
 ## Operator Next Steps

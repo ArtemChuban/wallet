@@ -61,13 +61,13 @@ Local Dockerized net-worth tracker + personal-debts + income ledgers: SQLite →
 - ✓ On Капитал `/`, user sees NW chart with future projection including recurring + future one-time pay via FX LOCF overlay — Phase 17 (FCST-01)
 - ✓ When a planned income date has passed without an actual, UI highlights it so the user can fill it in — Phase 15
 - ✓ Historical NW / BalanceSnapshot stay income-free (INISO) — Phase 17 (ISO-01)
+- ✓ Капитал «Прогноз» shows open credit obligations at due as A′ NW-neutral (visible, ΔNW=0 + tooltip; FX LOCF honesty) — Phase 21 (GRFCST-01/02)
 
 ### Active
 
 - [ ] User can set credit statement DOM + due DOM (monthly dual DOM schedule; clamp on statement)
 - [ ] User can manually enter «Платёж для беспроцентного» when a cycle closes
 - [ ] User can record earlier repayment/close of that obligation
-- [ ] Капитал «Прогноз» shows open credit obligations at due as A′ NW-neutral (visible, ΔNW=0 + tooltip; FX LOCF honesty)
 - [ ] Historical NW / BalanceSnapshot stay unaffected by grace-period entries (forecast overlay only)
 - [ ] Grace rules documented from the user's bank contract before implementation locks
 
@@ -140,9 +140,9 @@ v1.3 extends credit accounts with monthly dual-DOM grace schedules (statement + 
 | DebtDetailDialog = tabs (Погашение / Изменение / Простить / История), not stacked forms | User approved mock variant 1 over primary-CTA; reduces modal overload | ✓ Good — quick 2026-09-05 |
 | Income = side ledger; actual ≠ BalanceSnapshot; forecast overlay only | Keep historical NW account-only; ISO-01 | ✓ Good — Phase 17 INISO + Orca |
 | Forecast = dashed «Прогноз» Line + hinge; FX exclude → partial banner | Forecast-not-fact UX; never invent rates | ✓ Good — Phase 17 |
-| Credit grace amount due = manual entry (not derived from snapshots) | User lock for v1.3; snapshot history stays balance source of truth | — Pending v1.3 |
-| Credit grace obligations = forecast overlay only (no historical NW rewrite) | Same isolation pattern as income ISO-01 | — Pending v1.3 |
-| Bank contract study before grace-rule lock | User supplies contract; avoid guessing revolving/grace semantics | — Pending v1.3 |
+| Credit grace amount due = manual entry (not derived from snapshots) | User lock for v1.3; snapshot history stays balance source of truth | ✓ Good — Phase 20 |
+| Credit grace obligations = forecast overlay only (no historical NW rewrite) | Same isolation pattern as income ISO-01; A′ ΔNW=0 + FX banner | ✓ Good — Phase 21 |
+| Bank contract study before grace-rule lock | User supplies contract; avoid guessing revolving/grace semantics | ✓ Good — Phase 18 |
 
 ## Evolution
 
@@ -162,4 +162,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-08 after starting v1.3 Кредитка*
+*Last updated: 2026-09-09 after Phase 21*
