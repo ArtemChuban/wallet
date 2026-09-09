@@ -5,16 +5,16 @@ milestone_name: Кредитка
 current_phase: 21
 current_phase_name: Капитал forecast integration
 status: executing
-stopped_at: Completed 21-02-PLAN.md
-last_updated: "2026-09-09T20:35:12.422Z"
+stopped_at: Completed 21-03-PLAN.md
+last_updated: "2026-09-09T20:43:02.373Z"
 last_activity: 2026-09-09
 last_activity_desc: Completed 21-02 forecastGrace shell + banner codes
-state_head: 7d305c0b5a278dcaba02467cc7868195b168ada6
+state_head: 8dc5b5087fdb6716128c76cf2fb3797d431b5611
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 11
-  completed_plans: 10
+  completed_plans: 11
   percent: 40
 ---
 
@@ -58,6 +58,7 @@ Progress: [████░░░░░░] 40%
 | Phase 20 P03 | 5min | 2 tasks | 5 files |
 | Phase 21 P01 | 4min | 3 tasks | 6 files |
 | Phase 21 P02 | 3min | 2 tasks | 5 files |
+| Phase 21 P03 | 6min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -88,6 +89,7 @@ v1.3 locks from Phase 18 (see `18-CONTEXT.md`):
 - [Phase 21]: Builder returns excludedMissingFxCurrencies unique alphabetical
 - [Phase 21]: Lean OPEN findMany on / for forecastGrace (not nested CLOSED include)
 - [Phase 21]: Banner unique FX codes via excludedMissingFxCurrencies.join; no доходы/грейс tags
+- [Phase 21]: Tooltip: C-04 subcopy once under grace heading; displayPrimaryMajor on ForecastEvent for D-11
 
 ### Pending Todos
 
@@ -120,8 +122,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-09T20:35:12.320Z
-Stopped at: Completed 21-02-PLAN.md
+Last session: 2026-09-09T20:43:02.281Z
+Stopped at: Completed 21-03-PLAN.md
 Resume file: None
 
 ## Operator Next Steps

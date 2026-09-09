@@ -147,13 +147,13 @@ Plans:
   2. Forecast credit slots use FX LOCF honesty; missing rate shows partial banner (never invents rates)
   3. Early-closed obligations no longer move the forecast; income + grace coexist on one signed series
 
-**Plans**: 2/3 plans executed
+**Plans**: 3/3 plans executed
 
 Plans:
 
 - [x] 21-01-PLAN.md — Wave 0 + OPEN membership fold + A′ builder tracer (FX codes)
 - [x] 21-02-PLAN.md — `/` OPEN load → shell merge → banner codes + isolation smoke
-- [ ] 21-03-PLAN.md — Tooltip two-block grace chrome + sampling/human-check
+- [x] 21-03-PLAN.md — Tooltip two-block grace chrome + sampling/human-check
 
 **UI hint**: yes
 
@@ -180,7 +180,7 @@ Plans:
 | 18. Bank contract study + discuss locks | v1.3 | 2/2 | Complete    | 2026-09-08 |
 | 19. Schema + pure grace domain math | v1.3 | 3/3 | Complete    | 2026-09-09 |
 | 20. Obligation CRUD + cycle UI | v1.3 | 3/3 | Complete    | 2026-09-09 |
-| 21. Капитал forecast integration | v1.3 | 2/3 | In Progress|  |
+| 21. Капитал forecast integration | v1.3 | 3/3 | In Progress|  |
 | 22. GRACEISO regression + polish | v1.3 | 0/TBD | Not started | - |
 
 ---
