@@ -1,5 +1,5 @@
 ---
-status: partial
+status: complete
 phase: 21-kapital-forecast-integration
 source:
   - 21-01-SUMMARY.md
@@ -7,16 +7,12 @@ source:
   - 21-03-SUMMARY.md
   - 21-VERIFICATION.md
 started: "2026-09-09T20:50:00Z"
-updated: "2026-09-09T21:00:00Z"
+updated: "2026-09-09T21:20:00Z"
 ---
 
 ## Current Test
 
-number: —
-name: suite complete (partial)
-expected: |
-  Agent-driven Orca UAT finished with one live pass and two backstops covered by observation + code.
-awaiting: none
+[testing complete]
 
 ## Tests
 
@@ -30,9 +26,13 @@ reported: |
 
 ### 2. Long missing-code banner wrap
 expected: Wraps inside muted p-4 card; no ellipsis truncation of codes
-result: skipped
-reason: |
-  Live DB has no FX exclusions (banner not rendered). Banner `p-4` + `нет курса {CODES}` covered by unit/file-scan (`nw-forecast-ui.test.ts`) and DashboardChartsShell source. Not a product gap.
+result: pass
+reported: |
+  Seeded 15 missing-FX RecurringIncome rows (AUD…USD). Live banner:
+  «Прогноз неполный · нет курса AUD, CAD, CHF, CNY, DKK, EUR, GBP, JPY, KRW, NOK, NZD, PLN, SEK, TRY, USD»
+  role=status; class includes p-4 muted card; whiteSpace=normal; textOverflow=clip (not ellipsis);
+  overflow=visible; height≈74px (multi-line wrap); scrollWidth≈clientWidth (no horizontal clip).
+  Seed incomes deleted after test; grace restored CLOSED.
 
 ### 3. Long account name wrap
 expected: Name wraps via break-words / min-w-40; amount stays readable
@@ -43,14 +43,19 @@ reported: |
 ## Summary
 
 total: 3
-passed: 2
+passed: 3
 issues: 0
 blocked: 0
-skipped: 1
+skipped: 0
 pending: 0
+
+## Gaps
+
+[none]
 
 ## Notes
 
 - Temporarily reopened CLOSED obligation id=1 for UAT, then restored to CLOSED (`dueAsOf=2026-09-15`, `closedAsOf=2026-09-09`).
 - Account name restored to «Platinum».
-- Automated suite: 54 PASS / 0 FAIL (`nw-forecast` + ui + credit-grace).
+- FX banner UAT used temporary currencies + `note=UAT-21-FX-BANNER` incomes (deleted after pass). Currency catalog rows for those codes left in DB (harmless).
+- Automated suite previously: 54 PASS / 0 FAIL (`nw-forecast` + ui + credit-grace).
