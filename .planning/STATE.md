@@ -4,11 +4,11 @@ milestone: v1.3
 milestone_name: Кредитка
 current_phase: 20
 current_phase_name: Obligation CRUD + cycle UI
-status: planning
+status: executing
 stopped_at: Completed 20-01-PLAN.md
 last_updated: "2026-09-09T12:27:32.000Z"
 last_activity: 2026-09-09
-last_activity_desc: Phase 20 plan-check PASSED (Wave 0 verify-poison fixed)
+last_activity_desc: Completed 20-01 tracer (Грейс → schedule → create)
 state_head: 3a8f1acc1627ef8313e9305c2fd1af0d3046ad0b
 progress:
   total_phases: 5
