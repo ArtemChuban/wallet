@@ -120,8 +120,21 @@ Plans:
   4. When due date has passed without close, UI highlights the obligation so the user can act
   5. UI clearly distinguishes snapshot credit debt from grace amount due (Russian copy)
 
-**Plans**: TBD
+**Plans**: 3 plans
 **UI hint**: yes
+
+Plans:
+**Wave 1**
+
+- [ ] 20-01-PLAN.md — Wave 0 stubs + DestructiveConfirmStep + tracer (Грейс → schedule → CTA → create)
+
+**Wave 2** *(blocked on Wave 1)*
+
+- [ ] 20-02-PLAN.md — update/close/reopen actions + confirm steps + collapsed CLOSED
+
+**Wave 3** *(blocked on Wave 2)*
+
+- [ ] 20-03-PLAN.md — overdue chrome (OBL-03) + UX-01 copy + clear schedule
 
 ### Phase 21: Капитал forecast integration
 
@@ -159,9 +172,9 @@ Plans:
 | 13–17 | v1.2 | — | Complete | 2026-09-08 |
 | 18. Bank contract study + discuss locks | v1.3 | 2/2 | Complete    | 2026-09-08 |
 | 19. Schema + pure grace domain math | v1.3 | 3/3 | Complete    | 2026-09-09 |
-| 20. Obligation CRUD + cycle UI | v1.3 | 0/TBD | Not started | - |
+| 20. Obligation CRUD + cycle UI | v1.3 | 0/3 | Planned | - |
 | 21. Капитал forecast integration | v1.3 | 0/TBD | Not started | - |
 | 22. GRACEISO regression + polish | v1.3 | 0/TBD | Not started | - |
 
 ---
-*Roadmap updated: 2026-09-08 — v1.3 Кредитка phases 18–22*
+*Roadmap updated: 2026-09-09 — Phase 20 plans 20-01…03*

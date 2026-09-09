@@ -5,15 +5,15 @@ milestone_name: Кредитка
 current_phase: 20
 current_phase_name: Obligation CRUD + cycle UI
 status: planning
-stopped_at: Phase 20 UI-SPEC draft ready for checker
-last_updated: "2026-09-09T11:54:00.000Z"
+stopped_at: Phase 20 plans written (20-01…03) — ready for plan-check / execute
+last_updated: "2026-09-09T12:15:00.000Z"
 last_activity: 2026-09-09
-last_activity_desc: Phase 20 UI-SPEC.md written
+last_activity_desc: Phase 20 PLAN.md files created (3 plans)
 state_head: e71dcf720dd90ef0d69aa705ec850eb849e55be4
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 5
+  total_plans: 8
   completed_plans: 5
   percent: 20
 ---
@@ -30,11 +30,11 @@ See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 ## Current Position
 
 Phase: 20 — Obligation CRUD + cycle UI
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-09-09 — Phase 20 research complete
+Plan: 20-01…03 planned (not executed)
+Status: Ready to execute
+Last activity: 2026-09-09 — Phase 20 PLAN.md set written
 
-Progress: [░░░░░░░░░░] 0% (1/5 phases planned; 0/3 plans executed)
+Progress: [██░░░░░░░░] 20% (2/5 phases planned; 0/3 Phase 20 plans executed)
 
 ## Performance Metrics
 
@@ -101,10 +101,11 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-09T11:52:00.000Z
-Stopped at: Phase 20 research complete
-Resume file: /home/artem/Documents/wallet/.planning/phases/20-obligation-crud-cycle-ui/20-RESEARCH.md
+Last session: 2026-09-09T12:15:00.000Z
+Stopped at: Phase 20 plans complete
+Resume file: /home/artem/Documents/wallet/.planning/phases/20-obligation-crud-cycle-ui/20-01-PLAN.md
 
 ## Operator Next Steps
 
-- `/gsd-plan-phase 20` — planner consumes 20-RESEARCH.md (CONTEXT locks D-01…D-16)
+- `/gsd-execute-phase 20` — run Wave 1 (20-01) then 20-02 / 20-03
+- Or plan-checker first if `plan_checker_enabled`

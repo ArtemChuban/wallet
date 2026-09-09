@@ -40,14 +40,17 @@ created: "2026-09-09"
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 20-W0 | 01 | 0 | OBL/UX infra | — | N/A | unit | `npx vitest run src/lib/validations/credit-grace.test.ts` | ❌ W0 | ⬜ pending |
-| 20-actions | 01+ | 1 | OBL-01…02 | GRISO | no balanceSnapshot writes | unit | `npx vitest run src/app/accounts/actions.test.ts` | ❌ W0 | ⬜ pending |
-| 20-math | 01+ | 1 | CYCLE-02 / OBL-03 | — | N/A | unit | `npx vitest run src/lib/credit-grace.test.ts` | ✅ | ⬜ pending |
-| 20-ui | 02+ | 2 | UX-01 / OBL-03 | — | no window.confirm | UI source | `npx vitest run src/components/accounts/` | ❌ W0 | ⬜ pending |
+| 20-01-T1 | 01 | 1 | OBL/UX infra | — | N/A | unit | `npx vitest run src/lib/validations/credit-grace.test.ts` | ❌ W0 | ⬜ pending |
+| 20-01-T2 | 01 | 1 | OBL-02 prep | — | pendingLabel API | source | `grep -q pendingLabel src/components/ui/destructive-confirm-step.tsx` | ✅ | ⬜ pending |
+| 20-01-T3 | 01 | 1 | CYCLE-02, OBL-01 | T-20-02/03 | server dueAsOf; no balanceSnapshot | unit + files | `npx vitest run src/lib/credit-grace.test.ts src/lib/validations/credit-grace.test.ts src/app/accounts/actions.test.ts` | ⚠️ partial | ⬜ pending |
+| 20-02-T1 | 02 | 2 | OBL-01, OBL-02 | T-20-03 | no balanceSnapshot writes | unit | `npx vitest run src/app/accounts/actions.test.ts` | ⚠️ extend | ⬜ pending |
+| 20-02-T2 | 02 | 2 | OBL-02 | T-20-06 | DestructiveConfirmStep only | UI source | `npx vitest run src/components/accounts/credit-grace-ui.test.ts` | ❌ W0 | ⬜ pending |
+| 20-03-T1 | 03 | 3 | OBL-03, CYCLE-02 | T-20-08 | isGraceOverdue chrome | unit + UI | `npx vitest run src/lib/credit-grace.test.ts src/components/accounts/credit-grace-ui.test.ts` | ⚠️ | ⬜ pending |
+| 20-03-T2 | 03 | 3 | UX-01 | T-20-09 | disclaimer + Задолженность | UI source | `npx vitest run src/components/accounts/credit-grace-ui.test.ts src/app/accounts/actions.test.ts` | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
-*Planner must refine Task IDs to match final PLAN.md task numbers.*
+*Task IDs match 20-01…03 PLAN.md task order.*
 
 ---
 
