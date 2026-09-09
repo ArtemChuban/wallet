@@ -4,16 +4,16 @@ milestone: v1.3
 milestone_name: Кредитка
 current_phase: 22
 current_phase_name: GRACEISO regression + polish
-status: planning
-stopped_at: Phase 22 research complete
-last_updated: "2026-09-10T01:15:00.000Z"
+status: ready_to_execute
+stopped_at: Phase 22 plans created (22-01, 22-02)
+last_updated: "2026-09-10T01:20:00.000Z"
 last_activity: 2026-09-10
-last_activity_desc: Phase 22 RESEARCH.md written — GRISO twin of INISO
+last_activity_desc: Phase 22 PLAN.md written — GRISO twin + write-gates + gate hygiene
 state_head: bc13404fcf7aa6603ca978cebfcac6481f5626b1
 progress:
   total_phases: 5
   completed_phases: 4
-  total_plans: 11
+  total_plans: 13
   completed_plans: 11
   percent: 80
 ---

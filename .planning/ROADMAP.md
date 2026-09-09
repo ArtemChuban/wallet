@@ -168,7 +168,11 @@ Plans:
   2. Historical NW / past LOCF series stay identical with vs without grace data (golden / identity check)
   3. Isolation is covered by automated regression (file-scan / suite twin of INISO) suitable for milestone close
 
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 22-01-PLAN.md — GRISO twin suite (file-scan + golden) + five grace write-gates
+- [ ] 22-02-PLAN.md — Gate hygiene: REQUIREMENTS/ROADMAP/STATE after green suite
 
 ## Progress
 
@@ -181,7 +185,7 @@ Plans:
 | 19. Schema + pure grace domain math | v1.3 | 3/3 | Complete    | 2026-09-09 |
 | 20. Obligation CRUD + cycle UI | v1.3 | 3/3 | Complete    | 2026-09-09 |
 | 21. Капитал forecast integration | v1.3 | 3/3 | Complete    | 2026-09-09 |
-| 22. GRACEISO regression + polish | v1.3 | 0/TBD | Not started | - |
+| 22. GRACEISO regression + polish | v1.3 | 0/2 | Planned | - |
 
 ---
 *Roadmap updated: 2026-09-09 — Phase 20 plans 20-01…03*
