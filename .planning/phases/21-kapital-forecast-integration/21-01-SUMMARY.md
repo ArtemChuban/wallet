@@ -114,7 +114,7 @@ status: complete
 3. **Task 2 GREEN: openGraceForecastMembership** - `350fafc` (feat)
 4. **Task 3: A′ kind-aware builder** - `b47773d` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `d1649c3` (docs: complete plan)
 
 ## Files Created/Modified
 
