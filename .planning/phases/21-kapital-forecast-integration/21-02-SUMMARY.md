@@ -110,7 +110,7 @@ status: complete
 1. **Task 1: End-to-end `/` OPEN grace → shell merge → banner codes** - `ec3df43` (feat)
 2. **Task 2: Isolation smoke — page/shell stay off historical LOCF path** - `7d305c0` (test)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `cde8477` (docs: complete plan)
 
 ## Files Created/Modified
 
@@ -144,4 +144,7 @@ None.
 
 None — Plan 03 tooltip RU `describe.skip` / `it.todo` remain intentional Wave 0 owners (not this plan's goal).
 
-## Self-Check: PENDING
+## Self-Check: PASSED
+
+- FOUND: `src/app/page.tsx`, `DashboardChartsShell.tsx`, `21-02-SUMMARY.md`
+- FOUND commits: `ec3df43`, `7d305c0`
