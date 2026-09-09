@@ -4,12 +4,12 @@ milestone: v1.3
 milestone_name: Кредитка
 current_phase: 22
 current_phase_name: GRACEISO regression + polish
-status: planning
+status: executing
 stopped_at: Completed 22-01-PLAN.md
 last_updated: "2026-09-09T23:27:43.246Z"
 last_activity: 2026-09-10
-last_activity_desc: Phase 22 PLAN-CHECK PASS — VALIDATION.md + Open Questions RESOLVED + fails_when
-state_head: 56efcfe67890ea485f3d8873563eff6180d46ef1
+last_activity_desc: Phase 22 Plan 01 complete — GRISO twin green; 22-02 next
+state_head: 25b68aa
 progress:
   total_phases: 5
   completed_phases: 4
@@ -30,9 +30,9 @@ See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 ## Current Position
 
 Phase: 22 — GRACEISO regression + polish
-Plan: 22-01 next (of 2)
-Status: Plan-check PASSED — ready for `/gsd-execute-phase 22`
-Last activity: 2026-09-10 — 22-PLAN-CHECK.md PASS (re-verify after revision)
+Plan: 22-02 next (of 2)
+Status: Plan 01 complete — execute 22-02 gate hygiene
+Last activity: 2026-09-10 — 22-01 SUMMARY green (GRISO twin + write-gates)
 
 Progress: [████████░░] 80%
 
@@ -131,4 +131,4 @@ Resume file: None
 
 ## Operator Next Steps
 
-- `/gsd-plan-phase 22` — create PLAN.md from RESEARCH + CONTEXT
+- Execute `/gsd-execute-phase 22` remaining plan 22-02 (gate hygiene), or run 22-02 alone

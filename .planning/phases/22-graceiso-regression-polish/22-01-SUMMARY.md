@@ -96,7 +96,7 @@ status: complete
 2. **Task 2: End-to-end GRISO twin — file-scan walls + past-series golden** - `e1345df` (feat)
 3. **Task 3: Grace mutation write-gates — schedule gap + five-path coverage** - `56efcfe` (test)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `25b68aa` (docs: complete plan)
 
 ## Files Created/Modified
 - `src/lib/griso.test.ts` — GRISO-01 isolation twin (file-scan + golden + FIAT_CREDIT)
