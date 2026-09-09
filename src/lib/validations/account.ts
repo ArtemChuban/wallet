@@ -67,5 +67,61 @@ export const updateAccountNameSchema = z.object({
   name: accountNameSchema,
 });
 
+/** Day-of-month 1–31, or null when clearing / omitted (income dayOfMonth range). */
+const nullableDayOfMonthSchema = z.preprocess((val) => {
+  if (val === "" || val === undefined || val === null) return null;
+  return val;
+}, z.coerce.number().int().min(1).max(31).nullable());
+
+/**
+ * D-02 type gate for grace DOM writes.
+ * Null/null schedule is allowed for any type at schema layer; setting DOM requires FIAT_CREDIT.
+ */
+export function assertGraceDomAllowedForType(
+  accountType: string,
+  statementDayOfMonth: number | null,
+  dueDayOfMonth: number | null,
+): boolean {
+  const anyDomSet =
+    statementDayOfMonth !== null || dueDayOfMonth !== null;
+  if (!anyDomSet) return true;
+  return accountType === "FIAT_CREDIT";
+}
+
+/**
+ * Persist dual DOM on FIAT_CREDIT (CYCLE-01 / D-01…D-03).
+ * Optional accountType enables Zod-testable non-credit reject (D-02); action also gates from DB.
+ */
+export const updateGraceScheduleSchema = z
+  .object({
+    accountId: z.coerce.number().int().positive(),
+    statementDayOfMonth: nullableDayOfMonthSchema,
+    dueDayOfMonth: nullableDayOfMonthSchema,
+    accountType: z.string().optional(),
+  })
+  .superRefine((val, ctx) => {
+    const s = val.statementDayOfMonth;
+    const d = val.dueDayOfMonth;
+    const sSet = s !== null && s !== undefined;
+    const dSet = d !== null && d !== undefined;
+    if (sSet !== dSet) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Укажите обе даты или очистите обе",
+      });
+      return;
+    }
+    if (
+      val.accountType !== undefined &&
+      !assertGraceDomAllowedForType(val.accountType, s ?? null, d ?? null)
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Даты грейса только для кредитного счёта",
+      });
+    }
+  });
+
 export type CreateAccountInput = z.infer<typeof createAccountSchema>;
 export type UpdateAccountNameInput = z.infer<typeof updateAccountNameSchema>;
+export type UpdateGraceScheduleInput = z.infer<typeof updateGraceScheduleSchema>;
