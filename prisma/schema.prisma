@@ -40,6 +40,11 @@ enum DebtStatus {
   CLOSED
 }
 
+enum GraceObligationStatus {
+  OPEN
+  CLOSED
+}
+
 model Person {
   id               Int               @id @default(autoincrement())
   name             String            @unique
@@ -98,9 +103,30 @@ model Account {
   /// Metadata only — never an NW asset. Required (>0) iff type == FIAT_CREDIT (D-09, D-10).
   /// SQLite CHECK Account_credit_limit_invariant enforces FIAT_CREDIT ↔ creditLimitMinor > 0 (else null).
   creditLimitMinor BigInt?
+  /// Dual DOM schedule — FIAT_CREDIT only; both null or both set (Account_grace_dom_invariant).
+  statementDayOfMonth Int?
+  dueDayOfMonth       Int?
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
   balanceSnapshots BalanceSnapshot[]
+  creditGraceObligations CreditGraceObligation[]
+}
+
+/// Per-cycle grace obligation — amount + frozen due; currency inherits Account (D-05…D-08, D-15).
+model CreditGraceObligation {
+  id             Int                   @id @default(autoincrement())
+  accountId      Int
+  account        Account               @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  cycleStartAsOf String // YYYY-MM-DD — unique cycle key half (D-09, D-16)
+  dueAsOf        String // frozen at create (D-05)
+  amountMinor    BigInt
+  status         GraceObligationStatus @default(OPEN)
+  closedAsOf     String? // required when CLOSED (migration CHECK)
+  note           String?
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+
+  @@unique([accountId, cycleStartAsOf])
 }
 
 model FxRate {
