@@ -5,10 +5,10 @@ milestone_name: Кредитка
 current_phase: 21
 current_phase_name: Капитал forecast integration
 status: planning
-stopped_at: Phase 21 plans written — ready for execute
-last_updated: "2026-09-09T22:20:00.000Z"
+stopped_at: Phase 21 plans revised after checker — ready for execute
+last_updated: "2026-09-09T22:25:00.000Z"
 last_activity: 2026-09-09
-last_activity_desc: Phase 21 PLAN.md set (21-01…21-03) written
+last_activity_desc: Phase 21 PLAN/RESEARCH revised (checker blockers+warnings)
 state_head: a1b3d88
 progress:
   total_phases: 5
