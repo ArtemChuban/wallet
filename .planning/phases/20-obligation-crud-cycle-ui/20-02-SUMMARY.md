@@ -105,7 +105,7 @@ status: complete
 2. **Task 1 GREEN: implement actions** - `3422d79` (feat)
 3. **Task 2: Amount edit + close/reopen + collapsed CLOSED** - `a16489d` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `90c2711` (docs: complete plan)
 
 ## Files Created/Modified
 
