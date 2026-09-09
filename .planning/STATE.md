@@ -5,11 +5,11 @@ milestone_name: Кредитка
 current_phase: 21
 current_phase_name: Капитал forecast integration
 status: phase_complete
-stopped_at: Completed 21-03-PLAN.md
-last_updated: "2026-09-09T20:43:02.373Z"
+stopped_at: Phase 21 executed; UAT human_needed (agent partial)
+last_updated: "2026-09-09T20:57:18.128Z"
 last_activity: 2026-09-09
 last_activity_desc: Completed 21-03 tooltip two-block grace chrome
-state_head: d891de5
+state_head: ba751da0138a7887f07acb8edd7d71e4ad7df26f
 progress:
   total_phases: 5
   completed_phases: 2
@@ -122,9 +122,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-09T20:43:02.281Z
-Stopped at: Completed 21-03-PLAN.md
-Resume file: None
+Last session: 2026-09-09T20:57:17.896Z
+Stopped at: Phase 21 executed; UAT human_needed (agent partial)
+Resume file: .planning/phases/21-kapital-forecast-integration/21-UAT.md
 
 ## Operator Next Steps
 
