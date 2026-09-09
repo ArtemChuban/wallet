@@ -5,10 +5,10 @@ milestone_name: Кредитка
 current_phase: 20
 current_phase_name: Obligation CRUD + cycle UI
 status: planning
-stopped_at: Phase 20 context gathered
-last_updated: "2026-09-09T11:45:07.441Z"
+stopped_at: Phase 20 research complete
+last_updated: "2026-09-09T11:52:00.000Z"
 last_activity: 2026-09-09
-last_activity_desc: Phase 19 complete, transitioned to Phase 20
+last_activity_desc: Phase 20 RESEARCH.md written
 state_head: e71dcf720dd90ef0d69aa705ec850eb849e55be4
 progress:
   total_phases: 5
@@ -32,7 +32,7 @@ See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 Phase: 20 — Obligation CRUD + cycle UI
 Plan: Not started
 Status: Ready to plan
-Last activity: 2026-09-09 — Phase 19 complete, transitioned to Phase 20
+Last activity: 2026-09-09 — Phase 20 research complete
 
 Progress: [░░░░░░░░░░] 0% (1/5 phases planned; 0/3 plans executed)
 
@@ -101,10 +101,10 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-09T11:45:07.288Z
-Stopped at: Phase 20 context gathered
-Resume file: /home/artem/Documents/wallet/.planning/phases/20-obligation-crud-cycle-ui/20-CONTEXT.md
+Last session: 2026-09-09T11:52:00.000Z
+Stopped at: Phase 20 research complete
+Resume file: /home/artem/Documents/wallet/.planning/phases/20-obligation-crud-cycle-ui/20-RESEARCH.md
 
 ## Operator Next Steps
 
-- `/gsd-execute-phase 19` — Wave 1 decision gate (D-03/D-09) then tracer schema+math; Wave 2 parallel windows + write path
+- `/gsd-plan-phase 20` — planner consumes 20-RESEARCH.md (CONTEXT locks D-01…D-16)
