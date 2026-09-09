@@ -4,15 +4,15 @@ milestone: v1.3
 milestone_name: Кредитка
 current_phase: 22
 current_phase_name: GRACEISO regression + polish
-status: phase_complete
-stopped_at: Completed 22-02-PLAN.md — awaiting verify-work / milestone close
-last_updated: "2026-09-09T23:29:48.000Z"
+status: ready_for_verification
+stopped_at: Completed 22-02-PLAN.md
+last_updated: "2026-09-09T23:31:30.439Z"
 last_activity: 2026-09-10
-last_activity_desc: Phase 22 complete — GRISO suite green + GRISO-01 gate hygiene (D-12)
-state_head: 25b68aa
+last_activity_desc: Phase 22 plans complete — GRISO suite green + GRISO-01 gate hygiene (D-12); awaiting verify-work
+state_head: 2ecedefb5cbce7e4105d924eb36b25cb67024055
 progress:
   total_phases: 5
-  completed_phases: 5
+  completed_phases: 4
   total_plans: 13
   completed_plans: 13
   percent: 100
@@ -34,7 +34,7 @@ Plan: 2 of 2 complete
 Status: Phase 22 plans complete — GRISO-01 hygiene synced; next `/gsd-verify-work` or milestone close
 Last activity: 2026-09-10 — GRISO suite green + REQUIREMENTS/ROADMAP/STATE gate hygiene (D-12)
 
-Progress: [██████████] 100%
+Progress: [██████████] 100% (plans; phase verify pending)
 
 ## Performance Metrics
 
@@ -60,6 +60,7 @@ Progress: [██████████] 100%
 | Phase 21 P02 | 3min | 2 tasks | 5 files |
 | Phase 21 P03 | 6min | 2 tasks | 3 files |
 | Phase 22 P01 | 2min | 3 tasks | 2 files |
+| Phase 22 P02 | 1min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -93,6 +94,7 @@ v1.3 locks from Phase 18 (see `18-CONTEXT.md`):
 - [Phase 21]: Tooltip: C-04 subcopy once under grace heading; displayPrimaryMajor on ForecastEvent for D-11
 - [Phase 22]: Left credit-grace.test.ts GRISO smokes intact (D-03); twin lives in griso.test.ts
 - [Phase 22]: GRISO write-gates describe lists five mutations; schedule never-calls cover DOM set + clear
+- [Phase 22]: D-12 gate hygiene after green suite; GRISO-01 already checked — ROADMAP/STATE sync only
 
 ### Pending Todos
 
@@ -125,8 +127,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-09T23:29:48.000Z
-Stopped at: Completed 22-02-PLAN.md — awaiting verify-work / milestone close
+Last session: 2026-09-09T23:31:30.304Z
+Stopped at: Completed 22-02-PLAN.md
 Resume file: None
 
 ## Operator Next Steps

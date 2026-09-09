@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 12
+open_count: 13
 waived_count: 0
-fixed_count: 3
-total_count: 15
-last_updated: 2026-09-09T20:42:15.926Z
+fixed_count: 4
+total_count: 17
+last_updated: 2026-09-09T23:32:45.946Z
 ---
 
 # Broken Windows Ledger
@@ -30,6 +30,8 @@ last_updated: 2026-09-09T20:42:15.926Z
 | 13 | 17 | skipped-test | src/lib/iniso.test.ts |  | past buildNetWorthSeries golden identity it.todo | open |  | 2026-09-07T20:27:54.406Z |  |
 | 14 | 21 | skipped-test | src/components/dashboard/nw-forecast-ui.test.ts |  | Plan 03 tooltip RU describe.skip / it.todo retained for Plan 03 owner | open |  | 2026-09-09T20:35:11.165Z |  |
 | 15 | 21 | deviation | src/lib/nw-forecast.ts |  | Rule 2: displayPrimaryMajor on ForecastEvent for D-11 tooltip amounts | open |  | 2026-09-09T20:42:15.926Z |  |
+| 16 | 22 | deviation | .planning/REQUIREMENTS.md |  | Task 1 verify-only: GRISO-01 already Complete before 22-02 | fixed |  | 2026-09-09T23:31:30.808Z | 2026-09-09T23:32:32.608Z |
+| 17 | 22 | deviation | .planning/ROADMAP.md |  | Rule 3: re-applied Phase 22 Progress Complete after roadmap.update-plan-progress In Progress clobber | open |  | 2026-09-09T23:32:45.946Z |  |
 
 ````json
 [
@@ -211,6 +213,30 @@ last_updated: 2026-09-09T20:42:15.926Z
     "status": "open",
     "reason": "",
     "recorded_at": "2026-09-09T20:42:15.926Z",
+    "resolved_at": null
+  },
+  {
+    "id": 16,
+    "kind": "deviation",
+    "phase": "22",
+    "file": ".planning/REQUIREMENTS.md",
+    "line": null,
+    "description": "Task 1 verify-only: GRISO-01 already Complete before 22-02",
+    "status": "fixed",
+    "reason": "",
+    "recorded_at": "2026-09-09T23:31:30.808Z",
+    "resolved_at": "2026-09-09T23:32:32.608Z"
+  },
+  {
+    "id": 17,
+    "kind": "deviation",
+    "phase": "22",
+    "file": ".planning/ROADMAP.md",
+    "line": null,
+    "description": "Rule 3: re-applied Phase 22 Progress Complete after roadmap.update-plan-progress In Progress clobber",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-09T23:32:45.946Z",
     "resolved_at": null
   }
 ]
