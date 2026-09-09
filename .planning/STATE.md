@@ -5,11 +5,11 @@ milestone_name: Кредитка
 current_phase: 20
 current_phase_name: Obligation CRUD + cycle UI
 status: planning
-stopped_at: Phase 19 complete, ready to plan Phase 20
-last_updated: "2026-09-09T09:22:49.116Z"
+stopped_at: Phase 20 context gathered
+last_updated: "2026-09-09T11:45:07.441Z"
 last_activity: 2026-09-09
 last_activity_desc: Phase 19 complete, transitioned to Phase 20
-state_head: c7914681fea32311ba47586d175de5e0fafe1051
+state_head: e71dcf720dd90ef0d69aa705ec850eb849e55be4
 progress:
   total_phases: 5
   completed_phases: 1
@@ -101,9 +101,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-08T19:49:31.461Z
-Stopped at: Phase 19 complete, ready to plan Phase 20
-Resume file: .planning/phases/19-schema-pure-grace-domain-math/19-01-PLAN.md
+Last session: 2026-09-09T11:45:07.288Z
+Stopped at: Phase 20 context gathered
+Resume file: /home/artem/Documents/wallet/.planning/phases/20-obligation-crud-cycle-ui/20-CONTEXT.md
 
 ## Operator Next Steps
 
