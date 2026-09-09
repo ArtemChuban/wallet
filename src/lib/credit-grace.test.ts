@@ -173,6 +173,31 @@ describe("mergeGraceListRows (D-05 / CYCLE-02)", () => {
     });
     expect(rows.some((r) => r.kind === "cta")).toBe(true);
   });
+
+  it("sorts OPEN overdue first then nearest dueAsOf (D-08)", () => {
+    const rows = mergeGraceListRows(schedule21_15, "2026-02-20", [
+      {
+        id: 1,
+        cycleStartAsOf: "2026-02-21",
+        dueAsOf: "2026-03-15",
+        amountMinor: "200",
+        status: "OPEN",
+        note: null,
+      },
+      {
+        id: 2,
+        cycleStartAsOf: "2026-01-21",
+        dueAsOf: "2026-02-15",
+        amountMinor: "100",
+        status: "OPEN",
+        note: null,
+      },
+    ]);
+    const opens = rows.filter((r) => r.kind === "open");
+    expect(opens.map((r) => (r.kind === "open" ? r.obligation.id : null))).toEqual(
+      [2, 1],
+    );
+  });
 });
 
 describe("GRISO isolation smoke (T-19-03)", () => {

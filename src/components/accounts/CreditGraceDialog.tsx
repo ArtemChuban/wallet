@@ -30,6 +30,7 @@ import { DestructiveConfirmStep } from "@/components/ui/destructive-confirm-step
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
+  isGraceOverdue,
   mergeGraceListRows,
   type CreditGraceSchedule,
 } from "@/lib/credit-grace";
@@ -43,6 +44,9 @@ const EMPTY_SCHEDULE_HINT =
 
 const DOM_NON_RECALC_HINT =
   "Смена дат не пересчитывает уже сохранённые обязательства.";
+
+const OVERDUE_INTEREST_HINT =
+  "Срок оплаты прошёл — банк может начислить проценты.";
 
 const CLOSE_CONFIRM_MESSAGE = "Отметить обязательство оплаченным?";
 const REOPEN_CONFIRM_MESSAGE =
@@ -343,16 +347,30 @@ function CreditGraceBody({
               BigInt(row.obligation.amountMinor),
               account.currency.scale,
             );
+            const overdue = isGraceOverdue(row.obligation.dueAsOf, today);
             return (
               <li
                 key={`open-${row.obligation.id}`}
-                className="flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3"
+                className={
+                  overdue
+                    ? "flex flex-wrap items-center justify-between gap-2 border-t border-border bg-warning/15 px-3 py-2 pt-3 text-warning-foreground"
+                    : "flex flex-wrap items-center justify-between gap-2 border-t border-border pt-3"
+                }
               >
-                <div className="min-w-0 text-sm text-foreground">
+                <div
+                  className={
+                    overdue
+                      ? "min-w-0 text-sm text-warning-foreground"
+                      : "min-w-0 text-sm text-foreground"
+                  }
+                >
                   <p className="font-mono">
                     {formatAsOfDisplay(row.obligation.cycleStartAsOf)} →{" "}
                     {formatAsOfDisplay(row.obligation.dueAsOf)}
                   </p>
+                  {overdue ? (
+                    <p className="mt-1 text-sm">{OVERDUE_INTEREST_HINT}</p>
+                  ) : null}
                   <p className="mt-1 font-mono">
                     {amount} {account.currencyCode}
                     <span className="mx-2 text-muted-foreground">·</span>

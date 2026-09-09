@@ -192,10 +192,25 @@ export type GraceListRow =
     }
   | { kind: "cta"; cycleStartAsOf: string; dueAsOf: string };
 
+/** D-08: overdue OPEN first, then nearest dueAsOf, then cycleStartAsOf. */
+function compareOpenByDue(
+  a: { dueAsOf: string; cycleStartAsOf: string },
+  b: { dueAsOf: string; cycleStartAsOf: string },
+  today: string,
+): number {
+  const ao = isGraceOverdue(a.dueAsOf, today) ? 0 : 1;
+  const bo = isGraceOverdue(b.dueAsOf, today) ? 0 : 1;
+  if (ao !== bo) return ao - bo;
+  if (a.dueAsOf !== b.dueAsOf) {
+    return a.dueAsOf < b.dueAsOf ? -1 : 1;
+  }
+  return a.cycleStartAsOf < b.cycleStartAsOf ? -1 : 1;
+}
+
 /**
  * Merge resolveCurrentAndNext candidates with persisted rows (D-05).
  * Missing candidate window → CTA only — never invents DB placeholders.
- * Orphan OPEN (e.g. gap-day overdue) listed above candidate rows.
+ * All OPEN sorted per D-08 (overdue first); gap-day orphans retained (Pitfall 7).
  * CLOSED omitted here (collapsed history is Plan 02).
  */
 export function mergeGraceListRows(
@@ -207,38 +222,11 @@ export function mergeGraceListRows(
   const byStart = new Map(
     obligations.map((o) => [o.cycleStartAsOf, o] as const),
   );
-  const candidateStarts = new Set<string>();
-  const candidateRows: GraceListRow[] = [];
 
-  for (const w of [current, next]) {
-    if (!w) continue;
-    candidateStarts.add(w.cycleStartAsOf);
-    const existing = byStart.get(w.cycleStartAsOf);
-    if (existing?.status === "OPEN") {
-      candidateRows.push({
-        kind: "open",
-        obligation: {
-          id: existing.id,
-          cycleStartAsOf: existing.cycleStartAsOf,
-          dueAsOf: existing.dueAsOf,
-          amountMinor: existing.amountMinor,
-          note: existing.note,
-        },
-      });
-    } else if (!existing) {
-      candidateRows.push({
-        kind: "cta",
-        cycleStartAsOf: w.cycleStartAsOf,
-        dueAsOf: w.dueAsOf,
-      });
-    }
-  }
-
-  const orphans: GraceListRow[] = [];
+  const openRows: Extract<GraceListRow, { kind: "open" }>[] = [];
   for (const o of obligations) {
     if (o.status !== "OPEN") continue;
-    if (candidateStarts.has(o.cycleStartAsOf)) continue;
-    orphans.push({
+    openRows.push({
       kind: "open",
       obligation: {
         id: o.id,
@@ -249,14 +237,24 @@ export function mergeGraceListRows(
       },
     });
   }
+  openRows.sort((a, b) =>
+    compareOpenByDue(a.obligation, b.obligation, today),
+  );
 
-  orphans.sort((a, b) => {
-    if (a.kind !== "open" || b.kind !== "open") return 0;
-    if (a.obligation.dueAsOf !== b.obligation.dueAsOf) {
-      return a.obligation.dueAsOf < b.obligation.dueAsOf ? -1 : 1;
-    }
-    return a.obligation.cycleStartAsOf < b.obligation.cycleStartAsOf ? -1 : 1;
-  });
+  const openStarts = new Set(openRows.map((r) => r.obligation.cycleStartAsOf));
+  const ctaRows: Extract<GraceListRow, { kind: "cta" }>[] = [];
+  for (const w of [current, next]) {
+    if (!w) continue;
+    if (openStarts.has(w.cycleStartAsOf)) continue;
+    const existing = byStart.get(w.cycleStartAsOf);
+    // CLOSED (or other non-OPEN) at candidate start → no CTA invent
+    if (existing) continue;
+    ctaRows.push({
+      kind: "cta",
+      cycleStartAsOf: w.cycleStartAsOf,
+      dueAsOf: w.dueAsOf,
+    });
+  }
 
-  return [...orphans, ...candidateRows];
+  return [...openRows, ...ctaRows];
 }

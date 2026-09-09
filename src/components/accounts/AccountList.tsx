@@ -19,6 +19,7 @@ import {
   isCreditType,
   type AccountTypeSoft,
 } from "@/lib/account-type";
+import { isGraceOverdue } from "@/lib/credit-grace";
 import { formatAsOfDisplay } from "@/lib/dates";
 import { creditDebtMinor, formatMinorToMajor } from "@/lib/money";
 
@@ -171,6 +172,9 @@ function AccountRow({
     isCreditType(account.type) && account.creditLimitMinor != null
       ? `${formatMinorToMajor(BigInt(account.creditLimitMinor), account.currency.scale)} ${account.currencyCode}`
       : null;
+  const hasOverdueOpen = account.creditGraceObligations.some(
+    (o) => o.status === "OPEN" && isGraceOverdue(o.dueAsOf, today),
+  );
   const confirmDateLabel = confirmSnap
     ? formatAsOfDisplay(confirmSnap.asOfDate)
     : "";
@@ -264,6 +268,11 @@ function AccountRow({
               trigger={
                 <Button type="button" variant="outline" size="sm">
                   Грейс
+                  {hasOverdueOpen ? (
+                    <span className="ml-1 rounded-md bg-warning/15 px-1.5 py-0.5 text-xs font-semibold text-warning-foreground">
+                      просрочено
+                    </span>
+                  ) : null}
                 </Button>
               }
             />
