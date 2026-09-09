@@ -7,7 +7,9 @@ import {
   isGraceOverdue,
   listCycleWindows,
   mergeGraceListRows,
+  openGraceForecastMembership,
   resolveCurrentAndNext,
+  type GraceForecastObligationInput,
 } from "@/lib/credit-grace";
 
 const schedule21_15 = {
@@ -197,6 +199,100 @@ describe("mergeGraceListRows (D-05 / CYCLE-02)", () => {
     expect(opens.map((r) => (r.kind === "open" ? r.obligation.id : null))).toEqual(
       [2, 1],
     );
+  });
+});
+
+describe("openGraceForecastMembership (D-01…D-04 / C-07)", () => {
+  const today = "2026-03-01";
+  const horizonEnd = "2026-03-31";
+
+  function row(
+    partial: Partial<GraceForecastObligationInput> &
+      Pick<GraceForecastObligationInput, "id" | "dueAsOf" | "status">,
+  ): GraceForecastObligationInput {
+    return {
+      amountMinor: 50_000n,
+      accountId: 1,
+      accountName: "Карта",
+      currencyCode: "RUB",
+      currencyScale: 2,
+      isPrimaryCurrency: true,
+      ...partial,
+    };
+  }
+
+  it("excludes CLOSED / non-OPEN (C-07)", () => {
+    const members = openGraceForecastMembership(
+      [
+        row({ id: 1, dueAsOf: "2026-03-15", status: "CLOSED" }),
+        row({ id: 2, dueAsOf: "2026-03-10", status: "OPEN" }),
+      ],
+      today,
+      horizonEnd,
+    );
+    expect(members.map((m) => m.obligationId)).toEqual([2]);
+  });
+
+  it("folds overdue OPEN of any age onto today (D-01, D-02, D-03)", () => {
+    const members = openGraceForecastMembership(
+      [
+        row({ id: 1, dueAsOf: "2026-02-15", status: "OPEN" }),
+        row({ id: 2, dueAsOf: "2025-01-01", status: "OPEN" }),
+      ],
+      today,
+      horizonEnd,
+    );
+    expect(members).toHaveLength(2);
+    expect(members.every((m) => m.sampleAsOf === today)).toBe(true);
+    expect(members.map((m) => m.dueAsOf).sort()).toEqual([
+      "2025-01-01",
+      "2026-02-15",
+    ]);
+  });
+
+  it("dueAsOf === today lands on today bucket (D-04)", () => {
+    const members = openGraceForecastMembership(
+      [row({ id: 1, dueAsOf: today, status: "OPEN" })],
+      today,
+      horizonEnd,
+    );
+    expect(members).toEqual([
+      expect.objectContaining({
+        obligationId: 1,
+        dueAsOf: today,
+        sampleAsOf: today,
+        amountMinor: 50_000n,
+        accountId: 1,
+        accountName: "Карта",
+        currencyCode: "RUB",
+        currencyScale: 2,
+        isPrimaryCurrency: true,
+      }),
+    ]);
+  });
+
+  it("future dues in (today, horizonEnd] keep dueAsOf as sampleAsOf (D-04)", () => {
+    const members = openGraceForecastMembership(
+      [row({ id: 1, dueAsOf: "2026-03-15", status: "OPEN" })],
+      today,
+      horizonEnd,
+    );
+    expect(members).toEqual([
+      expect.objectContaining({
+        obligationId: 1,
+        dueAsOf: "2026-03-15",
+        sampleAsOf: "2026-03-15",
+      }),
+    ]);
+  });
+
+  it("excludes dueAsOf beyond horizonEnd (D-04)", () => {
+    const members = openGraceForecastMembership(
+      [row({ id: 1, dueAsOf: "2026-04-15", status: "OPEN" })],
+      today,
+      horizonEnd,
+    );
+    expect(members).toEqual([]);
   });
 });
 
