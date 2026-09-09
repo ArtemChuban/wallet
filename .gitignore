@@ -47,6 +47,9 @@ next-env.d.ts
 data/*.db
 data/*-wal
 data/*-shm
+prisma/*.db
+prisma/*-wal
+prisma/*-shm
 
 # Prisma generated client
 src/generated/
@@ -56,6 +59,7 @@ src/generated/
 
 # GSD ephemeral session lock
 .planning/milestone.lock
+.planning/.gsd-allow-shrink
 
 # GSD research fetch cache
 .planning/research/.cache/
