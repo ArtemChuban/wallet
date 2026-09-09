@@ -20,8 +20,8 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Forecast
 
-- [ ] **GRFCST-01**: On Капитал `/`, «Прогноз» includes open credit grace obligations from their due dates
-- [ ] **GRFCST-02**: Forecast credit slots use FX LOCF honesty (partial banner when rate missing)
+- [x] **GRFCST-01**: On Капитал `/`, «Прогноз» includes open credit grace obligations from their due dates
+- [x] **GRFCST-02**: Forecast credit slots use FX LOCF honesty (partial banner when rate missing)
 
 ### Isolation / clarity
 
@@ -76,8 +76,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | OBL-02 | Phase 20 | Complete |
 | OBL-03 | Phase 20 | Complete |
 | UX-01 | Phase 20 | Complete |
-| GRFCST-01 | Phase 21 | Pending |
-| GRFCST-02 | Phase 21 | Pending |
+| GRFCST-01 | Phase 21 | Complete |
+| GRFCST-02 | Phase 21 | Complete |
 | GRISO-01 | Phase 22 | Pending |
 
 **Coverage:**

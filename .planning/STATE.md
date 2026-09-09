@@ -4,17 +4,17 @@ milestone: v1.3
 milestone_name: Кредитка
 current_phase: 21
 current_phase_name: Капитал forecast integration
-status: planning
-stopped_at: Phase 21 plans revised after checker — ready for execute
-last_updated: "2026-09-09T22:25:00.000Z"
+status: executing
+stopped_at: Completed 21-01-PLAN.md
+last_updated: "2026-09-09T20:29:35.917Z"
 last_activity: 2026-09-09
-last_activity_desc: Phase 21 PLAN/RESEARCH revised (checker blockers+warnings)
-state_head: a1b3d88
+last_activity_desc: Completed 21-01 A′ forecast math tracer
+state_head: b47773d132c03a4aab27bf5b2d4b4019ded50fe5
 progress:
   total_phases: 5
   completed_phases: 2
-  total_plans: 8
-  completed_plans: 8
+  total_plans: 11
+  completed_plans: 10
   percent: 40
 ---
 
@@ -30,9 +30,9 @@ See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 ## Current Position
 
 Phase: 21 — Капитал forecast integration
-Plan: 21-01 (Wave 1) — not started
-Status: Ready to execute
-Last activity: 2026-09-09 — Phase 21 plans created (3 plans / 3 waves)
+Plan: 21-02 (Wave 2) — next
+Status: Executing
+Last activity: 2026-09-09 — Completed 21-01 (A′ math + membership)
 
 Progress: [████░░░░░░] 40%
 
@@ -56,6 +56,7 @@ Progress: [████░░░░░░] 40%
 | Phase 20 P01 | 9min | 3 tasks | 12 files |
 | Phase 20 P02 | 6 | 2 tasks | 5 files |
 | Phase 20 P03 | 5min | 2 tasks | 5 files |
+| Phase 21 P01 | 4min | 3 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -81,6 +82,9 @@ v1.3 locks from Phase 18 (see `18-CONTEXT.md`):
 - [Phase 20]: D-08 sort lives in mergeGraceListRows (all OPEN then CTAs) not only UI
 - [Phase 20]: Clear schedule remounts dialog body via formKey so empty-schedule hint returns
 - [Phase 20]: UI-SPEC clear-blocked copy shown when OPEN>0; server gate unchanged
+- [Phase 21]: A′ grace = FX gate then += 0n (not paired ± offset)
+- [Phase 21]: openGraceForecastMembership folds overdue OPEN onto today; CLOSED out
+- [Phase 21]: Builder returns excludedMissingFxCurrencies unique alphabetical
 
 ### Pending Todos
 
@@ -113,9 +117,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-09T22:20:00.000Z
-Stopped at: Phase 21 plans created (21-01…21-03)
-Resume file: /home/artem/Documents/wallet/.planning/phases/21-kapital-forecast-integration/21-01-PLAN.md
+Last session: 2026-09-09T20:29:35.818Z
+Stopped at: Completed 21-01-PLAN.md
+Resume file: None
 
 ## Operator Next Steps
 
