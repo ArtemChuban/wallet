@@ -1,6 +1,6 @@
 ---
 phase: 18-bank-contract-study-discuss-locks
-verified: 2026-09-08T12:51:10Z
+verified: 2026-09-09T21:28:08Z
 status: passed
 score: 8/8 must-haves verified
 behavior_unverified: 0
@@ -138,7 +138,17 @@ None. Phase goal achieved: grace cycle rules + NW overlay A′ semantics locked 
 
 CONT-01 flipped Complete in REQUIREMENTS.md as part of this verification (was correctly left `[ ]` through Plan 02 until verify).
 
+### Re-verification (verify-work 2026-09-09)
+
+Stale trigger: `18-02-SUMMARY.md` committed 7s after initial VERIFICATION (`3c000c5` vs `a91a71f`). Re-ran structural gates + coverage classify:
+
+- `uat.classify-coverage` on 18-01/18-02 → `all_auto_covered` (5/5 auto_passed)
+- Artifacts + D-01…D-19 + docs sync + todo fold + `dates.test.ts` 13/13 still green
+- `18-UAT.md` written status=complete, 5 passed, 0 issues
+
+No new gaps. Status remains **passed**.
+
 ---
 
-_Verified: 2026-09-08T12:51:10Z_
-_Verifier: Claude (gsd-verifier)_
+_Verified: 2026-09-09T21:28:08Z (re-verify; initial 2026-09-08T12:51:10Z)_
+_Verifier: Composer (gsd-verify-work / manager)_
