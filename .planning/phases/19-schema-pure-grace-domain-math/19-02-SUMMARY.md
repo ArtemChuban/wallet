@@ -112,7 +112,7 @@ status: complete
 3. **Task 2 RED:** `abef817` (test) — isGraceOverdue + GRISO smoke
 4. **Task 2 GREEN:** `f2a6bd0` (feat) — isGraceOverdue
 
-**Plan metadata:** (docs commit follows)
+**Plan metadata:** `43bdc82` (docs: complete plan)
 
 ## Files Created/Modified
 
