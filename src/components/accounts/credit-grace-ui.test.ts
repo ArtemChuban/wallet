@@ -35,7 +35,7 @@ describe("plan-01 tracer chrome (CYCLE-02 / OBL-01)", () => {
   });
 });
 
-describe.skip("plan-02 close/reopen confirm + collapsed CLOSED (OBL-02)", () => {
+describe("plan-02 close/reopen confirm + collapsed CLOSED (OBL-02)", () => {
   it("CreditGraceDialog imports DestructiveConfirmStep", () => {
     const src = readFileSync(
       "src/components/accounts/CreditGraceDialog.tsx",

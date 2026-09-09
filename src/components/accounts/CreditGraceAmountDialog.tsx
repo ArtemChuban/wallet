@@ -9,6 +9,7 @@ import {
 import { useRouter } from "next/navigation";
 import {
   createCreditGraceObligation,
+  updateCreditGraceObligation,
   type AccountActionState,
 } from "@/app/accounts/actions";
 import { Button } from "@/components/ui/button";
@@ -36,6 +37,11 @@ type CreditGraceAmountDialogProps = {
   cycleStartAsOf: string;
   dueAsOf: string;
   currencyCode: string;
+  /** Create CTA vs OPEN amount edit (D-09 / D-10). */
+  mode?: "create" | "edit";
+  obligationId?: number;
+  initialAmountMajor?: string;
+  initialNote?: string | null;
   trigger?: ReactElement;
 };
 
@@ -43,19 +49,26 @@ function CreditGraceAmountBody({
   accountId,
   cycleStartAsOf,
   dueAsOf,
+  mode,
+  obligationId,
+  initialAmountMajor,
+  initialNote,
   onSuccess,
 }: {
   accountId: number;
   cycleStartAsOf: string;
   dueAsOf: string;
+  mode: "create" | "edit";
+  obligationId?: number;
+  initialAmountMajor?: string;
+  initialNote?: string | null;
   onSuccess: () => void;
 }) {
-  const [amountMajor, setAmountMajor] = useState("");
-  const [note, setNote] = useState("");
-  const [state, formAction, isPending] = useActionState(
-    createCreditGraceObligation,
-    initialState,
-  );
+  const [amountMajor, setAmountMajor] = useState(initialAmountMajor ?? "");
+  const [note, setNote] = useState(initialNote ?? "");
+  const action =
+    mode === "edit" ? updateCreditGraceObligation : createCreditGraceObligation;
+  const [state, formAction, isPending] = useActionState(action, initialState);
 
   useEffect(() => {
     if (state?.success) {
@@ -63,20 +76,32 @@ function CreditGraceAmountBody({
     }
   }, [state, onSuccess]);
 
+  const title =
+    mode === "edit"
+      ? "Изменить платёж для беспроцентного"
+      : "Ввести платёж для беспроцентного";
+
   return (
     <form action={formAction} className="grid min-w-0 gap-4">
       <DialogHeader>
-        <DialogTitle>Платёж для беспроцентного</DialogTitle>
+        <DialogTitle>{title}</DialogTitle>
         <DialogDescription>
-          Сумма сохраняется для выбранного цикла. Срок оплаты фиксируется на
-          сервере.
+          {mode === "edit"
+            ? "Сумму можно изменить. Даты цикла и оплаты не меняются."
+            : "Сумма сохраняется для выбранного цикла. Срок оплаты фиксируется на сервере."}
         </DialogDescription>
       </DialogHeader>
 
-      <input type="hidden" name="accountId" value={accountId} />
-      <input type="hidden" name="cycleStartAsOf" value={cycleStartAsOf} />
-      <input type="hidden" name="dueAsOf" value={dueAsOf} />
-      <input type="hidden" name="status" value="OPEN" />
+      {mode === "edit" && obligationId != null ? (
+        <input type="hidden" name="id" value={obligationId} />
+      ) : (
+        <>
+          <input type="hidden" name="accountId" value={accountId} />
+          <input type="hidden" name="cycleStartAsOf" value={cycleStartAsOf} />
+          <input type="hidden" name="dueAsOf" value={dueAsOf} />
+          <input type="hidden" name="status" value="OPEN" />
+        </>
+      )}
 
       <div className="grid gap-2">
         <Label>Цикл</Label>
@@ -159,6 +184,10 @@ export function CreditGraceAmountDialog({
   cycleStartAsOf,
   dueAsOf,
   currencyCode,
+  mode = "create",
+  obligationId,
+  initialAmountMajor,
+  initialNote,
   trigger,
 }: CreditGraceAmountDialogProps) {
   const router = useRouter();
@@ -167,9 +196,11 @@ export function CreditGraceAmountDialog({
 
   const defaultTrigger = (
     <Button type="button" variant="outline" size="sm">
-      Ввести сумму
+      {mode === "edit" ? "Изменить" : "Ввести сумму"}
     </Button>
   );
+
+  void currencyCode;
 
   return (
     <Dialog
@@ -187,6 +218,10 @@ export function CreditGraceAmountDialog({
             accountId={accountId}
             cycleStartAsOf={cycleStartAsOf}
             dueAsOf={dueAsOf}
+            mode={mode}
+            obligationId={obligationId}
+            initialAmountMajor={initialAmountMajor}
+            initialNote={initialNote}
             onSuccess={() => {
               router.refresh();
               setOpen(false);

@@ -4,10 +4,14 @@ import {
   useActionState,
   useEffect,
   useState,
+  useTransition,
   type ReactElement,
 } from "react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
+  closeCreditGraceObligation,
+  reopenCreditGraceObligation,
   updateGraceSchedule,
   type AccountActionState,
 } from "@/app/accounts/actions";
@@ -22,6 +26,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { DestructiveConfirmStep } from "@/components/ui/destructive-confirm-step";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -29,7 +34,7 @@ import {
   type CreditGraceSchedule,
 } from "@/lib/credit-grace";
 import { formatAsOfDisplay } from "@/lib/dates";
-import { formatMinorToMajor } from "@/lib/money";
+import { formatMinorToMajor, formatMinorToMajorExact } from "@/lib/money";
 
 const initialState: AccountActionState = {};
 
@@ -38,6 +43,10 @@ const EMPTY_SCHEDULE_HINT =
 
 const DOM_NON_RECALC_HINT =
   "Смена дат не пересчитывает уже сохранённые обязательства.";
+
+const CLOSE_CONFIRM_MESSAGE = "Отметить обязательство оплаченным?";
+const REOPEN_CONFIRM_MESSAGE =
+  "Вернуть в «К оплате»? Дата оплаты будет очищена.";
 
 export type CreditGraceAccountProps = {
   id: number;
@@ -63,12 +72,16 @@ type CreditGraceDialogProps = {
   trigger?: ReactElement;
 };
 
+type ConfirmStep =
+  | { kind: "close"; id: number }
+  | { kind: "reopen"; id: number };
+
 function CreditGraceBody({
   account,
   today,
   onScheduleSaved,
 }: {
-  account: AccountListItem;
+  account: CreditGraceAccountProps;
   today: string;
   onScheduleSaved: () => void;
 }) {
@@ -83,6 +96,11 @@ function CreditGraceBody({
   const [dueDay, setDueDay] = useState(
     account.dueDayOfMonth != null ? String(account.dueDayOfMonth) : "",
   );
+  const [confirm, setConfirm] = useState<ConfirmStep | null>(null);
+  const [closedAsOf, setClosedAsOf] = useState(today);
+  const [showPaid, setShowPaid] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [isActing, startActionTransition] = useTransition();
 
   const [state, formAction, isPending] = useActionState(
     updateGraceSchedule,
@@ -105,6 +123,112 @@ function CreditGraceBody({
   const listRows = hasSchedule
     ? mergeGraceListRows(schedule, today, account.creditGraceObligations)
     : [];
+
+  const closedObligations = account.creditGraceObligations.filter(
+    (o) => o.status === "CLOSED",
+  );
+
+  function handleConfirm() {
+    if (!confirm) return;
+    startActionTransition(async () => {
+      setActionError(null);
+      const formData = new FormData();
+      formData.set("id", String(confirm.id));
+      if (confirm.kind === "close") {
+        formData.set("closedAsOf", closedAsOf);
+        const result = await closeCreditGraceObligation({}, formData);
+        if (!result.success) {
+          setActionError(
+            result.errors?.closedAsOf?.[0] ??
+              result.message ??
+              "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+          );
+          return;
+        }
+      } else {
+        const result = await reopenCreditGraceObligation({}, formData);
+        if (!result.success) {
+          setActionError(
+            result.message ??
+              "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+          );
+          return;
+        }
+      }
+      setConfirm(null);
+      onScheduleSaved();
+    });
+  }
+
+  if (confirm?.kind === "close") {
+    return (
+      <div className="grid gap-4">
+        <DialogHeader>
+          <DialogTitle>Оплачено</DialogTitle>
+        </DialogHeader>
+        {actionError ? (
+          <p className="text-sm text-destructive" role="alert">
+            {actionError}
+          </p>
+        ) : null}
+        <DestructiveConfirmStep
+          message={CLOSE_CONFIRM_MESSAGE}
+          confirmLabel="Отметить оплаченным"
+          pending={isActing}
+          pendingLabel="Сохранение…"
+          onConfirm={handleConfirm}
+          onBack={() => {
+            if (!isActing) {
+              setConfirm(null);
+              setActionError(null);
+            }
+          }}
+        >
+          <div className="grid gap-2">
+            <Label htmlFor={`grace-closed-asof-${confirm.id}`}>
+              Дата оплаты
+            </Label>
+            <Input
+              id={`grace-closed-asof-${confirm.id}`}
+              type="date"
+              value={closedAsOf}
+              onChange={(e) => setClosedAsOf(e.target.value)}
+              disabled={isActing}
+              required
+            />
+          </div>
+        </DestructiveConfirmStep>
+      </div>
+    );
+  }
+
+  if (confirm?.kind === "reopen") {
+    return (
+      <div className="grid gap-4">
+        <DialogHeader>
+          <DialogTitle>Вернуть к оплате</DialogTitle>
+        </DialogHeader>
+        {actionError ? (
+          <p className="text-sm text-destructive" role="alert">
+            {actionError}
+          </p>
+        ) : null}
+        <DestructiveConfirmStep
+          message={REOPEN_CONFIRM_MESSAGE}
+          confirmLabel="Вернуть"
+          pending={isActing}
+          pendingLabel="Возврат…"
+          onConfirm={handleConfirm}
+          onBack={() => {
+            if (!isActing) {
+              setConfirm(null);
+              setActionError(null);
+            }
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="grid max-h-[min(80vh,40rem)] gap-6 overflow-y-auto">
@@ -171,14 +295,14 @@ function CreditGraceBody({
 
         <DialogFooter>
           <Button type="submit" disabled={isPending}>
-            {isPending ? "Сохранение…" : "Сохранить график"}
+            {isPending ? "Сохранение…" : "Сохранить расписание"}
           </Button>
         </DialogFooter>
       </form>
 
       {hasSchedule ? (
         <ul className="grid gap-3">
-          {listRows.length === 0 ? (
+          {listRows.length === 0 && closedObligations.length === 0 ? (
             <li className="text-sm text-muted-foreground">
               Нет текущего цикла — следующий ниже.
             </li>
@@ -215,6 +339,10 @@ function CreditGraceBody({
               BigInt(row.obligation.amountMinor),
               account.currency.scale,
             );
+            const amountExact = formatMinorToMajorExact(
+              BigInt(row.obligation.amountMinor),
+              account.currency.scale,
+            );
             return (
               <li
                 key={`open-${row.obligation.id}`}
@@ -228,12 +356,106 @@ function CreditGraceBody({
                   <p className="mt-1 font-mono">
                     {amount} {account.currencyCode}
                     <span className="mx-2 text-muted-foreground">·</span>
-                    <span className="text-muted-foreground">К оплате</span>
+                    <span className="font-semibold">К оплате</span>
                   </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <CreditGraceAmountDialog
+                    mode="edit"
+                    accountId={account.id}
+                    obligationId={row.obligation.id}
+                    cycleStartAsOf={row.obligation.cycleStartAsOf}
+                    dueAsOf={row.obligation.dueAsOf}
+                    currencyCode={account.currencyCode}
+                    initialAmountMajor={amountExact}
+                    initialNote={row.obligation.note}
+                    trigger={
+                      <Button type="button" variant="outline" size="sm">
+                        Изменить
+                      </Button>
+                    }
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setClosedAsOf(today);
+                      setActionError(null);
+                      setConfirm({ kind: "close", id: row.obligation.id });
+                    }}
+                  >
+                    Оплачено
+                  </Button>
                 </div>
               </li>
             );
           })}
+
+          {closedObligations.length > 0 ? (
+            <li className="border-t border-border pt-3">
+              <button
+                type="button"
+                className="flex w-full items-center gap-2 text-left text-sm text-muted-foreground hover:text-foreground"
+                aria-expanded={showPaid}
+                onClick={() => setShowPaid((v) => !v)}
+              >
+                {showPaid ? (
+                  <ChevronDown className="size-4 shrink-0" aria-hidden />
+                ) : (
+                  <ChevronRight className="size-4 shrink-0" aria-hidden />
+                )}
+                <span>
+                  {showPaid ? "Скрыть оплаченные" : "Показать оплаченные"}
+                </span>
+              </button>
+              {showPaid ? (
+                <ul className="mt-2 grid gap-3">
+                  {closedObligations.map((o) => {
+                    const amount = formatMinorToMajor(
+                      BigInt(o.amountMinor),
+                      account.currency.scale,
+                    );
+                    return (
+                      <li
+                        key={`closed-${o.id}`}
+                        className="flex flex-wrap items-center justify-between gap-2 rounded-md bg-muted/40 px-3 py-2"
+                      >
+                        <div className="min-w-0 text-sm text-muted-foreground">
+                          <p className="font-mono">
+                            {formatAsOfDisplay(o.cycleStartAsOf)} →{" "}
+                            {formatAsOfDisplay(o.dueAsOf)}
+                          </p>
+                          <p className="mt-1 font-mono">
+                            {amount} {account.currencyCode}
+                            <span className="mx-2">·</span>
+                            <span>Оплачено</span>
+                            {o.closedAsOf ? (
+                              <>
+                                <span className="mx-2">·</span>
+                                <span>{formatAsOfDisplay(o.closedAsOf)}</span>
+                              </>
+                            ) : null}
+                          </p>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => {
+                            setActionError(null);
+                            setConfirm({ kind: "reopen", id: o.id });
+                          }}
+                        >
+                          Вернуть к оплате
+                        </Button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : null}
+            </li>
+          ) : null}
         </ul>
       ) : null}
     </div>
