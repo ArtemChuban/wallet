@@ -7,8 +7,8 @@ status: completed
 stopped_at: Phase 22 complete — all phases complete
 last_updated: "2026-09-09T23:36:45.163Z"
 last_activity: 2026-09-10
-last_activity_desc: Phase 22 complete
-state_head: 1c69d6f06e0df926dcacd68ad9a9e17e0f4a6c16
+last_activity_desc: Phase 22 verification passed — GRISO suite green; v1.3 ready for complete-milestone
+state_head: 755f001
 progress:
   total_phases: 5
   completed_phases: 5
@@ -24,16 +24,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 22 complete — GRACEISO regression + polish (awaiting verify-work)
+**Current focus:** Phase 22 verified — GRACEISO regression + polish; v1.3 milestone close next
 
 ## Current Position
 
-Phase: 22
-Plan: Not started
-Status: All phases complete
-Last activity: 2026-09-10 — Phase 22 complete
+Phase: 22 — GRACEISO regression + polish
+Plan: 2 of 2 complete
+Status: All v1.3 phases complete — verification passed
+Last activity: 2026-09-10 — 22-VERIFICATION.md passed (14/14); GRISO sampling 94/0
 
-Progress: [██████████] 100% (plans; phase verify pending)
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
