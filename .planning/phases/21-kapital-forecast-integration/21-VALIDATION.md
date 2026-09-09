@@ -40,21 +40,16 @@ created: "2026-09-09"
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 21-W0 | 01 | 0 | GRFCST-01/02 | T-21-01 | Never invent FX; exclude + banner | unit + file-scan | `npx vitest run src/lib/nw-forecast.test.ts src/components/dashboard/nw-forecast-ui.test.ts` | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | GRFCST-01 | — | OPEN future due sampled; ΔNW=0 vs income baseline | unit | `npx vitest run src/lib/nw-forecast.test.ts -t "grace"` | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | GRFCST-01 | — | Overdue OPEN folds to today | unit | `npx vitest run src/lib/nw-forecast.test.ts` | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | GRFCST-01 | — | CLOSED / early-closed excluded | unit | membership / nw-forecast tests | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | GRFCST-01 | — | Grace-only → flat non-empty points (D-07) | unit | `npx vitest run src/lib/nw-forecast.test.ts` | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | GRFCST-01 | — | Same-day income+grace: income moves NW; grace in metadata | unit | `npx vitest run src/lib/nw-forecast.test.ts` | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | GRFCST-02 | T-21-01 | Missing FX excludes grace; unique currency codes | unit | `npx vitest run src/lib/nw-forecast.test.ts` | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | GRFCST-02 | T-21-01 | Banner lists codes; no kind tags | file-scan | `npx vitest run src/components/dashboard/nw-forecast-ui.test.ts` | ⚠️ extend | ⬜ pending |
-| TBD | TBD | TBD | GRFCST-01 | T-21-03 | Tooltip RU strings present | file-scan | `npx vitest run src/components/dashboard/nw-forecast-ui.test.ts` | ❌ W0 | ⬜ pending |
-| TBD | TBD | TBD | Isolation | T-21-02 | net-worth / historical-series ban credit-grace | file-scan | extend credit-grace / light scan | ✅ partial | ⬜ pending |
-| TBD | TBD | TBD | Income regression | — | Phase 17 forecast tests green | unit | `npx vitest run src/lib/nw-forecast.test.ts` | ✅ | ⬜ pending |
+| 21-01-T1 | 01 | 1 | GRFCST-01/02 | T-21-01 | Never invent FX; Wave 0 stubs non-poisoning | unit + file-scan | `npx vitest run src/lib/nw-forecast.test.ts src/components/dashboard/nw-forecast-ui.test.ts` | ⚠️ extend | ⬜ pending |
+| 21-01-T2 | 01 | 1 | GRFCST-01 | T-21-03 | CLOSED excluded; overdue folds to today | unit | `npx vitest run src/lib/credit-grace.test.ts` | ⚠️ extend | ⬜ pending |
+| 21-01-T3 | 01 | 1 | GRFCST-01/02 | T-21-01 | A′ 0-delta; grace-only flat; FX codes unique | unit | `npx vitest run src/lib/nw-forecast.test.ts src/lib/credit-grace.test.ts` | ⚠️ extend | ⬜ pending |
+| 21-02-T1 | 02 | 2 | GRFCST-01/02 | T-21-01 | Banner lists codes; OPEN merge one series | unit + file-scan | `npx vitest run src/lib/nw-forecast.test.ts src/components/dashboard/nw-forecast-ui.test.ts` | ⚠️ extend | ⬜ pending |
+| 21-02-T2 | 02 | 2 | Isolation | T-21-02 | net-worth / historical-series ban credit-grace | file-scan | `npx vitest run src/lib/credit-grace.test.ts` | ✅ partial | ⬜ pending |
+| 21-03-T1 | 03 | 3 | GRFCST-01 | T-21-05 | Tooltip RU strings; single dashed series | file-scan | `npx vitest run src/components/dashboard/nw-forecast-ui.test.ts src/lib/nw-forecast.test.ts` | ⚠️ extend | ⬜ pending |
+| 21-03-T2 | 03 | 3 | GRFCST-01/02 | — | Phase sampling green + human tooltip feel | unit + file-scan | `npx vitest run src/lib/nw-forecast.test.ts src/components/dashboard/nw-forecast-ui.test.ts src/lib/credit-grace.test.ts` | ⚠️ extend | ⬜ pending |
+| Income regression | 01 | 1 | — | — | Phase 17 forecast tests green | unit | `npx vitest run src/lib/nw-forecast.test.ts` | ✅ | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
-
-*Planner must replace TBD task IDs with concrete plan/task refs when PLAN.md exists.*
 
 ---
 

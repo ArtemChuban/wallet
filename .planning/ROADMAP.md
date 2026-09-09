@@ -56,7 +56,7 @@ Full detail: [milestones/v1.2-ROADMAP.md](./milestones/v1.2-ROADMAP.md)
 
 - [x] **Phase 18: Bank contract study + discuss locks** - Document bank grace rules; lock cycle/overlay decisions before schema (completed 2026-09-08)
 - [x] **Phase 19: Schema + pure grace domain math** - Persist grace config + obligation model; trustworthy due-date math (completed 2026-09-09)
-- [ ] **Phase 20: Obligation CRUD + cycle UI** - Amount due, early close, cycle list, overdue highlight, debt≠grace copy
+- [x] **Phase 20: Obligation CRUD + cycle UI** - Amount due, early close, cycle list, overdue highlight, debt≠grace copy (completed 2026-09-09)
 - [ ] **Phase 21: Капитал forecast integration** - «Прогноз» includes open grace obligations with FX LOCF honesty
 - [ ] **Phase 22: GRACEISO regression + polish** - Prove grace never touches BalanceSnapshot / historical NW LOCF
 
@@ -147,7 +147,13 @@ Plans:
   2. Forecast credit slots use FX LOCF honesty; missing rate shows partial banner (never invents rates)
   3. Early-closed obligations no longer move the forecast; income + grace coexist on one signed series
 
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 21-01-PLAN.md — Wave 0 + OPEN membership fold + A′ builder tracer (FX codes)
+- [ ] 21-02-PLAN.md — `/` OPEN load → shell merge → banner codes + isolation smoke
+- [ ] 21-03-PLAN.md — Tooltip two-block grace chrome + sampling/human-check
+
 **UI hint**: yes
 
 ### Phase 22: GRACEISO regression + polish
@@ -172,7 +178,7 @@ Plans:
 | 13–17 | v1.2 | — | Complete | 2026-09-08 |
 | 18. Bank contract study + discuss locks | v1.3 | 2/2 | Complete    | 2026-09-08 |
 | 19. Schema + pure grace domain math | v1.3 | 3/3 | Complete    | 2026-09-09 |
-| 20. Obligation CRUD + cycle UI | v1.3 | 3/3 | In Progress|  |
+| 20. Obligation CRUD + cycle UI | v1.3 | 3/3 | Complete    | 2026-09-09 |
 | 21. Капитал forecast integration | v1.3 | 0/TBD | Not started | - |
 | 22. GRACEISO regression + polish | v1.3 | 0/TBD | Not started | - |
 

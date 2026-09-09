@@ -5,10 +5,10 @@ milestone_name: Кредитка
 current_phase: 21
 current_phase_name: Капитал forecast integration
 status: planning
-stopped_at: Phase 21 UI-SPEC drafted — awaiting checker
-last_updated: "2026-09-09T20:05:00.000Z"
+stopped_at: Phase 21 plans written — ready for execute
+last_updated: "2026-09-09T22:20:00.000Z"
 last_activity: 2026-09-09
-last_activity_desc: Phase 21 UI-SPEC.md written (auto from CONTEXT + chart chrome)
+last_activity_desc: Phase 21 PLAN.md set (21-01…21-03) written
 state_head: a1b3d88
 progress:
   total_phases: 5
@@ -30,9 +30,9 @@ See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 ## Current Position
 
 Phase: 21 — Капитал forecast integration
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-09-09 — Phase 20 complete, transitioned to Phase 21
+Plan: 21-01 (Wave 1) — not started
+Status: Ready to execute
+Last activity: 2026-09-09 — Phase 21 plans created (3 plans / 3 waves)
 
 Progress: [████░░░░░░] 40%
 
@@ -119,5 +119,4 @@ Resume file: /home/artem/Documents/wallet/.planning/phases/21-kapital-forecast-i
 
 ## Operator Next Steps
 
-- `/gsd-execute-phase 20` — continue Wave 2 (20-02) then 20-03
-- Or execute plan 20-02 alone
+- `/gsd-execute-phase 21` — Wave 1 (21-01) → Wave 2 (21-02) → Wave 3 (21-03)
