@@ -100,7 +100,7 @@ status: complete
 1. **Task 1: End-to-end tooltip two-block grace chrome** - `8dc5b50` (feat)
 2. **Task 2: Phase sampling gate + operator tooltip feel check** - no code delta (sampling + Orca); notes in this SUMMARY
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `d891de5` + `9a967e0` (docs: complete plan / STATE)
 
 ## Files Created/Modified
 
