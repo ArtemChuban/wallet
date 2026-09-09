@@ -159,3 +159,12 @@ export function resolveCurrentAndNext(
   const next = windows.find((w) => w.cycleStartAsOf > today) ?? null;
   return { current: null, next };
 }
+
+/**
+ * Calendar overdue vs injected today (D-07 / Phase 18 D-04).
+ * Inclusive due day is not overdue — dueAsOf < today via YYYY-MM-DD compare.
+ * Does not read the clock; overdue is not a persisted status enum.
+ */
+export function isGraceOverdue(dueAsOf: string, today: string): boolean {
+  return dueAsOf < today;
+}
