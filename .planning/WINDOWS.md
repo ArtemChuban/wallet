@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 13
+open_count: 12
 waived_count: 0
-fixed_count: 4
+fixed_count: 5
 total_count: 17
-last_updated: 2026-09-09T23:32:45.946Z
+last_updated: 2026-09-09T23:33:19.920Z
 ---
 
 # Broken Windows Ledger
@@ -31,7 +31,7 @@ last_updated: 2026-09-09T23:32:45.946Z
 | 14 | 21 | skipped-test | src/components/dashboard/nw-forecast-ui.test.ts |  | Plan 03 tooltip RU describe.skip / it.todo retained for Plan 03 owner | open |  | 2026-09-09T20:35:11.165Z |  |
 | 15 | 21 | deviation | src/lib/nw-forecast.ts |  | Rule 2: displayPrimaryMajor on ForecastEvent for D-11 tooltip amounts | open |  | 2026-09-09T20:42:15.926Z |  |
 | 16 | 22 | deviation | .planning/REQUIREMENTS.md |  | Task 1 verify-only: GRISO-01 already Complete before 22-02 | fixed |  | 2026-09-09T23:31:30.808Z | 2026-09-09T23:32:32.608Z |
-| 17 | 22 | deviation | .planning/ROADMAP.md |  | Rule 3: re-applied Phase 22 Progress Complete after roadmap.update-plan-progress In Progress clobber | open |  | 2026-09-09T23:32:45.946Z |  |
+| 17 | 22 | deviation | .planning/ROADMAP.md |  | Rule 3: re-applied Phase 22 Progress Complete after roadmap.update-plan-progress In Progress clobber | fixed |  | 2026-09-09T23:32:45.946Z | 2026-09-09T23:33:19.920Z |
 
 ````json
 [
@@ -234,10 +234,10 @@ last_updated: 2026-09-09T23:32:45.946Z
     "file": ".planning/ROADMAP.md",
     "line": null,
     "description": "Rule 3: re-applied Phase 22 Progress Complete after roadmap.update-plan-progress In Progress clobber",
-    "status": "open",
+    "status": "fixed",
     "reason": "",
     "recorded_at": "2026-09-09T23:32:45.946Z",
-    "resolved_at": null
+    "resolved_at": "2026-09-09T23:33:19.920Z"
   }
 ]
 ````
