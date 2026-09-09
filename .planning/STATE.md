@@ -5,11 +5,11 @@ milestone_name: Кредитка
 current_phase: 20
 current_phase_name: Obligation CRUD + cycle UI
 status: executing
-stopped_at: Completed 20-03-PLAN.md
-last_updated: "2026-09-09T12:42:42.989Z"
+stopped_at: Phase 20 executed; UAT human_needed
+last_updated: "2026-09-09T12:46:49.372Z"
 last_activity: 2026-09-09
 last_activity_desc: Completed 20-01 tracer (Грейс → schedule → create)
-state_head: 0f9c7ca6c0044f824258f15de4d0c6675717aab5
+state_head: 80faee430e6c6b47eb97c036678db0041e02f9c1
 progress:
   total_phases: 5
   completed_phases: 1
@@ -113,9 +113,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-09T12:42:42.915Z
-Stopped at: Completed 20-03-PLAN.md
-Resume file: None
+Last session: 2026-09-09T12:46:49.264Z
+Stopped at: Phase 20 executed; UAT human_needed
+Resume file: .planning/phases/20-obligation-crud-cycle-ui/20-VERIFICATION.md
 
 ## Operator Next Steps
 
