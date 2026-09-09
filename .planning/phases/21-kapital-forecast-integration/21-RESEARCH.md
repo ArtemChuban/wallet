@@ -410,15 +410,13 @@ For `/`, prefer lean query: OPEN only + account currency/name fields needed for 
 
 ## Open Questions
 
-1. **Lean vs nested Prisma load on `/`**
+1. **Lean vs nested Prisma load on `/`** — **RESOLVED** (Plan 02 assumptions)
    - What we know: accounts page already nests obligations.
-   - What's unclear: payload size if many CLOSED rows.
-   - Recommendation: filter `status: "OPEN"` in query; CLOSED never needed for overlay (C-07).
+   - Resolution: lean `creditGraceObligation.findMany({ where: { status: "OPEN" }, include: { account: { include: { currency: true } } } })` (or equivalent OPEN filter). CLOSED never loaded for overlay (C-07). Locked in `21-02-PLAN.md` `<assumptions>`.
 
-2. **Income rows in future tooltip**
+2. **Income rows in future tooltip** — **RESOLVED** (Plan 03 assumptions)
    - What we know: today future tooltip is aggregate «Прогноз» only.
-   - What's unclear: whether D-10 “forecast/income contribution first” means keep aggregate line or expand per-income.
-   - Recommendation: keep aggregate «Прогноз» amount as first block; grace block below — satisfies D-10 without redesigning income detail.
+   - Resolution: keep aggregate «Прогноз» amount as first block; grace block below — satisfies D-10 without per-income expansion (RESEARCH Open Q2). Locked in `21-03-PLAN.md` `<assumptions>`.
 
 ## Environment Availability
 
