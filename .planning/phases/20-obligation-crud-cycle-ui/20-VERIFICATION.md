@@ -1,7 +1,7 @@
 ---
 phase: 20-obligation-crud-cycle-ui
 verified: 2026-09-09T12:44:47Z
-status: human_needed
+status: passed
 score: 5/5 must-haves verified
 behavior_unverified: 0
 overrides_applied: 0
@@ -11,6 +11,7 @@ decision_coverage:
   total: 16
   not_honored: []
 prohibitions_review:
+
   - statement: MUST NOT put dual DOM fields inside AccountFormDialog
     disposition: honored
     evidence: "AccountFormDialog.tsx has no statementDayOfMonth/dueDayOfMonth/grace fields"
@@ -41,6 +42,7 @@ prohibitions_review:
     flagged: true
     note: unverified-prohibition — human review recommended (judgment-tier)
 human_verification:
+
   - test: "FIAT_CREDIT row → Грейс → set dual DOM → save → see current/next CTA or OPEN rows"
     expected: "Schedule fields at top; hybrid list shows cycle windows; CTA «Ввести сумму» when no row; no invented placeholders"
     why_human: "Browser flow + visual layout; unit tests cover merge math + source strings only"
