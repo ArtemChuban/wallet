@@ -450,6 +450,26 @@ describe("updateGraceSchedule (CYCLE-01 / D-02 / D-14)", () => {
     expect(revalidatePath).toHaveBeenCalledWith("/");
   });
 
+  it("never calls balanceSnapshot upsert/delete on DOM set (GRISO / D-04)", async () => {
+    vi.mocked(prisma.account.findUnique).mockResolvedValue({
+      id: 5,
+      type: "FIAT_CREDIT",
+      statementDayOfMonth: null,
+      dueDayOfMonth: null,
+    } as never);
+
+    const formData = new FormData();
+    formData.set("accountId", "5");
+    formData.set("statementDayOfMonth", "21");
+    formData.set("dueDayOfMonth", "15");
+
+    const result = await updateGraceSchedule({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.balanceSnapshot.upsert).not.toHaveBeenCalled();
+    expect(prisma.balanceSnapshot.delete).not.toHaveBeenCalled();
+  });
+
   it("D-14: FIAT_CREDIT clear with zero OPEN → success; both null", async () => {
     vi.mocked(prisma.account.findUnique).mockResolvedValue({
       id: 6,
@@ -473,6 +493,27 @@ describe("updateGraceSchedule (CYCLE-01 / D-02 / D-14)", () => {
     });
     expect(prisma.creditGraceObligation.create).not.toHaveBeenCalled();
     expect(prisma.creditGraceObligation.update).not.toHaveBeenCalled();
+  });
+
+  it("never calls balanceSnapshot upsert/delete on clear-with-zero-OPEN (GRISO / D-04)", async () => {
+    vi.mocked(prisma.account.findUnique).mockResolvedValue({
+      id: 6,
+      type: "FIAT_CREDIT",
+      statementDayOfMonth: 21,
+      dueDayOfMonth: 15,
+    } as never);
+    vi.mocked(prisma.creditGraceObligation.count).mockResolvedValue(0);
+
+    const formData = new FormData();
+    formData.set("accountId", "6");
+    formData.set("statementDayOfMonth", "");
+    formData.set("dueDayOfMonth", "");
+
+    const result = await updateGraceSchedule({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.balanceSnapshot.upsert).not.toHaveBeenCalled();
+    expect(prisma.balanceSnapshot.delete).not.toHaveBeenCalled();
   });
 });
 
@@ -775,5 +816,27 @@ describe("reopenCreditGraceObligation (OBL-02 / Plan 02)", () => {
     expect(prisma.balanceSnapshot.delete).not.toHaveBeenCalled();
     expect(revalidatePath).toHaveBeenCalledWith("/accounts");
     expect(revalidatePath).toHaveBeenCalledWith("/");
+  });
+});
+
+/**
+ * SC1 belt+suspenders: name the five grace mutations that must never write
+ * BalanceSnapshot (D-02 / D-04). Embedded never-calls above stay authoritative.
+ */
+describe("GRISO write-gates", () => {
+  it("exports all five grace mutations under never-call coverage", () => {
+    const names = Object.keys(accountActions);
+    for (const required of [
+      "updateGraceSchedule",
+      "createCreditGraceObligation",
+      "updateCreditGraceObligation",
+      "closeCreditGraceObligation",
+      "reopenCreditGraceObligation",
+    ]) {
+      expect(names).toContain(required);
+    }
+    // prisma mock retains balanceSnapshot for BAL-01 paths (D-08)
+    expect(prisma.balanceSnapshot.upsert).toBeTypeOf("function");
+    expect(prisma.balanceSnapshot.delete).toBeTypeOf("function");
   });
 });
