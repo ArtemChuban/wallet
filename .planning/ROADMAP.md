@@ -55,7 +55,7 @@ Full detail: [milestones/v1.2-ROADMAP.md](./milestones/v1.2-ROADMAP.md)
 **Milestone Goal:** Track monthly credit-card grace schedules (statement DOM + due DOM), manually record amount owed / early close, and show open obligations on Капитал «Прогноз» (A′ NW-neutral) without rewriting historical NW.
 
 - [x] **Phase 18: Bank contract study + discuss locks** - Document bank grace rules; lock cycle/overlay decisions before schema (completed 2026-09-08)
-- [ ] **Phase 19: Schema + pure grace domain math** - Persist grace config + obligation model; trustworthy due-date math
+- [x] **Phase 19: Schema + pure grace domain math** - Persist grace config + obligation model; trustworthy due-date math (completed 2026-09-09)
 - [ ] **Phase 20: Obligation CRUD + cycle UI** - Amount due, early close, cycle list, overdue highlight, debt≠grace copy
 - [ ] **Phase 21: Капитал forecast integration** - «Прогноз» includes open grace obligations with FX LOCF honesty
 - [ ] **Phase 22: GRACEISO regression + polish** - Prove grace never touches BalanceSnapshot / historical NW LOCF
@@ -95,17 +95,17 @@ Plans:
   2. Pure helpers compute due via next-month DOM + statement advance via `clampDayOfMonth` (month-edge / Feb); do not treat sole `addCalendarDays(start, days)` as authoritative due engine
   3. Obligation model can persist per-cycle amount/status keyed by cycle start without deriving dues from BalanceSnapshot
 
-**Plans**: 3 plans
+**Plans**: 3/3 plans executed
 
 Plans:
 **Wave 1**
 
-- [ ] 19-01-PLAN.md — Dual-DOM schema + obligation model + cycleStart/dueAsOf tracer + migrate
+- [x] 19-01-PLAN.md — Dual-DOM schema + obligation model + cycleStart/dueAsOf tracer + migrate
 
 **Wave 2** *(parallel after Wave 1)*
 
-- [ ] 19-02-PLAN.md — listCycleWindows / current-next / overdue pure math
-- [ ] 19-03-PLAN.md — updateGraceSchedule Zod+action + obligation Zod ready
+- [x] 19-02-PLAN.md — listCycleWindows / current-next / overdue pure math
+- [x] 19-03-PLAN.md — updateGraceSchedule Zod+action + obligation Zod ready
 
 ### Phase 20: Obligation CRUD + cycle UI
 
@@ -158,7 +158,7 @@ Plans:
 | 8–12 | v1.1 | — | Complete | 2026-09-07 |
 | 13–17 | v1.2 | — | Complete | 2026-09-08 |
 | 18. Bank contract study + discuss locks | v1.3 | 2/2 | Complete    | 2026-09-08 |
-| 19. Schema + pure grace domain math | v1.3 | 0/TBD | Not started | - |
+| 19. Schema + pure grace domain math | v1.3 | 3/3 | Complete    | 2026-09-09 |
 | 20. Obligation CRUD + cycle UI | v1.3 | 0/TBD | Not started | - |
 | 21. Капитал forecast integration | v1.3 | 0/TBD | Not started | - |
 | 22. GRACEISO regression + polish | v1.3 | 0/TBD | Not started | - |
