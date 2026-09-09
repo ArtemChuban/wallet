@@ -5,10 +5,10 @@ milestone_name: Кредитка
 current_phase: 20
 current_phase_name: Obligation CRUD + cycle UI
 status: planning
-stopped_at: Phase 20 research complete
-last_updated: "2026-09-09T11:52:00.000Z"
+stopped_at: Phase 20 UI-SPEC draft ready for checker
+last_updated: "2026-09-09T11:54:00.000Z"
 last_activity: 2026-09-09
-last_activity_desc: Phase 20 RESEARCH.md written
+last_activity_desc: Phase 20 UI-SPEC.md written
 state_head: e71dcf720dd90ef0d69aa705ec850eb849e55be4
 progress:
   total_phases: 5
