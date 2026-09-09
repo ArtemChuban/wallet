@@ -22,6 +22,7 @@ vi.mock("@/lib/db", () => ({
       count: vi.fn(),
       create: vi.fn(),
       update: vi.fn(),
+      findUnique: vi.fn(),
     },
   },
   ensureSqlitePragmas: vi.fn(),
@@ -37,6 +38,13 @@ vi.mock("@/lib/money", () => ({
     if (!Number.isFinite(n)) throw new Error("bad major");
     return BigInt(Math.round(n * 100));
   }),
+  formatMinorToMajorExact: vi.fn((minor: bigint, scale: number) => {
+    const neg = minor < 0n;
+    const abs = neg ? -minor : minor;
+    if (scale === 0) return `${neg ? "-" : ""}${abs.toString()}`;
+    const padded = abs.toString().padStart(scale + 1, "0");
+    return `${neg ? "-" : ""}${padded.slice(0, -scale)}.${padded.slice(-scale)}`;
+  }),
 }));
 
 import { Prisma } from "@/generated/prisma/client";
@@ -47,8 +55,11 @@ import * as accountActions from "./actions";
 import {
   createAccount,
   createCreditGraceObligation,
+  closeCreditGraceObligation,
   deleteBalanceSnapshot,
+  reopenCreditGraceObligation,
   updateAccountName,
+  updateCreditGraceObligation,
   updateGraceSchedule,
   upsertBalanceSnapshot,
 } from "./actions";
@@ -562,14 +573,207 @@ describe("createCreditGraceObligation (OBL-01 / Plan 01 T3)", () => {
   });
 });
 
-describe.skip("updateCreditGraceObligation (OBL-01 / Plan 02)", () => {
-  it.todo("updates amount/note on OPEN without rewriting cycle keys");
+describe("updateCreditGraceObligation (OBL-01 / Plan 02)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+  });
+
+  it("updates amount/note on OPEN without rewriting cycle keys", async () => {
+    vi.mocked(prisma.creditGraceObligation.findUnique).mockResolvedValue({
+      id: 10,
+      accountId: 5,
+      cycleStartAsOf: "2026-01-21",
+      dueAsOf: "2026-02-15",
+      amountMinor: 100000n,
+      status: "OPEN",
+      closedAsOf: null,
+      note: null,
+      account: {
+        id: 5,
+        type: "FIAT_CREDIT",
+        currency: { code: "RUB", scale: 2 },
+      },
+    } as never);
+    vi.mocked(prisma.creditGraceObligation.update).mockResolvedValue(
+      {} as never,
+    );
+
+    const formData = new FormData();
+    formData.set("id", "10");
+    formData.set("amountMajor", "2500.50");
+    formData.set("note", "правка");
+
+    const result = await updateCreditGraceObligation({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.creditGraceObligation.update).toHaveBeenCalledWith({
+      where: { id: 10 },
+      data: {
+        amountMinor: 250050n,
+        note: "правка",
+      },
+    });
+    const data = vi.mocked(prisma.creditGraceObligation.update).mock.calls[0]![0]!
+      .data as Record<string, unknown>;
+    expect(data).not.toHaveProperty("cycleStartAsOf");
+    expect(data).not.toHaveProperty("dueAsOf");
+    expect(data).not.toHaveProperty("status");
+    expect(prisma.balanceSnapshot.upsert).not.toHaveBeenCalled();
+    expect(prisma.balanceSnapshot.delete).not.toHaveBeenCalled();
+    expect(revalidatePath).toHaveBeenCalledWith("/accounts");
+    expect(revalidatePath).toHaveBeenCalledWith("/");
+  });
+
+  it("rejects non-OPEN update", async () => {
+    vi.mocked(prisma.creditGraceObligation.findUnique).mockResolvedValue({
+      id: 11,
+      accountId: 5,
+      status: "CLOSED",
+      closedAsOf: "2026-02-01",
+      amountMinor: 100n,
+      account: {
+        id: 5,
+        type: "FIAT_CREDIT",
+        currency: { code: "RUB", scale: 2 },
+      },
+    } as never);
+
+    const formData = new FormData();
+    formData.set("id", "11");
+    formData.set("amountMajor", "10");
+
+    const result = await updateCreditGraceObligation({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toMatch(/К оплате|открыт/i);
+    expect(prisma.creditGraceObligation.update).not.toHaveBeenCalled();
+  });
+
+  it("rejects non-FIAT_CREDIT account", async () => {
+    vi.mocked(prisma.creditGraceObligation.findUnique).mockResolvedValue({
+      id: 12,
+      accountId: 7,
+      status: "OPEN",
+      amountMinor: 100n,
+      account: {
+        id: 7,
+        type: "FIAT_ASSET",
+        currency: { code: "RUB", scale: 2 },
+      },
+    } as never);
+
+    const formData = new FormData();
+    formData.set("id", "12");
+    formData.set("amountMajor", "10");
+
+    const result = await updateCreditGraceObligation({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBe("Обязательства грейса только для кредитного счёта");
+    expect(prisma.creditGraceObligation.update).not.toHaveBeenCalled();
+  });
 });
 
-describe.skip("closeCreditGraceObligation (OBL-02 / Plan 02)", () => {
-  it.todo("closes with closedAsOf; no balanceSnapshot writes");
+describe("closeCreditGraceObligation (OBL-02 / Plan 02)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+  });
+
+  it("closes with closedAsOf; no balanceSnapshot writes", async () => {
+    vi.mocked(prisma.creditGraceObligation.findUnique).mockResolvedValue({
+      id: 20,
+      accountId: 5,
+      cycleStartAsOf: "2026-01-21",
+      dueAsOf: "2026-02-15",
+      amountMinor: 50000n,
+      status: "OPEN",
+      closedAsOf: null,
+      note: null,
+      account: {
+        id: 5,
+        type: "FIAT_CREDIT",
+        currency: { code: "RUB", scale: 2 },
+      },
+    } as never);
+    vi.mocked(prisma.creditGraceObligation.update).mockResolvedValue(
+      {} as never,
+    );
+
+    const formData = new FormData();
+    formData.set("id", "20");
+    formData.set("closedAsOf", "2026-02-10");
+
+    const result = await closeCreditGraceObligation({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.creditGraceObligation.update).toHaveBeenCalledWith({
+      where: { id: 20 },
+      data: {
+        status: "CLOSED",
+        closedAsOf: "2026-02-10",
+      },
+    });
+    expect(prisma.balanceSnapshot.upsert).not.toHaveBeenCalled();
+    expect(prisma.balanceSnapshot.delete).not.toHaveBeenCalled();
+    expect(revalidatePath).toHaveBeenCalledWith("/accounts");
+  });
+
+  it("rejects missing closedAsOf", async () => {
+    const formData = new FormData();
+    formData.set("id", "20");
+
+    const result = await closeCreditGraceObligation({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.errors?.closedAsOf?.[0]).toMatch(/дат/i);
+    expect(prisma.creditGraceObligation.update).not.toHaveBeenCalled();
+  });
 });
 
-describe.skip("reopenCreditGraceObligation (OBL-02 / Plan 02)", () => {
-  it.todo("reopens CLOSED → OPEN clearing closedAsOf");
+describe("reopenCreditGraceObligation (OBL-02 / Plan 02)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+  });
+
+  it("reopens CLOSED → OPEN clearing closedAsOf", async () => {
+    vi.mocked(prisma.creditGraceObligation.findUnique).mockResolvedValue({
+      id: 30,
+      accountId: 5,
+      cycleStartAsOf: "2026-01-21",
+      dueAsOf: "2026-02-15",
+      amountMinor: 50000n,
+      status: "CLOSED",
+      closedAsOf: "2026-02-10",
+      note: null,
+      account: {
+        id: 5,
+        type: "FIAT_CREDIT",
+        currency: { code: "RUB", scale: 2 },
+      },
+    } as never);
+    vi.mocked(prisma.creditGraceObligation.update).mockResolvedValue(
+      {} as never,
+    );
+
+    const formData = new FormData();
+    formData.set("id", "30");
+
+    const result = await reopenCreditGraceObligation({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.creditGraceObligation.update).toHaveBeenCalledWith({
+      where: { id: 30 },
+      data: {
+        status: "OPEN",
+        closedAsOf: null,
+      },
+    });
+    expect(prisma.balanceSnapshot.upsert).not.toHaveBeenCalled();
+    expect(prisma.balanceSnapshot.delete).not.toHaveBeenCalled();
+    expect(revalidatePath).toHaveBeenCalledWith("/accounts");
+    expect(revalidatePath).toHaveBeenCalledWith("/");
+  });
 });
