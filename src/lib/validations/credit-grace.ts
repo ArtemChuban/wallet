@@ -15,7 +15,8 @@ const asOfDateSchema = z
   .regex(/^\d{4}-\d{2}-\d{2}$/, "Укажите дату");
 
 const optionalNoteSchema = z.preprocess(
-  (val) => (val === "" || val === undefined ? undefined : val),
+  (val) =>
+    val === "" || val === undefined || val === null ? undefined : val,
   z.string().trim().max(500).optional(),
 );
 

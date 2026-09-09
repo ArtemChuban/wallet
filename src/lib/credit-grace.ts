@@ -168,3 +168,95 @@ export function resolveCurrentAndNext(
 export function isGraceOverdue(dueAsOf: string, today: string): boolean {
   return dueAsOf < today;
 }
+
+/** Persisted obligation shape for hybrid list merge (serialized minors OK). */
+export type GraceObligationListItem = {
+  id: number;
+  cycleStartAsOf: string;
+  dueAsOf: string;
+  amountMinor: string;
+  status: "OPEN" | "CLOSED";
+  note: string | null;
+};
+
+export type GraceListRow =
+  | {
+      kind: "open";
+      obligation: {
+        id: number;
+        cycleStartAsOf: string;
+        dueAsOf: string;
+        amountMinor: string;
+        note: string | null;
+      };
+    }
+  | { kind: "cta"; cycleStartAsOf: string; dueAsOf: string };
+
+/**
+ * Merge resolveCurrentAndNext candidates with persisted rows (D-05).
+ * Missing candidate window → CTA only — never invents DB placeholders.
+ * Orphan OPEN (e.g. gap-day overdue) listed above candidate rows.
+ * CLOSED omitted here (collapsed history is Plan 02).
+ */
+export function mergeGraceListRows(
+  schedule: CreditGraceSchedule | null,
+  today: string,
+  obligations: GraceObligationListItem[],
+): GraceListRow[] {
+  const { current, next } = resolveCurrentAndNext(schedule, today);
+  const byStart = new Map(
+    obligations.map((o) => [o.cycleStartAsOf, o] as const),
+  );
+  const candidateStarts = new Set<string>();
+  const candidateRows: GraceListRow[] = [];
+
+  for (const w of [current, next]) {
+    if (!w) continue;
+    candidateStarts.add(w.cycleStartAsOf);
+    const existing = byStart.get(w.cycleStartAsOf);
+    if (existing?.status === "OPEN") {
+      candidateRows.push({
+        kind: "open",
+        obligation: {
+          id: existing.id,
+          cycleStartAsOf: existing.cycleStartAsOf,
+          dueAsOf: existing.dueAsOf,
+          amountMinor: existing.amountMinor,
+          note: existing.note,
+        },
+      });
+    } else if (!existing) {
+      candidateRows.push({
+        kind: "cta",
+        cycleStartAsOf: w.cycleStartAsOf,
+        dueAsOf: w.dueAsOf,
+      });
+    }
+  }
+
+  const orphans: GraceListRow[] = [];
+  for (const o of obligations) {
+    if (o.status !== "OPEN") continue;
+    if (candidateStarts.has(o.cycleStartAsOf)) continue;
+    orphans.push({
+      kind: "open",
+      obligation: {
+        id: o.id,
+        cycleStartAsOf: o.cycleStartAsOf,
+        dueAsOf: o.dueAsOf,
+        amountMinor: o.amountMinor,
+        note: o.note,
+      },
+    });
+  }
+
+  orphans.sort((a, b) => {
+    if (a.kind !== "open" || b.kind !== "open") return 0;
+    if (a.obligation.dueAsOf !== b.obligation.dueAsOf) {
+      return a.obligation.dueAsOf < b.obligation.dueAsOf ? -1 : 1;
+    }
+    return a.obligation.cycleStartAsOf < b.obligation.cycleStartAsOf ? -1 : 1;
+  });
+
+  return [...orphans, ...candidateRows];
+}

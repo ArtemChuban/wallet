@@ -6,6 +6,7 @@ import {
   dueAsOfForCycle,
   isGraceOverdue,
   listCycleWindows,
+  mergeGraceListRows,
   resolveCurrentAndNext,
 } from "@/lib/credit-grace";
 
@@ -105,6 +106,72 @@ describe("isGraceOverdue (D-07)", () => {
   it("false on inclusive due day; true calendar day after", () => {
     expect(isGraceOverdue("2026-02-15", "2026-02-15")).toBe(false);
     expect(isGraceOverdue("2026-02-15", "2026-02-16")).toBe(true);
+  });
+});
+
+describe("mergeGraceListRows (D-05 / CYCLE-02)", () => {
+  it("emits CTA for candidate windows without persisted rows", () => {
+    const rows = mergeGraceListRows(schedule21_15, "2026-02-01", []);
+    expect(rows).toEqual([
+      {
+        kind: "cta",
+        cycleStartAsOf: "2026-01-21",
+        dueAsOf: "2026-02-15",
+      },
+      {
+        kind: "cta",
+        cycleStartAsOf: "2026-02-21",
+        dueAsOf: "2026-03-15",
+      },
+    ]);
+  });
+
+  it("uses persisted OPEN instead of inventing CTA for that window", () => {
+    const rows = mergeGraceListRows(schedule21_15, "2026-02-01", [
+      {
+        id: 9,
+        cycleStartAsOf: "2026-01-21",
+        dueAsOf: "2026-02-15",
+        amountMinor: "50000",
+        status: "OPEN",
+        note: null,
+      },
+    ]);
+    expect(rows).toEqual([
+      {
+        kind: "open",
+        obligation: {
+          id: 9,
+          cycleStartAsOf: "2026-01-21",
+          dueAsOf: "2026-02-15",
+          amountMinor: "50000",
+          note: null,
+        },
+      },
+      {
+        kind: "cta",
+        cycleStartAsOf: "2026-02-21",
+        dueAsOf: "2026-03-15",
+      },
+    ]);
+  });
+
+  it("lists orphan OPEN above CTAs on gap day (current null)", () => {
+    const rows = mergeGraceListRows(schedule21_15, "2026-02-16", [
+      {
+        id: 3,
+        cycleStartAsOf: "2026-01-21",
+        dueAsOf: "2026-02-15",
+        amountMinor: "100",
+        status: "OPEN",
+        note: null,
+      },
+    ]);
+    expect(rows[0]).toMatchObject({
+      kind: "open",
+      obligation: { id: 3, cycleStartAsOf: "2026-01-21" },
+    });
+    expect(rows.some((r) => r.kind === "cta")).toBe(true);
   });
 });
 

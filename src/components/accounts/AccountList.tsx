@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { deleteBalanceSnapshot } from "@/app/accounts/actions";
 import { AccountFormDialog } from "@/components/accounts/AccountFormDialog";
+import { CreditGraceDialog } from "@/components/accounts/CreditGraceDialog";
 import { SetBalanceDialog } from "@/components/accounts/SetBalanceDialog";
 import { DestructiveConfirmStep } from "@/components/ui/destructive-confirm-step";
 import { Button } from "@/components/ui/button";
@@ -45,6 +46,19 @@ export type AccountListItem = {
   locf: { asOfDate: string; amountMinor: string } | null;
   /** Newest-first snapshot history (D-14); empty → no expand (E4). */
   snapshots: BalanceSnapshotHistoryItem[];
+  /** Dual DOM schedule — FIAT_CREDIT only; both null or both set. */
+  statementDayOfMonth: number | null;
+  dueDayOfMonth: number | null;
+  /** Grace obligations; amountMinor serialized BigInt string. */
+  creditGraceObligations: Array<{
+    id: number;
+    cycleStartAsOf: string;
+    dueAsOf: string;
+    amountMinor: string;
+    status: "OPEN" | "CLOSED";
+    closedAsOf: string | null;
+    note: string | null;
+  }>;
 };
 
 function LocfDisplay({ account }: { account: AccountListItem }) {
@@ -243,6 +257,17 @@ function AccountRow({
           ) : null}
         </div>
         <div className="flex shrink-0 items-center gap-2">
+          {account.type === "FIAT_CREDIT" ? (
+            <CreditGraceDialog
+              account={account}
+              today={today}
+              trigger={
+                <Button type="button" variant="outline" size="sm">
+                  Грейс
+                </Button>
+              }
+            />
+          ) : null}
           {account.locf == null ? (
             <SetBalanceDialog
               account={account}

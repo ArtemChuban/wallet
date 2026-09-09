@@ -12,7 +12,12 @@ export default async function AccountsPage() {
   const [accountsRaw, currencies, snapshotsLteToday, allSnapshots] =
     await Promise.all([
       prisma.account.findMany({
-        include: { currency: true },
+        include: {
+          currency: true,
+          creditGraceObligations: {
+            orderBy: { cycleStartAsOf: "desc" },
+          },
+        },
         orderBy: { name: "asc" },
       }),
       prisma.currency.findMany({
@@ -68,6 +73,17 @@ export default async function AccountsPage() {
       currencyCode: a.currencyCode,
       creditLimitMinor:
         a.creditLimitMinor == null ? null : a.creditLimitMinor.toString(),
+      statementDayOfMonth: a.statementDayOfMonth,
+      dueDayOfMonth: a.dueDayOfMonth,
+      creditGraceObligations: a.creditGraceObligations.map((o) => ({
+        id: o.id,
+        cycleStartAsOf: o.cycleStartAsOf,
+        dueAsOf: o.dueAsOf,
+        amountMinor: o.amountMinor.toString(),
+        status: o.status,
+        closedAsOf: o.closedAsOf,
+        note: o.note,
+      })),
       currency: {
         code: a.currency.code,
         name: a.currency.name,

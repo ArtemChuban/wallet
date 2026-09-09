@@ -39,12 +39,14 @@ vi.mock("@/lib/money", () => ({
   }),
 }));
 
+import { Prisma } from "@/generated/prisma/client";
 import { revalidatePath } from "next/cache";
 import { calendarDateToday } from "@/lib/balances";
 import { ensureSqlitePragmas, prisma } from "@/lib/db";
 import * as accountActions from "./actions";
 import {
   createAccount,
+  createCreditGraceObligation,
   deleteBalanceSnapshot,
   updateAccountName,
   updateGraceSchedule,
@@ -464,9 +466,100 @@ describe("updateGraceSchedule (CYCLE-01 / D-02 / D-14)", () => {
 });
 
 describe("createCreditGraceObligation (OBL-01 / Plan 01 T3)", () => {
-  it.todo("creates OPEN obligation with server-frozen dueAsOf");
-  it.todo("P2002 → UI-SPEC Russian duplicate cycle message");
-  it.todo("never calls balanceSnapshot upsert/delete (GRISO)");
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+  });
+
+  it("creates OPEN obligation with server-frozen dueAsOf", async () => {
+    vi.mocked(prisma.account.findUnique).mockResolvedValue({
+      id: 5,
+      type: "FIAT_CREDIT",
+      statementDayOfMonth: 21,
+      dueDayOfMonth: 15,
+      currency: { code: "RUB", scale: 2 },
+    } as never);
+    vi.mocked(prisma.creditGraceObligation.create).mockResolvedValue(
+      {} as never,
+    );
+
+    const formData = new FormData();
+    formData.set("accountId", "5");
+    formData.set("cycleStartAsOf", "2026-01-21");
+    formData.set("dueAsOf", "2099-01-01");
+    formData.set("amountMajor", "1000.00");
+
+    const result = await createCreditGraceObligation({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.creditGraceObligation.create).toHaveBeenCalledWith({
+      data: {
+        accountId: 5,
+        cycleStartAsOf: "2026-01-21",
+        dueAsOf: "2026-02-15",
+        amountMinor: 100000n,
+        status: "OPEN",
+        note: null,
+      },
+    });
+    expect(revalidatePath).toHaveBeenCalledWith("/accounts");
+    expect(revalidatePath).toHaveBeenCalledWith("/");
+  });
+
+  it("P2002 → UI-SPEC Russian duplicate cycle message", async () => {
+    vi.mocked(prisma.account.findUnique).mockResolvedValue({
+      id: 5,
+      type: "FIAT_CREDIT",
+      statementDayOfMonth: 21,
+      dueDayOfMonth: 15,
+      currency: { code: "RUB", scale: 2 },
+    } as never);
+    vi.mocked(prisma.creditGraceObligation.create).mockRejectedValue(
+      new Prisma.PrismaClientKnownRequestError("Unique constraint failed", {
+        code: "P2002",
+        clientVersion: "test",
+        meta: { target: ["accountId", "cycleStartAsOf"] },
+      }),
+    );
+
+    const formData = new FormData();
+    formData.set("accountId", "5");
+    formData.set("cycleStartAsOf", "2026-01-21");
+    formData.set("dueAsOf", "2026-02-15");
+    formData.set("amountMajor", "100.00");
+
+    const result = await createCreditGraceObligation({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBe(
+      "Обязательство за этот цикл уже есть — измените сумму в существующей строке",
+    );
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
+  it("never calls balanceSnapshot upsert/delete (GRISO)", async () => {
+    vi.mocked(prisma.account.findUnique).mockResolvedValue({
+      id: 5,
+      type: "FIAT_CREDIT",
+      statementDayOfMonth: 21,
+      dueDayOfMonth: 15,
+      currency: { code: "RUB", scale: 2 },
+    } as never);
+    vi.mocked(prisma.creditGraceObligation.create).mockResolvedValue(
+      {} as never,
+    );
+
+    const formData = new FormData();
+    formData.set("accountId", "5");
+    formData.set("cycleStartAsOf", "2026-01-21");
+    formData.set("dueAsOf", "2026-02-15");
+    formData.set("amountMajor", "50");
+
+    await createCreditGraceObligation({}, formData);
+
+    expect(prisma.balanceSnapshot.upsert).not.toHaveBeenCalled();
+    expect(prisma.balanceSnapshot.delete).not.toHaveBeenCalled();
+  });
 });
 
 describe.skip("updateCreditGraceObligation (OBL-01 / Plan 02)", () => {

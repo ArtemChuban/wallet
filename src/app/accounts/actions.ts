@@ -5,6 +5,7 @@ import { Prisma } from "@/generated/prisma/client";
 import { calendarDateToday } from "@/lib/balances";
 import { ensureSqlitePragmas, prisma } from "@/lib/db";
 import { parseMajorToMinor } from "@/lib/money";
+import { dueAsOfForCycle } from "@/lib/credit-grace";
 import {
   assertGraceDomAllowedForType,
   createAccountSchema,
@@ -15,6 +16,10 @@ import {
   deleteBalanceSchema,
   setBalanceSchema,
 } from "@/lib/validations/balance";
+import {
+  assertAccountHasGraceSchedule,
+  createCreditGraceObligationSchema,
+} from "@/lib/validations/credit-grace";
 
 export type AccountActionState = {
   errors?: {
@@ -25,10 +30,19 @@ export type AccountActionState = {
     accountId?: string[];
     statementDayOfMonth?: string[];
     dueDayOfMonth?: string[];
+    amountMajor?: string[];
+    cycleStartAsOf?: string[];
+    dueAsOf?: string[];
+    note?: string[];
+    status?: string[];
+    closedAsOf?: string[];
   };
   message?: string;
   success?: boolean;
 };
+
+const DUPLICATE_CYCLE_MESSAGE =
+  "Обязательство за этот цикл уже есть — измените сумму в существующей строке";
 
 export type BalanceActionState = {
   errors?: {
@@ -253,6 +267,106 @@ export async function updateGraceSchedule(
       },
     });
   } catch {
+    return {
+      message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/accounts");
+  revalidatePath("/");
+  return { success: true, message: "Сохранено" };
+}
+
+/**
+ * Create OPEN grace obligation with positive amount (OBL-01 / D-05…D-09).
+ * Server freezes dueAsOf via dueAsOfForCycle — ignores client spoof (T-20-02).
+ * Never writes BalanceSnapshot (T-20-03 / GRISO).
+ */
+export async function createCreditGraceObligation(
+  _prev: AccountActionState,
+  formData: FormData,
+): Promise<AccountActionState> {
+  const validated = createCreditGraceObligationSchema.safeParse({
+    accountId: formData.get("accountId"),
+    cycleStartAsOf: formData.get("cycleStartAsOf"),
+    dueAsOf: formData.get("dueAsOf"),
+    amountMajor: formData.get("amountMajor"),
+    status: formData.get("status") || undefined,
+    closedAsOf: formData.get("closedAsOf") || undefined,
+    note: formData.get("note") || undefined,
+  });
+
+  if (!validated.success) {
+    return { errors: validated.error.flatten().fieldErrors };
+  }
+
+  const { accountId, cycleStartAsOf, amountMajor, note } = validated.data;
+
+  try {
+    await ensureSqlitePragmas();
+
+    const account = await prisma.account.findUnique({
+      where: { id: accountId },
+      include: { currency: true },
+    });
+    if (!account) {
+      return {
+        message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+      };
+    }
+
+    if (account.type !== "FIAT_CREDIT") {
+      return { message: "Обязательства грейса только для кредитного счёта" };
+    }
+
+    if (!assertAccountHasGraceSchedule(account)) {
+      return {
+        message:
+          "Укажите день выписки и день оплаты — как в банке. Циклы появятся после сохранения.",
+      };
+    }
+
+    const dueAsOf = dueAsOfForCycle(cycleStartAsOf, account.dueDayOfMonth!);
+
+    if (fracDigitCount(amountMajor) > account.currency.scale) {
+      return {
+        errors: {
+          amountMajor: [
+            `Не больше ${account.currency.scale} знаков после запятой`,
+          ],
+        },
+      };
+    }
+
+    let amountMinor: bigint;
+    try {
+      amountMinor = parseMajorToMinor(amountMajor, account.currency.scale);
+    } catch (err) {
+      const msg =
+        err instanceof Error && err.message === "too many fractional digits"
+          ? `Не больше ${account.currency.scale} знаков после запятой`
+          : "Некорректная сумма";
+      return { errors: { amountMajor: [msg] } };
+    }
+
+    if (amountMinor <= 0n) {
+      return { errors: { amountMajor: ["Введите сумму больше 0"] } };
+    }
+
+    await prisma.creditGraceObligation.create({
+      data: {
+        accountId,
+        cycleStartAsOf,
+        dueAsOf,
+        amountMinor,
+        status: "OPEN",
+        note: note ?? null,
+      },
+    });
+  } catch (error) {
+    if (isUniqueNameViolation(error)) {
+      return { message: DUPLICATE_CYCLE_MESSAGE };
+    }
     return {
       message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
     };
