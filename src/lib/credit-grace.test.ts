@@ -296,12 +296,27 @@ describe("openGraceForecastMembership (D-01…D-04 / C-07)", () => {
   });
 });
 
-describe("GRISO isolation smoke (T-19-03)", () => {
+describe("GRISO isolation smoke (T-19-03 / Phase 21)", () => {
   it("net-worth and historical-series do not import credit-grace", () => {
     const root = join(process.cwd(), "src/lib");
     for (const file of ["net-worth.ts", "historical-series.ts"]) {
       const src = readFileSync(join(root, file), "utf8");
       expect(src).not.toMatch(/credit-grace/);
     }
+  });
+
+  it("page overlay: computeNetWorthRows call site has no grace inputs (T-21-06)", () => {
+    const pageSrc = readFileSync(
+      join(process.cwd(), "src/app/page.tsx"),
+      "utf8",
+    );
+    expect(pageSrc).toMatch(/computeNetWorthRows\(inputs\)/);
+    expect(pageSrc).toMatch(/forecastGrace=/);
+    const inputsStart = pageSrc.indexOf("const inputs: NetWorthAccountInput[]");
+    const callStart = pageSrc.indexOf("computeNetWorthRows(inputs)");
+    expect(inputsStart).toBeGreaterThan(-1);
+    expect(callStart).toBeGreaterThan(inputsStart);
+    const inputsBlock = pageSrc.slice(inputsStart, callStart);
+    expect(inputsBlock).not.toMatch(/grace|Grace|obligation/i);
   });
 });
