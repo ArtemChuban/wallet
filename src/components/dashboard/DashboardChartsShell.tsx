@@ -10,6 +10,7 @@ import {
   type NetWorthChartPoint,
 } from "@/components/dashboard/NetWorthHistoryChart";
 import { addCalendarDays, windowStartForPreset, type RangePreset } from "@/lib/dates";
+import { openGraceForecastMembership } from "@/lib/credit-grace";
 import {
   buildNetWorthSeries,
   type SeriesAccount,
@@ -24,6 +25,7 @@ import type { NetWorthAccountType } from "@/lib/net-worth";
 import {
   buildNetWorthForecastSeries,
   forecastHorizonEnd,
+  type ForecastEvent,
   type ForecastSlot,
 } from "@/lib/nw-forecast";
 
@@ -79,6 +81,21 @@ export type ForecastIncomePayload = {
   }[];
 };
 
+/** OPEN grace rows for overlay — string minors across RSC boundary (C-07). */
+export type ForecastGracePayload = {
+  obligations: {
+    id: number;
+    dueAsOf: string;
+    amountMinor: string;
+    status: "OPEN" | "CLOSED";
+    accountId: number;
+    accountName: string;
+    currencyCode: string;
+    currencyScale: number;
+    isPrimaryCurrency: boolean;
+  }[];
+};
+
 type DashboardChartsShellProps = {
   accounts: ChartAccountPayload[];
   snapshots: ChartSnapshotPayload[];
@@ -89,6 +106,7 @@ type DashboardChartsShellProps = {
   primaryCode: string;
   anchorPrimaryMinor: string;
   forecastIncome: ForecastIncomePayload;
+  forecastGrace: ForecastGracePayload;
 };
 
 function reviveAccounts(rows: ChartAccountPayload[]): SeriesAccount[] {
@@ -121,7 +139,11 @@ function reviveRates(rows: ChartRatePayload[]): SeriesRate[] {
 
 function mergeFactAndForecast(
   fact: NetWorthChartPoint[],
-  forecastPoints: { asOfDate: string; forecast: number }[],
+  forecastPoints: {
+    asOfDate: string;
+    forecast: number;
+    forecastEvents?: ForecastEvent[];
+  }[],
   today: string,
   showForecast: boolean,
 ): NetWorthChartPoint[] {
@@ -135,16 +157,24 @@ function mergeFactAndForecast(
   }
 
   for (const fp of forecastPoints) {
+    const events =
+      fp.forecastEvents && fp.forecastEvents.length > 0
+        ? fp.forecastEvents
+        : undefined;
     const existing = byDate.get(fp.asOfDate);
     if (existing) {
       existing.forecast = fp.forecast;
+      if (events) {
+        existing.forecastEvents = events;
+      }
     } else if (fp.asOfDate >= today) {
       // D-07/D-12: today hinge + horizonEnd + future pay dates must stay on axis
       byDate.set(fp.asOfDate, {
         asOfDate: fp.asOfDate,
         nw: fp.asOfDate === today ? fp.forecast : Number.NaN,
         forecast: fp.forecast,
-      } as NetWorthChartPoint);
+        ...(events ? { forecastEvents: events } : {}),
+      });
     }
   }
 
@@ -163,6 +193,7 @@ export function DashboardChartsShell({
   primaryCode,
   anchorPrimaryMinor,
   forecastIncome,
+  forecastGrace,
 }: DashboardChartsShellProps) {
   const [range, setRange] = useState<RangePreset>("30d");
 
@@ -306,9 +337,37 @@ export function DashboardChartsShell({
       });
     }
 
+    // C-03 / D-01…D-05: OPEN grace membership → kind grace slots; concat with income.
+    const graceSlots: ForecastSlot[] = openGraceForecastMembership(
+      forecastGrace.obligations.map((o) => ({
+        id: o.id,
+        dueAsOf: o.dueAsOf,
+        amountMinor: BigInt(o.amountMinor),
+        status: o.status,
+        accountId: o.accountId,
+        accountName: o.accountName,
+        currencyCode: o.currencyCode,
+        currencyScale: o.currencyScale,
+        isPrimaryCurrency: o.isPrimaryCurrency,
+      })),
+      today,
+      horizonEnd,
+    ).map((m) => ({
+      kind: "grace" as const,
+      parentId: m.obligationId,
+      plannedAsOf: m.sampleAsOf,
+      plannedAmountMinor: m.amountMinor,
+      currencyCode: m.currencyCode,
+      currencyScale: m.currencyScale,
+      isPrimaryCurrency: m.isPrimaryCurrency,
+      accountId: m.accountId,
+      accountName: m.accountName,
+      dueAsOf: m.dueAsOf,
+    }));
+
     const built = buildNetWorthForecastSeries({
       anchorPrimaryMinor: anchorMinor,
-      slots: openSlots,
+      slots: [...openSlots, ...graceSlots],
       rates: seriesRates,
       primaryScale,
       today,
@@ -318,6 +377,7 @@ export function DashboardChartsShell({
     return built;
   }, [
     forecastIncome,
+    forecastGrace,
     range,
     today,
     anchorMinor,
@@ -325,10 +385,12 @@ export function DashboardChartsShell({
     primaryScale,
   ]);
 
-  // D-08 / D-16: hide Line when no includable slots; keep banner if FX exclusions
+  // D-07 / D-08 / D-16: hide Line when no includable slots (grace-only flat still counts);
+  // keep banner if FX exclusions (D-18).
   const showForecast = forecastMeta.includedSlotCount > 0;
   const showPartialBanner =
     forecastMeta.isPartialForecast || forecastMeta.excludedMissingFxCount > 0;
+  const missingFxCodes = forecastMeta.excludedMissingFxCurrencies;
 
   const points = useMemo(
     () =>
@@ -366,7 +428,12 @@ export function DashboardChartsShell({
             <span className="font-semibold text-foreground">
               Прогноз неполный
             </span>
-            <span className="text-muted-foreground"> · нет курса</span>
+            <span className="text-muted-foreground">
+              {" · нет курса"}
+              {missingFxCodes.length > 0
+                ? ` ${missingFxCodes.join(", ")}`
+                : ""}
+            </span>
           </p>
         ) : null}
       </section>

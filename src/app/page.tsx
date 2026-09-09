@@ -25,6 +25,7 @@ export default async function Home() {
       oneTimeIncomes,
       recurringActuals,
       oneTimeActuals,
+      openGraceObligations,
     ] = await Promise.all([
       prisma.account.findMany({
         include: { currency: true },
@@ -79,6 +80,25 @@ export default async function Home() {
           plannedAsOf: true,
           amountMinor: true,
           actualAsOf: true,
+        },
+      }),
+      // C-07 / GRFCST-01: OPEN-only lean load for forecast overlay (not NW LOCF).
+      prisma.creditGraceObligation.findMany({
+        where: { status: "OPEN" },
+        select: {
+          id: true,
+          dueAsOf: true,
+          amountMinor: true,
+          status: true,
+          accountId: true,
+          account: {
+            select: {
+              name: true,
+              currency: {
+                select: { code: true, scale: true, isPrimary: true },
+              },
+            },
+          },
         },
       }),
     ]);
@@ -276,6 +296,19 @@ export default async function Home() {
                 plannedAsOf: a.plannedAsOf,
                 amountMinor: a.amountMinor.toString(),
                 actualAsOf: a.actualAsOf,
+              })),
+            }}
+            forecastGrace={{
+              obligations: openGraceObligations.map((o) => ({
+                id: o.id,
+                dueAsOf: o.dueAsOf,
+                amountMinor: o.amountMinor.toString(),
+                status: o.status,
+                accountId: o.accountId,
+                accountName: o.account.name,
+                currencyCode: o.account.currency.code,
+                currencyScale: o.account.currency.scale,
+                isPrimaryCurrency: o.account.currency.isPrimary,
               })),
             }}
           />

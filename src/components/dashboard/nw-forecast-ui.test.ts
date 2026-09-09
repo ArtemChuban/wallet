@@ -49,9 +49,19 @@ describe("forecast chart chrome file-scan", () => {
 });
 
 /** Plan 02 owner — banner lists unique FX codes; quiet role=status retained. */
-describe.skip("plan-02 banner FX codes (GRFCST-02 / D-15)", () => {
-  it.todo("banner joins unique missing currency codes (USD, EUR pattern)");
-  it.todo("partial banner keeps role=status (quiet)");
+describe("plan-02 banner FX codes (GRFCST-02 / D-15)", () => {
+  it("banner joins unique missing currency codes (USD, EUR pattern)", () => {
+    expect(shellSrc).toMatch(/excludedMissingFxCurrencies/);
+    expect(shellSrc).toMatch(/\.join\(", "\)/);
+    expect(shellSrc).toMatch(/нет курса/);
+    // D-16: currency codes only — no income/grace kind tags in banner copy
+    expect(shellSrc).not.toMatch(/доходы|грейс/);
+  });
+
+  it("partial banner keeps role=status (quiet)", () => {
+    expect(shellSrc).toMatch(/role=["']status["']/);
+    expect(shellSrc).toMatch(/Прогноз неполный/);
+  });
 });
 
 /** Plan 03 owner — locked tooltip RU from C-04. */

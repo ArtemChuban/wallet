@@ -21,6 +21,7 @@ import {
 import { formatAsOfDisplay } from "@/lib/dates";
 import { accountStackKey } from "@/lib/historical-series";
 import { formatChartNumber } from "@/lib/money";
+import type { ForecastEvent } from "@/lib/nw-forecast";
 
 const CHART_COLORS = [
   "var(--chart-1)",
@@ -40,8 +41,12 @@ export type NetWorthStackAccount = {
 export type NetWorthChartPoint = {
   asOfDate: string;
   nw: number;
-  /** Flattened stack majors keyed by accountStackKey(id); optional forecast major. */
-  [stackKey: string]: string | number;
+  /** Optional dashed-series major (Plan 17+). */
+  forecast?: number;
+  /** Builder metadata for today + future tooltips (Plan 21 / D-06, D-09). */
+  forecastEvents?: ForecastEvent[];
+  /** Flattened stack majors keyed by accountStackKey(id). */
+  [stackKey: string]: string | number | ForecastEvent[] | undefined;
 };
 
 type NetWorthHistoryChartProps = {
