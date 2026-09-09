@@ -113,9 +113,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-09T19:50:55.286Z
-Stopped at: Phase 21 context gathered
-Resume file: /home/artem/Documents/wallet/.planning/phases/21-kapital-forecast-integration/21-CONTEXT.md
+Last session: 2026-09-09T22:20:00.000Z
+Stopped at: Phase 21 plans created (21-01…21-03)
+Resume file: /home/artem/Documents/wallet/.planning/phases/21-kapital-forecast-integration/21-01-PLAN.md
 
 ## Operator Next Steps
 
