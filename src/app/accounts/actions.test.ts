@@ -462,3 +462,21 @@ describe("updateGraceSchedule (CYCLE-01 / D-02 / D-14)", () => {
     expect(prisma.creditGraceObligation.update).not.toHaveBeenCalled();
   });
 });
+
+describe("createCreditGraceObligation (OBL-01 / Plan 01 T3)", () => {
+  it.todo("creates OPEN obligation with server-frozen dueAsOf");
+  it.todo("P2002 → UI-SPEC Russian duplicate cycle message");
+  it.todo("never calls balanceSnapshot upsert/delete (GRISO)");
+});
+
+describe.skip("updateCreditGraceObligation (OBL-01 / Plan 02)", () => {
+  it.todo("updates amount/note on OPEN without rewriting cycle keys");
+});
+
+describe.skip("closeCreditGraceObligation (OBL-02 / Plan 02)", () => {
+  it.todo("closes with closedAsOf; no balanceSnapshot writes");
+});
+
+describe.skip("reopenCreditGraceObligation (OBL-02 / Plan 02)", () => {
+  it.todo("reopens CLOSED → OPEN clearing closedAsOf");
+});
