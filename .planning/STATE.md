@@ -5,16 +5,16 @@ milestone_name: Кредитка
 current_phase: 20
 current_phase_name: Obligation CRUD + cycle UI
 status: planning
-stopped_at: Phase 20 plans written (20-01…03) — ready for plan-check / execute
-last_updated: "2026-09-09T12:15:00.000Z"
+stopped_at: Completed 20-01-PLAN.md
+last_updated: "2026-09-09T12:27:32.000Z"
 last_activity: 2026-09-09
-last_activity_desc: Phase 20 PLAN.md files created (3 plans)
-state_head: e71dcf720dd90ef0d69aa705ec850eb849e55be4
+last_activity_desc: Phase 20 plan-check PASSED (Wave 0 verify-poison fixed)
+state_head: 3a8f1acc1627ef8313e9305c2fd1af0d3046ad0b
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 8
-  completed_plans: 5
+  completed_plans: 6
   percent: 20
 ---
 
@@ -31,8 +31,8 @@ See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 
 Phase: 20 — Obligation CRUD + cycle UI
 Plan: 20-01…03 planned (not executed)
-Status: Ready to execute
-Last activity: 2026-09-09 — Phase 20 PLAN.md set written
+Status: Plan-check PASSED — ready to execute
+Last activity: 2026-09-09 — Phase 20 plan-check PASSED after Wave 0 revision
 
 Progress: [██░░░░░░░░] 20% (2/5 phases planned; 0/3 Phase 20 plans executed)
 
@@ -53,6 +53,7 @@ Progress: [██░░░░░░░░] 20% (2/5 phases planned; 0/3 Phase 20
 |------|----------|-------|-------|
 | Phase 18 P01 | 3min | 2 tasks | 2 files |
 | Phase 18 P02 | 3min | 3 tasks | 6 files |
+| Phase 20 P01 | 9min | 3 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -69,6 +70,9 @@ v1.3 locks from Phase 18 (see `18-CONTEXT.md`):
 - [Phase 18]: Phase 18 Plan 01 docs-only — no prisma/src; Plan 02 owns wording sync
 - [Phase 18]: Plan 02 confirmed dual DOM + A′ as planning SoT; CYCLE-01/ROADMAP/PROJECT synced; credit todo folded
 - [Phase 18]: CONT-01 verified Complete (18-VERIFICATION.md 8/8 structural)
+- [Phase 20]: Грейс label on AccountList trigger for source-scan verify
+- [Phase 20]: FormData null note treated as optional empty in grace Zod
+- [Phase 20]: CLOSED omitted from mergeGraceListRows until Plan 02
 
 ### Pending Todos
 
@@ -101,9 +105,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-09T12:15:00.000Z
-Stopped at: Phase 20 plans complete
-Resume file: /home/artem/Documents/wallet/.planning/phases/20-obligation-crud-cycle-ui/20-01-PLAN.md
+Last session: 2026-09-09T12:27:31.936Z
+Stopped at: Completed 20-01-PLAN.md
+Resume file: None
 
 ## Operator Next Steps
 

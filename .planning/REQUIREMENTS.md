@@ -10,11 +10,11 @@ Requirements for this milestone. Each maps to roadmap phases.
 ### Cycle
 
 - [x] **CYCLE-01**: User can set statement day-of-month and due day-of-month on a credit account (monthly repeat); statement DOM uses `clampDayOfMonth` (D-03); due is next-month DOM (this bank: 15) per dual-DOM SoT (D-02) — prefer `statementDayOfMonth` + `dueDayOfMonth` over sole `graceDurationDays`
-- [ ] **CYCLE-02**: User can see cycle instances for a credit account (current / next due)
+- [x] **CYCLE-02**: User can see cycle instances for a credit account (current / next due)
 
 ### Obligation
 
-- [ ] **OBL-01**: User can manually enter the amount due by the end of the interest-free window for a cycle
+- [x] **OBL-01**: User can manually enter the amount due by the end of the interest-free window for a cycle
 - [ ] **OBL-02**: User can record early repayment / close of that obligation
 - [ ] **OBL-03**: When due date has passed without close, UI highlights the obligation so the user can act
 
@@ -71,8 +71,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | CONT-01 | Phase 18 | Complete |
 | CYCLE-01 | Phase 19 | Complete |
-| CYCLE-02 | Phase 20 | Pending |
-| OBL-01 | Phase 20 | Pending |
+| CYCLE-02 | Phase 20 | Complete |
+| OBL-01 | Phase 20 | Complete |
 | OBL-02 | Phase 20 | Pending |
 | OBL-03 | Phase 20 | Pending |
 | UX-01 | Phase 20 | Pending |
