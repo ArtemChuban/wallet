@@ -5,16 +5,16 @@ milestone_name: Кредитка
 current_phase: 20
 current_phase_name: Obligation CRUD + cycle UI
 status: executing
-stopped_at: Completed 20-02-PLAN.md
-last_updated: "2026-09-09T12:36:08.668Z"
+stopped_at: Completed 20-03-PLAN.md
+last_updated: "2026-09-09T12:42:42.989Z"
 last_activity: 2026-09-09
 last_activity_desc: Completed 20-01 tracer (Грейс → schedule → create)
-state_head: a16489d6e8de353c6efd01018081f487bd4a80fa
+state_head: 0f9c7ca6c0044f824258f15de4d0c6675717aab5
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 8
-  completed_plans: 7
+  completed_plans: 8
   percent: 20
 ---
 
@@ -55,6 +55,7 @@ Progress: [██░░░░░░░░] 20%
 | Phase 18 P02 | 3min | 3 tasks | 6 files |
 | Phase 20 P01 | 9min | 3 tasks | 12 files |
 | Phase 20 P02 | 6 | 2 tasks | 5 files |
+| Phase 20 P03 | 5min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -77,6 +78,9 @@ v1.3 locks from Phase 18 (see `18-CONTEXT.md`):
 - [Phase 20]: close/reopen are dedicated exports; validate via update schema after load
 - [Phase 20]: CLOSED list stays outside mergeGraceListRows — separate collapsed section (D-06)
 - [Phase 20]: Edit amount uses formatMinorToMajorExact for input prefill (no thousand spaces)
+- [Phase 20]: D-08 sort lives in mergeGraceListRows (all OPEN then CTAs) not only UI
+- [Phase 20]: Clear schedule remounts dialog body via formKey so empty-schedule hint returns
+- [Phase 20]: UI-SPEC clear-blocked copy shown when OPEN>0; server gate unchanged
 
 ### Pending Todos
 
@@ -109,8 +113,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-09T12:36:08.587Z
-Stopped at: Completed 20-02-PLAN.md
+Last session: 2026-09-09T12:42:42.915Z
+Stopped at: Completed 20-03-PLAN.md
 Resume file: None
 
 ## Operator Next Steps

@@ -16,7 +16,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 - [x] **OBL-01**: User can manually enter the amount due by the end of the interest-free window for a cycle
 - [x] **OBL-02**: User can record early repayment / close of that obligation
-- [ ] **OBL-03**: When due date has passed without close, UI highlights the obligation so the user can act
+- [x] **OBL-03**: When due date has passed without close, UI highlights the obligation so the user can act
 
 ### Forecast
 
@@ -26,7 +26,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 ### Isolation / clarity
 
 - [ ] **GRISO-01**: Grace actions never write `BalanceSnapshot` or change historical NW LOCF
-- [ ] **UX-01**: UI clearly distinguishes snapshot credit debt from grace amount due (Russian copy)
+- [x] **UX-01**: UI clearly distinguishes snapshot credit debt from grace amount due (Russian copy)
 
 ### Contract gate
 
@@ -74,8 +74,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CYCLE-02 | Phase 20 | Complete |
 | OBL-01 | Phase 20 | Complete |
 | OBL-02 | Phase 20 | Complete |
-| OBL-03 | Phase 20 | Pending |
-| UX-01 | Phase 20 | Pending |
+| OBL-03 | Phase 20 | Complete |
+| UX-01 | Phase 20 | Complete |
 | GRFCST-01 | Phase 21 | Pending |
 | GRFCST-02 | Phase 21 | Pending |
 | GRISO-01 | Phase 22 | Pending |
