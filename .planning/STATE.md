@@ -2,20 +2,20 @@
 gsd_state_version: 1.0
 milestone: v1.3
 milestone_name: Кредитка
-current_phase: 20
-current_phase_name: Obligation CRUD + cycle UI
-status: executing
-stopped_at: Phase 20 executed; UAT human_needed
-last_updated: "2026-09-09T12:46:49.372Z"
+current_phase: 21
+current_phase_name: Капитал forecast integration
+status: planning
+stopped_at: Phase 20 complete, ready to plan Phase 21
+last_updated: "2026-09-09T13:50:48.292Z"
 last_activity: 2026-09-09
-last_activity_desc: Completed 20-01 tracer (Грейс → schedule → create)
-state_head: 80faee430e6c6b47eb97c036678db0041e02f9c1
+last_activity_desc: Phase 20 complete, transitioned to Phase 21
+state_head: 5e63abc0233e45f547a86b74cf118bce69a41eae
 progress:
   total_phases: 5
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 8
   completed_plans: 8
-  percent: 20
+  percent: 40
 ---
 
 # Project State
@@ -25,16 +25,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 20 — Obligation CRUD + cycle UI (Plan 02 next)
+**Current focus:** Phase 21 — Капитал forecast integration
 
 ## Current Position
 
-Phase: 20 — Obligation CRUD + cycle UI
-Plan: 3 of 3
-Status: 20-01 complete — ready for 20-02
-Last activity: 2026-09-09 — Completed 20-01-PLAN.md
+Phase: 21 — Капитал forecast integration
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-09-09 — Phase 20 complete, transitioned to Phase 21
 
-Progress: [██░░░░░░░░] 20%
+Progress: [████░░░░░░] 40%
 
 ## Performance Metrics
 
@@ -114,7 +114,7 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-09-09T12:46:49.264Z
-Stopped at: Phase 20 executed; UAT human_needed
+Stopped at: Phase 20 complete, ready to plan Phase 21
 Resume file: .planning/phases/20-obligation-crud-cycle-ui/20-VERIFICATION.md
 
 ## Operator Next Steps
