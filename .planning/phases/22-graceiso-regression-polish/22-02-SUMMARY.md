@@ -16,7 +16,7 @@ affects: [v1.3 milestone close, gsd-verify-work]
 actuals:
   tokens: 1169
   tasks: 2
-  commits: 2
+  commits: 4
 
 tech-stack:
   added: []
