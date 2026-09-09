@@ -4,11 +4,11 @@ milestone: v1.3
 milestone_name: Кредитка
 current_phase: 22
 current_phase_name: GRACEISO regression + polish
-status: ready_to_execute
-stopped_at: Phase 22 plans created (22-01, 22-02)
-last_updated: "2026-09-10T01:20:00.000Z"
+status: planning
+stopped_at: Phase 22 plan-check FAIL — awaiting planner revision
+last_updated: "2026-09-10T01:25:00.000Z"
 last_activity: 2026-09-10
-last_activity_desc: Phase 22 PLAN.md written — GRISO twin + write-gates + gate hygiene
+last_activity_desc: Phase 22 PLAN-CHECK FAIL — missing VALIDATION.md + Open Questions unresolved markers
 state_head: bc13404fcf7aa6603ca978cebfcac6481f5626b1
 progress:
   total_phases: 5
@@ -30,9 +30,9 @@ See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 ## Current Position
 
 Phase: 22 — GRACEISO regression + polish
-Plan: Not started
-Status: Research complete — ready to plan
-Last activity: 2026-09-10 — Phase 22 RESEARCH.md (GRISO twin / write-gates / gate hygiene)
+Plan: 22-01 next (of 2) — blocked on plan revision
+Status: Plan-check FAILED — revise then re-check
+Last activity: 2026-09-10 — 22-PLAN-CHECK.md FAIL (VALIDATION.md + Open Questions)
 
 Progress: [████████░░] 80%
 

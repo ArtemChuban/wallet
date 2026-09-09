@@ -440,16 +440,18 @@ This session baseline (without griso yet): those files except griso → **85 pas
 
 *(A1–A2 are process assumptions; all discrete code values above were Read/probed this session.)*
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Dedicated vs embedded write-gate its for update/close/reopen**
    - What we know: create has dedicated GRISO it; others embed asserts in happy path.
    - What's unclear: stylistic preference only.
    - Recommendation: add schedule dedicated it; optionally unify all five under `describe("GRISO write-gates")` without removing embedded asserts (belt + suspenders OK).
+   - **RESOLVED:** Plan 22-01 T3 adds dedicated `updateGraceSchedule` never-calls; keeps create/update/close/reopen asserts; optional unified `describe("GRISO write-gates")` allowed without removing embedded asserts.
 
 2. **Whether page overlay smoke stays in credit-grace.test.ts**
    - What we know: works; Phase 21 verify cites it.
    - Recommendation: leave; optionally duplicate a one-liner in griso — not required.
+   - **RESOLVED:** Leave `credit-grace.test.ts` GRISO smoke + page overlay assert; add fuller `griso.test.ts` twin (D-03 discretion / Plan 22-01). No relocate/delete.
 
 ## Environment Availability
 
