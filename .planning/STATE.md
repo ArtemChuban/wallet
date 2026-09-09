@@ -102,9 +102,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-09-08T19:49:31.461Z
-Stopped at: Phase 19 context gathered
-Resume file: .planning/phases/19-schema-pure-grace-domain-math/19-CONTEXT.md
+Stopped at: Phase 19 plans created (19-01..19-03)
+Resume file: .planning/phases/19-schema-pure-grace-domain-math/19-01-PLAN.md
 
 ## Operator Next Steps
 
-- Phase 19 schema (dual DOM ints + clamp; A′ from CONTEXT / checklist)
+- `/gsd-execute-phase 19` — Wave 1 decision gate (D-03/D-09) then tracer schema+math; Wave 2 parallel windows + write path
