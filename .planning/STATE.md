@@ -5,11 +5,11 @@ milestone_name: Кредитка
 current_phase: 22
 current_phase_name: GRACEISO regression + polish
 status: planning
-stopped_at: Phase 22 context gathered
-last_updated: "2026-09-09T23:09:12.036Z"
-last_activity: 2026-09-09
-last_activity_desc: Phase 21 complete, transitioned to Phase 22
-state_head: a2965a852c0e55a9a270f2540fe6944cc32a3f2c
+stopped_at: Phase 22 research complete
+last_updated: "2026-09-10T01:15:00.000Z"
+last_activity: 2026-09-10
+last_activity_desc: Phase 22 RESEARCH.md written — GRISO twin of INISO
+state_head: bc13404fcf7aa6603ca978cebfcac6481f5626b1
 progress:
   total_phases: 5
   completed_phases: 4
@@ -31,10 +31,10 @@ See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 
 Phase: 22 — GRACEISO regression + polish
 Plan: Not started
-Status: Ready to plan
-Last activity: 2026-09-09 — Phase 21 UAT + security complete; transitioned to Phase 22
+Status: Research complete — ready to plan
+Last activity: 2026-09-10 — Phase 22 RESEARCH.md (GRISO twin / write-gates / gate hygiene)
 
-Progress: [██████░░░░] 60%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
