@@ -258,3 +258,68 @@ export function mergeGraceListRows(
 
   return [...openRows, ...ctaRows];
 }
+
+/** Input row for Капитал forecast membership (OPEN filter + today-fold). */
+export type GraceForecastObligationInput = {
+  id: number;
+  dueAsOf: string;
+  amountMinor: bigint;
+  status: "OPEN" | "CLOSED";
+  accountId: number;
+  accountName: string;
+  currencyCode: string;
+  currencyScale: number;
+  isPrimaryCurrency: boolean;
+};
+
+/** Lean membership DTO — shell maps to ForecastSlot kind grace (no nw-forecast import). */
+export type GraceForecastMembership = {
+  obligationId: number;
+  dueAsOf: string;
+  sampleAsOf: string;
+  amountMinor: bigint;
+  accountId: number;
+  accountName: string;
+  currencyCode: string;
+  currencyScale: number;
+  isPrimaryCurrency: boolean;
+};
+
+/**
+ * OPEN obligations in overlay window with overdue folded onto today (D-01…D-04, C-07).
+ * Pure YYYY-MM-DD compare — no Date clock. Does not import nw-forecast.
+ */
+export function openGraceForecastMembership(
+  obligations: readonly GraceForecastObligationInput[],
+  today: string,
+  horizonEnd: string,
+): GraceForecastMembership[] {
+  const out: GraceForecastMembership[] = [];
+  for (const o of obligations) {
+    if (o.status !== "OPEN") continue;
+
+    let sampleAsOf: string;
+    if (o.dueAsOf < today) {
+      sampleAsOf = today;
+    } else if (o.dueAsOf === today) {
+      sampleAsOf = today;
+    } else if (o.dueAsOf <= horizonEnd) {
+      sampleAsOf = o.dueAsOf;
+    } else {
+      continue;
+    }
+
+    out.push({
+      obligationId: o.id,
+      dueAsOf: o.dueAsOf,
+      sampleAsOf,
+      amountMinor: o.amountMinor,
+      accountId: o.accountId,
+      accountName: o.accountName,
+      currencyCode: o.currencyCode,
+      currencyScale: o.currencyScale,
+      isPrimaryCurrency: o.isPrimaryCurrency,
+    });
+  }
+  return out;
+}
