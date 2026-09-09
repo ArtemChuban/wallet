@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
+  assertGraceDomAllowedForType,
   createAccountSchema,
   updateAccountNameSchema,
+  updateGraceScheduleSchema,
 } from "./account";
 
 describe("createAccountSchema (ACCT-01 / QUICK-0i7 ASSET)", () => {
@@ -164,5 +166,87 @@ describe("updateAccountNameSchema (ACCT-01 / D-15)", () => {
   it("rejects empty name", () => {
     expect(updateAccountNameSchema.safeParse({ name: "" }).success).toBe(false);
     expect(updateAccountNameSchema.safeParse({ name: "  " }).success).toBe(false);
+  });
+});
+
+describe("updateGraceScheduleSchema (CYCLE-01 / D-02 / D-03)", () => {
+  it("accepts both statementDayOfMonth 21 and dueDayOfMonth 15", () => {
+    const result = updateGraceScheduleSchema.safeParse({
+      accountId: 1,
+      statementDayOfMonth: 21,
+      dueDayOfMonth: 15,
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.statementDayOfMonth).toBe(21);
+      expect(result.data.dueDayOfMonth).toBe(15);
+    }
+  });
+
+  it("rejects partial schedule with Russian pairing message (D-03)", () => {
+    for (const payload of [
+      { accountId: 1, statementDayOfMonth: 21, dueDayOfMonth: null },
+      { accountId: 1, statementDayOfMonth: null, dueDayOfMonth: 15 },
+      { accountId: 1, statementDayOfMonth: 21 },
+    ] as const) {
+      const result = updateGraceScheduleSchema.safeParse(payload);
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        const messages = result.error.issues.map((i) => i.message);
+        expect(messages).toContain("Укажите обе даты или очистите обе");
+      }
+    }
+  });
+
+  it("accepts both null / both omitted as clear intent at schema layer (D-03)", () => {
+    const bothNull = updateGraceScheduleSchema.safeParse({
+      accountId: 1,
+      statementDayOfMonth: null,
+      dueDayOfMonth: null,
+    });
+    expect(bothNull.success).toBe(true);
+    if (bothNull.success) {
+      expect(bothNull.data.statementDayOfMonth).toBeNull();
+      expect(bothNull.data.dueDayOfMonth).toBeNull();
+    }
+
+    const omitted = updateGraceScheduleSchema.safeParse({ accountId: 1 });
+    expect(omitted.success).toBe(true);
+    if (omitted.success) {
+      expect(omitted.data.statementDayOfMonth).toBeNull();
+      expect(omitted.data.dueDayOfMonth).toBeNull();
+    }
+  });
+
+  it("rejects DOM outside 1–31", () => {
+    for (const day of [0, 32] as const) {
+      const result = updateGraceScheduleSchema.safeParse({
+        accountId: 1,
+        statementDayOfMonth: day,
+        dueDayOfMonth: day,
+      });
+      expect(result.success).toBe(false);
+    }
+  });
+
+  it("rejects ASSET (non-FIAT_CREDIT) when DOM fields are set (D-02)", () => {
+    const result = updateGraceScheduleSchema.safeParse({
+      accountId: 1,
+      accountType: "ASSET",
+      statementDayOfMonth: 21,
+      dueDayOfMonth: 15,
+    });
+    expect(result.success).toBe(false);
+    if (!result.success) {
+      const messages = result.error.issues.map((i) => i.message);
+      expect(messages).toContain("Даты грейса только для кредитного счёта");
+    }
+  });
+
+  it("assertGraceDomAllowedForType rejects non-credit when DOM set", () => {
+    expect(assertGraceDomAllowedForType("ASSET", 21, 15)).toBe(false);
+    expect(assertGraceDomAllowedForType("FIAT_DEBIT", 21, 15)).toBe(false);
+    expect(assertGraceDomAllowedForType("FIAT_CREDIT", 21, 15)).toBe(true);
+    expect(assertGraceDomAllowedForType("ASSET", null, null)).toBe(true);
   });
 });
