@@ -15,7 +15,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 ### Obligation
 
 - [x] **OBL-01**: User can manually enter the amount due by the end of the interest-free window for a cycle
-- [ ] **OBL-02**: User can record early repayment / close of that obligation
+- [x] **OBL-02**: User can record early repayment / close of that obligation
 - [ ] **OBL-03**: When due date has passed without close, UI highlights the obligation so the user can act
 
 ### Forecast
@@ -73,7 +73,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CYCLE-01 | Phase 19 | Complete |
 | CYCLE-02 | Phase 20 | Complete |
 | OBL-01 | Phase 20 | Complete |
-| OBL-02 | Phase 20 | Pending |
+| OBL-02 | Phase 20 | Complete |
 | OBL-03 | Phase 20 | Pending |
 | UX-01 | Phase 20 | Pending |
 | GRFCST-01 | Phase 21 | Pending |

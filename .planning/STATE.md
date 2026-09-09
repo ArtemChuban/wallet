@@ -5,16 +5,16 @@ milestone_name: Кредитка
 current_phase: 20
 current_phase_name: Obligation CRUD + cycle UI
 status: executing
-stopped_at: Completed 20-01-PLAN.md
-last_updated: "2026-09-09T12:27:32.000Z"
+stopped_at: Completed 20-02-PLAN.md
+last_updated: "2026-09-09T12:36:08.668Z"
 last_activity: 2026-09-09
 last_activity_desc: Completed 20-01 tracer (Грейс → schedule → create)
-state_head: 3a8f1acc1627ef8313e9305c2fd1af0d3046ad0b
+state_head: a16489d6e8de353c6efd01018081f487bd4a80fa
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 8
-  completed_plans: 6
+  completed_plans: 7
   percent: 20
 ---
 
@@ -25,16 +25,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 18 — Bank contract study + discuss locks
+**Current focus:** Phase 20 — Obligation CRUD + cycle UI (Plan 02 next)
 
 ## Current Position
 
 Phase: 20 — Obligation CRUD + cycle UI
-Plan: 20-01…03 planned (not executed)
-Status: Plan-check PASSED — ready to execute
-Last activity: 2026-09-09 — Phase 20 plan-check PASSED after Wave 0 revision
+Plan: 3 of 3
+Status: 20-01 complete — ready for 20-02
+Last activity: 2026-09-09 — Completed 20-01-PLAN.md
 
-Progress: [██░░░░░░░░] 20% (2/5 phases planned; 0/3 Phase 20 plans executed)
+Progress: [██░░░░░░░░] 20%
 
 ## Performance Metrics
 
@@ -54,6 +54,7 @@ Progress: [██░░░░░░░░] 20% (2/5 phases planned; 0/3 Phase 20
 | Phase 18 P01 | 3min | 2 tasks | 2 files |
 | Phase 18 P02 | 3min | 3 tasks | 6 files |
 | Phase 20 P01 | 9min | 3 tasks | 12 files |
+| Phase 20 P02 | 6 | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -73,6 +74,9 @@ v1.3 locks from Phase 18 (see `18-CONTEXT.md`):
 - [Phase 20]: Грейс label on AccountList trigger for source-scan verify
 - [Phase 20]: FormData null note treated as optional empty in grace Zod
 - [Phase 20]: CLOSED omitted from mergeGraceListRows until Plan 02
+- [Phase 20]: close/reopen are dedicated exports; validate via update schema after load
+- [Phase 20]: CLOSED list stays outside mergeGraceListRows — separate collapsed section (D-06)
+- [Phase 20]: Edit amount uses formatMinorToMajorExact for input prefill (no thousand spaces)
 
 ### Pending Todos
 
@@ -105,11 +109,11 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-09T12:27:31.936Z
-Stopped at: Completed 20-01-PLAN.md
+Last session: 2026-09-09T12:36:08.587Z
+Stopped at: Completed 20-02-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
 
-- `/gsd-execute-phase 20` — run Wave 1 (20-01) then 20-02 / 20-03
-- Or plan-checker first if `plan_checker_enabled`
+- `/gsd-execute-phase 20` — continue Wave 2 (20-02) then 20-03
+- Or execute plan 20-02 alone
