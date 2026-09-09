@@ -47,3 +47,15 @@ describe("forecast chart chrome file-scan", () => {
     expect(shellSrc).toMatch(/role=["']status["']/);
   });
 });
+
+/** Plan 02 owner — banner lists unique FX codes; quiet role=status retained. */
+describe.skip("plan-02 banner FX codes (GRFCST-02 / D-15)", () => {
+  it.todo("banner joins unique missing currency codes (USD, EUR pattern)");
+  it.todo("partial banner keeps role=status (quiet)");
+});
+
+/** Plan 03 owner — locked tooltip RU from C-04. */
+describe.skip("plan-03 tooltip RU (C-04 / GRFCST-01)", () => {
+  it.todo("tooltip includes «Платёж для беспроцентного»");
+  it.todo("tooltip includes «NW без изменения (оплата карты)»");
+});

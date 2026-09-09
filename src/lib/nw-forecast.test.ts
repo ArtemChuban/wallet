@@ -259,3 +259,13 @@ describe("forecast FX", () => {
     expect(result.points).toEqual([]);
   });
 });
+
+/** Plan 01 Wave 0 — tracer (Task 3) greens these; do not hard-fail. */
+describe("grace A′ / membership / FX codes", () => {
+  it.todo("future OPEN grace sampled with ΔNW=0 (A′ / C-01 / D-06 / GRFCST-01)");
+  it.todo("overdue OPEN fold → today sampleAsOf (D-01 / D-02 / D-03)");
+  it.todo("grace-only horizon → non-empty flat points (D-07)");
+  it.todo("same-day income+grace: NW moves by income only (C-03 / D-06)");
+  it.todo("FX miss codes unique alphabetical across income+grace (D-15 / D-17 / GRFCST-02)");
+  it.todo("CLOSED never fed as grace ForecastSlot (C-07)");
+});
