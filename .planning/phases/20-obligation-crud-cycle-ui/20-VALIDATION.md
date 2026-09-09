@@ -40,13 +40,13 @@ created: "2026-09-09"
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 20-01-T1 | 01 | 1 | OBL/UX infra | — | N/A | unit | `npx vitest run src/lib/validations/credit-grace.test.ts` | ❌ W0 | ⬜ pending |
+| 20-01-T1 | 01 | 1 | OBL/UX infra | — | N/A | unit | `npx vitest run src/lib/validations/credit-grace.test.ts src/app/accounts/actions.test.ts src/components/accounts/credit-grace-ui.test.ts` (todo/skip only — no hard-fail poison) | ❌ W0 | ⬜ pending |
 | 20-01-T2 | 01 | 1 | OBL-02 prep | — | pendingLabel API | source | `grep -q pendingLabel src/components/ui/destructive-confirm-step.tsx` | ✅ | ⬜ pending |
-| 20-01-T3 | 01 | 1 | CYCLE-02, OBL-01 | T-20-02/03 | server dueAsOf; no balanceSnapshot | unit + files | `npx vitest run src/lib/credit-grace.test.ts src/lib/validations/credit-grace.test.ts src/app/accounts/actions.test.ts` | ⚠️ partial | ⬜ pending |
-| 20-02-T1 | 02 | 2 | OBL-01, OBL-02 | T-20-03 | no balanceSnapshot writes | unit | `npx vitest run src/app/accounts/actions.test.ts` | ⚠️ extend | ⬜ pending |
-| 20-02-T2 | 02 | 2 | OBL-02 | T-20-06 | DestructiveConfirmStep only | UI source | `npx vitest run src/components/accounts/credit-grace-ui.test.ts` | ❌ W0 | ⬜ pending |
+| 20-01-T3 | 01 | 1 | CYCLE-02, OBL-01 | T-20-02/03 | server dueAsOf; no balanceSnapshot | unit + files | `npx vitest run … &amp;&amp; npx vitest run src/app/accounts/actions.test.ts -t createCreditGraceObligation &amp;&amp; npx vitest run src/components/accounts/credit-grace-ui.test.ts` | ⚠️ partial | ⬜ pending |
+| 20-02-T1 | 02 | 2 | OBL-01, OBL-02 | T-20-03 | no balanceSnapshot writes | unit | `npx vitest run src/app/accounts/actions.test.ts` (unskip update/close/reopen) | ⚠️ extend | ⬜ pending |
+| 20-02-T2 | 02 | 2 | OBL-02 | T-20-06 | DestructiveConfirmStep only | UI source | `npx vitest run src/components/accounts/credit-grace-ui.test.ts` (plan-03 still describe.skip) | ❌ W0 | ⬜ pending |
 | 20-03-T1 | 03 | 3 | OBL-03, CYCLE-02 | T-20-08 | isGraceOverdue chrome | unit + UI | `npx vitest run src/lib/credit-grace.test.ts src/components/accounts/credit-grace-ui.test.ts` | ⚠️ | ⬜ pending |
-| 20-03-T2 | 03 | 3 | UX-01 | T-20-09 | disclaimer + Задолженность | UI source | `npx vitest run src/components/accounts/credit-grace-ui.test.ts src/app/accounts/actions.test.ts` | ❌ W0 | ⬜ pending |
+| 20-03-T2 | 03 | 3 | UX-01 | T-20-09 | disclaimer + Задолженность | UI source | `npx vitest run src/components/accounts/credit-grace-ui.test.ts src/app/accounts/actions.test.ts` (plan-03 unskipped) | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -56,9 +56,9 @@ created: "2026-09-09"
 
 ## Wave 0 Requirements
 
-- [ ] `src/lib/validations/credit-grace.test.ts` — schema pairing / positive amount / closedAsOf refine
-- [ ] Extend `src/app/accounts/actions.test.ts` — create / update / close / reopen / P2002 / no `balanceSnapshot`
-- [ ] `src/components/accounts/credit-grace-ui.test.ts` (or AccountList.test extend) — DestructiveConfirmStep import, no `window.confirm`, locked RU strings, grace button only on credit
+- [ ] `src/lib/validations/credit-grace.test.ts` — schema pairing / positive amount / closedAsOf refine (**green in Wave 0**)
+- [ ] Extend `src/app/accounts/actions.test.ts` — create as it.todo (Plan 01 T3 greens); update/close/reopen as describe.skip or it.todo (Plan 02 greens) — **no hard-failing cross-wave expects**
+- [ ] `src/components/accounts/credit-grace-ui.test.ts` — owner describes: plan-01 it.todo→green in T3; plan-02/plan-03 describe.skip until those plans — **full-file vitest exits 0 after each wave**
 
 ---
 

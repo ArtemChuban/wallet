@@ -410,22 +410,11 @@ prisma.account.findMany({
 
 **If empty table were required:** not applicable — three discretion assumptions logged.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Amount dialog nesting vs sibling**
-   - What we know: IncomeFact is sibling dialog; DebtDetail embeds tabs.
-   - What's unclear: grace amount create/edit UX density.
-   - Recommendation: **sibling `CreditGraceAmountDialog`** opened from CTA / row edit (IncomeFact pattern); keep close/reopen as steps inside `CreditGraceDialog`.
-
-2. **Dashboard «долг» label**
-   - What we know: AccountList + dashboard charts still say «долг».
-   - What's unclear: whether UX-01 mandates all surfaces this phase.
-   - Recommendation: **AccountList + grace dialog** mandatory; dashboard rename optional follow-up / Phase 21 polish unless UI-SPEC expands.
-
-3. **Close action shape**
-   - What we know: `updateCreditGraceObligationSchema` already accepts status + closedAsOf.
-   - What's unclear: dedicated `closeCreditGraceObligation` vs generic update.
-   - Recommendation: thin wrappers `close` / `reopen` calling update semantics for clearer tests + RU messages.
+1. **Amount dialog nesting vs sibling** — **RESOLVED:** sibling `CreditGraceAmountDialog` (IncomeFact pattern); close/reopen stay steps inside `CreditGraceDialog` (20-01 / 20-02 plans).
+2. **Dashboard «долг» label** — **RESOLVED:** AccountList + grace dialog only this phase; dashboard rename out of scope (20-03 / RESEARCH A2).
+3. **Close action shape** — **RESOLVED:** thin wrappers `closeCreditGraceObligation` / `reopenCreditGraceObligation` over update semantics (20-02).
 
 ## Environment Availability
 
