@@ -1,7 +1,10 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   cycleStartAsOf,
   dueAsOfForCycle,
+  isGraceOverdue,
   listCycleWindows,
   resolveCurrentAndNext,
 } from "@/lib/credit-grace";
@@ -95,5 +98,22 @@ describe("resolveCurrentAndNext (RESEARCH Pattern 3)", () => {
       current: { cycleStartAsOf: "2026-01-21", dueAsOf: "2026-02-15" },
       next: { cycleStartAsOf: "2026-02-21", dueAsOf: "2026-03-15" },
     });
+  });
+});
+
+describe("isGraceOverdue (D-07)", () => {
+  it("false on inclusive due day; true calendar day after", () => {
+    expect(isGraceOverdue("2026-02-15", "2026-02-15")).toBe(false);
+    expect(isGraceOverdue("2026-02-15", "2026-02-16")).toBe(true);
+  });
+});
+
+describe("GRISO isolation smoke (T-19-03)", () => {
+  it("net-worth and historical-series do not import credit-grace", () => {
+    const root = join(process.cwd(), "src/lib");
+    for (const file of ["net-worth.ts", "historical-series.ts"]) {
+      const src = readFileSync(join(root, file), "utf8");
+      expect(src).not.toMatch(/credit-grace/);
+    }
   });
 });
