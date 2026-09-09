@@ -6,8 +6,10 @@ import { calendarDateToday } from "@/lib/balances";
 import { ensureSqlitePragmas, prisma } from "@/lib/db";
 import { parseMajorToMinor } from "@/lib/money";
 import {
+  assertGraceDomAllowedForType,
   createAccountSchema,
   updateAccountNameSchema,
+  updateGraceScheduleSchema,
 } from "@/lib/validations/account";
 import {
   deleteBalanceSchema,
@@ -20,6 +22,9 @@ export type AccountActionState = {
     type?: string[];
     currencyCode?: string[];
     creditLimitMajor?: string[];
+    accountId?: string[];
+    statementDayOfMonth?: string[];
+    dueDayOfMonth?: string[];
   };
   message?: string;
   success?: boolean;
@@ -170,6 +175,84 @@ export async function updateAccountName(
     if (isUniqueNameViolation(error)) {
       return { errors: { name: ["Счёт с таким названием уже есть"] } };
     }
+    return {
+      message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+    };
+  }
+
+  revalidatePath("/accounts");
+  revalidatePath("/");
+  return { success: true, message: "Сохранено" };
+}
+
+/**
+ * Persist dual DOM schedule on FIAT_CREDIT only (CYCLE-01 / D-01 / D-02).
+ * Clears both null only when zero OPEN obligations (D-14). Never mutates obligation rows (D-04 / D-05).
+ */
+export async function updateGraceSchedule(
+  _prev: AccountActionState,
+  formData: FormData,
+): Promise<AccountActionState> {
+  const validated = updateGraceScheduleSchema.safeParse({
+    accountId: formData.get("accountId"),
+    statementDayOfMonth: formData.get("statementDayOfMonth"),
+    dueDayOfMonth: formData.get("dueDayOfMonth"),
+  });
+
+  if (!validated.success) {
+    return { errors: validated.error.flatten().fieldErrors };
+  }
+
+  const { accountId, statementDayOfMonth, dueDayOfMonth } = validated.data;
+
+  try {
+    await ensureSqlitePragmas();
+
+    const account = await prisma.account.findUnique({
+      where: { id: accountId },
+    });
+    if (!account) {
+      return {
+        message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+      };
+    }
+
+    if (
+      !assertGraceDomAllowedForType(
+        account.type,
+        statementDayOfMonth,
+        dueDayOfMonth,
+      )
+    ) {
+      return { message: "Даты грейса только для кредитного счёта" };
+    }
+
+    if (account.type !== "FIAT_CREDIT") {
+      return { message: "Даты грейса только для кредитного счёта" };
+    }
+
+    const clearing =
+      statementDayOfMonth === null && dueDayOfMonth === null;
+    if (clearing) {
+      const openCount = await prisma.creditGraceObligation.count({
+        where: { accountId, status: "OPEN" },
+      });
+      if (openCount > 0) {
+        return {
+          message:
+            "Нельзя очистить график при открытых обязательствах грейса",
+        };
+      }
+    }
+
+    await prisma.account.update({
+      where: { id: accountId },
+      data: {
+        statementDayOfMonth,
+        dueDayOfMonth,
+      },
+    });
+  } catch {
     return {
       message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
     };
