@@ -4,18 +4,18 @@ milestone: v1.3
 milestone_name: Кредитка
 current_phase: 22
 current_phase_name: GRACEISO regression + polish
-status: executing
-stopped_at: Completed 22-01-PLAN.md
-last_updated: "2026-09-09T23:27:43.246Z"
+status: phase_complete
+stopped_at: Completed 22-02-PLAN.md — awaiting verify-work / milestone close
+last_updated: "2026-09-09T23:29:48.000Z"
 last_activity: 2026-09-10
-last_activity_desc: Phase 22 Plan 01 complete — GRISO twin green; 22-02 next
+last_activity_desc: Phase 22 complete — GRISO suite green + GRISO-01 gate hygiene (D-12)
 state_head: 25b68aa
 progress:
   total_phases: 5
-  completed_phases: 4
+  completed_phases: 5
   total_plans: 13
-  completed_plans: 12
-  percent: 80
+  completed_plans: 13
+  percent: 100
 ---
 
 # Project State
@@ -25,16 +25,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 22 — GRACEISO regression + polish
+**Current focus:** Phase 22 complete — GRACEISO regression + polish (awaiting verify-work)
 
 ## Current Position
 
 Phase: 22 — GRACEISO regression + polish
-Plan: 22-02 next (of 2)
-Status: Plan 01 complete — execute 22-02 gate hygiene
-Last activity: 2026-09-10 — 22-01 SUMMARY green (GRISO twin + write-gates)
+Plan: 2 of 2 complete
+Status: Phase 22 plans complete — GRISO-01 hygiene synced; next `/gsd-verify-work` or milestone close
+Last activity: 2026-09-10 — GRISO suite green + REQUIREMENTS/ROADMAP/STATE gate hygiene (D-12)
 
-Progress: [████████░░] 80%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -125,10 +125,10 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-09T23:27:43.116Z
-Stopped at: Completed 22-01-PLAN.md
+Last session: 2026-09-09T23:29:48.000Z
+Stopped at: Completed 22-02-PLAN.md — awaiting verify-work / milestone close
 Resume file: None
 
 ## Operator Next Steps
 
-- Execute `/gsd-execute-phase 22` remaining plan 22-02 (gate hygiene), or run 22-02 alone
+- Run `/gsd-verify-work` for Phase 22 (Orca smoke only if OPERATOR demands — D-13); then `/gsd-complete-milestone` for v1.3 when ready

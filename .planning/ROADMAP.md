@@ -58,7 +58,7 @@ Full detail: [milestones/v1.2-ROADMAP.md](./milestones/v1.2-ROADMAP.md)
 - [x] **Phase 19: Schema + pure grace domain math** - Persist grace config + obligation model; trustworthy due-date math (completed 2026-09-09)
 - [x] **Phase 20: Obligation CRUD + cycle UI** - Amount due, early close, cycle list, overdue highlight, debt≠grace copy (completed 2026-09-09)
 - [x] **Phase 21: Капитал forecast integration** - «Прогноз» includes open grace obligations with FX LOCF honesty (completed 2026-09-09)
-- [ ] **Phase 22: GRACEISO regression + polish** - Prove grace never touches BalanceSnapshot / historical NW LOCF
+- [x] **Phase 22: GRACEISO regression + polish** - Prove grace never touches BalanceSnapshot / historical NW LOCF (completed 2026-09-10)
 
 ## Phase Details
 
@@ -168,12 +168,12 @@ Plans:
   2. Historical NW / past LOCF series stay identical with vs without grace data (golden / identity check)
   3. Isolation is covered by automated regression (file-scan / suite twin of INISO) suitable for milestone close
 
-**Plans**: 1/2 plans executed
+**Plans**: 2/2 plans executed
 
 Plans:
 
 - [x] 22-01-PLAN.md — GRISO twin suite (file-scan + golden) + five grace write-gates
-- [ ] 22-02-PLAN.md — Gate hygiene: REQUIREMENTS/ROADMAP/STATE after green suite
+- [x] 22-02-PLAN.md — Gate hygiene: REQUIREMENTS/ROADMAP/STATE after green suite
 
 ## Progress
 
@@ -186,7 +186,7 @@ Plans:
 | 19. Schema + pure grace domain math | v1.3 | 3/3 | Complete    | 2026-09-09 |
 | 20. Obligation CRUD + cycle UI | v1.3 | 3/3 | Complete    | 2026-09-09 |
 | 21. Капитал forecast integration | v1.3 | 3/3 | Complete    | 2026-09-09 |
-| 22. GRACEISO regression + polish | v1.3 | 1/2 | In Progress|  |
+| 22. GRACEISO regression + polish | v1.3 | 2/2 | Complete    | 2026-09-10 |
 
 ---
-*Roadmap updated: 2026-09-10 — Phase 22 plans 22-01…02*
+*Roadmap updated: 2026-09-10 — Phase 22 plans 22-01…02 complete; GRISO-01 gate hygiene*
