@@ -70,7 +70,7 @@ Exceptions:
 - Chart height stays **200px** (`h-[200px]`) — existing Капитал contract; not a spacing-scale token.
 - Minimum tap target **44×44px** for range-control segments (existing `DashboardRangeControl`).
 - Forecast partial banner: same geometry as Phase 17 — `rounded-lg border border-border bg-muted/60 p-4` — sit **immediately under** NW chart (inside chart section), **not** inside Person/`/income` stats or grace dialogs.
-- Same-day tooltip: income/forecast block and grace block share one tooltip card; separate with `border-t border-border/50` + `pt-1.5` / `mt-0.5` (xs/sm) — do **not** open a second floating tooltip.
+- Same-day tooltip: income/forecast block and grace block share one tooltip card; separate with `border-t border-border/50` + `pt-1` / `mt-1` (4px / xs) — do **not** open a second floating tooltip. (Existing «Итого» chrome uses `pt-1.5`/`mt-0.5`; new grace-block separator must stay on the 4px scale.)
 
 Source: Phase 17 Spacing; existing `NetWorthHistoryChart` / `DashboardChartsShell`; CONTEXT D-10 / D-14.
 
