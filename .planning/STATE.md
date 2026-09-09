@@ -4,12 +4,12 @@ milestone: v1.3
 milestone_name: Кредитка
 current_phase: 21
 current_phase_name: Капитал forecast integration
-status: executing
+status: phase_complete
 stopped_at: Completed 21-03-PLAN.md
 last_updated: "2026-09-09T20:43:02.373Z"
 last_activity: 2026-09-09
-last_activity_desc: Completed 21-02 forecastGrace shell + banner codes
-state_head: 8dc5b5087fdb6716128c76cf2fb3797d431b5611
+last_activity_desc: Completed 21-03 tooltip two-block grace chrome
+state_head: d891de5
 progress:
   total_phases: 5
   completed_phases: 2
@@ -30,9 +30,9 @@ See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 ## Current Position
 
 Phase: 21 — Капитал forecast integration
-Plan: 21-03 (Wave 3) — next
-Status: Executing
-Last activity: 2026-09-09 — Completed 21-02 (forecastGrace shell + banner codes)
+Plan: 21-03 of 03 — complete (all phase plans done)
+Status: Phase plans complete — ready for verify-work
+Last activity: 2026-09-09 — Completed 21-03 (tooltip C-04 grace chrome)
 
 Progress: [████░░░░░░] 40%
 
@@ -98,7 +98,7 @@ v1.3 locks from Phase 18 (see `18-CONTEXT.md`):
 
 ### Blockers/Concerns
 
-- Phase 21: implement A′ NW-neutral + same-day income/grace tooltip (locked D-11…D-13; not A-vs-B reopen)
+- Phase 21: verify-work UAT — recheck tooltip grace block with OPEN obligation (live DB had obligations=[])
 
 ### Roadmap Evolution
 
