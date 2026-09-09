@@ -48,6 +48,9 @@ const DOM_NON_RECALC_HINT =
 const OVERDUE_INTEREST_HINT =
   "Срок оплаты прошёл — банк может начислить проценты.";
 
+const CLEAR_SCHEDULE_BLOCKED =
+  "Нельзя очистить расписание, пока есть обязательства «К оплате»";
+
 const CLOSE_CONFIRM_MESSAGE = "Отметить обязательство оплаченным?";
 const REOPEN_CONFIRM_MESSAGE =
   "Вернуть в «К оплате»? Дата оплаты будет очищена.";
@@ -131,6 +134,10 @@ function CreditGraceBody({
   const closedObligations = account.creditGraceObligations.filter(
     (o) => o.status === "CLOSED",
   );
+  const openCount = account.creditGraceObligations.filter(
+    (o) => o.status === "OPEN",
+  ).length;
+  const canClearSchedule = openCount === 0;
 
   function handleConfirm() {
     if (!confirm) return;
@@ -297,12 +304,32 @@ function CreditGraceBody({
           </p>
         ) : null}
 
-        <DialogFooter>
+        <DialogFooter className="flex-col gap-2 sm:flex-col sm:space-x-0">
           <Button type="submit" disabled={isPending}>
             {isPending ? "Сохранение…" : "Сохранить расписание"}
           </Button>
         </DialogFooter>
       </form>
+
+      {hasSchedule ? (
+        <form action={formAction} className="grid gap-2">
+          <input type="hidden" name="accountId" value={account.id} />
+          <input type="hidden" name="statementDayOfMonth" value="" />
+          <input type="hidden" name="dueDayOfMonth" value="" />
+          <Button
+            type="submit"
+            variant="outline"
+            disabled={isPending || !canClearSchedule}
+          >
+            {isPending ? "Сохранение…" : "Очистить расписание"}
+          </Button>
+          {!canClearSchedule ? (
+            <p className="text-sm text-muted-foreground" role="status">
+              {CLEAR_SCHEDULE_BLOCKED}
+            </p>
+          ) : null}
+        </form>
+      ) : null}
 
       {hasSchedule ? (
         <ul className="grid gap-3">
@@ -511,6 +538,7 @@ export function CreditGraceDialog({
             account={account}
             today={today}
             onScheduleSaved={() => {
+              setFormKey((k) => k + 1);
               router.refresh();
             }}
           />

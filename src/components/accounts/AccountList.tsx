@@ -88,7 +88,7 @@ function LocfDisplay({ account }: { account: AccountListItem }) {
         </span>
         <span className="mx-2 text-muted-foreground">·</span>
         <span className="text-muted-foreground">
-          долг {debt} {code}
+          Задолженность {debt} {code}
         </span>
         <span className="mx-2 text-muted-foreground">·</span>
         <span className="text-muted-foreground">на {asOf}</span>

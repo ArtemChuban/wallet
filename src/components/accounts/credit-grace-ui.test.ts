@@ -85,13 +85,14 @@ describe("plan-03 overdue chrome (OBL-03 / D-07)", () => {
   });
 });
 
-describe.skip("plan-03 UX-01 + clear schedule (owned by task 2)", () => {
+describe("plan-03 UX-01 + clear schedule (OBL-03 / UX-01 / D-14)", () => {
   it("AccountList credit debt label is Задолженность", () => {
     const listSrc = readFileSync(
       "src/components/accounts/AccountList.tsx",
       "utf8",
     );
     expect(listSrc).toMatch(/Задолженность/);
+    expect(listSrc).not.toMatch(/\bдолг\b/);
   });
 
   it("amount dialog shows UX-01 disclaimer", () => {
@@ -116,6 +117,16 @@ describe.skip("plan-03 UX-01 + clear schedule (owned by task 2)", () => {
     expect(src).not.toMatch(/defaultValue=\{?["']?21/);
     expect(src).not.toMatch(/defaultValue=\{?["']?15/);
     expect(src).not.toMatch(/defaultValue=.15/);
+  });
+
+  it("grace dialog never embeds snapshot LOCF debt amount", () => {
+    const src = readFileSync(
+      "src/components/accounts/CreditGraceDialog.tsx",
+      "utf8",
+    );
+    expect(src).not.toMatch(/creditDebtMinor/);
+    expect(src).not.toMatch(/locf/);
+    expect(src).not.toMatch(/Задолженность/);
   });
 
   it("grace button gated to FIAT_CREDIT; no native confirm in grace files", () => {
