@@ -16,7 +16,7 @@ affects: [v1.3 milestone close, gsd-verify-work]
 actuals:
   tokens: 1169
   tasks: 2
-  commits: 1
+  commits: 2
 
 tech-stack:
   added: []
@@ -88,7 +88,7 @@ status: complete
 1. **Task 1: Mark GRISO-01 complete in REQUIREMENTS** — no commit (already `[x]` + Complete; verify greps exit 0)
 2. **Task 2: Sync ROADMAP Phase 22 progress + STATE** - `2ecedef` (docs)
 
-**Plan metadata:** (see final docs commit)
+**Plan metadata:** `ed1af79` (docs: complete plan)
 
 ## Files Created/Modified
 
