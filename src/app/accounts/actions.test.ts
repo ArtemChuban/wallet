@@ -18,6 +18,11 @@ vi.mock("@/lib/db", () => ({
       upsert: vi.fn(),
       delete: vi.fn(),
     },
+    creditGraceObligation: {
+      count: vi.fn(),
+      create: vi.fn(),
+      update: vi.fn(),
+    },
   },
   ensureSqlitePragmas: vi.fn(),
 }));
@@ -42,6 +47,7 @@ import {
   createAccount,
   deleteBalanceSnapshot,
   updateAccountName,
+  updateGraceSchedule,
   upsertBalanceSnapshot,
 } from "./actions";
 
@@ -52,6 +58,7 @@ describe("accounts/actions exports (D-14 / T-02-10)", () => {
       expect.arrayContaining([
         "createAccount",
         "updateAccountName",
+        "updateGraceSchedule",
         "upsertBalanceSnapshot",
         "deleteBalanceSnapshot",
       ]),
@@ -339,5 +346,119 @@ describe("deleteBalanceSnapshot (BAL-01 / D-10 / D-11)", () => {
     expect(result.message).toBe(
       "Не удалось удалить снимок. Попробуйте снова.",
     );
+  });
+});
+
+describe("updateGraceSchedule (CYCLE-01 / D-02 / D-14)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+    vi.mocked(prisma.account.update).mockResolvedValue({} as never);
+    vi.mocked(prisma.creditGraceObligation.count).mockResolvedValue(0);
+  });
+
+  it("D-02: ASSET + dual DOM → error; account.update not called", async () => {
+    vi.mocked(prisma.account.findUnique).mockResolvedValue({
+      id: 3,
+      type: "ASSET",
+      statementDayOfMonth: null,
+      dueDayOfMonth: null,
+    } as never);
+
+    const formData = new FormData();
+    formData.set("accountId", "3");
+    formData.set("statementDayOfMonth", "21");
+    formData.set("dueDayOfMonth", "15");
+
+    const result = await updateGraceSchedule({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBe("Даты грейса только для кредитного счёта");
+    expect(prisma.account.update).not.toHaveBeenCalled();
+    expect(prisma.creditGraceObligation.create).not.toHaveBeenCalled();
+    expect(prisma.creditGraceObligation.update).not.toHaveBeenCalled();
+  });
+
+  it("D-14: FIAT_CREDIT clear while OPEN > 0 → error; update not called", async () => {
+    vi.mocked(prisma.account.findUnique).mockResolvedValue({
+      id: 4,
+      type: "FIAT_CREDIT",
+      statementDayOfMonth: 21,
+      dueDayOfMonth: 15,
+    } as never);
+    vi.mocked(prisma.creditGraceObligation.count).mockResolvedValue(2);
+
+    const formData = new FormData();
+    formData.set("accountId", "4");
+    formData.set("statementDayOfMonth", "");
+    formData.set("dueDayOfMonth", "");
+
+    const result = await updateGraceSchedule({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.message).toBe(
+      "Нельзя очистить график при открытых обязательствах грейса",
+    );
+    expect(prisma.creditGraceObligation.count).toHaveBeenCalledWith({
+      where: { accountId: 4, status: "OPEN" },
+    });
+    expect(prisma.account.update).not.toHaveBeenCalled();
+  });
+
+  it("FIAT_CREDIT + DOM 21/15 → success; updates only DOM fields (D-01)", async () => {
+    vi.mocked(prisma.account.findUnique).mockResolvedValue({
+      id: 5,
+      type: "FIAT_CREDIT",
+      statementDayOfMonth: null,
+      dueDayOfMonth: null,
+    } as never);
+
+    const formData = new FormData();
+    formData.set("accountId", "5");
+    formData.set("statementDayOfMonth", "21");
+    formData.set("dueDayOfMonth", "15");
+
+    const result = await updateGraceSchedule({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.account.update).toHaveBeenCalledTimes(1);
+    expect(prisma.account.update).toHaveBeenCalledWith({
+      where: { id: 5 },
+      data: { statementDayOfMonth: 21, dueDayOfMonth: 15 },
+    });
+    const data = vi.mocked(prisma.account.update).mock.calls[0]![0]!.data;
+    expect(Object.keys(data as object).sort()).toEqual([
+      "dueDayOfMonth",
+      "statementDayOfMonth",
+    ]);
+    expect(prisma.creditGraceObligation.create).not.toHaveBeenCalled();
+    expect(prisma.creditGraceObligation.update).not.toHaveBeenCalled();
+    expect(revalidatePath).toHaveBeenCalledWith("/accounts");
+    expect(revalidatePath).toHaveBeenCalledWith("/");
+  });
+
+  it("D-14: FIAT_CREDIT clear with zero OPEN → success; both null", async () => {
+    vi.mocked(prisma.account.findUnique).mockResolvedValue({
+      id: 6,
+      type: "FIAT_CREDIT",
+      statementDayOfMonth: 21,
+      dueDayOfMonth: 15,
+    } as never);
+    vi.mocked(prisma.creditGraceObligation.count).mockResolvedValue(0);
+
+    const formData = new FormData();
+    formData.set("accountId", "6");
+    formData.set("statementDayOfMonth", "");
+    formData.set("dueDayOfMonth", "");
+
+    const result = await updateGraceSchedule({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.account.update).toHaveBeenCalledWith({
+      where: { id: 6 },
+      data: { statementDayOfMonth: null, dueDayOfMonth: null },
+    });
+    expect(prisma.creditGraceObligation.create).not.toHaveBeenCalled();
+    expect(prisma.creditGraceObligation.update).not.toHaveBeenCalled();
   });
 });
