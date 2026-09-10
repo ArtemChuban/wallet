@@ -54,7 +54,7 @@ created: "2026-09-10"
 - [x] `src/lib/mcp/tools/income.test.ts` — stubs for SIDE-02 overdue/actual + no-write
 - [x] `src/lib/mcp/tools/grace.test.ts` — stubs for SIDE-03 OPEN/CTA + overdue
 - [x] `src/lib/mcp/tools/forecast.test.ts` — stubs for SIDE-04 sparse / default horizon / events
-- [ ] Extend `src/lib/disol.test.ts` walls to `src/lib/mcp/reads/load-net-worth-asof.ts` + `tools/net-worth.ts`
+- [x] Extend `src/lib/disol.test.ts` walls to `src/lib/mcp/reads/load-net-worth-asof.ts` + `tools/net-worth.ts`
 - [ ] Optional `src/lib/mcp/isolation-contract.test.ts` — BalanceSnapshot never-write across SIDE files
 
 ---
