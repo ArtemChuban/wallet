@@ -39,7 +39,7 @@ created: "2026-09-10"
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status | fails_when |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|------------|
 | 24-01-T1 | 01 | 1 | CAP-01…04 W0 | — | N/A | unit | `npx vitest run src/lib/mcp/tools/accounts.test.ts src/lib/mcp/tools/net-worth.test.ts src/lib/mcp/tools/balances.test.ts src/lib/mcp/tools/fx.test.ts` | ✅ | ✅ green | stub missing / vitest non-zero / hard-fail poison |
-| 24-01-T2 | 01 | 1 | D-09 | T-24-01 | string minors | unit | `npx vitest run src/lib/mcp/serialize.test.ts` | ❌ W0 | ⬜ pending | vitest non-zero / "0 passed" |
+| 24-01-T2 | 01 | 1 | D-09 | T-24-01 | string minors | unit | `npx vitest run src/lib/mcp/serialize.test.ts` | ✅ | ✅ green | vitest non-zero / "0 passed" |
 | 24-01-T3 | 01 | 1 | D-05/06/08 | T-24-04 | zod asOf | unit | `npx vitest run src/lib/mcp/as-of.test.ts` | ❌ W0 | ⬜ pending | vitest non-zero / today bypass |
 | 24-02-T1 | 02 | 2 | CAP-02 | T-24-02 | computeNetWorthRows honesty | unit | `npx vitest run src/lib/mcp/tools/net-worth.test.ts src/lib/mcp/as-of.test.ts src/lib/mcp/serialize.test.ts` | ✅ W0 | ⬜ pending | markers absent / vitest non-zero |
 | 24-02-T2 | 02 | 2 | CAP-02 | T-24-02 | adapter parity | unit | `npx vitest run src/lib/mcp/tools/net-worth.test.ts src/lib/mcp/localhost-guard.test.ts src/app/api/mcp/route.test.ts` | ✅ W0 | ⬜ pending | vitest non-zero / CAP-02 todo left |
