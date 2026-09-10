@@ -126,13 +126,13 @@ Plans:
   3. Agent can list grace obligations via MCP; historical NW LOCF remains grace-free (GRISO-01)
   4. Agent can get Капитал forecast overlay (income + A′ grace) via MCP
 
-**Plans**: 2/4 plans executed
+**Plans**: 3/4 plans executed
 
 Plans:
 
 - [x] 25-01-PLAN.md — Wave 0 SIDE stubs + optionalHorizonEndSchema + disol MCP walls
 - [x] 25-02-PLAN.md — Tracer get_forecast_overlay (SIDE-04 sparse series)
-- [ ] 25-03-PLAN.md — list_debts + DISOL contract (SIDE-01)
+- [x] 25-03-PLAN.md — list_debts + DISOL contract (SIDE-01)
 - [ ] 25-04-PLAN.md — list_income + list_grace_obligations + isolation-contract finalize (SIDE-02/03)
 
 ### Phase 26: Connect Docs + Policy
@@ -176,5 +176,5 @@ Plans:
 | 22. GRACEISO regression + polish | v1.3 | 2/2 | Complete | 2026-09-10 |
 | 23. MCP Host + Localhost Safety | v1.4 | 2/2 | Complete | 2026-09-10 |
 | 24. Capital Read Tools | v1.4 | 4/4 | Complete    | 2026-09-10 |
-| 25. Side-Ledger Tools + Isolation | v1.4 | 2/4 | In Progress|  |
+| 25. Side-Ledger Tools + Isolation | v1.4 | 3/4 | In Progress|  |
 | 26. Connect Docs + Policy | v1.4 | 0/? | Not started | - |
