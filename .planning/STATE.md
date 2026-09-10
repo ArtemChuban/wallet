@@ -5,16 +5,16 @@ milestone_name: Local MCP
 current_phase: 25
 current_phase_name: Side-Ledger Tools + Isolation
 status: ready_to_execute
-stopped_at: Phase 25 plans created
-last_updated: "2026-09-10T17:25:00.000Z"
+stopped_at: Completed 25-01-PLAN.md
+last_updated: "2026-09-10T17:37:18.296Z"
 last_activity: 2026-09-10
 last_activity_desc: Phase 25 PLAN.md files written (25-01…25-04)
-state_head: c4e55011e66ebc545b5005c76b7dd4dc2baad1a8
+state_head: 53ed34a66b7e5b7ad79781af38137c1fa5ce09e1
 progress:
   total_phases: 4
   completed_phases: 1
-  total_plans: 6
-  completed_plans: 6
+  total_plans: 10
+  completed_plans: 7
   percent: 25
 ---
 
@@ -34,7 +34,7 @@ Plan: 25-01 ready (4 plans)
 Status: ready_to_execute
 Last activity: 2026-09-10 — Phase 25 plans created (25-01…25-04)
 
-Progress: [█████░░░░░] 50%
+Progress: [███░░░░░░░] 25%
 
 ## Performance Metrics
 
@@ -47,6 +47,11 @@ Progress: [█████░░░░░] 50%
 **By Phase:** v1.3 complete (18–22). v1.4: Phase 23 complete; Phase 24 verified — next Phase 25.
 
 *Updated after each plan completion*
+**Per-Plan Metrics:**
+
+| Plan | Duration | Tasks | Files |
+|------|----------|-------|-------|
+| Phase 25 P01 | 3min | 3 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -59,6 +64,9 @@ v1.4 locks (pending execution):
 - In-app MCP host (not sidecar / not app-spawned agent)
 - MCP v1.4 = read-only + Streamable HTTP on `/api/mcp`
 - Localhost Host/Origin + Compose `127.0.0.1` publish only
+- [Phase 25]: optionalHorizonEndSchema YYYY-MM-DD; default today+365 stays in forecast loader (D-04)
+- [Phase 25]: optionalIncomeRangeSchema both-or-neither from/to for list_income (A2)
+- [Phase 25]: disol MCP walls on load-net-worth-asof + tools/net-worth only (D-05)
 
 ### Pending Todos
 
@@ -93,6 +101,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-10T17:06:25.151Z
-Stopped at: Phase 25 plans created
-Resume file: .planning/phases/25-side-ledger-tools-isolation/25-01-PLAN.md
+Last session: 2026-09-10T17:37:18.227Z
+Stopped at: Completed 25-01-PLAN.md
+Resume file: None

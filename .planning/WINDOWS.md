@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 18
+open_count: 22
 waived_count: 0
 fixed_count: 5
-total_count: 23
-last_updated: 2026-09-10T16:04:03.667Z
+total_count: 27
+last_updated: 2026-09-10T17:37:01.270Z
 ---
 
 # Broken Windows Ledger
@@ -38,6 +38,10 @@ last_updated: 2026-09-10T16:04:03.667Z
 | 21 | 24 | stub | src/lib/mcp/tools/net-worth.test.ts |  | Wave 0 it.todo CAP stub until later plan greens | open |  | 2026-09-10T16:04:03.433Z |  |
 | 22 | 24 | stub | src/lib/mcp/tools/balances.test.ts |  | Wave 0 it.todo CAP stub until later plan greens | open |  | 2026-09-10T16:04:03.553Z |  |
 | 23 | 24 | stub | src/lib/mcp/tools/fx.test.ts |  | Wave 0 it.todo CAP stub until later plan greens | open |  | 2026-09-10T16:04:03.667Z |  |
+| 24 | 25 | stub | src/lib/mcp/tools/debts.test.ts |  | Wave 0 it.todo stubs for SIDE tool suite — filled by later plans | open |  | 2026-09-10T17:37:00.907Z |  |
+| 25 | 25 | stub | src/lib/mcp/tools/income.test.ts |  | Wave 0 it.todo stubs for SIDE tool suite — filled by later plans | open |  | 2026-09-10T17:37:01.029Z |  |
+| 26 | 25 | stub | src/lib/mcp/tools/grace.test.ts |  | Wave 0 it.todo stubs for SIDE tool suite — filled by later plans | open |  | 2026-09-10T17:37:01.147Z |  |
+| 27 | 25 | stub | src/lib/mcp/tools/forecast.test.ts |  | Wave 0 it.todo stubs for SIDE tool suite — filled by later plans | open |  | 2026-09-10T17:37:01.270Z |  |
 
 ````json
 [
@@ -315,6 +319,54 @@ last_updated: 2026-09-10T16:04:03.667Z
     "status": "open",
     "reason": "",
     "recorded_at": "2026-09-10T16:04:03.667Z",
+    "resolved_at": null
+  },
+  {
+    "id": 24,
+    "kind": "stub",
+    "phase": "25",
+    "file": "src/lib/mcp/tools/debts.test.ts",
+    "line": null,
+    "description": "Wave 0 it.todo stubs for SIDE tool suite — filled by later plans",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-10T17:37:00.907Z",
+    "resolved_at": null
+  },
+  {
+    "id": 25,
+    "kind": "stub",
+    "phase": "25",
+    "file": "src/lib/mcp/tools/income.test.ts",
+    "line": null,
+    "description": "Wave 0 it.todo stubs for SIDE tool suite — filled by later plans",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-10T17:37:01.029Z",
+    "resolved_at": null
+  },
+  {
+    "id": 26,
+    "kind": "stub",
+    "phase": "25",
+    "file": "src/lib/mcp/tools/grace.test.ts",
+    "line": null,
+    "description": "Wave 0 it.todo stubs for SIDE tool suite — filled by later plans",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-10T17:37:01.147Z",
+    "resolved_at": null
+  },
+  {
+    "id": 27,
+    "kind": "stub",
+    "phase": "25",
+    "file": "src/lib/mcp/tools/forecast.test.ts",
+    "line": null,
+    "description": "Wave 0 it.todo stubs for SIDE tool suite — filled by later plans",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-10T17:37:01.270Z",
     "resolved_at": null
   }
 ]
