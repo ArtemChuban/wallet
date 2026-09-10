@@ -5,9 +5,9 @@ milestone_name: Кредитка
 current_phase: 22
 status: completed
 stopped_at: Phase 22 complete — all phases complete
-last_updated: "2026-09-09T23:36:45.163Z"
+last_updated: "2026-09-10T10:45:00.000Z"
 last_activity: 2026-09-10
-last_activity_desc: Phase 22 verification passed — GRISO suite green; v1.3 ready for complete-milestone
+last_activity_desc: Phases 19+22 UAT complete (agent, all_auto_covered); v1.3 ready for complete-milestone
 state_head: 755f001
 progress:
   total_phases: 5
@@ -24,14 +24,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 22 verified — GRACEISO regression + polish; v1.3 milestone close next
+**Current focus:** v1.3 UAT closed for 19+22; ready `/gsd-complete-milestone`
 
 ## Current Position
 
 Phase: 22 — GRACEISO regression + polish
 Plan: 2 of 2 complete
-Status: All v1.3 phases complete — verification passed
-Last activity: 2026-09-10 — 22-VERIFICATION.md passed (14/14); GRISO sampling 94/0
+Status: All v1.3 phases complete — verification + UAT passed
+Last activity: 2026-09-10 — 19-UAT 12/12 + 22-UAT 5/5; GRISO suite 113/0
 
 Progress: [██████████] 100%
 
@@ -132,4 +132,4 @@ Resume file: None
 
 ## Operator Next Steps
 
-- Run `/gsd-verify-work` for Phase 22 (Orca smoke only if OPERATOR demands — D-13); then `/gsd-complete-milestone` for v1.3 when ready
+- Phases 19+22 UAT complete (agent-driven, coverage auto-pass). Run `/gsd-complete-milestone` for v1.3.
