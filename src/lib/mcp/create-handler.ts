@@ -1,6 +1,7 @@
 import { createMcpHandler, McpServer } from "@modelcontextprotocol/server";
 import { registerListAccounts } from "./tools/accounts";
 import { registerGetAccountBalance } from "./tools/balances";
+import { registerListFxRates } from "./tools/fx";
 import { registerGetNetWorth } from "./tools/net-worth";
 import { registerWalletPing } from "./tools/wallet-ping";
 
@@ -27,6 +28,7 @@ export function createWalletMcpHandler() {
       registerGetNetWorth(server);
       registerListAccounts(server);
       registerGetAccountBalance(server);
+      registerListFxRates(server);
       return server;
     },
     { responseMode: "json", legacy: "stateless" },
