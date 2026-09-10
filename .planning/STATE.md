@@ -2,20 +2,20 @@
 gsd_state_version: 1.0
 milestone: v1.4
 milestone_name: Local MCP
-current_phase: 25
-current_phase_name: Side-Ledger Tools + Isolation
-status: verifying
-stopped_at: Completed 25-04-PLAN.md
-last_updated: "2026-09-10T17:58:39.352Z"
+current_phase: 26
+current_phase_name: Connect Docs + Policy
+status: planning
+stopped_at: Phase 25 complete
+last_updated: "2026-09-10T18:03:55.552Z"
 last_activity: 2026-09-10
-last_activity_desc: Completed 25-01 Wave 0 stubs + horizon schema + disol MCP walls
-state_head: d40df9b05608542dcdd15a794f6e42ccab015d11
+last_activity_desc: Phase 25 complete, transitioned to Phase 26
+state_head: 236a4e176a6985ade84dd6db8d9e22a85cbd9e37
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 10
   completed_plans: 10
-  percent: 25
+  percent: 50
 ---
 
 # Project State
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-09-10 — v1.4 Local MCP)
 
 ## Current Position
 
-Phase: 25 of 26 (Side-Ledger Tools + Isolation)
-Plan: 4 of 4 (25-02 next)
-Status: Phase complete — ready for verification
-Last activity: 2026-09-10 — Completed 25-01-PLAN.md
+Phase: 26 of 26 (Connect Docs + Policy)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-09-10 — Phase 25 complete, transitioned to Phase 26
 
 Progress: [███░░░░░░░] 25%
 
@@ -113,6 +113,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-10T17:58:39.258Z
-Stopped at: Completed 25-04-PLAN.md
-Resume file: None
+Last session: 2026-09-10T18:03:55.462Z
+Stopped at: Phase 25 complete
+Resume file: .planning/phases/25-side-ledger-tools-isolation/25-VERIFICATION.md

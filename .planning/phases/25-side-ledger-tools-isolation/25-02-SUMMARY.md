@@ -104,7 +104,7 @@ Each task was committed atomically:
 1. **Task 1: End-to-end get_forecast_overlay — SIDE-04 tracer** - `e37835d` (feat)
 2. **Task 2: Green SIDE-04 forecast adapter tests** - `2d926c6` (test)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `c64327b` (docs: complete plan)
 
 _Note: Tracer shipped before adapter tests (plan order); TDD task is GREEN-only against tracer._
 

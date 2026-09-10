@@ -126,7 +126,7 @@
     {
       "number": "25",
       "name": "Side-Ledger Tools + Isolation",
-      "status": "in_progress"
+      "status": "complete"
     },
     {
       "number": "26",
@@ -136,8 +136,8 @@
   ],
   "next": {
     "command": "/gsd:progress --next",
-    "label": "Advance to the next step (verify)",
-    "reason": "Phase 25 of 4 · 25% · ready to verify"
+    "label": "Advance to the next step (plan phase 26)",
+    "reason": "Phase 26 of 4 — needs a plan"
   },
-  "updated_at": "2026-09-10T17:58:38.032Z"
+  "updated_at": "2026-09-10T18:03:54.859Z"
 }
