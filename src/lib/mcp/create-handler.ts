@@ -4,6 +4,7 @@ import { registerGetAccountBalance } from "./tools/balances";
 import { registerListDebts } from "./tools/debts";
 import { registerGetForecastOverlay } from "./tools/forecast";
 import { registerListFxRates } from "./tools/fx";
+import { registerListGraceObligations } from "./tools/grace";
 import { registerListIncome } from "./tools/income";
 import { registerGetNetWorth } from "./tools/net-worth";
 import { registerWalletPing } from "./tools/wallet-ping";
@@ -21,14 +22,16 @@ export function createWalletMcpHandler() {
         {
           instructions:
             "Read-only localhost capital MCP (Капитал): wallet_ping, list_accounts, " +
-            "get_net_worth, get_account_balance, list_fx_rates, get_forecast_overlay, list_debts, list_income. " +
+            "get_net_worth, get_account_balance, list_fx_rates, get_forecast_overlay, " +
+            "list_debts, list_income, list_grace_obligations. " +
             "Net worth / Капитал is accounts-only — no debts or income. " +
             "list_fx_rates is transparency only, not a currency converter; " +
             "do not multiply rates — primary amounts come from get_net_worth / get_account_balance. " +
-            "SIDE: get_forecast_overlay + list_debts + list_income available now; list_grace_obligations next. " +
+            "SIDE: get_forecast_overlay, list_debts, list_income, list_grace_obligations. " +
             "Капитал forecast overlay (Прогноз): income + A′ grace; not historical NW LOCF. " +
             "list_debts is Долги side ledger — not historical NW. " +
-            "list_income is Доходы side ledger — not historical NW.",
+            "list_income is Доходы side ledger — not historical NW. " +
+            "list_grace_obligations is Грейс side ledger — not historical NW.",
         },
       );
       registerWalletPing(server);
@@ -39,6 +42,7 @@ export function createWalletMcpHandler() {
       registerGetForecastOverlay(server);
       registerListDebts(server);
       registerListIncome(server);
+      registerListGraceObligations(server);
       return server;
     },
     { responseMode: "json", legacy: "stateless" },
