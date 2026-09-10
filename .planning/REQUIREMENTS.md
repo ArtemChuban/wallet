@@ -68,25 +68,25 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| HOST-01 | — | Pending |
-| HOST-02 | — | Pending |
-| CAP-01 | — | Pending |
-| CAP-02 | — | Pending |
-| CAP-03 | — | Pending |
-| CAP-04 | — | Pending |
-| SIDE-01 | — | Pending |
-| SIDE-02 | — | Pending |
-| SIDE-03 | — | Pending |
-| SIDE-04 | — | Pending |
-| CLI-01 | — | Pending |
-| CLI-02 | — | Pending |
-| PARITY-01 | — | Pending |
+| HOST-01 | Phase 23 | Pending |
+| HOST-02 | Phase 23 | Pending |
+| CAP-01 | Phase 24 | Pending |
+| CAP-02 | Phase 24 | Pending |
+| CAP-03 | Phase 24 | Pending |
+| CAP-04 | Phase 24 | Pending |
+| SIDE-01 | Phase 25 | Pending |
+| SIDE-02 | Phase 25 | Pending |
+| SIDE-03 | Phase 25 | Pending |
+| SIDE-04 | Phase 25 | Pending |
+| CLI-01 | Phase 26 | Pending |
+| CLI-02 | Phase 26 | Pending |
+| PARITY-01 | Phase 26 | Pending |
 
 **Coverage:**
 - v1.4 requirements: 13 total
-- Mapped to phases: 0
-- Unmapped: 13 ⚠️
+- Mapped to phases: 13
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-09-10*
-*Last updated: 2026-09-10 after v1.4 scoping*
+*Last updated: 2026-09-10 after v1.4 roadmap*
