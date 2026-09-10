@@ -71,10 +71,11 @@ Local Dockerized net-worth tracker + personal-debts + income + credit-grace ledg
 
 ### Active
 
-- [ ] In-app MCP server on localhost HTTP/SSE (same process as Next.js wallet)
-- [ ] Read-only MCP tools for accounts, balances/NW, FX, debts, income, grace
-- [ ] Docs: how to point Claude Code / Cursor CLI at the localhost MCP endpoint
-- [ ] Localhost-safe binding (no public exposure; single-user local)
+- [ ] HOST-01/02 — in-app Streamable HTTP MCP at `/api/mcp` + localhost Host/Origin + `127.0.0.1` publish
+- [ ] CAP-01…04 — read-only accounts, NW, balances, FX via MCP
+- [ ] SIDE-01…04 — read-only debts, income, grace, forecast overlay via MCP (DISOL/INISO/GRISO)
+- [ ] CLI-01/02 — readOnlyHint + isolation copy; Claude Code / Cursor connect docs
+- [ ] PARITY-01 — new user-visible read surfaces always ship matching MCP read tools same phase
 
 ### Out of Scope
 
@@ -125,6 +126,8 @@ v1.4 (planning): in-app read-only MCP over localhost HTTP/SSE so external CLI ag
 - **Users**: Single user, local — no multi-tenant or SaaS
 - **FX v1**: Manual dated rates, primary ↔ other only
 - **Balances v1**: Manual dated snapshots, not double-entry ledger
+- **MCP parity (PARITY-01)**: Any new user-visible read surface must expose matching read-only MCP tool(s) in the same milestone/phase — agents stay at UI parity
+- **MCP v1.4**: Read-only; localhost only; no app-spawned agent; no in-app chat
 
 ## Key Decisions
 
