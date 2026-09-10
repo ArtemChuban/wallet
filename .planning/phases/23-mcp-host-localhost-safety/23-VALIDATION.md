@@ -5,7 +5,7 @@ slug: "mcp-host-localhost-safety"
 # audit-milestone §5.5 distinguishes NOT-VALIDATED (draft) from PARTIAL (validated + nyquist_compliant: false) (#2117)
 status: draft
 nyquist_compliant: false
-wave_0_complete: false
+wave_0_complete: true
 created: "2026-09-10"
 ---
 
@@ -40,11 +40,11 @@ created: "2026-09-10"
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 23-01-01 | 01 | 1 | HOST-01 | T-23-SC | Human confirms mcp-handler SUS before install | gate | RESEARCH present + mcp-handler citation | ✅ | ⬜ pending |
-| 23-01-02 | 01 | 1 | HOST-01, HOST-02 | — | Wave 0 stubs for guard + route smoke | unit | `npx vitest run src/lib/mcp/localhost-guard.test.ts src/app/api/mcp/route.test.ts` | ❌ W0 | ⬜ pending |
+| 23-01-01 | 01 | 1 | HOST-01 | T-23-SC | Human confirms mcp-handler SUS before install | gate | RESEARCH present + mcp-handler citation | ✅ | ✅ green |
+| 23-01-02 | 01 | 1 | HOST-01, HOST-02 | — | Wave 0 stubs for guard + route smoke | unit | `npx vitest run src/lib/mcp/localhost-guard.test.ts src/app/api/mcp/route.test.ts` | ✅ | ✅ green |
 | 23-01-03 | 01 | 1 | HOST-01 | T-23-SC | mcp-handler + server ^2 in package.json | install | node assert deps + node_modules dirs | ✅ pkg | ⬜ pending |
-| 23-02-01 | 02 | 2 | HOST-01, HOST-02 | T-23-01…05 | Tracer: guarded /api/mcp + wallet_ping | unit/smoke | `npx vitest run src/lib/mcp/localhost-guard.test.ts src/app/api/mcp/route.test.ts` | ❌ W0→impl | ⬜ pending |
-| 23-02-02 | 02 | 2 | HOST-02 | T-23-01,03,04 | Full Host/Origin/port matrix + route mock | unit | `npx vitest run src/lib/mcp/localhost-guard.test.ts src/app/api/mcp/route.test.ts` | ❌ W0→impl | ⬜ pending |
+| 23-02-01 | 02 | 2 | HOST-01, HOST-02 | T-23-01…05 | Tracer: guarded /api/mcp + wallet_ping | unit/smoke | `npx vitest run src/lib/mcp/localhost-guard.test.ts src/app/api/mcp/route.test.ts` | ✅ W0→impl | ⬜ pending |
+| 23-02-02 | 02 | 2 | HOST-02 | T-23-01,03,04 | Full Host/Origin/port matrix + route mock | unit | `npx vitest run src/lib/mcp/localhost-guard.test.ts src/app/api/mcp/route.test.ts` | ✅ W0→impl | ⬜ pending |
 | 23-02-03 | 02 | 2 | HOST-01, HOST-02 | T-23-02,05 | Curl initialize + Compose checklist + no CORS | suite + manual | `npm test` + grep Compose ports | ✅ compose | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
@@ -53,9 +53,9 @@ created: "2026-09-10"
 
 ## Wave 0 Requirements
 
-- [ ] `src/lib/mcp/localhost-guard.test.ts` — stubs for HOST-02
-- [ ] `src/app/api/mcp/route.test.ts` — stubs for HOST-01 route smoke with mocks
-- [ ] Framework install: none — Vitest already present
+- [x] `src/lib/mcp/localhost-guard.test.ts` — stubs for HOST-02
+- [x] `src/app/api/mcp/route.test.ts` — stubs for HOST-01 route smoke with mocks
+- [x] Framework install: none — Vitest already present
 
 ---
 
