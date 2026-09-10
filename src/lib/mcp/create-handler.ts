@@ -1,6 +1,7 @@
 import { createMcpHandler, McpServer } from "@modelcontextprotocol/server";
 import { registerListAccounts } from "./tools/accounts";
 import { registerGetAccountBalance } from "./tools/balances";
+import { registerGetForecastOverlay } from "./tools/forecast";
 import { registerListFxRates } from "./tools/fx";
 import { registerGetNetWorth } from "./tools/net-worth";
 import { registerWalletPing } from "./tools/wallet-ping";
@@ -18,11 +19,12 @@ export function createWalletMcpHandler() {
         {
           instructions:
             "Read-only localhost capital MCP (Капитал): wallet_ping, list_accounts, " +
-            "get_net_worth, get_account_balance, list_fx_rates. " +
+            "get_net_worth, get_account_balance, list_fx_rates, get_forecast_overlay. " +
             "Net worth / Капитал is accounts-only — no debts or income. " +
             "list_fx_rates is transparency only, not a currency converter; " +
             "do not multiply rates — primary amounts come from get_net_worth / get_account_balance. " +
-            "Side ledgers (debts/income/grace) come later.",
+            "SIDE: get_forecast_overlay available now; list_debts / list_income / list_grace_obligations next. " +
+            "Капитал forecast overlay (Прогноз): income + A′ grace; not historical NW LOCF.",
         },
       );
       registerWalletPing(server);
@@ -30,6 +32,7 @@ export function createWalletMcpHandler() {
       registerListAccounts(server);
       registerGetAccountBalance(server);
       registerListFxRates(server);
+      registerGetForecastOverlay(server);
       return server;
     },
     { responseMode: "json", legacy: "stateless" },
