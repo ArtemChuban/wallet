@@ -17,10 +17,11 @@ export function createWalletMcpHandler() {
         { name: "wallet-mcp", version: "1.4.0" },
         {
           instructions:
-            "Read-only localhost wallet MCP for capital tools (Капитал). " +
-            "Net worth is accounts-only — no debts or income. " +
-            "FX list tools are transparency only, not a currency converter; " +
-            "primary amounts come from get_net_worth / get_account_balance. " +
+            "Read-only localhost capital MCP (Капитал): wallet_ping, list_accounts, " +
+            "get_net_worth, get_account_balance, list_fx_rates. " +
+            "Net worth / Капитал is accounts-only — no debts or income. " +
+            "list_fx_rates is transparency only, not a currency converter; " +
+            "do not multiply rates — primary amounts come from get_net_worth / get_account_balance. " +
             "Side ledgers (debts/income/grace) come later.",
         },
       );
