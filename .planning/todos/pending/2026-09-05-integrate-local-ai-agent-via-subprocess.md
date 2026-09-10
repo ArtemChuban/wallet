@@ -3,6 +3,7 @@ created: 2026-09-05T12:35:50.289Z
 title: Integrate local AI agent via subprocess (Claude Code CLI / Cursor agent)
 area: general
 severity: minor
+resolves_phase: 23
 files: []
 audit_acknowledged:
   milestone: v1.1
