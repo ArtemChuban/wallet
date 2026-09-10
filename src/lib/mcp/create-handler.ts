@@ -1,6 +1,8 @@
 import { createMcpHandler, McpServer } from "@modelcontextprotocol/server";
-import { registerWalletPing } from "./tools/wallet-ping";
+import { registerListAccounts } from "./tools/accounts";
+import { registerGetAccountBalance } from "./tools/balances";
 import { registerGetNetWorth } from "./tools/net-worth";
+import { registerWalletPing } from "./tools/wallet-ping";
 
 /**
  * Wallet Streamable HTTP MCP handler.
@@ -23,6 +25,8 @@ export function createWalletMcpHandler() {
       );
       registerWalletPing(server);
       registerGetNetWorth(server);
+      registerListAccounts(server);
+      registerGetAccountBalance(server);
       return server;
     },
     { responseMode: "json", legacy: "stateless" },
