@@ -9,8 +9,8 @@ Requirements for this milestone. Each maps to roadmap phases.
 
 ### Host
 
-- [ ] **HOST-01**: Running wallet app exposes in-process Streamable HTTP MCP at `/api/mcp` (same Next.js lifecycle as the UI; no sidecar, no agent subprocess)
-- [ ] **HOST-02**: MCP accepts only localhost clients (Host/Origin guard + Compose host publish stays `127.0.0.1`)
+- [x] **HOST-01**: Running wallet app exposes in-process Streamable HTTP MCP at `/api/mcp` (same Next.js lifecycle as the UI; no sidecar, no agent subprocess)
+- [x] **HOST-02**: MCP accepts only localhost clients (Host/Origin guard + Compose host publish stays `127.0.0.1`)
 
 ### Capital (read-only)
 
@@ -68,8 +68,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| HOST-01 | Phase 23 | Pending |
-| HOST-02 | Phase 23 | Pending |
+| HOST-01 | Phase 23 | Complete |
+| HOST-02 | Phase 23 | Complete |
 | CAP-01 | Phase 24 | Pending |
 | CAP-02 | Phase 24 | Pending |
 | CAP-03 | Phase 24 | Pending |
@@ -83,6 +83,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | PARITY-01 | Phase 26 | Pending |
 
 **Coverage:**
+
 - v1.4 requirements: 13 total
 - Mapped to phases: 13
 - Unmapped: 0 ✓
