@@ -420,17 +420,19 @@ expect(nwPayload.rows.every((r) => !("personId" in r))).toBe(true);
 
 **If wrong:** Planner can tighten schemas without changing tool names.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Income default mode vs range**
    - What we know: Page = next-open; `listAllInRange` needs explicit from/to; forecast uses `today+1..horizonEnd`.
    - What's unclear: Whether agents need occurrence calendars on day one.
    - Recommendation: Ship page-parity default + optional `from`/`to` (A2).
+   - **RESOLVED:** Page-parity default + optional paired `from`/`to` (A2) — plans 25-01/25-04
 
 2. **Grace CTA rows in MCP**
    - What we know: UI merge includes CTA for missing schedule windows.
    - What's unclear: Agents may confuse CTA with persisted obligations.
    - Recommendation: Include CTA with `kind: "cta" | "open"` discriminant (same as `GraceListRow`).
+   - **RESOLVED:** Include CTA with `kind: "open" | "cta"` discriminant — plan 25-04
 
 ## Environment Availability
 
