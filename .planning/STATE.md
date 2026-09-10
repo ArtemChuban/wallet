@@ -4,11 +4,11 @@ milestone: v1.4
 milestone_name: Local MCP
 current_phase: 24
 current_phase_name: Capital Read Tools
-status: ready_to_plan
-stopped_at: Phase 24 research complete
-last_updated: "2026-09-10T15:40:00.000Z"
+status: ready_to_execute
+stopped_at: Phase 24 plans created
+last_updated: "2026-09-10T16:00:00.000Z"
 last_activity: 2026-09-10
-last_activity_desc: Phase 24 RESEARCH.md written (CAP-01…04 thin MCP adapters)
+last_activity_desc: Phase 24 PLAN.md set (4 plans, CAP-01…04)
 state_head: 161b89a
 progress:
   total_phases: 4
@@ -30,9 +30,9 @@ See: .planning/PROJECT.md (updated 2026-09-10 — v1.4 Local MCP)
 ## Current Position
 
 Phase: 24 of 26 (Capital Read Tools)
-Plan: —
-Status: Research complete — ready to plan
-Last activity: 2026-09-10 — Phase 24 RESEARCH.md (capital MCP tools)
+Plan: 01 of 04
+Status: Plans complete — ready to execute
+Last activity: 2026-09-10 — Phase 24 plans (24-01…24-04)
 
 Progress: [██░░░░░░░░] 25%
 
@@ -44,7 +44,7 @@ Progress: [██░░░░░░░░] 25%
 - Average duration: —
 - Total execution time: —
 
-**By Phase:** v1.3 complete (18–22). v1.4: Phase 23 complete; Phase 24 research done (plan next).
+**By Phase:** v1.3 complete (18–22). v1.4: Phase 23 complete; Phase 24 planned (4 plans) — execute next.
 
 *Updated after each plan completion*
 
@@ -93,6 +93,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-10T15:40:00.000Z
-Stopped at: Phase 24 research complete
-Resume file: .planning/phases/24-capital-read-tools/24-RESEARCH.md
+Last session: 2026-09-10T16:00:00.000Z
+Stopped at: Phase 24 plans created
+Resume file: .planning/phases/24-capital-read-tools/24-01-PLAN.md

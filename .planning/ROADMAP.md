@@ -105,7 +105,13 @@ Plans:
   3. Agent can get an account's native and primary balance as-of a date via MCP
   4. Agent can list FX rates / rate-as-of (primary↔other) via MCP
 
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 24-01-PLAN.md — Wave 0 stubs + serialize + as-of (D-05/06/08/09)
+- [ ] 24-02-PLAN.md — Tracer get_net_worth (CAP-02) + capital-era instructions
+- [ ] 24-03-PLAN.md — list_accounts (CAP-01) + get_account_balance (CAP-03)
+- [ ] 24-04-PLAN.md — list_fx_rates (CAP-04) + D-15 finalize + full regression
 
 ### Phase 25: Side-Ledger Tools + Isolation
 
@@ -161,6 +167,6 @@ Plans:
 | 21. Капитал forecast integration | v1.3 | 3/3 | Complete | 2026-09-09 |
 | 22. GRACEISO regression + polish | v1.3 | 2/2 | Complete | 2026-09-10 |
 | 23. MCP Host + Localhost Safety | v1.4 | 2/2 | Complete | 2026-09-10 |
-| 24. Capital Read Tools | v1.4 | 0/? | Not started | - |
+| 24. Capital Read Tools | v1.4 | 0/4 | Planned | - |
 | 25. Side-Ledger Tools + Isolation | v1.4 | 0/? | Not started | - |
 | 26. Connect Docs + Policy | v1.4 | 0/? | Not started | - |
