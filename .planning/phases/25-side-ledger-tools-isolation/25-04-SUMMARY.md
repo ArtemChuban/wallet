@@ -110,7 +110,7 @@ Each task was committed atomically:
 4. **Task 2 GREEN: list_grace_obligations tool** - `886389c` (feat)
 5. **Task 3: isolation-contract + catalog finalize** - `d40df9b` (test)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `7b7457f` (docs: complete plan)
 
 ## Files Created/Modified
 - `src/lib/mcp/reads/load-income.ts` — next-open + range serialize/load
