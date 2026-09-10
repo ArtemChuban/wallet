@@ -4,8 +4,8 @@ import { describe, expect, it } from "vitest";
 
 /**
  * D-05 thin MCP isolation wall across SIDE tool + read adapters.
- * Never-write BalanceSnapshot mutates; never import @/app/**/actions.
- * Named DISOL/INISO/GRISO essay prose stays Phase 26 — this is source contract only.
+ * Never-write BalanceSnapshot mutates; never import app route actions modules.
+ * Named DISOL/INISO/GRISO essay prose stays Phase 26 - this is source contract only.
  */
 const SIDE_MCP_SOURCES = [
   "src/lib/mcp/tools/debts.ts",
