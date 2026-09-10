@@ -2,20 +2,20 @@
 gsd_state_version: 1.0
 milestone: v1.4
 milestone_name: Local MCP
-current_phase: 23
-current_phase_name: MCP Host + Localhost Safety
-status: ready_to_execute
-stopped_at: Phase 24 context gathered
-last_updated: "2026-09-10T15:33:55.261Z"
+current_phase: 24
+current_phase_name: Capital Read Tools
+status: ready_to_plan
+stopped_at: Phase 24 research complete
+last_updated: "2026-09-10T15:40:00.000Z"
 last_activity: 2026-09-10
-last_activity_desc: Phase 23 plan-check re-verify PASSED (Open Questions RESOLVED)
-state_head: dda21c85926dbb905035f3aae6f749a9c60ed603
+last_activity_desc: Phase 24 RESEARCH.md written (CAP-01…04 thin MCP adapters)
+state_head: 161b89a
 progress:
   total_phases: 4
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 2
   completed_plans: 2
-  percent: 0
+  percent: 25
 ---
 
 # Project State
@@ -31,8 +31,8 @@ See: .planning/PROJECT.md (updated 2026-09-10 — v1.4 Local MCP)
 
 Phase: 24 of 26 (Capital Read Tools)
 Plan: —
-Status: Ready to discuss/plan
-Last activity: 2026-09-10 — Phase 23 verified passed (HOST-01/02)
+Status: Research complete — ready to plan
+Last activity: 2026-09-10 — Phase 24 RESEARCH.md (capital MCP tools)
 
 Progress: [██░░░░░░░░] 25%
 
@@ -93,6 +93,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-10T15:33:55.177Z
-Stopped at: Phase 24 context gathered
-Resume file: .planning/phases/24-capital-read-tools/24-CONTEXT.md
+Last session: 2026-09-10T15:40:00.000Z
+Stopped at: Phase 24 research complete
+Resume file: .planning/phases/24-capital-read-tools/24-RESEARCH.md
