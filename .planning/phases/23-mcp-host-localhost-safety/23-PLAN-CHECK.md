@@ -1,9 +1,9 @@
 # Phase 23 Plan Check
 
-**Checked:** 2026-09-10
+**Checked:** 2026-09-10 (re-verify after RESEARCH Open Questions + Plan 02 read_first fixes)
 **Plans:** 23-01, 23-02
 **Gate:** Revision (gsd-plan-checker)
-**Verdict:** ISSUES FOUND — 1 blocker, 2 warnings
+**Verdict:** VERIFICATION PASSED — 0 blockers, 0 warnings
 
 ## Goal (ROADMAP)
 
@@ -38,13 +38,23 @@ Estimates: 01 = 20k / budget 100k (ok); 02 = 45k / budget 100k (ok). Confidence 
 
 ---
 
+## Prior findings disposition
+
+| Prior issue | Severity | Disposition |
+|-------------|----------|-------------|
+| RESEARCH Open Questions unmarked | blocker | **FIXED** — `## Open Questions (RESOLVED)` + inline RESOLVED on all 3 items |
+| Plan 02 weak PATTERNS analog cite | warning | **FIXED** — tracer `read_first` includes `src/lib/db.ts` (+ PATTERNS.md / RESEARCH Patterns) |
+| AGENTS.md Next docs missing from read_first | warning | **FIXED** — tracer `read_first` includes `node_modules/next/dist/docs/` |
+
+---
+
 ## Dimension results
 
 | # | Dimension | Result |
 |---|-----------|--------|
 | 1 | Requirement coverage | PASS — HOST-01/02 in both frontmatters; tasks map |
 | 2 | Task completeness | PASS — files/action/verify/done (checkpoint N/A files); read_first + acceptance_criteria + fails_when present |
-| 3 | Dependency correctness | PASS — `23-01`→`23-02` acyclic; wave 1→2; phase-plan-index resolves |
+| 3 | Dependency correctness | PASS — `23-01`→`23-02` acyclic; wave 1→2 |
 | 3b | Undeclared coupling | PASS — different waves |
 | 4 | Key links planned | PASS — guard→fetch, SDK createMcpHandler+responseMode, wallet_ping only |
 | 5 | Scope sanity | PASS — 3 tasks/plan; ≤7 files; estimates in budget |
@@ -54,11 +64,11 @@ Estimates: 01 = 20k / budget 100k (ok); 02 = 45k / budget 100k (ok). Confidence 
 | 7c | Architectural tier | PASS — route/guard Frontend Server; ping in-process; Compose deploy-only |
 | 8 | Nyquist | PASS — VALIDATION.md exists; Wave 0 stubs in 01; all tasks `<automated>`; no watch; sampling continuous; fails_when stated (probe not injected → 8f presence judged from plans) |
 | 9 | Cross-plan data contracts | PASS — 01 deps/stubs → 02 SDK create + green tests; no conflicting transforms |
-| 10 | .cursor/rules/ | SKIPPED (no `.cursor/rules/`); AGENTS.md Next-docs hint → warning below |
-| 11 | Research resolution | **FAIL** — see blocker |
-| 12 | Pattern compliance | PASS w/ warning — PATTERNS.md in read_first; stubs cite health/account-type; create-handler/wallet-ping analogs weakly named in action |
+| 10 | .cursor/rules/ | SKIPPED (no `.cursor/rules/`); AGENTS.md Next-docs satisfied via Plan 02 read_first |
+| 11 | Research resolution | PASS — Open Questions (RESOLVED); A1/install+SDK/403 body locked |
+| 12 | Pattern compliance | PASS — health/account-type stubs; db.ts + PATTERNS/RESEARCH in Plan 02 tracer read_first |
 
-### Extra gates (user prompt)
+### Extra gates
 
 | Gate | Result |
 |------|--------|
@@ -84,62 +94,36 @@ Estimates: 01 = 20k / budget 100k (ok); 02 = 45k / budget 100k (ok). Confidence 
 Sampling: Wave 1 3/3; Wave 2 3/3 → ✅  
 Wave 0: localhost-guard.test.ts + route.test.ts planned in 01 → ✅  
 Failing directions: stated on all runnable verifies → ✅  
-Overall: ✅ PASS (Dim 8); Dim 11 still fails phase
+Overall: ✅ PASS
 
 ---
 
-## ISSUES FOUND
+## VERIFICATION PASSED
 
 **Phase:** 23-mcp-host-localhost-safety  
-**Plans checked:** 2  
-**Issues:** 1 blocker(s), 2 warning(s), 0 info
+**Plans verified:** 2  
+**Status:** All checks passed
 
-### Blockers (must fix)
+### Coverage Summary
 
-**1. [research_resolution] RESEARCH.md Open Questions not marked resolved**
-- Plan: null (phase research)
-- File: `23-RESEARCH.md`
-- Unresolved (formal): missing Host port; mcp-handler install vs import; 403 JSON schema
-- Note: Recommendations + plan `<assumptions>` A1–A3 already lock answers; marker hygiene only
-- Fix: Rename to `## Open Questions (RESOLVED)` and mark each item `RESOLVED: …` (A1 reject missing port; install both / SDK create; `{ error, reason }` body)
+| Requirement | Plans | Status |
+|-------------|-------|--------|
+| HOST-01 | 01, 02 | Covered |
+| HOST-02 | 01, 02 | Covered |
 
-### Warnings (should fix)
+### Plan Summary
 
-**1. [pattern_compliance] Plan 02 tracer action weak-cites PATTERNS analogs for create-handler / wallet-ping**
-- Plan: 02
-- Task: tracer
-- Expected: name `src/lib/db.ts` (factory) and/or `src/lib/validations/balance.ts` (zod tool) / RESEARCH Patterns 1–2 for No-Analog MCP mount
-- Fix: One sentence in `<action>` or `<read_first>` naming those analogs (PATTERNS already in read_first)
-
-**2. [claude_md_compliance] AGENTS.md Next docs not in Plan 02 read_first**
-- Plan: 02
-- Task: tracer (route.ts)
-- Rule: read `node_modules/next/dist/docs/` before route/runtime code
-- Fix: Add relevant Next route/runtime doc path to `<read_first>`
+| Plan | Tasks | Files | Wave | Status |
+|------|-------|-------|------|--------|
+| 01 | 3 | 5 | 1 | Valid |
+| 02 | 3 | 7 | 2 | Valid |
 
 ### Structured Issues
 
 ```yaml
-issues:
-  - dimension: research_resolution
-    severity: blocker
-    plan: null
-    description: "23-RESEARCH.md ## Open Questions lacks (RESOLVED) suffix and inline RESOLVED markers (missing Host port; mcp-handler install vs import; 403 schema)"
-    fix_hint: "Mark section ## Open Questions (RESOLVED) and each item RESOLVED per A1–A3 already assumed in plans"
-  - dimension: pattern_compliance
-    severity: warning
-    plan: "02"
-    task: 1
-    description: "Tracer action does not name PATTERNS analogs for create-handler.ts / wallet-ping.ts"
-    fix_hint: "Cite db.ts / validations/balance.ts or RESEARCH Patterns 1–2 in action"
-  - dimension: claude_md_compliance
-    severity: warning
-    plan: "02"
-    task: 1
-    description: "Plan 02 tracer omits Next dist docs from read_first despite AGENTS.md"
-    fix_hint: "Add node_modules/next/dist/docs/… route handler doc to read_first"
+issues: []
 ```
 
 ### Recommendation
 
-1 blocker — revise RESEARCH.md Open Questions markers (plans themselves already encode resolutions). Optional: tighten Plan 02 read_first/action for patterns + Next docs. Re-run plan-checker after RESEARCH edit.
+Plans verified. Run `/gsd-execute-phase 23` to proceed.
