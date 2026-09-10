@@ -4,17 +4,17 @@ milestone: v1.4
 milestone_name: Local MCP
 current_phase: 25
 current_phase_name: Side-Ledger Tools + Isolation
-status: executing
-stopped_at: Completed 25-03-PLAN.md
-last_updated: "2026-09-10T17:48:50.736Z"
+status: verifying
+stopped_at: Completed 25-04-PLAN.md
+last_updated: "2026-09-10T17:58:39.352Z"
 last_activity: 2026-09-10
 last_activity_desc: Completed 25-01 Wave 0 stubs + horizon schema + disol MCP walls
-state_head: 5946204c9c788161f74586c38681597eafd9966e
+state_head: d40df9b05608542dcdd15a794f6e42ccab015d11
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 10
-  completed_plans: 9
+  completed_plans: 10
   percent: 25
 ---
 
@@ -31,7 +31,7 @@ See: .planning/PROJECT.md (updated 2026-09-10 — v1.4 Local MCP)
 
 Phase: 25 of 26 (Side-Ledger Tools + Isolation)
 Plan: 4 of 4 (25-02 next)
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-09-10 — Completed 25-01-PLAN.md
 
 Progress: [███░░░░░░░] 25%
@@ -54,6 +54,7 @@ Progress: [███░░░░░░░] 25%
 | Phase 25 P01 | 3min | 3 tasks | 8 files |
 | Phase 25 P02 | 4min | 2 tasks | 4 files |
 | Phase 25 P03 | 4min | 2 tasks | 4 files |
+| Phase 25 P04 | 5min | 3 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -75,6 +76,9 @@ v1.4 locks (pending execution):
 - [Phase 25]: Totals colocated in list_debts (no get_debt_totals tool)
 - [Phase 25]: Default OPEN filter via filterDebtsForList; includeClosed optional widen
 - [Phase 25]: D-08 isolation one-liner in LIST_DEBTS_DESCRIPTION only — no payload meta flags
+- [Phase 25]: Default list_income = next_open page parity; range only when both from+to set (A2)
+- [Phase 25]: Grace CTA rows included with kind open|cta; CLOSED omitted
+- [Phase 25]: D-08 one-liners in descriptions + instructions only — no payload meta; no named essay
 
 ### Pending Todos
 
@@ -109,6 +113,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-10T17:48:50.644Z
-Stopped at: Completed 25-03-PLAN.md
+Last session: 2026-09-10T17:58:39.258Z
+Stopped at: Completed 25-04-PLAN.md
 Resume file: None
