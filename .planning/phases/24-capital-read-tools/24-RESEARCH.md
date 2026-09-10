@@ -381,16 +381,18 @@ Exact field names are planner-discretion as long as D-09…D-12 hold; prefer sta
 
 **If empty table were required for zero assumptions:** N/A — four low-risk assumptions above need planner defaults, not user re-discuss (discretion was none on larger options).
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Missing account on `get_account_balance`**
    - What we know: D-07 empty/missing data → success + honesty flags for NW/FX emptiness; D-11 covers missing FX/snapshot
    - What's unclear: unknown `accountId` — error vs `{ error: "account_not_found" }`
    - Recommendation: success payload with `error: "account_not_found"` and null amounts (keep tool surface soft); document in PLAN
+   - **RESOLVED:** Soft success payload `account_not_found` + null amounts (Plan 03 A1) — not MCP tool error
 
 2. **Whether to annotate `wallet_ping`**
    - What we know: D-13 says all CAP tools
    - Recommendation: optional one-liner in same plan for consistency; not CAP-blocking
+   - **RESOLVED:** Skip annotating `wallet_ping` this phase — not CAP-blocking; D-13 applies to CAP tools only
 
 ## Environment Availability
 
