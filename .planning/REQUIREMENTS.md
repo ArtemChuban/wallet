@@ -24,7 +24,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 - [ ] **SIDE-01**: Agent can list debts and debt primary totals via MCP without folding debts into NW (DISOL-01)
 - [ ] **SIDE-02**: Agent can list income (plan/actual/overdue) via MCP without writing BalanceSnapshot (INISO-01)
 - [ ] **SIDE-03**: Agent can list grace obligations via MCP without rewriting historical NW LOCF (GRISO-01)
-- [ ] **SIDE-04**: Agent can get Капитал forecast overlay (income + A′ grace) via MCP
+- [x] **SIDE-04**: Agent can get Капитал forecast overlay (income + A′ grace) via MCP
 
 ### Client / policy
 
@@ -77,7 +77,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SIDE-01 | Phase 25 | Pending |
 | SIDE-02 | Phase 25 | Pending |
 | SIDE-03 | Phase 25 | Pending |
-| SIDE-04 | Phase 25 | Pending |
+| SIDE-04 | Phase 25 | Complete |
 | CLI-01 | Phase 26 | Pending |
 | CLI-02 | Phase 26 | Pending |
 | PARITY-01 | Phase 26 | Pending |

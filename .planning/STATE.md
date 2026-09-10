@@ -5,16 +5,16 @@ milestone_name: Local MCP
 current_phase: 25
 current_phase_name: Side-Ledger Tools + Isolation
 status: executing
-stopped_at: Completed 25-01-PLAN.md
-last_updated: "2026-09-10T17:37:18.296Z"
+stopped_at: Completed 25-02-PLAN.md
+last_updated: "2026-09-10T17:43:07.041Z"
 last_activity: 2026-09-10
 last_activity_desc: Completed 25-01 Wave 0 stubs + horizon schema + disol MCP walls
-state_head: 79c93f1
+state_head: 2d926c68c75919507bcaf55d5bff77fafb97488c
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 10
-  completed_plans: 7
+  completed_plans: 8
   percent: 25
 ---
 
@@ -30,8 +30,8 @@ See: .planning/PROJECT.md (updated 2026-09-10 — v1.4 Local MCP)
 ## Current Position
 
 Phase: 25 of 26 (Side-Ledger Tools + Isolation)
-Plan: 2 of 4 (25-02 next)
-Status: executing
+Plan: 3 of 4 (25-02 next)
+Status: Ready to execute
 Last activity: 2026-09-10 — Completed 25-01-PLAN.md
 
 Progress: [███░░░░░░░] 25%
@@ -52,6 +52,7 @@ Progress: [███░░░░░░░] 25%
 | Plan | Duration | Tasks | Files |
 |------|----------|-------|-------|
 | Phase 25 P01 | 3min | 3 tasks | 8 files |
+| Phase 25 P02 | 4min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -67,6 +68,9 @@ v1.4 locks (pending execution):
 - [Phase 25]: optionalHorizonEndSchema YYYY-MM-DD; default today+365 stays in forecast loader (D-04)
 - [Phase 25]: optionalIncomeRangeSchema both-or-neither from/to for list_income (A2)
 - [Phase 25]: disol MCP walls on load-net-worth-asof + tools/net-worth only (D-05)
+- [Phase 25]: Anchor via loadNetWorthAsOf(today) accounts-only; rates/income/grace batched beside it
+- [Phase 25]: Horizon default stays in resolveForecastHorizonEnd — not resolveAsOf (D-04)
+- [Phase 25]: Instructions list get_forecast_overlay now; list_* tools named as next (Plan 03–04)
 
 ### Pending Todos
 
@@ -101,6 +105,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-10T17:37:18.227Z
-Stopped at: Completed 25-01-PLAN.md
+Last session: 2026-09-10T17:43:06.959Z
+Stopped at: Completed 25-02-PLAN.md
 Resume file: None
