@@ -44,7 +44,7 @@ Progress: [██░░░░░░░░] 25%
 - Average duration: —
 - Total execution time: —
 
-**By Phase:** v1.3 complete (18–22). v1.4 phases 23–26 not started.
+**By Phase:** v1.3 complete (18–22). v1.4: Phase 23 complete; Phase 24 research done (plan next).
 
 *Updated after each plan completion*
 
