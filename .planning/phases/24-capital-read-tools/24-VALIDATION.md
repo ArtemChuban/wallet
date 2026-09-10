@@ -47,7 +47,7 @@ created: "2026-09-10"
 | 24-03-T2 | 03 | 3 | CAP-03 | T-24-02 | conversionOk false | unit | `npx vitest run src/lib/mcp/tools/balances.test.ts` | ❌ W0 | ⬜ pending | markers missing / vitest non-zero |
 | 24-03-T3 | 03 | 3 | CAP-01+03 | T-24-03 | handler wire | unit | `npx vitest run src/lib/mcp/tools/accounts.test.ts src/lib/mcp/tools/balances.test.ts src/lib/mcp/tools/net-worth.test.ts src/app/api/mcp/route.test.ts` | — | ⬜ pending | register markers missing / vitest non-zero |
 | 24-04-T1 | 04 | 4 | CAP-04 | T-24-02 | FX transparency | unit | `npx vitest run src/lib/mcp/tools/fx.test.ts` | ❌ W0 | ⬜ pending | markers missing / vitest non-zero |
-| 24-04-T2 | 04 | 4 | CAP-01…04 | T-24-03 | full catalog | unit | `npx vitest run src/lib/mcp/ src/app/api/mcp/route.test.ts && npm test` | — | ⬜ pending | CAP register missing / suite non-zero |
+| 24-04-T2 | 04 | 4 | CAP-01…04 | T-24-03 | full catalog | unit | `npx vitest run src/lib/mcp/ src/app/api/mcp/route.test.ts` | — | ⬜ pending | CAP register missing / suite non-zero |
 | 24-host | * | * | HOST regression | T-24-01 | localhost guard unchanged | unit | `npx vitest run src/app/api/mcp/route.test.ts src/lib/mcp/localhost-guard.test.ts` | ✅ | ⬜ pending | vitest non-zero |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
