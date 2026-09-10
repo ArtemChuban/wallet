@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 14
+open_count: 18
 waived_count: 0
 fixed_count: 5
-total_count: 19
-last_updated: 2026-09-10T13:32:05.494Z
+total_count: 23
+last_updated: 2026-09-10T16:04:03.667Z
 ---
 
 # Broken Windows Ledger
@@ -34,6 +34,10 @@ last_updated: 2026-09-10T13:32:05.494Z
 | 17 | 22 | deviation | .planning/ROADMAP.md |  | Rule 3: re-applied Phase 22 Progress Complete after roadmap.update-plan-progress In Progress clobber | fixed |  | 2026-09-09T23:32:45.946Z | 2026-09-09T23:33:19.920Z |
 | 18 | 23 | stub | src/lib/mcp/localhost-guard.test.ts | 8 | Wave 0 it.todo Host/Origin/port matrix — Plan 02 greens | open |  | 2026-09-10T13:32:05.374Z |  |
 | 19 | 23 | stub | src/app/api/mcp/route.test.ts | 8 | Wave 0 it.todo route smoke mock fetch — Plan 02 greens | open |  | 2026-09-10T13:32:05.494Z |  |
+| 20 | 24 | stub | src/lib/mcp/tools/accounts.test.ts |  | Wave 0 it.todo CAP stub until later plan greens | open |  | 2026-09-10T16:04:03.313Z |  |
+| 21 | 24 | stub | src/lib/mcp/tools/net-worth.test.ts |  | Wave 0 it.todo CAP stub until later plan greens | open |  | 2026-09-10T16:04:03.433Z |  |
+| 22 | 24 | stub | src/lib/mcp/tools/balances.test.ts |  | Wave 0 it.todo CAP stub until later plan greens | open |  | 2026-09-10T16:04:03.553Z |  |
+| 23 | 24 | stub | src/lib/mcp/tools/fx.test.ts |  | Wave 0 it.todo CAP stub until later plan greens | open |  | 2026-09-10T16:04:03.667Z |  |
 
 ````json
 [
@@ -263,6 +267,54 @@ last_updated: 2026-09-10T13:32:05.494Z
     "status": "open",
     "reason": "",
     "recorded_at": "2026-09-10T13:32:05.494Z",
+    "resolved_at": null
+  },
+  {
+    "id": 20,
+    "kind": "stub",
+    "phase": "24",
+    "file": "src/lib/mcp/tools/accounts.test.ts",
+    "line": null,
+    "description": "Wave 0 it.todo CAP stub until later plan greens",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-10T16:04:03.313Z",
+    "resolved_at": null
+  },
+  {
+    "id": 21,
+    "kind": "stub",
+    "phase": "24",
+    "file": "src/lib/mcp/tools/net-worth.test.ts",
+    "line": null,
+    "description": "Wave 0 it.todo CAP stub until later plan greens",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-10T16:04:03.433Z",
+    "resolved_at": null
+  },
+  {
+    "id": 22,
+    "kind": "stub",
+    "phase": "24",
+    "file": "src/lib/mcp/tools/balances.test.ts",
+    "line": null,
+    "description": "Wave 0 it.todo CAP stub until later plan greens",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-10T16:04:03.553Z",
+    "resolved_at": null
+  },
+  {
+    "id": 23,
+    "kind": "stub",
+    "phase": "24",
+    "file": "src/lib/mcp/tools/fx.test.ts",
+    "line": null,
+    "description": "Wave 0 it.todo CAP stub until later plan greens",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-10T16:04:03.667Z",
     "resolved_at": null
   }
 ]
