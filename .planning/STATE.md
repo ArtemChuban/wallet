@@ -4,12 +4,12 @@ milestone: v1.4
 milestone_name: Local MCP
 current_phase: 25
 current_phase_name: Side-Ledger Tools + Isolation
-status: planning
-stopped_at: Phase 25 context gathered
-last_updated: "2026-09-10T17:06:25.272Z"
+status: ready_to_plan
+stopped_at: Phase 25 research complete
+last_updated: "2026-09-10T17:13:51.159Z"
 last_activity: 2026-09-10
-last_activity_desc: Phase 24 complete, transitioned to Phase 25
-state_head: 432a8b3a54f891bbc26c841f2755cf78a2e017f8
+last_activity_desc: Phase 25 RESEARCH.md written
+state_head: c4e55011e66ebc545b5005c76b7dd4dc2baad1a8
 progress:
   total_phases: 4
   completed_phases: 1
@@ -31,8 +31,8 @@ See: .planning/PROJECT.md (updated 2026-09-10 — v1.4 Local MCP)
 
 Phase: 25 of 26 (Side-Ledger Tools + Isolation)
 Plan: Not started
-Status: Ready to plan
-Last activity: 2026-09-10 — Phase 24 complete, transitioned to Phase 25
+Status: ready_to_plan
+Last activity: 2026-09-10 — Phase 25 RESEARCH.md written
 
 Progress: [█████░░░░░] 50%
 
@@ -94,5 +94,5 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-09-10T17:06:25.151Z
-Stopped at: Phase 25 context gathered
+Stopped at: Phase 25 research complete
 Resume file: .planning/phases/25-side-ledger-tools-isolation/25-CONTEXT.md
