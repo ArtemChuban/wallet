@@ -84,7 +84,10 @@ Full detail: [milestones/v1.3-ROADMAP.md](./milestones/v1.3-ROADMAP.md)
   2. External client can complete MCP initialize against that URL (curl or Inspector smoke)
   3. Requests with non-localhost Host/Origin are rejected
   4. Compose host publish remains `127.0.0.1:3000:3000` (not `0.0.0.0`)
-**Plans**: TBD
+**Plans**: 2 plans
+Plans:
+- [ ] 23-01-PLAN.md — SUS gate + Wave 0 stubs + install MCP deps
+- [ ] 23-02-PLAN.md — Tracer guarded /api/mcp + wallet_ping + Vitest + curl/Compose smoke
 
 ### Phase 24: Capital Read Tools
 **Goal**: External agent can read accounts, net worth, balances, and FX via MCP with the same honesty as Капитал UI

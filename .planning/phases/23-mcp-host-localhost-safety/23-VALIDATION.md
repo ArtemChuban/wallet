@@ -40,11 +40,14 @@ created: "2026-09-10"
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 23-xx-xx | TBD | TBD | HOST-01 | — | Route serves guarded MCP handler | unit/smoke | `npx vitest run src/app/api/mcp/route.test.ts` | ❌ W0 | ⬜ pending |
-| 23-xx-xx | TBD | TBD | HOST-02 | T-23-01 | Bad Host/Origin/port → 403 + reason | unit | `npx vitest run src/lib/mcp/localhost-guard.test.ts` | ❌ W0 | ⬜ pending |
-| 23-xx-xx | TBD | TBD | HOST-01 | — | wallet_ping D-06 shape | unit | `npx vitest run` (mcp lib) | ❌ W0 | ⬜ pending |
+| 23-01-01 | 01 | 1 | HOST-01 | T-23-SC | Human confirms mcp-handler SUS before install | gate | RESEARCH present + mcp-handler citation | ✅ | ⬜ pending |
+| 23-01-02 | 01 | 1 | HOST-01, HOST-02 | — | Wave 0 stubs for guard + route smoke | unit | `npx vitest run src/lib/mcp/localhost-guard.test.ts src/app/api/mcp/route.test.ts` | ❌ W0 | ⬜ pending |
+| 23-01-03 | 01 | 1 | HOST-01 | T-23-SC | mcp-handler + server ^2 in package.json | install | node assert deps + node_modules dirs | ✅ pkg | ⬜ pending |
+| 23-02-01 | 02 | 2 | HOST-01, HOST-02 | T-23-01…05 | Tracer: guarded /api/mcp + wallet_ping | unit/smoke | `npx vitest run src/lib/mcp/localhost-guard.test.ts src/app/api/mcp/route.test.ts` | ❌ W0→impl | ⬜ pending |
+| 23-02-02 | 02 | 2 | HOST-02 | T-23-01,03,04 | Full Host/Origin/port matrix + route mock | unit | `npx vitest run src/lib/mcp/localhost-guard.test.ts src/app/api/mcp/route.test.ts` | ❌ W0→impl | ⬜ pending |
+| 23-02-03 | 02 | 2 | HOST-01, HOST-02 | T-23-02,05 | Curl initialize + Compose checklist + no CORS | suite + manual | `npm test` + grep Compose ports | ✅ compose | ⬜ pending |
 
-*Planner fills concrete Task IDs. Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
+*Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
 ---
 
