@@ -432,20 +432,13 @@ Route smoke: mock `createWalletMcpHandler` / `.fetch` to return `Response.json({
 | A3 | Pure-JS MCP packages auto-trace into standalone without `outputFileTracingIncludes` | NFT | Docker prod break until includes added |
 | A4 | `serverInfo.version: "1.4.0"` is fine for initialize (not tied to package.json `0.1.0`) | create-handler | Cosmetic only |
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Missing Host port when PORT=3000**
-   - What we know: SDK ignores port; D-03 requires port === PORT.
-   - What's unclear: Should `Host: localhost` (no port) pass when listening on 3000?
-   - Recommendation: **Reject** missing/non-matching port (A1). Curl with full URL always sends `:3000`.
+1. **Missing Host port when PORT=3000** — RESOLVED: Reject missing/non-matching port (A1). Curl with full URL always sends `:3000`. Locked in `23-02-PLAN.md` guard task.
 
-2. **mcp-handler install vs import**
-   - What we know: Locked to install both; create path cannot honor `responseMode: "json"`.
-   - What's unclear: Whether human wants unused dependency.
-   - Recommendation: Install both; implement with SDK; optional tiny comment in create-handler citing gap. SUS checkpoint on mcp-handler.
+2. **mcp-handler install vs import** — RESOLVED: Install both; implement with SDK `createMcpHandler` + `.fetch` and `responseMode: "json"`; comment gap in create-handler. SUS checkpoint on mcp-handler in `23-01-PLAN.md`.
 
-3. **Exact 403 JSON schema beyond `reason`**
-   - Recommendation: Minimal `{ error: "Forbidden", reason }` unless discuss-phase reopens.
+3. **Exact 403 JSON schema beyond `reason`** — RESOLVED: Minimal `{ error: "Forbidden", reason: "bad_host" | "bad_origin" }` (A2). Locked in CONTEXT D-10 + plans.
 
 ## Environment Availability
 
