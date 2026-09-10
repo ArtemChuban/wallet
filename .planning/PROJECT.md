@@ -14,9 +14,15 @@ At any moment, see true net worth (assets minus credit-card debt) in the primary
 
 Local Dockerized net-worth tracker + personal-debts + income + credit-grace ledgers: SQLite → currencies/accounts → dated balances → dated FX → NW dashboard/charts with dashed «Прогноз» from income and open grace obligations (A′ ΔNW=0) → `/debts` + `/income` + account «Грейс». Stack: Next.js 16 App Router, Prisma 7 + SQLite, shadcn/ui, recharts, Vitest. Russian-first UI. Debts never change NW (DISOL-01). Income never writes BalanceSnapshot / past LOCF (ISO-01). Grace never writes BalanceSnapshot / past LOCF (GRISO-01).
 
-## Next Milestone Goals
+## Current Milestone: v1.4 Local MCP
 
-Awaiting `/gsd-new-milestone` — fresh REQUIREMENTS + roadmap. Candidates from Future/Out of Scope / deferred: timezone in settings, local AI agent, account delete (ACCT-04), auto-apply income actual → snapshot, chart legend доходы vs обязательства, nav overdue badges.
+**Goal:** In-app read-only MCP server (same Next.js process) over localhost HTTP/SSE so external CLI agents connect without the app spawning subprocesses.
+
+**Target features:**
+- MCP hosted inside the running wallet app (Docker / `npm run dev` lifecycle)
+- Read-only tools covering accounts, balances/NW, FX, debts, income, grace
+- Connect docs for Claude Code / Cursor CLI → localhost MCP
+- No write tools, no in-app chat UI, no agent subprocess spawn
 
 ## Requirements
 
@@ -65,7 +71,10 @@ Awaiting `/gsd-new-milestone` — fresh REQUIREMENTS + roadmap. Candidates from 
 
 ### Active
 
-(None — define via `/gsd-new-milestone`)
+- [ ] In-app MCP server on localhost HTTP/SSE (same process as Next.js wallet)
+- [ ] Read-only MCP tools for accounts, balances/NW, FX, debts, income, grace
+- [ ] Docs: how to point Claude Code / Cursor CLI at the localhost MCP endpoint
+- [ ] Localhost-safe binding (no public exposure; single-user local)
 
 ### Out of Scope
 
@@ -86,7 +95,9 @@ Awaiting `/gsd-new-milestone` — fresh REQUIREMENTS + roadmap. Candidates from 
 - FX between arbitrary non-primary pairs — primary ↔ other only
 - Multi-user / auth / cloud sync — single local user
 - Timezone selection in settings — deferred (Moscow calendar still default unless promoted)
-- Local AI agent via subprocess — deferred
+- Local AI agent via subprocess spawn from app — superseded by in-app MCP host; CLI agent stays external
+- MCP write / mutate tools — deferred (v1.4 read-only)
+- In-app chat / «Ассистент» UI — deferred (CLI connects to MCP)
 - Nav «Валюты» discoverability / account delete (ACCT-04) — residual debt
 - Chart legend separating доходы vs обязательства on «Прогноз» — deferred
 - Cash / APR / min-payment / «missed min voids grace» bank rules — D-07…D-10 OOS
@@ -100,6 +111,8 @@ v1.1: personal debts as parallel domain; DISOL-01.
 v1.2: income side ledger + Капитал «Прогноз» from open planned pay; INISO-01.
 
 v1.3 (2026-09-10): credit grace dual-DOM schedules, manual «Платёж для беспроцентного», A′ overlay, GRISO isolation. Audit `tech_debt`: Nyquist VALIDATION still draft on phases 19–22.
+
+v1.4 (planning): in-app read-only MCP over localhost HTTP/SSE so external CLI agents query wallet data; no subprocess agent, no write tools, no chat UI.
 
 **UI constitution — destructive actions:** Never use `window.confirm` for deletes or irreversible actions. In-app second step with Russian copy. App-wide from Phase 9.
 
@@ -144,6 +157,8 @@ v1.3 (2026-09-10): credit grace dual-DOM schedules, manual «Платёж для
 | Bank contract study before grace-rule lock | User supplies contract; avoid guessing revolving/grace semantics | ✓ Good — Phase 18 |
 | Dual DOM (statement + due next month) over sole graceDurationDays | Matches T-Bank Platinum ТП 7.90 calendar (21→15) | ✓ Good — Phase 18–19 |
 | GRISO twin of INISO (`griso.test.ts` + never-calls ×5) | Regression-proof historical NW free of grace | ✓ Good — Phase 22 |
+| In-app MCP host (not sidecar / not app-spawned agent) | CLI agent stays external; wallet exposes tools on localhost | — Pending v1.4 |
+| MCP v1.4 = read-only + HTTP/SSE | Thin slice; writes + chat UI deferred | — Pending v1.4 |
 
 ## Evolution
 
@@ -163,4 +178,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-10 after v1.3 milestone*
+*Last updated: 2026-09-10 after starting v1.4 Local MCP*
