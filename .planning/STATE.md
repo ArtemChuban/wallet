@@ -2,20 +2,20 @@
 gsd_state_version: 1.0
 milestone: v1.4
 milestone_name: Local MCP
-current_phase: 24
-current_phase_name: Capital Read Tools
-status: planning
-stopped_at: Phase 23 verified passed
-last_updated: "2026-09-10T13:50:08.137Z"
+current_phase: 23
+current_phase_name: MCP Host + Localhost Safety
+status: ready_to_execute
+stopped_at: Phase 24 context gathered
+last_updated: "2026-09-10T15:33:55.261Z"
 last_activity: 2026-09-10
 last_activity_desc: Phase 23 plan-check re-verify PASSED (Open Questions RESOLVED)
-state_head: b7f0f71c681db314d1af667bc38c45c4924bb228
+state_head: dda21c85926dbb905035f3aae6f749a9c60ed603
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 0
   total_plans: 2
   completed_plans: 2
-  percent: 25
+  percent: 0
 ---
 
 # Project State
@@ -25,16 +25,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-10 — v1.4 Local MCP)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 23 — MCP Host + Localhost Safety
+**Current focus:** Phase 24 — Capital Read Tools
 
 ## Current Position
 
-Phase: 23 of 26 (MCP Host + Localhost Safety)
-Plan: 01 (of 2)
-Status: Ready to execute (plan-check passed)
-Last activity: 2026-09-10 — Phase 23 plan-check PASSED
+Phase: 24 of 26 (Capital Read Tools)
+Plan: —
+Status: Ready to discuss/plan
+Last activity: 2026-09-10 — Phase 23 verified passed (HOST-01/02)
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [██░░░░░░░░] 25%
 
 ## Performance Metrics
 
@@ -63,7 +63,6 @@ v1.4 locks (pending execution):
 ### Pending Todos
 
 - Add timezone selection to settings (general, minor)
-- Integrate local AI agent via subprocess (general, minor) — superseded by v1.4 MCP; revisit todo status after ship
 
 ### Blockers/Concerns
 
@@ -88,12 +87,12 @@ Items acknowledged and deferred at milestone close, most recent first:
 | todos | 2026-09-05-add-salary-income-tracking-with-forecast.md | promoted → v1.2 (shipped) | 2026-09-07 | v1.1 |
 | todos | 2026-09-05-add-timezone-selection-to-settings.md | (presence-only) | 2026-09-07 | v1.1 |
 | todos | 2026-09-05-improve-credit-account-type-with-limit-grace-period-and-fore.md | folded/closed via Phase 18 CONT-01 (dual DOM + A′) | 2026-09-08 | v1.3 |
-| todos | 2026-09-05-integrate-local-ai-agent-via-subprocess.md | (presence-only) | 2026-09-07 | v1.1 |
+| todos | 2026-09-05-integrate-local-ai-agent-via-subprocess.md | closed → v1.4 Local MCP (completed 2026-09-10) | 2026-09-07 | v1.1 |
 | todos | 2026-09-05-merge-debit-crypto-cash-account-types-into-one.md | done via quick 260908-0i7 | 2026-09-08 | v1.2 |
 | scope | ACCT-01 delete → ACCT-04 (D-14) | deferred | 2026-09-02 | v1 |
 
 ## Session Continuity
 
-Last session: 2026-09-10T13:50:08.080Z
-Stopped at: Phase 23 verified passed
-Resume file: .planning/phases/23-mcp-host-localhost-safety/23-VERIFICATION.md
+Last session: 2026-09-10T15:33:55.177Z
+Stopped at: Phase 24 context gathered
+Resume file: .planning/phases/24-capital-read-tools/24-CONTEXT.md
