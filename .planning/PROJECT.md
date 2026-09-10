@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A local, single-user personal finance site for tracking net worth across accounts (asset + credit), a parallel «Долги» side ledger, a «Доходы» income ledger with plan vs actual and NW forecast from recurring pay, and (v1.3) credit-card grace-period tracking with payment amounts on the NW forecast overlay. Runs in Docker with SQLite on the host; no cloud accounts. Not budgeting or transaction categorization.
+A local, single-user personal finance site for tracking net worth across accounts (asset + credit), a parallel «Долги» side ledger, a «Доходы» income ledger with plan vs actual and NW forecast from recurring pay, and credit-card grace-period tracking with A′ NW-neutral payment amounts on the Капитал «Прогноз» overlay. Runs in Docker with SQLite on the host; no cloud accounts. Not budgeting or transaction categorization.
 
 ## Core Value
 
@@ -10,20 +10,13 @@ At any moment, see true net worth (assets minus credit-card debt) in the primary
 
 ## Current State
 
-**Shipped:** v1.0 MVP (2026-09-04); **v1.1 Долги людям (2026-09-07)**; **v1.2 Доходы (2026-09-08)**. **Active:** v1.3 Кредитка — credit grace periods + forecast obligations.
+**Shipped:** v1.0 MVP (2026-09-04); **v1.1 Долги людям (2026-09-07)**; **v1.2 Доходы (2026-09-08)**; **v1.3 Кредитка (2026-09-10)**.
 
-Local Dockerized net-worth tracker + personal-debts + income ledgers: SQLite → currencies/accounts → dated balances → dated FX → NW dashboard/charts with dashed «Прогноз» from income and (v1.3) credit grace obligations → `/debts` + `/income`. Stack: Next.js 16 App Router, Prisma 7 + SQLite, shadcn/ui, recharts, Vitest. Russian-first UI. Debts never change NW (DISOL-01). Income never writes BalanceSnapshot / past LOCF (ISO-01).
+Local Dockerized net-worth tracker + personal-debts + income + credit-grace ledgers: SQLite → currencies/accounts → dated balances → dated FX → NW dashboard/charts with dashed «Прогноз» from income and open grace obligations (A′ ΔNW=0) → `/debts` + `/income` + account «Грейс». Stack: Next.js 16 App Router, Prisma 7 + SQLite, shadcn/ui, recharts, Vitest. Russian-first UI. Debts never change NW (DISOL-01). Income never writes BalanceSnapshot / past LOCF (ISO-01). Grace never writes BalanceSnapshot / past LOCF (GRISO-01).
 
-## Current Milestone: v1.3 Кредитка
+## Next Milestone Goals
 
-**Goal:** Track monthly credit-card grace schedules (statement DOM + due DOM next month), manually record «Платёж для беспроцентного», and reflect open obligations on Капитал «Прогноз» as A′ NW-neutral slots (visible @ due, ΔNW=0).
-
-**Target features:**
-- Credit account: statement day-of-month + due day-of-month (monthly dual DOM; clamp on statement)
-- Manual entry of amount due («Платёж для беспроцентного») for a cycle
-- That obligation appears on Капитал «Прогноз» at due (A′ NW-neutral — visible, no second chart series)
-- Earlier repayment: manual close entry; forecast stops carrying that obligation
-- Bank contract study before detailed planning (user supplies contract → document grace rules)
+Awaiting `/gsd-new-milestone` — fresh REQUIREMENTS + roadmap. Candidates from Future/Out of Scope / deferred: timezone in settings, local AI agent, account delete (ACCT-04), auto-apply income actual → snapshot, chart legend доходы vs обязательства, nav overdue badges.
 
 ## Requirements
 
@@ -61,21 +54,24 @@ Local Dockerized net-worth tracker + personal-debts + income ledgers: SQLite →
 - ✓ On Капитал `/`, user sees NW chart with future projection including recurring + future one-time pay via FX LOCF overlay — Phase 17 (FCST-01)
 - ✓ When a planned income date has passed without an actual, UI highlights it so the user can fill it in — Phase 15
 - ✓ Historical NW / BalanceSnapshot stay income-free (INISO) — Phase 17 (ISO-01)
-- ✓ Капитал «Прогноз» shows open credit obligations at due as A′ NW-neutral (visible, ΔNW=0 + tooltip; FX LOCF honesty) — Phase 21 (GRFCST-01/02)
+
+### Validated (v1.3)
+
+- ✓ Bank contract studied; dual DOM + A′ NW-neutral + RU vocab locked in CONTEXT before schema — Phase 18 (CONT-01)
+- ✓ Credit account stores statementDayOfMonth + dueDayOfMonth (clamp; FIAT_CREDIT-only) — Phase 19 (CYCLE-01)
+- ✓ User sees cycle instances (current / next) and «Грейс» CRUD for amount due / early close / overdue — Phase 20 (CYCLE-02, OBL-01…03, UX-01)
+- ✓ Капитал «Прогноз» shows open grace obligations as A′ NW-neutral (ΔNW=0 + tooltip; FX LOCF honesty) — Phase 21 (GRFCST-01/02)
+- ✓ Grace never writes BalanceSnapshot or changes historical NW LOCF (GRISO regression twin) — Phase 22 (GRISO-01)
 
 ### Active
 
-- [ ] User can set credit statement DOM + due DOM (monthly dual DOM schedule; clamp on statement)
-- [ ] User can manually enter «Платёж для беспроцентного» when a cycle closes
-- [ ] User can record earlier repayment/close of that obligation
-- [ ] Historical NW / BalanceSnapshot stay unaffected by grace-period entries (forecast overlay only)
-- [ ] Grace rules documented from the user's bank contract before implementation locks
+(None — define via `/gsd-new-milestone`)
 
 ### Out of Scope
 
 - Auto-updating account balance snapshots when income is marked received — deferred (manual balances stay source of truth)
-- Deriving amount due from balance-snapshot history — v1.3 is manual entry only
-- Full revolving interest / penalty calculation engine — grace tracking + forecast only unless contract study forces more
+- Deriving amount due from balance-snapshot history — v1.3 shipped manual entry only
+- Full revolving interest / penalty calculation engine — grace tracking + forecast only
 - Transaction history / expense posting / full double-entry — still periodic balance snapshots only
 - Spending analytics, monthly burn, category cash-flow — deferred
 - Long-term savings goals with target dates — deferred
@@ -84,27 +80,30 @@ Local Dockerized net-worth tracker + personal-debts + income ledgers: SQLite →
 - Repayments in a different currency than the debt — deferred
 - Debts affecting net worth — explicitly excluded; tracking alongside capital only
 - Income amounts flowing into `computeNetWorthRows` historical LOCF (projection is forecast overlay, not rewriting past NW) — locked
+- Grace feeding historical `computeNetWorthRows` / LOCF — locked GRISO-01
 - Bank/CSV import or API sync — deferred; manual only
 - Automatic FX from external APIs — deferred; manual rates only
 - FX between arbitrary non-primary pairs — primary ↔ other only
 - Multi-user / auth / cloud sync — single local user
 - Timezone selection in settings — deferred (Moscow calendar still default unless promoted)
 - Local AI agent via subprocess — deferred
-- Nav «Валюты» discoverability / account delete (ACCT-04) — residual v1 debt, not this milestone unless promoted later
+- Nav «Валюты» discoverability / account delete (ACCT-04) — residual debt
+- Chart legend separating доходы vs обязательства on «Прогноз» — deferred
+- Cash / APR / min-payment / «missed min voids grace» bank rules — D-07…D-10 OOS
 
 ## Context
 
-Shipped v1.0: capital visibility across disconnected money places (bank, USDT, cash, credit debt) in one local Docker + SQLite app. UI Russian-first. Residual audit tech debt: some human-only FieldControl/restart smoke checks; nav «Валюты» lands on rates not currency list.
+Shipped v1.0: capital visibility across disconnected money places (bank, USDT, cash, credit debt) in one local Docker + SQLite app. UI Russian-first.
 
-v1.1 adds personal debts (people ↔ money owed) as a parallel domain: same money/FX primitives for primary totals and charts, but debt balances must not flow into `computeNetWorthRows` or NW charts.
+v1.1: personal debts as parallel domain; DISOL-01.
 
-v1.2 adds income (зарплата + разовые) as another parallel ledger: plan vs actual, counterparties + stats, multi-currency; Капитал shows forward NW projection from open planned pay (recurring + future one-time). Marking actual does not bump account balances yet. Milestone archived 2026-09-08.
+v1.2: income side ledger + Капитал «Прогноз» from open planned pay; INISO-01.
 
-v1.3 extends credit accounts with monthly dual-DOM grace schedules (statement + due), manual «Платёж для беспроцентного» / early close, and A′ NW-neutral forecast overlay on Капитал. Contract study with the user's bank agreement informs the exact cycle rules before plan lock.
+v1.3 (2026-09-10): credit grace dual-DOM schedules, manual «Платёж для беспроцентного», A′ overlay, GRISO isolation. Audit `tech_debt`: Nyquist VALIDATION still draft on phases 19–22.
 
-**UI constitution — destructive actions:** Never use `window.confirm` (or equivalent browser confirm) for deletes or other irreversible actions. Always use an in-app second step inside the dialog/flow (explicit «точно удалить?» / equivalent) with Russian copy that states what will be lost. Applies app-wide from Phase 9 onward (debts, people, balance snapshots, and any future destructive UX).
+**UI constitution — destructive actions:** Never use `window.confirm` for deletes or irreversible actions. In-app second step with Russian copy. App-wide from Phase 9.
 
-**Operator preferences:** See `.planning/OPERATOR.md` (agent-driven UAT via `npm run dev` + Orca browser; ask human only for subjective / parallel / blocked cases). Binding for all agents on `/gsd-verify-work`.
+**Operator preferences:** See `.planning/OPERATOR.md` (agent-driven UAT via `npm run dev` + Orca).
 
 ## Constraints
 
@@ -141,8 +140,10 @@ v1.3 extends credit accounts with monthly dual-DOM grace schedules (statement + 
 | Income = side ledger; actual ≠ BalanceSnapshot; forecast overlay only | Keep historical NW account-only; ISO-01 | ✓ Good — Phase 17 INISO + Orca |
 | Forecast = dashed «Прогноз» Line + hinge; FX exclude → partial banner | Forecast-not-fact UX; never invent rates | ✓ Good — Phase 17 |
 | Credit grace amount due = manual entry (not derived from snapshots) | User lock for v1.3; snapshot history stays balance source of truth | ✓ Good — Phase 20 |
-| Credit grace obligations = forecast overlay only (no historical NW rewrite) | Same isolation pattern as income ISO-01; A′ ΔNW=0 + FX banner | ✓ Good — Phase 21 |
+| Credit grace obligations = forecast overlay only (no historical NW rewrite); A′ ΔNW=0 | Same isolation pattern as income ISO-01; FX banner honesty | ✓ Good — Phase 21–22 |
 | Bank contract study before grace-rule lock | User supplies contract; avoid guessing revolving/grace semantics | ✓ Good — Phase 18 |
+| Dual DOM (statement + due next month) over sole graceDurationDays | Matches T-Bank Platinum ТП 7.90 calendar (21→15) | ✓ Good — Phase 18–19 |
+| GRISO twin of INISO (`griso.test.ts` + never-calls ×5) | Regression-proof historical NW free of grace | ✓ Good — Phase 22 |
 
 ## Evolution
 
@@ -162,4 +163,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-09 after Phase 21*
+*Last updated: 2026-09-10 after v1.3 milestone*

@@ -1,5 +1,25 @@
 # Milestones
 
+## v1.3 Кредитка (Shipped: 2026-09-10)
+
+**Closeout:** override_closeout  
+**Known verification overrides:** 0 newly acknowledged, 2 carried forward from a prior close (see STATE.md Deferred Items)  
+**Audit:** tech_debt (Nyquist VALIDATION draft on phases 19–22; 10/10 reqs satisfied)  
+**Phases completed:** 5 phases, 13 plans, 31 tasks  
+**Git range:** `v1.2` → `v1.3` (~160 commits, 136 files, +20k/−1k)  
+**Timeline:** 2026-09-08 → 2026-09-10 (~2.5 days)
+
+**Key accomplishments:**
+
+- Bank contract → dual DOM + A′ locks (CONT-01 / Phase 18)
+- Prisma dual DOM + CreditGraceObligation + pure next-month due math (CYCLE-01 / Phase 19)
+- «Грейс» CRUD: schedule, amount due, early close, overdue, debt≠grace RU (Phases 20)
+- Капитал «Прогноз» A′ ΔNW=0 + FX honesty banner (GRFCST-01/02 / Phase 21)
+- GRISO twin suite — grace never touches BalanceSnapshot / historical LOCF (Phase 22)
+- Audit 10/10 reqs · integration 15/15 · flows 6/6
+
+---
+
 ## v1.2 Доходы (Shipped: 2026-09-08)
 
 **Closeout:** verified_closeout  

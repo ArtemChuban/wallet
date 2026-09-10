@@ -2,48 +2,46 @@
 gsd_state_version: 1.0
 milestone: v1.3
 milestone_name: Кредитка
-current_phase: 22
-status: completed
+status: Awaiting next milestone
 stopped_at: Phase 22 complete — all phases complete
-last_updated: "2026-09-10T10:45:00.000Z"
+last_updated: "2026-09-10T11:22:54.927Z"
 last_activity: 2026-09-10
-last_activity_desc: Phases 19+22 UAT complete (agent, all_auto_covered); v1.3 ready for complete-milestone
-state_head: 755f001
+last_activity_desc: Milestone v1.3 completed and archived
+state_head: 6d37e65ff414c15e645f3661d255282349b09ca6
 progress:
   total_phases: 5
   completed_phases: 5
   total_plans: 13
   completed_plans: 13
   percent: 100
+current_phase: 22
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-09-08 — v1.3 Кредитка)
+See: .planning/PROJECT.md (updated 2026-09-10 — v1.3 shipped)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** v1.3 UAT closed for 19+22; ready `/gsd-complete-milestone`
+**Current focus:** Planning next milestone — `/gsd-new-milestone`
 
 ## Current Position
 
-Phase: 22 — GRACEISO regression + polish
-Plan: 2 of 2 complete
-Status: All v1.3 phases complete — verification + UAT passed
-Last activity: 2026-09-10 — 19-UAT 12/12 + 22-UAT 5/5; GRISO suite 113/0
-
-Progress: [██████████] 100%
+Phase: Milestone v1.3 complete
+Plan: —
+Status: Awaiting next milestone
+Last activity: 2026-09-10 — Milestone v1.3 completed and archived
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 56 (v1.0: 24 + v1.1: 18 + v1.2: 14)
+- Total plans completed: 69 (v1.0: 24 + v1.1: 18 + v1.2: 14 + v1.3: 13)
 - Average duration: —
 - Total execution time: —
 
-**By Phase:** v1.3 not started. Prior per-plan metrics in git history / prior STATE.
+**By Phase:** v1.3 complete (phases 18–22). Per-plan metrics retained below.
 
 *Updated after each plan completion*
 **Per-Plan Metrics:**
@@ -102,14 +100,14 @@ v1.3 locks from Phase 18 (see `18-CONTEXT.md`):
 
 ### Blockers/Concerns
 
-- Phase 21: verify-work UAT — recheck tooltip grace block with OPEN obligation (live DB had obligations=[])
+(none)
 
 ### Roadmap Evolution
 
 - Phase 7: LOCF consolidation + Nyquist 3–6 (v1.0)
 - Phase 8–12: debts refresh + Nyquist 10–11 (v1.1)
 - Phases 13–17: v1.2 Доходы — SHIPPED 2026-09-08
-- Phases 18–22: v1.3 Кредитка — roadmap created 2026-09-08; Phase 18 locks dual DOM + A′ in REQUIREMENTS/ROADMAP/PROJECT
+- Phases 18–22: v1.3 Кредитка — SHIPPED 2026-09-10 (audit tech_debt: Nyquist draft 19–22)
 
 ## Deferred Items
 
@@ -126,10 +124,11 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-09T23:31:30.304Z
-Stopped at: Phase 22 complete — all phases complete
+Last session: 2026-09-10T11:23:00Z
+Stopped at: Milestone v1.3 archived — awaiting `/gsd-new-milestone`
 Resume file: None
 
 ## Operator Next Steps
 
-- Phases 19+22 UAT complete (agent-driven, coverage auto-pass). Run `/gsd-complete-milestone` for v1.3.
+- `/gsd-new-milestone` — define next REQUIREMENTS + roadmap (Active empty after v1.3)
+- Optional: `/gsd-validate-phase` 19–22 on archived phases if Nyquist debt should close retroactively

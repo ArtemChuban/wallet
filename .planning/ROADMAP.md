@@ -5,7 +5,7 @@
 - ✅ **v1.0 MVP** — Phases 1–7 (shipped 2026-09-04)
 - ✅ **v1.1 Долги людям** — Phases 8–12 (shipped 2026-09-07)
 - ✅ **v1.2 Доходы** — Phases 13–17 (shipped 2026-09-08)
-- 🚧 **v1.3 Кредитка** — Phases 18–22 (in progress)
+- ✅ **v1.3 Кредитка** — Phases 18–22 (shipped 2026-09-10)
 
 ## Phases
 
@@ -50,143 +50,15 @@ Full detail: [milestones/v1.2-ROADMAP.md](./milestones/v1.2-ROADMAP.md)
 
 </details>
 
-### 🚧 v1.3 Кредитка (In Progress)
+<details>
+<summary>✅ v1.3 Кредитка (Phases 18–22) — SHIPPED 2026-09-10</summary>
 
-**Milestone Goal:** Track monthly credit-card grace schedules (statement DOM + due DOM), manually record amount owed / early close, and show open obligations on Капитал «Прогноз» (A′ NW-neutral) without rewriting historical NW.
+- [x] Phase 18: Bank contract study + discuss locks (2/2 plans) — completed 2026-09-08
+- [x] Phase 19: Schema + pure grace domain math (3/3 plans) — completed 2026-09-09
+- [x] Phase 20: Obligation CRUD + cycle UI (3/3 plans) — completed 2026-09-09
+- [x] Phase 21: Капитал forecast integration (3/3 plans) — completed 2026-09-09
+- [x] Phase 22: GRACEISO regression + polish (2/2 plans) — completed 2026-09-10
 
-- [x] **Phase 18: Bank contract study + discuss locks** - Document bank grace rules; lock cycle/overlay decisions before schema (completed 2026-09-08)
-- [x] **Phase 19: Schema + pure grace domain math** - Persist grace config + obligation model; trustworthy due-date math (completed 2026-09-09)
-- [x] **Phase 20: Obligation CRUD + cycle UI** - Amount due, early close, cycle list, overdue highlight, debt≠grace copy (completed 2026-09-09)
-- [x] **Phase 21: Капитал forecast integration** - «Прогноз» includes open grace obligations with FX LOCF honesty (completed 2026-09-09)
-- [x] **Phase 22: GRACEISO regression + polish** - Prove grace never touches BalanceSnapshot / historical NW LOCF (completed 2026-09-10)
+Full detail: [milestones/v1.3-ROADMAP.md](./milestones/v1.3-ROADMAP.md)
 
-## Phase Details
-
-### Phase 18: Bank contract study + discuss locks
-
-**Goal**: Grace cycle rules and NW overlay semantics are locked from the user's bank contract before any schema/plan precision
-**Depends on**: Phase 17 (v1.2 shipped)
-**Requirements**: CONT-01
-**Success Criteria** (what must be TRUE):
-
-  1. User-supplied bank contract (or notes) is studied and grace rules are written into phase CONTEXT
-  2. Locked decisions exist for: dual DOM (statement day + due day next month), statement clamp via `clampDayOfMonth`, interest-free vs revolving OOS (D-01…D-10) — not sole duration-days SoT
-  3. Overlay **A′** NW-neutral locked (visible @ due, ΔNW=0 + tooltip) before Phase 19 plan lock (D-11…D-13) — not open Option A vs B deferral
-  4. Vocabulary locked in Russian: «Задолженность» ≠ «Платёж для беспроцентного» ≠ минимум (D-14…D-19)
-
-**Plans**: 2/2 plans executed
-Plans:
-**Wave 1**
-
-- [x] 18-01-PLAN.md — CONT-01 checklist + artifact structural proof (tracer)
-
-**Wave 2** *(blocked on Wave 1 completion)*
-
-- [x] 18-02-PLAN.md — Sync CYCLE-01 / ROADMAP / PROJECT to dual DOM + A′; fold credit todo
-
-### Phase 19: Schema + pure grace domain math
-
-**Goal**: Credit grace schedule and obligation identity exist as data + pure math ready for UI
-**Depends on**: Phase 18
-**Requirements**: CYCLE-01
-**Success Criteria** (what must be TRUE):
-
-  1. Credit account can store dual DOM ints (`statementDayOfMonth` + `dueDayOfMonth`); both null or both set
-  2. Pure helpers compute due via next-month DOM + statement advance via `clampDayOfMonth` (month-edge / Feb); do not treat sole `addCalendarDays(start, days)` as authoritative due engine
-  3. Obligation model can persist per-cycle amount/status keyed by cycle start without deriving dues from BalanceSnapshot
-
-**Plans**: 3/3 plans executed
-
-Plans:
-**Wave 1**
-
-- [x] 19-01-PLAN.md — Dual-DOM schema + obligation model + cycleStart/dueAsOf tracer + migrate
-
-**Wave 2** *(parallel after Wave 1)*
-
-- [x] 19-02-PLAN.md — listCycleWindows / current-next / overdue pure math
-- [x] 19-03-PLAN.md — updateGraceSchedule Zod+action + obligation Zod ready
-
-### Phase 20: Obligation CRUD + cycle UI
-
-**Goal**: User manages grace cycles and obligations on the credit account with clear RU copy
-**Depends on**: Phase 19
-**Requirements**: CYCLE-02, OBL-01, OBL-02, OBL-03, UX-01
-**Success Criteria** (what must be TRUE):
-
-  1. User can see cycle instances for a credit account (current / next due)
-  2. User can manually enter amount due by end of interest-free window for a cycle
-  3. User can record early repayment / close of that obligation (DestructiveConfirmStep; no `window.confirm`)
-  4. When due date has passed without close, UI highlights the obligation so the user can act
-  5. UI clearly distinguishes snapshot credit debt from grace amount due (Russian copy)
-
-**Plans**: 3/3 plans executed
-**UI hint**: yes
-
-Plans:
-**Wave 1**
-
-- [x] 20-01-PLAN.md — Wave 0 stubs + DestructiveConfirmStep + tracer (Грейс → schedule → CTA → create)
-
-**Wave 2** *(blocked on Wave 1)*
-
-- [x] 20-02-PLAN.md — update/close/reopen actions + confirm steps + collapsed CLOSED
-
-**Wave 3** *(blocked on Wave 2)*
-
-- [x] 20-03-PLAN.md — overdue chrome (OBL-03) + UX-01 copy + clear schedule
-
-### Phase 21: Капитал forecast integration
-
-**Goal**: Open grace obligations appear on Капитал «Прогноз» with the same FX honesty as income forecast
-**Depends on**: Phase 20
-**Requirements**: GRFCST-01, GRFCST-02
-**Success Criteria** (what must be TRUE):
-
-  1. On Капитал `/`, dashed «Прогноз» includes open credit grace obligations from their due dates
-  2. Forecast credit slots use FX LOCF honesty; missing rate shows partial banner (never invents rates)
-  3. Early-closed obligations no longer move the forecast; income + grace coexist on one signed series
-
-**Plans**: 3/3 plans executed
-
-Plans:
-
-- [x] 21-01-PLAN.md — Wave 0 + OPEN membership fold + A′ builder tracer (FX codes)
-- [x] 21-02-PLAN.md — `/` OPEN load → shell merge → banner codes + isolation smoke
-- [x] 21-03-PLAN.md — Tooltip two-block grace chrome + sampling/human-check
-
-**UI hint**: yes
-
-### Phase 22: GRACEISO regression + polish
-
-**Goal**: Historical NW and BalanceSnapshot stay grace-free; milestone isolation is regression-proof
-**Depends on**: Phase 21
-**Requirements**: GRISO-01
-**Success Criteria** (what must be TRUE):
-
-  1. Grace config / amount-due / early-close actions never write BalanceSnapshot
-  2. Historical NW / past LOCF series stay identical with vs without grace data (golden / identity check)
-  3. Isolation is covered by automated regression (file-scan / suite twin of INISO) suitable for milestone close
-
-**Plans**: 2/2 plans executed
-
-Plans:
-
-- [x] 22-01-PLAN.md — GRISO twin suite (file-scan + golden) + five grace write-gates
-- [x] 22-02-PLAN.md — Gate hygiene: REQUIREMENTS/ROADMAP/STATE after green suite
-
-## Progress
-
-| Phase | Milestone | Plans Complete | Status | Completed |
-|-------|-----------|----------------|--------|-----------|
-| 1–7 | v1.0 | — | Complete | 2026-09-04 |
-| 8–12 | v1.1 | — | Complete | 2026-09-07 |
-| 13–17 | v1.2 | — | Complete | 2026-09-08 |
-| 18. Bank contract study + discuss locks | v1.3 | 2/2 | Complete    | 2026-09-08 |
-| 19. Schema + pure grace domain math | v1.3 | 3/3 | Complete    | 2026-09-09 |
-| 20. Obligation CRUD + cycle UI | v1.3 | 3/3 | Complete    | 2026-09-09 |
-| 21. Капитал forecast integration | v1.3 | 3/3 | Complete    | 2026-09-09 |
-| 22. GRACEISO regression + polish | v1.3 | 2/2 | Complete    | 2026-09-10 |
-
----
-*Roadmap updated: 2026-09-10 — Phase 22 plans 22-01…02 complete; GRISO-01 gate hygiene*
+</details>
