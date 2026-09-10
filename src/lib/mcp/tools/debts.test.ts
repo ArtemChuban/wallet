@@ -1,12 +1,22 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   filterDebtsForList,
   serializeDebtsPayload,
   type DebtListPersonInput,
 } from "@/lib/mcp/reads/load-debts";
-import { serializeNetWorthPayload } from "@/lib/mcp/reads/load-net-worth-asof";
+import {
+  serializeNetWorthPayload,
+  type NetWorthAccountMeta,
+} from "@/lib/mcp/reads/load-net-worth-asof";
+import { LIST_DEBTS_DESCRIPTION } from "@/lib/mcp/tools/debts";
 import { computeNetWorthRows, type NetWorthAccountInput } from "@/lib/net-worth";
-import type { NetWorthAccountMeta } from "@/lib/mcp/reads/load-net-worth-asof";
+
+const DEBTS_MCP_SOURCES = [
+  "src/lib/mcp/reads/load-debts.ts",
+  "src/lib/mcp/tools/debts.ts",
+] as const;
 
 const fixturePeople: DebtListPersonInput[] = [
   {
@@ -167,5 +177,21 @@ describe("list_debts (SIDE-01)", () => {
     expect(JSON.stringify(nw)).not.toMatch(/iOwePrimaryMinor|theyOwePrimaryMinor/);
     // Credit-card debtNativeMinor is accounts CAP — not Долги ledger.
     expect(nw.rows[0]).toHaveProperty("debtNativeMinor");
+  });
+
+  it("list_debts description has D-08 side-ledger one-liner; loader uses domain totals", () => {
+    expect(LIST_DEBTS_DESCRIPTION).toMatch(/Side ledger \(Долги\)/);
+    expect(LIST_DEBTS_DESCRIPTION).toMatch(/not historical net worth/);
+    const loader = readFileSync(
+      resolve(process.cwd(), "src/lib/mcp/reads/load-debts.ts"),
+      "utf8",
+    );
+    expect(loader).toMatch(/computeDebtPrimaryTotals/);
+    expect(loader).toMatch(/remainingMinor/);
+    for (const file of DEBTS_MCP_SOURCES) {
+      const src = readFileSync(resolve(process.cwd(), file), "utf8");
+      expect(src).not.toMatch(/from ["']@\/app\/.*\/actions["']/);
+      expect(src).not.toMatch(/balanceSnapshot\.(create|update|upsert|delete)/);
+    }
   });
 });
