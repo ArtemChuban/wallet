@@ -17,7 +17,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 - [ ] **CAP-01**: Agent can list accounts with types, currencies, and credit metadata via MCP
 - [ ] **CAP-02**: Agent can get net worth as-of a date via MCP with partial-FX honesty
 - [ ] **CAP-03**: Agent can get an account's native and primary balance as-of a date via MCP
-- [ ] **CAP-04**: Agent can list FX rates / rate-as-of (primary↔other) via MCP
+- [x] **CAP-04**: Agent can list FX rates / rate-as-of (primary↔other) via MCP
 
 ### Side ledgers (read-only)
 
@@ -73,7 +73,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CAP-01 | Phase 24 | Pending |
 | CAP-02 | Phase 24 | Pending |
 | CAP-03 | Phase 24 | Pending |
-| CAP-04 | Phase 24 | Pending |
+| CAP-04 | Phase 24 | Complete |
 | SIDE-01 | Phase 25 | Pending |
 | SIDE-02 | Phase 25 | Pending |
 | SIDE-03 | Phase 25 | Pending |
