@@ -1,7 +1,7 @@
 /**
  * MCP forecast overlay loader (SIDE-04).
  * Ports DashboardChartsShell forecastMeta fold → buildNetWorthForecastSeries.
- * Accounts-only NW anchor via loadNetWorthAsOf — never debts / buildNetWorthSeries.
+ * Accounts-only NW anchor via loadNetWorthAsOf — never debts / historical series builder.
  */
 
 import { openGraceForecastMembership } from "@/lib/credit-grace";
