@@ -1,8 +1,8 @@
 ---
 phase: "24"
 slug: "capital-read-tools"
-status: draft
-nyquist_compliant: false
+status: validated
+nyquist_compliant: true
 wave_0_complete: true
 created: "2026-09-10"
 ---
@@ -40,7 +40,7 @@ created: "2026-09-10"
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|------------|
 | 24-01-T1 | 01 | 1 | CAP-01…04 W0 | — | N/A | unit | `npx vitest run src/lib/mcp/tools/accounts.test.ts src/lib/mcp/tools/net-worth.test.ts src/lib/mcp/tools/balances.test.ts src/lib/mcp/tools/fx.test.ts` | ✅ | ✅ green | stub missing / vitest non-zero / hard-fail poison |
 | 24-01-T2 | 01 | 1 | D-09 | T-24-01 | string minors | unit | `npx vitest run src/lib/mcp/serialize.test.ts` | ✅ | ✅ green | vitest non-zero / "0 passed" |
-| 24-01-T3 | 01 | 1 | D-05/06/08 | T-24-04 | zod asOf | unit | `npx vitest run src/lib/mcp/as-of.test.ts` | ❌ W0 | ⬜ pending | vitest non-zero / today bypass |
+| 24-01-T3 | 01 | 1 | D-05/06/08 | T-24-04 | zod asOf | unit | `npx vitest run src/lib/mcp/as-of.test.ts` | ✅ | ✅ green | vitest non-zero / today bypass |
 | 24-02-T1 | 02 | 2 | CAP-02 | T-24-02 | computeNetWorthRows honesty | unit | `npx vitest run src/lib/mcp/tools/net-worth.test.ts src/lib/mcp/as-of.test.ts src/lib/mcp/serialize.test.ts` | ✅ W0 | ⬜ pending | markers absent / vitest non-zero |
 | 24-02-T2 | 02 | 2 | CAP-02 | T-24-02 | adapter parity | unit | `npx vitest run src/lib/mcp/tools/net-worth.test.ts src/lib/mcp/localhost-guard.test.ts src/app/api/mcp/route.test.ts` | ✅ W0 | ⬜ pending | vitest non-zero / CAP-02 todo left |
 | 24-03-T1 | 03 | 3 | CAP-01 | T-24-01 | metadata-only list | unit | `npx vitest run src/lib/mcp/tools/accounts.test.ts` | ✅ W0 | ⬜ pending | list_accounts missing / vitest non-zero |
@@ -56,8 +56,8 @@ created: "2026-09-10"
 
 ## Wave 0 Requirements
 
-- [ ] `src/lib/mcp/serialize.ts` + `serialize.test.ts` — BigInt/null helpers (D-09) — Plan 01 T2
-- [ ] `src/lib/mcp/as-of.ts` + `as-of.test.ts` — default today + YYYY-MM-DD regex (D-05/06/08) — Plan 01 T3
+- [x] `src/lib/mcp/serialize.ts` + `serialize.test.ts` — BigInt/null helpers (D-09) — Plan 01 T2
+- [x] `src/lib/mcp/as-of.ts` + `as-of.test.ts` — default today + YYYY-MM-DD regex (D-05/06/08) — Plan 01 T3
 - [x] `src/lib/mcp/tools/{accounts,net-worth,balances,fx}.test.ts` — CAP-01…04 Wave 0 stubs — Plan 01 T1
 - [ ] Prefer testing read assemblers with fixtures (no live SQLite) — mirror `net-worth.test.ts` style
 - [x] Framework install: none — Vitest already present
@@ -82,6 +82,6 @@ Existing domain tests (`src/lib/net-worth.test.ts`, `balances.test.ts`, `fx.test
 - [x] Wave 0 covers all MISSING references (planned in 24-01)
 - [x] No watch-mode flags
 - [x] Feedback latency < 90s
-- [ ] `nyquist_compliant: true` set in frontmatter (after Wave 0 executes)
+- [x] `nyquist_compliant: true` set in frontmatter (after Wave 0 executes)
 
-**Approval:** pending — plans authored; Wave 0 not yet executed
+**Approval:** Wave 0 executed (Plan 01) — serialize + as-of + CAP stubs present; later plans green tool suites
