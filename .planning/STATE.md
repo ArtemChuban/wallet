@@ -5,11 +5,11 @@ milestone_name: Local MCP
 current_phase: 25
 current_phase_name: Side-Ledger Tools + Isolation
 status: planning
-stopped_at: Phase 24 complete, ready to plan Phase 25
-last_updated: "2026-09-10T16:22:31.972Z"
+stopped_at: Phase 25 context gathered
+last_updated: "2026-09-10T17:06:25.272Z"
 last_activity: 2026-09-10
 last_activity_desc: Phase 24 complete, transitioned to Phase 25
-state_head: d42fa182cc00d698e42bd4eb49fc6f80916abd04
+state_head: 432a8b3a54f891bbc26c841f2755cf78a2e017f8
 progress:
   total_phases: 4
   completed_phases: 1
@@ -93,6 +93,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-10T16:22:31.605Z
-Stopped at: Phase 24 complete, ready to plan Phase 25
-Resume file: .planning/phases/24-capital-read-tools/24-VERIFICATION.md
+Last session: 2026-09-10T17:06:25.151Z
+Stopped at: Phase 25 context gathered
+Resume file: .planning/phases/25-side-ledger-tools-isolation/25-CONTEXT.md
