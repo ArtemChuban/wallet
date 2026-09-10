@@ -1,192 +1,188 @@
 # Feature Research
 
-**Domain:** Credit-card grace period / statement obligation + net-worth forecast overlay
-**Researched:** 2026-09-08
-**Confidence:** HIGH (product locks from PROJECT.md + user intent); MEDIUM (ecosystem UX via web)
-**Milestone:** v1.3 Кредитка
-**App shape:** Local single-user NW tracker (manual balance snapshots + dated FX); no bank sync; credit = limit + debt already shipped; income forecast overlay (v1.2) is the pattern to extend — not re-list as new
+**Domain:** In-app read-only MCP host for local personal-finance apps (Wallet v1.4)
+**Researched:** 2026-09-10
+**Confidence:** HIGH (PROJECT.md locks + Wallet domain libs); MEDIUM (ecosystem peers + client transport quirks)
 
-## Expected Behavior (domain norms → Wallet lock)
+**Scope:** MCP host capabilities only — tool surface, connect docs, localhost HTTP/SSE. Do **not** re-list accounts/balances/FX/debts/income/grace product features (already shipped v1.0–v1.3); they appear only as **tool dependencies**.
 
-Industry mental model (RU banks + bill/grace apps):
+## How local finance MCP usually works
 
-1. **Cycle template** — recurring billing/grace cycle: statement/cutoff anchor + days (or fixed due DOM) until interest-free pay deadline.
-2. **Cycle instance** — each month closes → bank publishes statement with amounts (min pay / «платёж для беспроцентного периода» / full debt).
-3. **Amount due (grace-preserving)** — user records the amount that must be paid by due date to keep grace. In connected apps this syncs; in manual apps user types from bank UI/PDF.
-4. **Status** — open obligation → paid/closed (full or early); overdue if due passed without close.
-5. **Forecast / cash planning** — upcoming obligation hits cashflow/NW projection **from the due date** as planned outflow; clearing it removes the future hit.
-6. **Live card debt ≠ statement due** — current outstanding debt (Wallet snapshots) drifts from the frozen statement amount; products that stay honest treat them separately.
+Peers (Beancount / GnuCash / Firefly MCP):
 
-Wallet-locked shape (do not fight):
+1. **Process model** — most ship **stdio**: client spawns a sidecar that opens the ledger file / talks to an API. HTTP used when the data plane is already a long-lived service (Firefly HTTP+OAuth).
+2. **Read surface** — small set of typed tools: list accounts, balances / net worth as-of, optional income statement, filtered transactions / BQL. Explicit **read-only** (file `mode=ro`, no write tools, path not in tool args).
+3. **Safety** — no shell; isolate data path via env; annotate `readOnlyHint: true`; bound result size.
+4. **Primitives** — **tools** are what agents actually call; resources/prompts optional polish.
 
-| Intent | Norm match |
-|--------|------------|
-| Grace START + duration DAYS, monthly repeat | Cycle template (TodayKa/Swipeity/BillWise cutoff→due; RU выписка→льготный) |
-| When period ends → **manual** amount due | PocketSmith “adjust when bill arrives”; anti-sync |
-| Amount on Капитал «Прогноз» from due date | PocketSmith/Monarch recurring bill foresight; extend v1.2 overlay |
-| Early close → forecast drops obligation | Paid/closed clears unpaid bill |
-| Amount **never** derived from snapshots | Explicit anti-feature vs “compute from spend” |
-| Contract later for exact rules | Bank-specific grace math stays research flag |
-
-Parallel to v1.2 income: schedule → occurrence → manual fact → overdue cue → forecast overlay only (ISO-01 twin). Not YNAB payment-category funding. Not Monarch Spinwheel sync.
+**Wallet lock (differs from peer default):** data lives in the **already-running** Next.js + SQLite Docker app on `127.0.0.1:3000`. MCP is **in-process HTTP/SSE**, not a stdio sidecar and not an app-spawned agent. External Claude Code / Cursor CLI connect **to** the wallet; wallet does not spawn them.
 
 ## Feature Landscape
 
-### Table Stakes (Users Expect These)
+### Table Stakes (Users / agents expect these)
 
-For *this* product shape (manual, local, snapshot NW + existing credit + dashed Прогноз). Missing these = v1.3 feels incomplete.
+Missing any of these → MCP host feels broken for v1.4.
 
 | Feature | Why Expected | Complexity | Notes / Wallet deps |
 |---------|--------------|------------|---------------------|
-| Grace cycle on credit account (start date + duration days, monthly) | Every grace/bill tool starts with cycle dates; RU user thinks «дата выписки + N дней» | MEDIUM | Extend existing credit Account; Moscow calendar; month-end edge cases → contract/phase research |
-| Generate / list open cycle instances | Users need “this period / next due” not only template fields | MEDIUM | Analog income occurrences; one open cycle per account typical |
-| Manual amount due for interest-free window | Without bank sync, statement amount is the only honest source; PROJECT lock | LOW–MEDIUM | Enter after cycle ends; currency = account currency |
-| Early close / mark paid (stops forecast) | Paying before due is normal; open obligation must clear | LOW–MEDIUM | Mirror debt early-close / income actual; DestructiveConfirm if destructive |
-| Obligation on Капитал «Прогноз» from due date | Core milestone deliverable; capital foresight | HIGH | Extend `nw-forecast` / DashboardChartsShell; **overlay only** — no BalanceSnapshot / historical LOCF rewrite |
-| FX honesty on forecast points | Same as income forecast partial banner | MEDIUM | Reuse FX LOCF Maps; exclude/partial if rate missing |
-| Overdue / «заполни» when due passed w/o close | Income overdue pattern; otherwise silent interest risk | LOW–MEDIUM | Highlight on credit UI; optional nav badge later |
-| Keep credit limit + debt snapshots unchanged by grace entries | Debt SoT stays snapshots; grace is obligation ledger | LOW (policy) | Grace amount ≠ auto debt delta |
-| Russian-first copy for cycle / due / paid | App constitution | LOW | Align with Капитал / Доходы vocabulary |
+| In-app MCP endpoint on same Next lifecycle | Peers that are “always-on apps” expose HTTP; PROJECT: same process as wallet | MEDIUM–HIGH | Route under app (e.g. `/mcp`); live with `npm run dev` / Docker; reuse Prisma/`src/lib/*` |
+| Streamable HTTP (+ SSE response capability) | Spec default for network MCP (2025-03-26+); clients POST JSON-RPC, accept JSON or SSE | MEDIUM | Prefer Streamable HTTP over deprecated dual-endpoint HTTP+SSE; keep SSE answers when client asks |
+| Bind localhost only (`127.0.0.1`) | Spec SHOULD; Docker already maps `127.0.0.1:3000:3000` | LOW | Never publish `0.0.0.0` for MCP; DNS-rebinding Host/Origin checks |
+| Read-only tools covering all shipped domains | Finance MCP peers always expose capital + side ledgers agents ask about | MEDIUM | Thin wrappers over existing libs — see tool map below |
+| `list_accounts` (or equiv.) | Every peer starts here | LOW | Account + currency metadata; types already in schema |
+| `get_balances` / `get_net_worth` as-of date | Table-stakes “how rich am I?” | LOW–MEDIUM | Deps: `getBalanceAsOf` / LOCF Maps + `computeNetWorthRows`; return `isPartial` honesty |
+| `list_fx_rates` / rate-as-of | Wallet FX is manual dated; agents need conversion context | LOW | Dep: `getRateAsOf` / FX Maps; primary↔other only |
+| `list_debts` + primary totals | Parallel ledger; agents will ask “кому должен” | LOW–MEDIUM | Deps: `remainingMinor*`, `computeDebtPrimaryTotals`; **never fold into NW** (DISOL-01) |
+| `list_income` / planned vs actual / overdue | Side ledger + forecast questions | MEDIUM | Deps: `listAllInRange`, `isIncomeOverdue`; actual ≠ BalanceSnapshot (INISO-01) |
+| `list_grace` / open obligations | v1.3 domain; “что платить по грейсу” | MEDIUM | Deps: `mergeGraceListRows`, `openGraceForecastMembership`; GRISO-01 |
+| Tool annotations `readOnlyHint: true` | Clients use hints for auto-approve UX; defaults assume destructive | LOW | Also `openWorldHint: false` (closed local DB); annotations ≠ security |
+| Server instructions / tool descriptions with isolation rules | Agents invent NW from debts/income without explicit DISOL/INISO/GRISO copy | LOW | Document in MCP `instructions` + each tool description |
+| Connect docs: Claude Code + Cursor CLI → localhost URL | PROJECT Active requirement; HTTP clients need copy-paste config | LOW–MEDIUM | Claude: `type: "http"` + `url`; Cursor: `url` in `mcp.json`; note “app must already be running” |
+| Health / “MCP up” discoverability | Operators need to know endpoint before wiring clients | LOW | Reuse `/api/health` pattern; docs state exact path + port |
+
+#### Suggested v1.4 tool map (names illustrative)
+
+| Tool | Returns | Depends on (existing) |
+|------|---------|------------------------|
+| `list_accounts` | accounts + types + currencies | Prisma account/currency reads |
+| `get_net_worth` | rows + `totalPrimaryMinor` + `isPartial` as-of | `computeNetWorthRows`, balance+FX LOCF |
+| `get_account_balance` | native + primary as-of | `getBalanceAsOf` / batch Maps |
+| `list_fx_rates` | dated primary↔other rates | FX tables / `getRateAsOf` |
+| `list_debts` | people/debts + remaining + status | `debts.ts` remaining/status |
+| `get_debt_totals` | I-owe / they-owe primary + partial | `computeDebtPrimaryTotals` |
+| `list_income` | plans/facts in range + overdue flags | `income.ts` occurrence helpers |
+| `list_grace_obligations` | open/closed cycles + due + overdue | `credit-grace.ts` |
+| `get_forecast_overlay` *(optional P1 if thin)* | income + grace points on horizon | `buildNetWorthForecastSeries`, grace membership |
+
+Keep count **small (~6–10)** — peers that stay usable stay narrow; Firefly-style 140-tool dumps are anti-pattern for Wallet.
 
 ### Differentiators (Advantage for *this* app)
 
 | Feature | Value Proposition | Complexity | Notes |
 |---------|-------------------|------------|-------|
-| Grace obligations as NW **forecast overlay** (not budget category, not bill calendar alone) | Capital app sees *when* NW dips for grace pay — rare vs YNAB/Monarch | HIGH | Compose with income forecast slots; dashed «Прогноз» already shipped |
-| Manual amount due + early close as first-class (no sync lie) | Fits Docker/SQLite honesty; no Plaid/Spinwheel | LOW–MEDIUM | Product philosophy differentiator |
-| Isolation: grace never rewrites past NW (ISO-01 sibling) | Same trust model as income INISO | LOW (policy) | Hard assert in tests like income |
-| Credit debt (snapshot) + grace due (cycle) side-by-side | User sees “owe now” vs “must pay by date to keep grace” | MEDIUM | UX: two numbers, one account — avoid conflation |
-| Contract-driven cycle rules (user supplies bank PDF) | Avoid wrong revolving/per-purchase grace guesses | Research gate | Document before plan lock; may refine start/duration semantics |
+| In-process host (no stdio sidecar, no ledger-file path) | One Docker process = UI + tools; no second SQLite opener / no `BEANCOUNT_FILE` env dance | MEDIUM | Aligns with “CLI stays external” decision |
+| Domain-honest tool contracts | Agents get DISOL/INISO/GRISO baked into schemas (debts≠NW; income/grace≠historical LOCF) | LOW–MEDIUM | Rare vs Beancount “one ledger = truth” |
+| Forecast overlay tool (income + A′ grace) | Answers “what happens to NW next?” without inventing BalanceSnapshots | MEDIUM | Dep: `nw-forecast.ts` + grace membership; dashed «Прогноз» parity |
+| Dual-client connect guide with transport reality | Claude Code HTTP + Cursor URL/SSE quirks documented up front | LOW | Cursor CLI has reported SSE POST 405 — prefer Streamable `/mcp`; document `mcp-remote` stdio bridge as fallback only |
+| Partial-FX / exclude reasons in tool JSON | Same honesty as UI banners — agents don’t invent rates | LOW | Mirror `isPartial` / exclude fields from NW + debt totals |
+| Russian-aware field labels in descriptions (optional) | Matches Russian-first product vocabulary agents see in UI | LOW | Descriptions can bilingual; response keys stay stable English identifiers |
 
-### Anti-Features (Seem Good, Wrong for v1.3)
+### Anti-Features (Seem good, wrong for v1.4)
 
 | Feature | Why Requested | Why Problematic | Alternative |
 |---------|---------------|-----------------|-------------|
-| Derive amount due from balance-snapshot history | “App should know spend” | Snapshots ≠ statement; mid-cycle debt ≠ grace pay; PROJECT Out of Scope | Manual entry from bank statement line |
-| Bank / CSV / Plaid sync of statement | Less typing | Cloud/auth path; deferred | Manual CRUD |
-| Full APR / penalty / revolving interest engine | “Show cost of missing grace” | Contract-complex; scope explosion | Grace track + forecast only unless contract forces |
-| Auto-update debit/credit BalanceSnapshot on pay | “Money moved” | Breaks snapshot SoT; double-count | User edits balances separately; close only clears obligation |
-| Minimum payment vs statement vs full-debt triad UI | Bank statements show all three | Extra states; v1.3 cares about grace-preserving amount | One manual “сумма к оплате до конца льготного” field |
-| Per-purchase / per-transaction grace windows | Some cards work that way | Needs tx ledger Wallet doesn’t have | Monthly cycle only until contract says otherwise |
-| “Which card to swipe” max interest-free optimizer | TodayKa/Swipeity core | Different product; multi-card strategy | Out of scope |
-| YNAB-style payment category funding from spends | Budgeters expect it | Requires categories + register | Not this product |
-| Merge obligation into historical `computeNetWorthRows` | “Past should show the bill” | Lies about account balances | Forecast overlay from due date forward only |
-| Push / email due reminders | BillWise/Monarch habit | No notif infra in local Docker | In-app overdue highlight |
-| Auto-create next cycle amount as average of past | PocketSmith average budget | Invents money; conflicts with manual lock | Blank amount until user enters |
-| Multi-card utilization / credit-score coaching | Cardue/CardCycle | Analytics creep | Limit + debt already enough |
+| Write / mutate MCP tools | “Agent can log a repayment” | PROJECT Out of Scope; breaks trust for first host slice | Read-only only; mutate later if ever |
+| App-spawned local agent / subprocess | Old “in-app assistant” idea | Superseded; lifecycle + security mess | External CLI → localhost MCP |
+| In-app chat / «Ассистент» UI | Familiar chat UX | Scope + product distraction from capital UI | CLI connects; no chat surface |
+| Stdio-only MCP server | “That’s how most MCP tutorials work” | Client would spawn second process; fights Docker single-app model | Streamable HTTP on running app |
+| Bind `0.0.0.0` / LAN exposure | “Use from phone” | DNS rebinding + accidental public finance data | `127.0.0.1` only |
+| Raw SQL / Prisma / “query anything” tool | Power-user flexibility | Injection + schema footguns; peers that do BQL still constrain read-only | Typed domain tools only |
+| Transaction / spend / category tools | Beancount/GnuCash table stakes elsewhere | Wallet has **no** tx ledger (Out of Scope) | Don’t fake; point agents at balances/NW |
+| 50–140 micro-tools (Firefly-style) | Completeness theater | Context bloat; hard to maintain annotations | 6–10 domain tools |
+| Resources-only catalog (no tools) | Spec purity | Many agents/tool-routers are tool-first | Tools first; resources optional for docs/schema later |
+| OAuth / multi-user auth for MCP | “Proper remote MCP” | Single local user; no cloud | Localhost trust boundary; optional later token if needed |
+| Auto-approve cloud agent reach into wallet | Convenience | Exfiltrates personal NW off-machine | Local CLI only in docs |
+| MCP that rewrites historical NW from income/grace | “Consistent numbers” | Violates INISO/GRISO | Forecast overlay tool only |
 
 ## Feature Dependencies
 
 ```
-Credit account: limit + debt (shipped v1.0)
-    └──requires──> Grace cycle template on credit account
-                       └──requires──> Cycle instances + manual amount due
-                           └──requires──> Early close / paid status
-                               └──requires──> Прогноз overlay from due date
+App running (Docker / npm run dev) on 127.0.0.1:3000
+    └──requires──> In-app Streamable HTTP MCP endpoint
+                       ├──requires──> MCP SDK server + route wiring
+                       ├──requires──> Localhost bind + Host/Origin checks
+                       └──requires──> Read-only tool handlers
+                              ├──requires──> Accounts + currencies (v1.0)
+                              ├──requires──> Balances LOCF + computeNetWorthRows (v1.0)
+                              ├──requires──> FX as-of (v1.0)
+                              ├──requires──> Debts remaining + primary totals (v1.1) ──conflicts──> folding into NW
+                              ├──requires──> Income occurrences / overdue (v1.2) ──conflicts──> writing BalanceSnapshot
+                              ├──requires──> Grace list / open membership (v1.3) ──conflicts──> historical LOCF rewrite
+                              └──enhances──> nw-forecast overlay tool (v1.2+v1.3)
 
-Income forecast overlay + FX LOCF (shipped v1.2)
-    └──enhances──> Credit obligations share same dashed Прогноз series / partial FX banner
-    └──conflicts──> Feeding grace into historical NW LOCF (ISO-01)
+Connect docs
+    └──requires──> Stable public URL path + example Claude Code + Cursor configs
+    └──enhances──> Transport notes (Streamable HTTP preferred; SSE/legacy fallback)
 
-Balance snapshots (shipped)
-    └──conflicts──> Deriving amount due from snapshots
-    └──enhances──> Display debt vs grace due as separate facts
-
-Bank contract study (user supplies)
-    └──requires──> Exact start/duration / statement semantics before plan lock
+readOnlyHint annotations ──enhances──> Client UX (auto-approve reads)
+Server instructions (DISOL/INISO/GRISO) ──enhances──> All domain tools
 ```
 
 ### Dependency Notes
 
-- **Grace template requires credit account:** Only credit type gets cycle fields; debit/crypto/cash unchanged.
-- **Amount due requires cycle instance:** Template alone cannot hit forecast; need dated due + amount.
-- **Прогноз requires open obligation with due date + amount:** Closed/early-paid excluded from series (like income actual clears plan slot).
-- **Shared forecast infra enhances credit:** Reuse `nw-forecast` composition, hinge, dashed Line — do not invent second chart system.
-- **Snapshots conflict with derivation:** Debt LOCF remains independent; paying grace is not automatic debt=0.
-- **Contract study gates cycle math:** Start+days monthly is the product intent; bank may define “start” as statement day vs purchase day — document before implementation lock.
+- **MCP endpoint requires running app:** Unlike stdio peers, nothing to spawn — docs must say “start wallet first.”
+- **Domain tools require shipped libs:** No new finance math in v1.4 — wrap `src/lib/{net-worth,balances,fx,debts,income,credit-grace,nw-forecast}.ts`.
+- **Debts/income/grace conflict with NW mutation:** Tool responses must keep isolation flags explicit so agents don’t “fix” DISOL/INISO/GRISO.
+- **Connect docs enhance adoption but don’t block tool implementation:** Can ship endpoint + tools, then docs in same milestone (both Active requirements).
+- **Forecast tool enhances but can trail:** Core capital/debt/income/grace reads are enough for MVP; forecast is the capital-foresight differentiator.
 
 ## MVP Definition
 
-### Launch With (v1.3)
+### Launch With (v1.4)
 
-Minimum to validate locked intent.
+- [ ] In-app Streamable HTTP MCP on localhost (same process as Next)
+- [ ] Read-only tools: accounts, NW/balances as-of, FX, debts+totals, income, grace
+- [ ] `readOnlyHint: true` + isolation copy in server/tool descriptions
+- [ ] Connect docs: Claude Code (`type: http`) + Cursor (`url`) → `http://127.0.0.1:3000/...`
+- [ ] Localhost-only binding documented and enforced
 
-- [ ] Grace START + duration DAYS on credit account; monthly repeat — cycle template
-- [ ] Manual amount due when period ends — obligation instance
-- [ ] Early close / paid — removes open obligation
-- [ ] Капитал «Прогноз» includes open obligations from due date (FX LOCF honesty)
-- [ ] Historical NW / BalanceSnapshot unaffected (forecast overlay only)
-- [ ] Bank contract notes captured before rule lock (may be doc-only phase)
+### Add After Validation (v1.4.x / next)
 
-### Add After Validation (v1.3.x / next)
-
-- [ ] Overdue highlight / nav cue when due passed w/o close — trigger: first real missed cycle
-- [ ] Multi-credit-card cycle list on one screen — trigger: >1 credit account in use
-- [ ] Edit amount due after entry (correction) — trigger: user typos from statement
-- [ ] Partial pay of grace amount — trigger: contract or user asks; else keep binary open/closed
+- [ ] `get_forecast_overlay` if not in initial slice — trigger: agents keep recomputing forecast badly from raw tools
+- [ ] Optional MCP resource for “domain rules” markdown — trigger: repeated DISOL mistakes
+- [ ] Cursor `mcp-remote` bridge note only if Streamable HTTP fails in target CLI — trigger: real UAT fail
+- [ ] Bounded pagination/`limit` on list tools — trigger: large debt/income histories
 
 ### Future Consideration (v2+)
 
-- [ ] Bank/CSV import of statement amount + due
-- [ ] Interest/penalty calculator from contract APR
-- [ ] Suggest balance snapshot after pay (still manual confirm)
-- [ ] Per-transaction grace / which-card optimizer
-- [ ] Min vs grace vs full debt breakdown UI
+- [ ] Write tools (with confirmations) — defer until read path trusted
+- [ ] In-app chat UI — still Out of Scope unless product flips
+- [ ] Auth token on localhost — if LAN/share ever opens
+- [ ] Stdio adapter package — only if a client cannot do HTTP
 
 ## Feature Prioritization Matrix
 
 | Feature | User Value | Implementation Cost | Priority |
 |---------|------------|---------------------|----------|
-| Grace start + days monthly | HIGH | MEDIUM | P1 |
-| Manual amount due | HIGH | LOW–MEDIUM | P1 |
-| Early close clears forecast | HIGH | LOW–MEDIUM | P1 |
-| Прогноз overlay from due date | HIGH | HIGH | P1 |
-| Overlay-only isolation (no NW rewrite) | HIGH | MEDIUM | P1 |
-| Contract study before rule lock | HIGH | LOW (research) | P1 |
-| Overdue UI | MEDIUM | LOW | P2 |
-| Edit/correct amount due | MEDIUM | LOW | P2 |
-| Partial payments | LOW–MEDIUM | MEDIUM | P3 |
-| Interest engine / bank sync / swipe optimizer | LOW (for this product) | HIGH | P3 / never in v1.3 |
+| In-app Streamable HTTP endpoint | HIGH | MEDIUM–HIGH | P1 |
+| Localhost bind + rebinding guards | HIGH | LOW | P1 |
+| Accounts + NW/balances + FX tools | HIGH | LOW–MEDIUM | P1 |
+| Debts + income + grace read tools | HIGH | MEDIUM | P1 |
+| `readOnlyHint` + isolation instructions | HIGH | LOW | P1 |
+| Claude Code + Cursor connect docs | HIGH | LOW | P1 |
+| Forecast overlay tool | MEDIUM | MEDIUM | P2 |
+| MCP resources for rules/schema | LOW–MEDIUM | LOW | P3 |
+| Write tools / chat UI / stdio sidecar | — | HIGH | Anti / defer |
 
 **Priority key:**
-- P1: Must have for v1.3 launch
-- P2: Should have soon after core works
-- P3: Nice / defer
+- P1: Must have for v1.4 launch
+- P2: Should have when thin
+- P3: Nice later
 
 ## Competitor Feature Analysis
 
-| Feature | YNAB | Monarch Bill Sync | PocketSmith | Grace apps (TodayKa/Swipeity) | Wallet v1.3 |
-|---------|------|-------------------|-------------|-------------------------------|-------------|
-| Cycle dates | Not primary | Due date (+ statement via bureau) | Via budgets/calendar | Statement + due core | START + days monthly |
-| Amount due source | Payment category from spends | Synced statement / min | Manual/avg budget then adjust | Often N/A (date focus) | **Manual only** |
-| Paid / close | Transfer to CC | Auto when txn matches | Budget vs actual | Reminders | Manual early close |
-| NW / cash forecast | Budget available, not grace NW | Recurring calendar | Transfer budget → forecast | Rarely NW | **Dashed Прогноз on Капитал** |
-| Bank sync | Optional import | Required for Bill Sync | Optional | Usually none | **None** |
-| Interest engine | No | No | No | Some APR toys | **Out of scope** |
-
-## Categories for Requirements Scoping
-
-Use these buckets when writing REQUIREMENTS / phase plans:
-
-| Category | Includes | Excludes |
-|----------|----------|----------|
-| **Cycle config** | Start date, duration days, monthly recurrence, credit-account binding | Per-txn grace, multi-cutoff optimizers |
-| **Obligation entry** | Manual amount due, due date derived from cycle, edit/correct | Snapshot-derived amounts, min/full triad |
-| **Lifecycle** | Open → paid/early-close; overdue cue | Auto-pay detection, partial-pay (unless promoted) |
-| **Forecast overlay** | Include open obligations from due date; FX partial; compose with income | Historical LOCF rewrite, hero current-NW mutation |
-| **Isolation / SoT** | Snapshots remain debt SoT; grace ledger separate | Auto balance bumps on close |
-| **Contract research** | Document bank grace rules before lock | Guessing revolving semantics |
+| Feature | mcp-beancount (RO) | gnucash-mcp (RO) | Firefly III MCP | Wallet v1.4 approach |
+|---------|--------------------|------------------|-----------------|----------------------|
+| Transport | stdio (typical) | stdio | stdio or HTTP | **In-app HTTP/SSE** (app already up) |
+| Accounts / balances / NW | ✓ | ✓ | ✓ (via many tools) | ✓ via few typed tools |
+| Transactions / BQL | ✓ | ✓ | ✓ | **Anti** — no tx ledger |
+| Side ledgers (debts/income/grace) | N/A (one book) | N/A | budgets/piggy etc. | ✓ explicit tools + isolation |
+| Writes | ✗ (good) | ✗ (good) / other forks ✓ | many | **✗ deferred** |
+| Connect docs | env + Claude Desktop | Claude Desktop | HTTP OAuth guides | Claude Code + Cursor CLI localhost |
+| Safety | file path env, allowlist | SQLite `mode=ro` | OAuth/PAT | localhost + RO tools + annotations |
 
 ## Sources
 
-- PROJECT.md v1.3 locks (manual amount, forecast overlay, contract study) — HIGH
-- Todo `2026-09-05-improve-credit-account-type-with-limit-grace-period-and-fore.md` — HIGH (problem statement)
-- Monarch Bill Sync help/blog (statement balance, min due, paid detection) — MEDIUM
-- YNAB credit-card payment model (category funding, not statement dates) — MEDIUM
-- PocketSmith CC transfer budgets + NW forecast (adjust when bill arrives) — MEDIUM
-- TodayKa / Swipeity / BillWise (manual cycle dates, interest-free focus) — MEDIUM
-- T-Bank / VTB / Sovcombank grace & statement explainers (расчётный → выписка → льготный; платёж для беспроцентного) — MEDIUM
+- MCP Streamable HTTP transport (spec): https://modelcontextprotocol.io/specification/2025-11-25/basic/transports — confidence MEDIUM (websearch/official, verified against SDK notes)
+- MCP TypeScript SDK server transports: https://ts.sdk.modelcontextprotocol.io/server — confidence MEDIUM
+- Claude Code MCP servers (HTTP `type` + `url`): https://code.claude.com/docs/en/mcp-servers — confidence MEDIUM
+- Cursor CLI MCP: https://cursor.com/docs/cli/mcp — confidence MEDIUM; Cursor SSE/HTTP agent quirks: forum reports — confidence LOW–MEDIUM (treat as risk flag in docs)
+- mekanics/mcp-beancount tool set (RO NW/balances/query): https://github.com/mekanics/mcp-beancount — confidence MEDIUM
+- michMartineau/gnucash-mcp (RO SQLite tools): https://github.com/michMartineau/gnucash-mcp — confidence MEDIUM
+- daften/fireflyiii-mcp (large tool surface / HTTP): https://github.com/daften/fireflyiii-mcp — confidence MEDIUM (anti-pattern for size)
+- MCP tool annotations (`readOnlyHint`): https://blog.modelcontextprotocol.io/posts/2026-03-16-tool-annotations/ — confidence MEDIUM
+- Wallet locks: `.planning/PROJECT.md` v1.4 Local MCP; domain libs under `src/lib/` — confidence HIGH
 
 ---
-*Feature research for: Wallet v1.3 credit grace + forecast obligations*
-*Researched: 2026-09-08*
+*Feature research for: Wallet in-app read-only MCP host (v1.4)*
+*Researched: 2026-09-10*

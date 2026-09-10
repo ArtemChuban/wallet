@@ -1,171 +1,169 @@
 # Project Research Summary
 
-**Project:** Wallet (v1.3 Кредитка)
-**Domain:** Credit-card grace-period tracking + NW forecast obligation overlay (local single-user SQLite app)
-**Researched:** 2026-09-08
+**Project:** Wallet (v1.4 Local MCP)
+**Domain:** In-app read-only MCP host (Streamable HTTP) inside Next.js + Prisma SQLite personal-finance app
+**Researched:** 2026-09-10
 **Confidence:** HIGH
 
 ## Executive Summary
 
-Wallet v1.3 extends an already-shipping capital tracker: FIAT_CREDIT accounts already carry limit + debt via snapshots; Капитал already draws a dashed «Прогноз» Line from open income slots (v1.2). Experts in this niche (manual bill/grace apps + PocketSmith-style “adjust when statement arrives”) separate **cycle template**, **statement amount due**, and **live card debt**. Wallet locks the same honesty: grace START + duration DAYS monthly, **manual** amount due, early close, and forecast overlay only — never snapshot-derived dues, never BalanceSnapshot writes, never historical LOCF rewrite (GRACEISO-01 twin of ISO-01).
+Wallet v1.4 is **not** a greenfield finance MCP and **not** a stdio sidecar. Peers (Beancount / GnuCash / Firefly) usually spawn a child process over a ledger file; Wallet already runs as a long-lived Next.js + SQLite Docker app on `127.0.0.1:3000`. Experts ship MCP as a **same-process Streamable HTTP route** that external Claude Code / Cursor CLIs call — wallet never spawns agents, never adds chat UI, never opens write tools.
 
-**Recommended approach:** add **zero npm packages**. Extend Prisma (`Account.grace*` + child `CreditGraceObligation`), pure `@/lib/credit-grace.ts` (due = `addCalendarDays(start, days)`), signed slots in `@/lib/nw-forecast`, merge into existing `DashboardChartsShell` / one dashed Line. UX stays on credit account + Капитал — not a parallel `/grace` or «Долги» coupling. Bank contract notes gate cycle-rule lock before PLAN precision.
+**Recommended approach:** Add only `mcp-handler@^2` + `@modelcontextprotocol/server@^2` on the existing stack (Next 16.3.4, Prisma 7, Zod 4, Node 24). Mount `/api/mcp` as a Node Route Handler with Host/Origin localhost guards, `responseMode: 'json'`, and ~6–10 read-only tools that wrap existing `@/lib/*` (accounts, NW/balances, FX, debts, income, grace). Keep Compose publish `127.0.0.1:3000:3000`; document Claude `type: http` + Cursor `url` snippets.
 
-**Key risks:** (1) stock/flow double-count — subtracting amount-due while credit debt already reduces NW; lock Option A (cash-out dip) vs B (markers / parallel series) in discuss before chart polish. (2) calendar operator mix-up — start uses DOM clamp, due uses +days, not one helper for both. (3) shipping APR/revolving or auto-derive from snapshots — out of scope until contract forces. Mitigate with contract phase-zero, GRACEISO tests, Vitest due-date matrix, and RU copy that debt snapshot ≠ льготный amount.
+**Key risks:** (1) Docker “localhost” confusion / widening host publish → LAN finance leak; (2) missing Origin/Host checks → DNS-rebinding exfil; (3) ad-hoc tool SQL that breaks DISOL/INISO/GRISO; (4) wrong transport or client `type` → “connected” but dead. Mitigate by shipping **host+guards before tools**, reuse domain libs only, CI-ban mutate imports under `lib/mcp/`, and UAT real CLI configs.
 
 ## Key Findings
 
 ### Recommended Stack
 
-Reuse the pinned app stack; v1.3 is schema + TypeScript only. See [STACK.md](./STACK.md).
+Reuse the app; do not replace core runtime. New deps are thin: official Vercel `mcp-handler` 2.x over MCP TS server v2 Streamable HTTP. No Redis, no custom server, no sidecar, no OAuth for v1.4. Edge runtime forbidden (better-sqlite3). Prefer documenting `127.0.0.1` over `localhost` (IPv6). Stdio clients get `mcp-remote` bridge docs only — server stays HTTP.
 
 **Core technologies:**
-- Next.js 16.3.4 App Router — Server Actions + `revalidatePath` for grace config / amount-due / early close (same as accounts/income)
-- Prisma 7.10.0 + better-sqlite3 — `String` YYYY-MM-DD + `BigInt` minor on Account + obligation child; no second DB
-- `@/lib/dates` + new `@/lib/credit-grace*.ts` — `addCalendarDays` for due; month walk + clamp for cycle starts; keep Prisma out of unit math
-- `@/lib/nw-forecast` + recharts 3.10.1 — signed forecast slots (−grace); one dashed «Прогноз» Line; no new chart lib
-- Zod 4.5.4 + Vitest 4.1.11 + shadcn Dialog / DestructiveConfirmStep — validate graceDays > 0; pure cycle/open-set tests; no `window.confirm`
+- **Next.js 16.3.4 App Router** — same-process Route Handler host — already Dockerized; matches `/api/health`
+- **Prisma 7 + better-sqlite3** — read-only tool backends — one SQLite path; no second opener
+- **Zod 4.5.4** — tool `inputSchema` — app standard; MCP server peer `zod@^4.2.0`
+- **mcp-handler ^2 + @modelcontextprotocol/server ^2** — Fetch MCP mount + Host/Origin helpers — SSE/Redis removed; Claude/Cursor expect Streamable HTTP
+- **Vitest** — adapter + guard unit tests — keep Prisma out of pure math tests
 
-**Do not install:** date-fns / luxon / dayjs, rrule, cron/job queues, money npm libs, interest engines, OCR/PDF parsers.
+Details: [STACK.md](./STACK.md)
 
 ### Expected Features
 
-Manual local NW tracker extending credit + income-forecast patterns — not YNAB funding, not Monarch sync, not swipe optimizers. See [FEATURES.md](./FEATURES.md).
+Table stakes = in-app Streamable HTTP on localhost + narrow typed read tools covering **all shipped domains** + isolation copy in instructions + dual-client connect docs. Differentiators = in-process (no sidecar), domain-honest DISOL/INISO/GRISO contracts, optional forecast overlay, partial-FX honesty. Anti-features = write tools, chat UI, stdio-only server, `0.0.0.0` publish, raw SQL tool, Firefly-scale tool dumps, OAuth.
 
 **Must have (table stakes):**
-- Grace cycle on credit account (start date + duration days, monthly) — cycle template
-- Cycle instances + manual amount due for interest-free window — never from snapshots
-- Early close / paid — removes open obligation from forecast
-- Капитал «Прогноз» includes open obligations from due date (FX LOCF honesty / partial banner)
-- Historical NW / BalanceSnapshot unaffected (overlay only)
-- Bank contract notes before rule lock (may be doc-only)
+- In-app Streamable HTTP MCP on same Next lifecycle — agents need a live URL
+- Localhost bind + Host/Origin guards — spec security; Docker already loopback-publish
+- Read-only tools: accounts, NW/balances as-of, FX, debts+totals, income, grace — peers always expose capital + side ledgers
+- `readOnlyHint: true` + DISOL/INISO/GRISO in server/tool descriptions — stop agent invention
+- Claude Code + Cursor connect docs (`type: http` / `url`) — PROJECT Active requirement
 
 **Should have (competitive):**
-- Debt (snapshot) vs grace due (cycle) side-by-side with clear RU labels
-- GRACEISO isolation as trust differentiator (same as income)
-- Overdue / «заполни» highlight when due passed without close (P2 after first real miss)
+- Forecast overlay tool (`get_forecast_overlay`) — “what happens to NW next?” without fake BalanceSnapshots
+- Partial-FX / exclude reasons in JSON — same honesty as UI banners
+- Optional bilingual (RU) descriptions — match product vocabulary
 
-**Defer (v2+ / never in v1.3):**
-- Derive due from BalanceSnapshot history; bank/CSV sync; APR/penalty engine
-- Min vs statement vs full-debt triad; per-purchase grace; which-card optimizer
-- Auto BalanceSnapshot on pay; push reminders; YNAB payment categories
+**Defer (v2+):**
+- Write/mutate MCP tools — trust read path first
+- In-app chat / agent spawn — Out of Scope
+- OAuth / multi-user auth — single local user
+- Stdio adapter package — only if a required client cannot HTTP
+
+Details: [FEATURES.md](./FEATURES.md)
 
 ### Architecture Approach
 
-Grace is **not** a fourth parallel ledger like Долги/Доходы. Config lives on `Account` (FIAT_CREDIT); amount/status lives on child `CreditGraceObligation` keyed by `cycleStartAsOf`. Historical path (`net-worth` / `historical-series`) stays untouched; `/` merges income + grace open slots into one signed forecast series. See [ARCHITECTURE.md](./ARCHITECTURE.md).
+Single Node process: external CLI → Streamable HTTP → `/api/mcp` → Host/Origin guard → mcp-handler per-request factory → `lib/mcp` tool registry → read assemblers → existing domain libs → Prisma singleton. Mutations stay in Server Actions only — never called from MCP. Prefer `src/lib/mcp/{create-handler,localhost-guard,register-tools,tools/*,reads/*}`; optional extract of page-parity loaders so UI and MCP share LOCF math.
 
 **Major components:**
-1. `Account.graceAnchorAsOf` + `graceDurationDays` — schedule metadata (both null or both set)
-2. `CreditGraceObligation` — per-cycle manual `amountMinor`, `dueAsOf` stored at create, OPEN|CLOSED, unique `(accountId, cycleStartAsOf)`
-3. `src/lib/credit-grace.ts` — cycle candidates, due math, open membership, overdue (pure + Vitest)
-4. `nw-forecast.ts` + `DashboardChartsShell` — signed `deltaMinor` slots; merge with income; FX LOCF as-of today
-5. Account UI + `grace-actions.ts` — config, amount entry, early close; **forbidden** BalanceSnapshot writes
+1. **`/api/mcp` Route Handler** — protocol mount (GET/POST/DELETE), `runtime=nodejs`, `force-dynamic`
+2. **Localhost guard** — Host/Origin allowlist before handler (DNS-rebinding defense)
+3. **Tool registry + reads** — thin adapters over `@/lib/*`; BigInt serialize; no actions
+4. **Domain libs (unchanged contracts)** — net-worth, balances, fx, debts, income, credit-grace, nw-forecast
+5. **Docker publish** — host `127.0.0.1:3000`; container still `HOSTNAME=0.0.0.0`
 
-**Default overlay semantics (discuss lock):** Option A — negative delta at due date (cash-out approximation until user updates balances). Escalate to Option B if UAT confuses double-count vs existing credit debt.
+Details: [ARCHITECTURE.md](./ARCHITECTURE.md)
 
 ### Critical Pitfalls
 
-Top risks from [PITFALLS.md](./PITFALLS.md):
+1. **Docker bind confusion** — keep container `0.0.0.0` listen + host publish `127.0.0.1:3000:3000`; never open a second MCP port or widen publish
+2. **No Origin/Host validation** — wrap every MCP request with SDK Host/Origin helpers before handler; no CORS `*`
+3. **Wrong transport (legacy SSE-only / missing methods)** — one Streamable HTTP path; export GET+POST+DELETE; prefer `responseMode: 'json'`
+4. **Reimplement domain math in tools** — call existing libs only; twin DISOL/INISO/GRISO tests
+5. **Client docs wrong (`type` / path / app not running)** — copy-paste per-client snippets; prerequisite “start wallet first”; smoke initialize with curl
 
-1. **Stock/flow double-count** — never treat amount-due as a second liability on top of LOCF debt without an explicit model + golden test (pay from own assets ≈ NW-neutral in truth)
-2. **Bake grace into historical LOCF / snapshots** — GRACEISO-01: no import into `net-worth`/`historical-series`; actions never write BalanceSnapshot
-3. **Wrong calendar operators** — start = `clampDayOfMonth`; due = `addCalendarDays(start, graceDays)`; Moscow `calendarDateToday`
-4. **Unsigned ForecastSlot collision** — extend signed/direction slots before shoving credit into income-only adder
-5. **Skip contract study** — do not lock schema/cycle math on generic bank articles; user contract → CONTEXT before PLAN lock
+Details: [PITFALLS.md](./PITFALLS.md)
 
 ## Implications for Roadmap
 
-Based on research, suggested phase structure (renumber to continue after v1.2 Phase 17):
+Based on research, suggested phase structure (dependency-aware; matches pitfalls mapping + architecture build order):
 
-### Phase 18: Bank contract study + discuss locks
-**Rationale:** PROJECT gate — cycle start semantics, monthly repeat/clamp, interest-free vs revolving OOS, overlay Option A vs B must precede plan precision.
-**Delivers:** CONTEXT / contract notes; locked decisions (start definition, duration, NW-semantics A|B, vocabulary: льготный ≠ долг по снимку ≠ минимум).
-**Addresses:** Contract research (P1); anti-features (no APR engine, no sync).
-**Avoids:** Pitfalls 3, 10 (wrong grace model / premature schema lock).
+### Phase 1: MCP Host + Transport + Localhost Safety
+**Rationale:** Nothing else matters if endpoint, Node runtime, publish lock, or rebinding guards are wrong — pitfalls say security is not a later pass.
+**Delivers:** Deps installed; `/api/mcp` with `wallet_ping`; Host/Origin guard; Compose verify still `127.0.0.1:3000:3000`; curl/Inspector initialize smoke.
+**Addresses:** In-app Streamable HTTP endpoint; localhost bind + rebinding guards; health/discoverability path.
+**Avoids:** Docker bind confusion; missing Origin/Host; incomplete Streamable HTTP; Edge/Redis/sidecar.
+**Uses:** `mcp-handler@^2`, `@modelcontextprotocol/server@^2`, SDK Host/Origin helpers.
 
-### Phase 19: Schema + pure grace domain math
-**Rationale:** Data model + calendar operators before any UI; isolation boundary at schema (Account vs Долги).
-**Delivers:** Prisma migration (`Account.grace*` + `CreditGraceObligation`); `credit-grace.ts` + Vitest (Feb/31, +days across month, open membership); Zod validations.
-**Addresses:** Cycle config; obligation instance identity; BigInt minor.
-**Avoids:** Pitfalls 5, 7, 8 (calendar, orphan periods, Person/Debt coupling); no amount-due derivation (Pitfall 4).
+### Phase 2: Capital Read Tools (Accounts + NW/Balances + FX)
+**Rationale:** Foundation every peer starts with; NW honesty is Core Value; FX honesty feeds conversion.
+**Delivers:** `list_accounts`, `get_net_worth` / `get_account_balance`, `list_fx_rates`; BigInt serialize; page-parity read assemblers; `readOnlyHint` + isolation instructions scaffold.
+**Addresses:** Accounts + NW/balances + FX tools (P1).
+**Avoids:** Domain math fork; float money; unbounded dumps (as-of params).
+**Implements:** `lib/mcp/tools/{accounts,net-worth,fx}` + shared reads.
 
-### Phase 20: Amount-due + early-close actions/UI
-**Rationale:** Manual obligation CRUD must exist before forecast wiring; GRACEISO write-path lock here.
-**Delivers:** Account grace fields UI; create obligation / early close / list open|closed; DestructiveConfirmStep; RU copy that snapshots unchanged.
-**Addresses:** Manual amount due; early close; keep limit+debt snapshots independent.
-**Avoids:** Pitfalls 2, 4, 7 (snapshot writes, auto-derive, close bugs).
+### Phase 3: Side-Ledger Read Tools (Debts + Income + Grace) + Isolation Tests
+**Rationale:** Agents will ask about Долги / Доход / Грейс; isolation locks must be enforced in same wave as tools.
+**Delivers:** `list_debts`, `get_debt_totals`, `list_income`, `list_grace_obligations`; CI/path ban on `actions` / mutate under `mcp/`; DISOL/INISO/GRISO fixture tests; optional thin `get_forecast_overlay` if cheap.
+**Addresses:** Debts + income + grace read tools; isolation copy; P2 forecast if thin.
+**Avoids:** Mutate bleed; folding debts into NW; income/grace rewriting historical LOCF.
+**Implements:** `lib/mcp/tools/{debts,income,grace}` (+ optional forecast).
 
-### Phase 21: Капитал forecast integration (signed slots + FX)
-**Rationale:** Depends on open obligations + signed `nw-forecast`; highest integration risk (stock/flow + income coexistence).
-**Delivers:** Extend `ForecastSlot` with signed `deltaMinor`; `page.tsx` + `DashboardChartsShell` merge; partial FX banner for credit; early close clears dip; golden no double-liability test.
-**Addresses:** Прогноз from due date; FX honesty; income coexistence.
-**Avoids:** Pitfalls 1, 6, 9 (double-count, unsigned slots, FX invent).
-
-### Phase 22: GRACEISO regression + UAT polish
-**Rationale:** Catch late coupling; legend/copy/overdue after core math green.
-**Delivers:** File-scan like `iniso.test.ts`; past-series golden identity; overdue highlight; chart legend (доходы / обязательства); Orca UAT path config→amount→forecast→close→history unchanged.
-**Addresses:** Isolation SoT; overdue P2; Russian-first chrome.
-**Avoids:** Pitfall 2 residual; UX panic from unexplained dip.
+### Phase 4: Connect Docs + Multi-Client UAT
+**Rationale:** Endpoint without verified Claude/Cursor configs fails Active requirement; client quirks are MEDIUM confidence until smoked.
+**Delivers:** Copy-paste Claude Code (`type: http`) + Cursor (`type: http` + `url`) docs; prerequisite “app must be running”; optional `mcp-remote` fallback note; real-client UAT.
+**Addresses:** Dual-client connect docs (P1).
+**Avoids:** Docs/`type` confusion; stdio-spawn docs; path drift (`/mcp` vs `/api/mcp`).
 
 ### Phase Ordering Rationale
 
-- Contract/discuss before schema — bank rule mismatch = high recovery cost
-- Pure schedule math before CRUD — due dates must be trustworthy before users enter amounts
-- Obligation write path before chart — open-set membership is the forecast input
-- Overlay semantics + signed slots before polish — stock/flow is the milestone’s sharpest pitfall
-- Isolation + UAT last — mirrors v1.2 INISO closure pattern
+- Host+guards before tools — unauthenticated finance MCP without Host/Origin is unsafe even if read-only
+- Capital tools before side ledgers — shared LOCF/NW assemblers; debts/income/grace assert isolation against that foundation
+- Docs last but same milestone — needs stable URL + proven transport; UAT catches Cursor `streamable-http` CLI quirks
+- Grouping follows `lib/mcp` boundaries and pitfall-to-phase map: transport → tools+isolation → connect UAT
 
 ### Research Flags
 
-Phases likely needing deeper research during planning (`/gsd-plan-phase --research` or discuss):
-- **Phase 18:** User bank contract specifics (statement day vs purchase day; weekend shifts; cash-advance carve-outs) — sparse until user supplies PDF/notes
-- **Phase 21:** Overlay Option A vs B UX + same-day income+grace tooltip/netting — ecosystem analogies only MEDIUM; needs product lock
+Phases likely needing deeper research during planning:
+- **Phase 1:** Exact `mcp-handler` vs `@modelcontextprotocol/server` `createMcpHandler` export shape at install; standalone NFT tracing of MCP pkgs into `.next/standalone`
+- **Phase 4:** Whether this machine’s Cursor CLI needs `mcp-remote`; verify `type: http` vs `streamable-http` parser behavior live
 
-Phases with standard patterns (skip heavy research-phase):
-- **Phase 19:** Prisma + pure dates — well-documented in-repo (`dates.ts`, income month walk)
-- **Phase 20:** Server Actions + Dialogs + DestructiveConfirm — copy income/debt patterns
-- **Phase 22:** INISO-style file-scan + Orca UAT — established milestone closure
+Phases with standard patterns (skip research-phase):
+- **Phase 2:** Thin wrappers over known `@/lib/net-worth|balances|fx` — well-documented in-repo
+- **Phase 3:** Same pattern for debts/income/grace; isolation rules already locked in PROJECT/domain libs — plan with existing fixtures, not new ecosystem research
 
 ## Confidence Assessment
 
 | Area | Confidence | Notes |
 |------|------------|-------|
-| Stack | HIGH | Repo pins + codebase; reject date-fns/rrule with clear fit reasons |
-| Features | HIGH | PROJECT locks + domain norms; ecosystem UX MEDIUM but does not change MVP |
-| Architecture | HIGH | Clear integration with income forecast + ISO walls; NW-semantics Option A/B still discuss |
-| Pitfalls | HIGH | Codebase stock/flow + calendar traps verified; bank revolving details MEDIUM pending contract |
+| Stack | HIGH | Official mcp-handler 2 / server 2 / MCP HTTP docs + pinned wallet package.json |
+| Features | HIGH (locks) / MEDIUM (peers) | PROJECT.md + domain libs HIGH; peer/tool-count + client quirks MEDIUM |
+| Architecture | MEDIUM-HIGH | Integration pattern HIGH from SDK + codebase; client-config quirks MEDIUM |
+| Pitfalls | HIGH | Spec security warning + existing Compose pattern; CLI type strings MEDIUM |
 
 **Overall confidence:** HIGH
 
 ### Gaps to Address
 
-- **Bank contract content:** User must supply agreement; until then keep schema flexible (anchor + durationDays + manual amount) — handle in Phase 18
-- **NW overlay semantics A vs B:** Architecture defaults A; Pitfalls prefers explicit netting/markers if double-count confuses — lock in discuss before Phase 21 plan
-- **Month-advance clamp for next cycle start:** Product must lock end-of-month behavior after contract (reuse income clamp vs bank rule)
-- **Past-due open in forecast:** Architecture says `dueAsOf > today` → UI only; confirm policy if product wants overdue still on dashed line
-- **Partial pay / edit amount after entry:** P2/P3 — promote only if UAT demands
+- **mcp-handler export shape** — verify at Phase 1 install; both are Fetch handlers; do not block roadmap
+- **Cursor CLI transport string** — smoke in Phase 4; document `mcp-remote` only on real fail
+- **Standalone NFT** — confirm MCP packages in production image after first build
+- **Optional bearer header** — not required for loopback single-user; revisit only if bind widens
+- **Forecast tool placement** — P2; ship in Phase 3 if thin, else v1.4.x after agent UAT pain
+- **Exact route path** — research agrees `/api/mcp`; lock in Phase 1 and never drift docs
 
 ## Sources
 
 ### Primary (HIGH confidence)
-- `.planning/PROJECT.md` — v1.3 locks (manual amount, overlay only, contract study, OOS revolving)
-- `package.json` pins — Next 16.3.4, Prisma 7.10.0, recharts 3.10.1, Zod 4.5.4, Vitest 4.1.11
-- Codebase — `dates.ts`, `nw-forecast.ts`, `DashboardChartsShell.tsx`, `NetWorthHistoryChart.tsx`, `iniso.test.ts`, `prisma/schema.prisma`, income occurrence patterns
-- Todo `2026-09-05-improve-credit-account-type-with-limit-grace-period-and-fore.md` — problem statement / derive-from-spend risk
+- npm `mcp-handler@2.1.1` + `@modelcontextprotocol/server@2.0.0` — Next Route Handler, Streamable HTTP, Host/Origin exports
+- MCP Spec transports (Streamable HTTP security: Origin, localhost) — https://modelcontextprotocol.io/specification/
+- MCP TS docs — Serve over HTTP — https://ts.sdk.modelcontextprotocol.io/v2/serving/http.html
+- Claude Code MCP docs — `--transport http`, `type: http` — https://code.claude.com/docs/en/mcp-servers
+- Cursor MCP docs — remote `url` — https://cursor.com/docs/mcp
+- Wallet codebase — `package.json`, `Dockerfile`, `docker-compose.yml` `127.0.0.1:3000:3000`, `src/lib/*`, `/api/health`
+- `.planning/PROJECT.md` v1.4 locks — in-app, read-only, no sidecar/chat/writes
 
 ### Secondary (MEDIUM confidence)
-- PocketSmith / Monarch Bill Sync / YNAB credit models — manual adjust vs sync vs category funding
-- TodayKa / Swipeity / BillWise — cycle-date focus
-- T-Bank / VTB / Sovcombank / Raiffeisen explainers — расчётный → льготный; min ≠ full payoff
-- Centinel / Simplifi / BudgetLabs — cash-out vs double-count guidance for card payments on forecasts
-- Prior v1.2 PITFALLS — ISO, DOM, FX, chart fact/forecast patterns reused
+- Vercel mcp-handler 2.0 changelog — SDK v2 / zod4
+- Peer MCPs: mcp-beancount, gnucash-mcp, fireflyiii-mcp — tool-surface anti-patterns
+- MCP tool annotations post — `readOnlyHint`
+- Tenable WAS-114885 — DNS rebinding class issue for HTTP/SSE MCP
+- Community Next.js MCP posts — GET/POST/DELETE, stateless sessionIdGenerator
 
 ### Tertiary (LOW confidence)
-- npm registry versions for rejected libs (date-fns, rrule, cron-parser) — confirm-only
-- Experian / Wealthsimple / WalletHub grace-void-on-carry articles — not a substitute for user contract
-- EV–equity double-count metaphor — UI metaphor only
+- Cursor forum / CLI quirks (`streamable-http` parse failures, SSE POST 405) — treat as Phase 4 UAT risk flags
 
 ---
-*Research completed: 2026-09-08*
+*Research completed: 2026-09-10*
 *Ready for roadmap: yes*
-*Milestone: v1.3 Кредитка*
