@@ -139,6 +139,12 @@ None - no external service configuration required.
 - Plan 02 may import SDK `createMcpHandler`, implement `localhost-guard.ts`, thin `/api/mcp` route, and convert Wave 0 todos to real expects
 - Do not use mcp-handler create path until upstream forwards `responseMode`
 
+## Self-Check: PASSED
+
+- Files present: localhost-guard.test.ts, route.test.ts, package.json deps, 23-01-SUMMARY.md, 23-VALIDATION.md
+- Commits present: 0084452, 2efdb9e
+- vitest Wave 0 stubs exit 0 (9 todo)
+
 ---
 *Phase: 23-mcp-host-localhost-safety*
 *Completed: 2026-09-10*
