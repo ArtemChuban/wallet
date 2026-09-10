@@ -42,7 +42,7 @@ created: "2026-09-10"
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
 | 23-01-01 | 01 | 1 | HOST-01 | T-23-SC | Human confirms mcp-handler SUS before install | gate | RESEARCH present + mcp-handler citation | ✅ | ✅ green |
 | 23-01-02 | 01 | 1 | HOST-01, HOST-02 | — | Wave 0 stubs for guard + route smoke | unit | `npx vitest run src/lib/mcp/localhost-guard.test.ts src/app/api/mcp/route.test.ts` | ✅ | ✅ green |
-| 23-01-03 | 01 | 1 | HOST-01 | T-23-SC | mcp-handler + server ^2 in package.json | install | node assert deps + node_modules dirs | ✅ pkg | ⬜ pending |
+| 23-01-03 | 01 | 1 | HOST-01 | T-23-SC | mcp-handler + server ^2 in package.json | install | node assert deps + node_modules dirs | ✅ pkg | ✅ green |
 | 23-02-01 | 02 | 2 | HOST-01, HOST-02 | T-23-01…05 | Tracer: guarded /api/mcp + wallet_ping | unit/smoke | `npx vitest run src/lib/mcp/localhost-guard.test.ts src/app/api/mcp/route.test.ts` | ✅ W0→impl | ⬜ pending |
 | 23-02-02 | 02 | 2 | HOST-02 | T-23-01,03,04 | Full Host/Origin/port matrix + route mock | unit | `npx vitest run src/lib/mcp/localhost-guard.test.ts src/app/api/mcp/route.test.ts` | ✅ W0→impl | ⬜ pending |
 | 23-02-03 | 02 | 2 | HOST-01, HOST-02 | T-23-02,05 | Curl initialize + Compose checklist + no CORS | suite + manual | `npm test` + grep Compose ports | ✅ compose | ⬜ pending |

@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 12
+open_count: 14
 waived_count: 0
 fixed_count: 5
-total_count: 17
-last_updated: 2026-09-09T23:33:19.920Z
+total_count: 19
+last_updated: 2026-09-10T13:32:05.494Z
 ---
 
 # Broken Windows Ledger
@@ -32,6 +32,8 @@ last_updated: 2026-09-09T23:33:19.920Z
 | 15 | 21 | deviation | src/lib/nw-forecast.ts |  | Rule 2: displayPrimaryMajor on ForecastEvent for D-11 tooltip amounts | open |  | 2026-09-09T20:42:15.926Z |  |
 | 16 | 22 | deviation | .planning/REQUIREMENTS.md |  | Task 1 verify-only: GRISO-01 already Complete before 22-02 | fixed |  | 2026-09-09T23:31:30.808Z | 2026-09-09T23:32:32.608Z |
 | 17 | 22 | deviation | .planning/ROADMAP.md |  | Rule 3: re-applied Phase 22 Progress Complete after roadmap.update-plan-progress In Progress clobber | fixed |  | 2026-09-09T23:32:45.946Z | 2026-09-09T23:33:19.920Z |
+| 18 | 23 | stub | src/lib/mcp/localhost-guard.test.ts | 8 | Wave 0 it.todo Host/Origin/port matrix — Plan 02 greens | open |  | 2026-09-10T13:32:05.374Z |  |
+| 19 | 23 | stub | src/app/api/mcp/route.test.ts | 8 | Wave 0 it.todo route smoke mock fetch — Plan 02 greens | open |  | 2026-09-10T13:32:05.494Z |  |
 
 ````json
 [
@@ -238,6 +240,30 @@ last_updated: 2026-09-09T23:33:19.920Z
     "reason": "",
     "recorded_at": "2026-09-09T23:32:45.946Z",
     "resolved_at": "2026-09-09T23:33:19.920Z"
+  },
+  {
+    "id": 18,
+    "kind": "stub",
+    "phase": "23",
+    "file": "src/lib/mcp/localhost-guard.test.ts",
+    "line": 8,
+    "description": "Wave 0 it.todo Host/Origin/port matrix — Plan 02 greens",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-10T13:32:05.374Z",
+    "resolved_at": null
+  },
+  {
+    "id": 19,
+    "kind": "stub",
+    "phase": "23",
+    "file": "src/app/api/mcp/route.test.ts",
+    "line": 8,
+    "description": "Wave 0 it.todo route smoke mock fetch — Plan 02 greens",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-10T13:32:05.494Z",
+    "resolved_at": null
   }
 ]
 ````
