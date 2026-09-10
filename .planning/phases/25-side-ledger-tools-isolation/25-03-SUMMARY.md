@@ -104,7 +104,7 @@ Each task was committed atomically:
 2. **Task 1 GREEN: list_debts page-parity tool** - `ce06aad` (feat)
 3. **Task 2: Green SIDE-01 + DISOL contract** - `5946204` (test)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `fe6f324` (docs: complete plan)
 
 ## Files Created/Modified
 - `src/lib/mcp/reads/load-debts.ts` — loader + filter + serialize + colocated totals
