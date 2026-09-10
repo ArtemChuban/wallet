@@ -16,7 +16,7 @@ updated: "2026-09-10T10:42:00Z"
 expected: Kill any running server/service. Clear ephemeral state (temp DBs, caches, lock files). Start the application from scratch. Server boots without errors, any seed/migration completes, and a primary query (health check, homepage load, or basic API call) returns live data.
 result: pass
 reported: |
-  Agent cold-start 2026-09-10: `prisma migrate deploy` applied; `npm run dev` + GET http://localhost:3000/ returns live HTML (no UI deliverables this phase — UI-SPEC: no surfaces).
+  Agent cold-start 2026-09-10: `prisma migrate deploy` (no pending); `npm run dev`; GET http://localhost:3000/ → HTTP 200, ~33KB HTML lang=ru (no UI deliverables this phase — UI-SPEC: no surfaces).
 
 ### 2. Account stores dual DOM with FIAT_CREDIT both-null-or-both CHECK
 expected: Account stores dual DOM (statementDayOfMonth + dueDayOfMonth) with FIAT_CREDIT both-null-or-both CHECK
