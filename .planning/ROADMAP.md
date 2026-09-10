@@ -69,7 +69,7 @@ Full detail: [milestones/v1.3-ROADMAP.md](./milestones/v1.3-ROADMAP.md)
 **Milestone Goal:** In-app read-only MCP over localhost HTTP/SSE so external CLI agents query wallet data without the app spawning subprocesses.
 
 - [x] **Phase 23: MCP Host + Localhost Safety** - In-process Streamable HTTP at `/api/mcp` with Host/Origin + loopback publish
-- [ ] **Phase 24: Capital Read Tools** - Accounts, NW, balances, FX via read-only MCP
+- [x] **Phase 24: Capital Read Tools** - Accounts, NW, balances, FX via read-only MCP (completed 2026-09-10)
 - [ ] **Phase 25: Side-Ledger Tools + Isolation** - Debts, income, grace, forecast overlay; DISOL/INISO/GRISO locked
 - [ ] **Phase 26: Connect Docs + Policy** - Claude/Cursor connect snippets, readOnlyHint + isolation copy, PARITY-01 materialization
 
@@ -105,13 +105,14 @@ Plans:
   3. Agent can get an account's native and primary balance as-of a date via MCP
   4. Agent can list FX rates / rate-as-of (primary↔other) via MCP
 
-**Plans**: 4 plans
+**Plans**: 4/4 plans executed
 
 Plans:
-- [ ] 24-01-PLAN.md — Wave 0 stubs + serialize + as-of (D-05/06/08/09)
-- [ ] 24-02-PLAN.md — Tracer get_net_worth (CAP-02) + capital-era instructions
-- [ ] 24-03-PLAN.md — list_accounts (CAP-01) + get_account_balance (CAP-03)
-- [ ] 24-04-PLAN.md — list_fx_rates (CAP-04) + D-15 finalize + full regression
+
+- [x] 24-01-PLAN.md — Wave 0 stubs + serialize + as-of (D-05/06/08/09)
+- [x] 24-02-PLAN.md — Tracer get_net_worth (CAP-02) + capital-era instructions
+- [x] 24-03-PLAN.md — list_accounts (CAP-01) + get_account_balance (CAP-03)
+- [x] 24-04-PLAN.md — list_fx_rates (CAP-04) + D-15 finalize + full regression
 
 ### Phase 25: Side-Ledger Tools + Isolation
 
@@ -167,6 +168,6 @@ Plans:
 | 21. Капитал forecast integration | v1.3 | 3/3 | Complete | 2026-09-09 |
 | 22. GRACEISO regression + polish | v1.3 | 2/2 | Complete | 2026-09-10 |
 | 23. MCP Host + Localhost Safety | v1.4 | 2/2 | Complete | 2026-09-10 |
-| 24. Capital Read Tools | v1.4 | 0/4 | Planned | - |
+| 24. Capital Read Tools | v1.4 | 4/4 | Complete    | 2026-09-10 |
 | 25. Side-Ledger Tools + Isolation | v1.4 | 0/? | Not started | - |
 | 26. Connect Docs + Policy | v1.4 | 0/? | Not started | - |

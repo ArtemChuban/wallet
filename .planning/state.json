@@ -1,12 +1,143 @@
 {
   "contract": "1.0.0",
   "flavor": "core",
-  "milestone": "v1.4",
-  "phases": [],
+  "milestone": "v1.4 — Local MCP",
+  "phases": [
+    {
+      "number": "1",
+      "name": "Docker + SQLite Foundation",
+      "status": "complete"
+    },
+    {
+      "number": "2",
+      "name": "Currencies + Accounts",
+      "status": "complete"
+    },
+    {
+      "number": "3",
+      "name": "Dated Balance Snapshots",
+      "status": "complete"
+    },
+    {
+      "number": "4",
+      "name": "Dated FX",
+      "status": "complete"
+    },
+    {
+      "number": "5",
+      "name": "Net Worth Dashboard",
+      "status": "complete"
+    },
+    {
+      "number": "6",
+      "name": "Historical Charts",
+      "status": "complete"
+    },
+    {
+      "number": "7",
+      "name": "LOCF consolidation + Nyquist",
+      "status": "complete"
+    },
+    {
+      "number": "8",
+      "name": "Debts schema + domain math",
+      "status": "complete"
+    },
+    {
+      "number": "9",
+      "name": "People + debts CRUD + nav",
+      "status": "complete"
+    },
+    {
+      "number": "10",
+      "name": "Repayments + close/write-off",
+      "status": "complete"
+    },
+    {
+      "number": "11",
+      "name": "Charts + primary totals",
+      "status": "complete"
+    },
+    {
+      "number": "12",
+      "name": "Debts refresh + Nyquist",
+      "status": "complete"
+    },
+    {
+      "number": "13",
+      "name": "Income schema + domain math",
+      "status": "complete"
+    },
+    {
+      "number": "14",
+      "name": "Доходы CRUD + nav",
+      "status": "complete"
+    },
+    {
+      "number": "15",
+      "name": "Plan vs actual + overdue",
+      "status": "complete"
+    },
+    {
+      "number": "16",
+      "name": "Counterparty income stats",
+      "status": "complete"
+    },
+    {
+      "number": "17",
+      "name": "NW forecast overlay + isolation",
+      "status": "complete"
+    },
+    {
+      "number": "18",
+      "name": "Bank contract study + discuss locks",
+      "status": "complete"
+    },
+    {
+      "number": "19",
+      "name": "Schema + pure grace domain math",
+      "status": "complete"
+    },
+    {
+      "number": "20",
+      "name": "Obligation CRUD + cycle UI",
+      "status": "complete"
+    },
+    {
+      "number": "21",
+      "name": "Капитал forecast integration",
+      "status": "complete"
+    },
+    {
+      "number": "22",
+      "name": "GRACEISO regression + polish",
+      "status": "complete"
+    },
+    {
+      "number": "23",
+      "name": "MCP Host + Localhost Safety",
+      "status": "complete"
+    },
+    {
+      "number": "24",
+      "name": "Capital Read Tools",
+      "status": "complete"
+    },
+    {
+      "number": "25",
+      "name": "Side-Ledger Tools + Isolation",
+      "status": "pending"
+    },
+    {
+      "number": "26",
+      "name": "Connect Docs + Policy",
+      "status": "pending"
+    }
+  ],
   "next": {
-    "command": "/gsd-discuss-phase",
-    "label": "Discuss the first phase",
-    "reason": "Project initialized — plan your first phase"
+    "command": "/gsd:progress --next",
+    "label": "Advance to the next step (plan phase 25)",
+    "reason": "Phase 25 of 4 — needs a plan"
   },
-  "updated_at": "2026-09-10T11:52:51.791Z"
+  "updated_at": "2026-09-10T16:22:31.986Z"
 }
