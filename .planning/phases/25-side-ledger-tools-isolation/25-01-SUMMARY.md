@@ -110,7 +110,7 @@ Each task was committed atomically:
 2. **Task 2: as-of optionalHorizonEndSchema + paired from/to helpers (D-02)** - `67a7401` (test RED) → `83d85f7` (feat GREEN)
 3. **Task 3: Extend disol walls to MCP NW paths (D-05)** - `53ed34a` (test)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `79c93f1` (docs: complete plan)
 
 _Note: TDD tasks may have multiple commits (test → feat → refactor)_
 

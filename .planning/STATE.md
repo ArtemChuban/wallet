@@ -4,12 +4,12 @@ milestone: v1.4
 milestone_name: Local MCP
 current_phase: 25
 current_phase_name: Side-Ledger Tools + Isolation
-status: ready_to_execute
+status: executing
 stopped_at: Completed 25-01-PLAN.md
 last_updated: "2026-09-10T17:37:18.296Z"
 last_activity: 2026-09-10
-last_activity_desc: Phase 25 PLAN.md files written (25-01…25-04)
-state_head: 53ed34a66b7e5b7ad79781af38137c1fa5ce09e1
+last_activity_desc: Completed 25-01 Wave 0 stubs + horizon schema + disol MCP walls
+state_head: 79c93f1
 progress:
   total_phases: 4
   completed_phases: 1
@@ -25,14 +25,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-10 — v1.4 Local MCP)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 25 planned — next execute Side-Ledger Tools
+**Current focus:** Phase 25 executing — next 25-02 get_forecast_overlay tracer
 
 ## Current Position
 
 Phase: 25 of 26 (Side-Ledger Tools + Isolation)
-Plan: 25-01 ready (4 plans)
-Status: ready_to_execute
-Last activity: 2026-09-10 — Phase 25 plans created (25-01…25-04)
+Plan: 2 of 4 (25-02 next)
+Status: executing
+Last activity: 2026-09-10 — Completed 25-01-PLAN.md
 
 Progress: [███░░░░░░░] 25%
 
