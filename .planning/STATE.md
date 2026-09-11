@@ -5,16 +5,16 @@ milestone_name: Local MCP
 current_phase: 26
 current_phase_name: Connect Docs + Policy
 status: planned
-stopped_at: Completed 26-03-PLAN.md
-last_updated: "2026-09-11T10:26:54.071Z"
+stopped_at: Completed 26-02-PLAN.md
+last_updated: "2026-09-11T10:31:54.442Z"
 last_activity: 2026-09-11
 last_activity_desc: Phase 26 planned — 4 plans across 3 waves
-state_head: 4c12c825602b95e22180fd0bafa6fdf41680e1d8
+state_head: 2fd821aedbc3a71c7feb9788d27431e17b2d3466
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 14
-  completed_plans: 12
+  completed_plans: 13
   percent: 50
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-09-10 — v1.4 Local MCP)
 ## Current Position
 
 Phase: 26 of 26 (Connect Docs + Policy)
-Plan: 3 of 04 (not started)
+Plan: 4 of 04 (not started)
 Status: Ready to execute
 Last activity: 2026-09-11 — Phase 26 plans created (4 plans / 3 waves)
 
@@ -57,6 +57,7 @@ Progress: [█████░░░░░] 50%
 | Phase 25 P04 | 5min | 3 tasks | 8 files |
 | Phase 26 P01 | 2min | 2 tasks | 6 files |
 | Phase 26 P03 | 4min | 2 tasks | 1 files |
+| Phase 26 P02 | 3min | 3 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -84,6 +85,9 @@ v1.4 locks (pending execution):
 - [Phase 26]: Forecast overlay cites combined INISO-01/GRISO-01 in create-handler instructions
 - [Phase 26]: wave_0_complete stays false until Plan 02 income/grace/forecast regexes
 - [Phase 26]: README MCP: Claude transport http + Cursor type http/url for 127.0.0.1:3000/api/mcp; no smoke/PARITY/mcp-remote
+- [Phase 26]: Forecast overlay uses combined INISO-01/GRISO-01 sentence — no FORECAST-01
+- [Phase 26]: CAP polish is accounts-only / transparency / do-not-multiply only — no SIDE rule ids
+- [Phase 26]: wave_0_complete + nyquist_compliant true after full mcp suite green
 
 ### Pending Todos
 
@@ -118,6 +122,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-11T10:26:53.965Z
-Stopped at: Completed 26-03-PLAN.md
+Last session: 2026-09-11T10:31:54.340Z
+Stopped at: Completed 26-02-PLAN.md
 Resume file: None
