@@ -1,6 +1,6 @@
 ---
 phase: 23-mcp-host-localhost-safety
-verified: 2026-09-10T13:49:30Z
+verified: 2026-09-11T10:54:00Z
 status: passed
 score: 9/9 must-haves verified
 behavior_unverified: 0
@@ -16,9 +16,9 @@ human_verification: []
 # Phase 23: MCP Host + Localhost Safety Verification Report
 
 **Phase Goal:** Running wallet exposes in-process Streamable HTTP MCP on localhost only — same Next lifecycle, no sidecar
-**Verified:** 2026-09-10T13:49:30Z
+**Verified:** 2026-09-11T10:54:00Z
 **Status:** passed
-**Re-verification:** Yes — live curl closed truth #2 after initial human_needed
+**Re-verification:** Yes — 2026-09-11 agent UAT re-confirmed live initialize/tools/list + bad_host 403 + Compose L5 (23-UAT.md); prior 2026-09-10 curl also closed truth #2
 
 ## Goal Achievement
 
