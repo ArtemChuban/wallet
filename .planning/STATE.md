@@ -1,19 +1,16 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.4
-milestone_name: Local MCP
-status: Awaiting next milestone
-stopped_at: null
-last_updated: "2026-09-11T11:30:00Z"
+milestone: v1.5
+milestone_name: Сберегательный счет
+status: planning
+last_updated: "2026-09-11T12:31:53.767Z"
 last_activity: 2026-09-11
-last_activity_desc: Milestone v1.4 archived — awaiting /gsd-new-milestone
-state_head: edf425befdcc152e2db7597821ad2ccacb5f6287
 progress:
-  total_phases: 4
-  completed_phases: 4
-  total_plans: 14
-  completed_plans: 14
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
@@ -27,12 +24,10 @@ See: .planning/PROJECT.md (updated 2026-09-11 after v1.4 Local MCP)
 
 ## Current Position
 
-Phase: Milestone v1.4 complete (shipped 2026-09-11)
+Phase: Not started (defining requirements)
 Plan: —
-Status: Awaiting next milestone
-Last activity: 2026-09-11 — archived v1.4 Local MCP
-
-Progress: [██████████] 100% (v1.4)
+Status: Defining requirements
+Last activity: 2026-09-11 — Milestone v1.5 started
 
 ## Performance Metrics
 

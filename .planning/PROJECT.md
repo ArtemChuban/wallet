@@ -14,9 +14,16 @@ At any moment, see true net worth (assets minus credit-card debt) in the primary
 
 Local Dockerized net-worth tracker + personal-debts + income + credit-grace ledgers + in-process MCP: SQLite → currencies/accounts → dated balances → dated FX → NW dashboard/charts with dashed «Прогноз» from income and open grace obligations (A′ ΔNW=0) → `/debts` + `/income` + account «Грейс» → Streamable HTTP MCP at `http://127.0.0.1:3000/api/mcp` (Host/Origin + Compose loopback). Stack: Next.js 16 App Router, Prisma 7 + SQLite, mcp-handler / MCP SDK, shadcn/ui, recharts, Vitest. Russian-first UI. Debts never change NW (DISOL-01). Income never writes BalanceSnapshot / past LOCF (ISO-01 / INISO-01). Grace never writes BalanceSnapshot / past LOCF (GRISO-01). Agents stay at UI parity (PARITY-01).
 
-## Next Milestone Goals
+## Current Milestone: v1.5 Сберегательный счет
 
-Planning next milestone via `/gsd-new-milestone`. Candidates from deferred backlog: savings account type + interest NW forecast; timezone settings; MCP write tools / chat UI remain out of scope until explicitly promoted.
+**Goal:** Новый тип счёта SAVINGS с годовой ставкой и днём начисления; вклад ожидаемых процентов в dashed «Прогноз» на Капитал без переписывания historical NW / LOCF.
+
+**Target features:**
+- Тип счёта `SAVINGS` (отдельный от debit/credit/crypto/cash)
+- Поля: годовой %, день месяца начисления
+- Математика: баланс × ставка / 12 → ожидаемое начисление в день месяца
+- Overlay «Прогноз» на `/` (как income) — только прогноз, без авто BalanceSnapshot
+- MCP read-tools под PARITY-01 для нового read-surface
 
 ## Requirements
 
@@ -74,7 +81,10 @@ Planning next milestone via `/gsd-new-milestone`. Candidates from deferred backl
 
 ### Active
 
-(None — define next milestone via `/gsd-new-milestone`)
+- User can create and manage SAVINGS accounts with annual interest rate and day-of-month accrual
+- User sees expected monthly interest (balance × rate / 12) on Капитал dashed «Прогноз» overlay
+- Interest forecast never writes BalanceSnapshot or changes historical NW LOCF (savings isolation twin of INISO/GRISO)
+- New savings read surfaces expose matching read-only MCP tools (PARITY-01)
 
 ### Out of Scope
 
@@ -83,7 +93,6 @@ Planning next milestone via `/gsd-new-milestone`. Candidates from deferred backl
 - Full revolving interest / penalty calculation engine — grace tracking + forecast only
 - Transaction history / expense posting / full double-entry — still periodic balance snapshots only
 - Spending analytics, monthly burn, category cash-flow — deferred
-- Long-term savings goals with target dates — deferred
 - Interest / penalties on personal debts — principal only
 - Debt list filters / search — deferred (single list)
 - Repayments in a different currency than the debt — deferred
@@ -95,6 +104,9 @@ Planning next milestone via `/gsd-new-milestone`. Candidates from deferred backl
 - FX between arbitrary non-primary pairs — primary ↔ other only
 - Multi-user / auth / cloud sync — single local user
 - Timezone selection in settings — deferred (Moscow calendar still default; todo acknowledged at v1.4 close)
+- Auto BalanceSnapshot when savings interest accrues — deferred (v1.5 forecast overlay only)
+- Compound / daily accrual engines beyond simple annual%÷12 monthly — deferred
+- Long-term savings goals with target dates — still deferred
 - Local AI agent via subprocess spawn from app — superseded by in-app MCP host; CLI agent stays external
 - MCP write / mutate tools — deferred (v1.4 shipped read-only)
 - In-app chat / «Ассистент» UI — deferred (CLI connects to MCP)
@@ -185,4 +197,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-11 after v1.4 Local MCP*
+*Last updated: 2026-09-11 — milestone v1.5 Сберегательный счет started*
