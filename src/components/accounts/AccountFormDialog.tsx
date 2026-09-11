@@ -8,7 +8,7 @@ import {
 } from "react";
 import {
   createAccount,
-  updateAccountName,
+  updateAccount,
   type AccountActionState,
 } from "@/app/accounts/actions";
 import { Button } from "@/components/ui/button";
@@ -36,6 +36,7 @@ import {
   type AccountTypeSoft,
 } from "@/lib/account-type";
 import { formatMinorToMajor } from "@/lib/money";
+import { formatBpsToPercentMajor } from "@/lib/savings-rate";
 
 type CurrencyOption = {
   code: string;
@@ -50,6 +51,10 @@ type AccountRow = {
   currencyCode: string;
   /** Serialized BigInt string from RSC. */
   creditLimitMinor: string | null;
+  /** SAVINGS annual rate in bps; null for non-SAVINGS (page wiring may land in 27-04). */
+  annualRateBps: number | null;
+  /** SAVINGS accrual DOM 1–31; null for non-SAVINGS. */
+  accrualDayOfMonth: number | null;
   currency: { code: string; name: string; scale: number };
 };
 
@@ -97,8 +102,30 @@ function AccountFormBody({
   const [name, setName] = useState(
     mode === "edit" && account ? account.name : "",
   );
+  const [annualRate, setAnnualRate] = useState(() => {
+    if (
+      mode === "edit" &&
+      account &&
+      account.type === "SAVINGS" &&
+      account.annualRateBps != null
+    ) {
+      return formatBpsToPercentMajor(account.annualRateBps);
+    }
+    return "";
+  });
+  const [accrualDom, setAccrualDom] = useState(() => {
+    if (
+      mode === "edit" &&
+      account &&
+      account.type === "SAVINGS" &&
+      account.accrualDayOfMonth != null
+    ) {
+      return String(account.accrualDayOfMonth);
+    }
+    return "";
+  });
 
-  const action = mode === "create" ? createAccount : updateAccountName;
+  const action = mode === "create" ? createAccount : updateAccount;
   const [state, formAction, isPending] = useActionState(action, initialState);
 
   useEffect(() => {
@@ -107,10 +134,12 @@ function AccountFormBody({
     }
   }, [state, onSuccess]);
 
-  const title = mode === "create" ? "Новый счёт" : "Изменить название";
+  const title = mode === "create" ? "Новый счёт" : "Изменить счёт";
   const submitLabel = mode === "create" ? "Добавить счёт" : "Сохранить";
   const showCreditLimit = mode === "create" && isCreditType(accountType);
-  const showSavingsFields = mode === "create" && accountType === "SAVINGS";
+  const showSavingsFields =
+    (mode === "create" && accountType === "SAVINGS") ||
+    (mode === "edit" && account?.type === "SAVINGS");
 
   const editLimit =
     mode === "edit" &&
@@ -127,7 +156,7 @@ function AccountFormBody({
         <DialogDescription>
           {mode === "create"
             ? "Тип, валюта и кредитный лимит нельзя изменить после создания."
-            : "Можно изменить только название."}
+            : "Тип и валюта не меняются."}
         </DialogDescription>
       </DialogHeader>
 
@@ -162,7 +191,14 @@ function AccountFormBody({
             <Select
               value={accountType}
               onValueChange={(value) => {
-                if (value != null) setAccountType(String(value));
+                if (value != null) {
+                  const next = String(value);
+                  setAccountType(next);
+                  if (next !== "SAVINGS") {
+                    setAnnualRate("");
+                    setAccrualDom("");
+                  }
+                }
               }}
               disabled={isPending}
             >
@@ -271,6 +307,8 @@ function AccountFormBody({
             <Input
               id="annual-rate"
               name="annualRatePercentMajor"
+              value={annualRate}
+              onChange={(e) => setAnnualRate(e.target.value)}
               inputMode="decimal"
               autoComplete="off"
               aria-invalid={Boolean(state.errors?.annualRatePercentMajor)}
@@ -287,6 +325,8 @@ function AccountFormBody({
             <Input
               id="accrual-dom"
               name="accrualDayOfMonth"
+              value={accrualDom}
+              onChange={(e) => setAccrualDom(e.target.value)}
               inputMode="numeric"
               autoComplete="off"
               aria-invalid={Boolean(state.errors?.accrualDayOfMonth)}

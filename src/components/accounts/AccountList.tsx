@@ -42,6 +42,10 @@ export type AccountListItem = {
   currencyCode: string;
   /** Serialized BigInt for RSC→client props (never treat as NW asset). */
   creditLimitMinor: string | null;
+  /** SAVINGS rate bps for edit prefill (list countdown = Plan 04). */
+  annualRateBps: number | null;
+  /** SAVINGS accrual DOM for edit prefill. */
+  accrualDayOfMonth: number | null;
   currency: { code: string; name: string; scale: number };
   /** LOCF as of today; null before first snapshot (BAL-02). */
   locf: { asOfDate: string; amountMinor: string } | null;

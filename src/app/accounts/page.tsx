@@ -73,6 +73,8 @@ export default async function AccountsPage() {
       currencyCode: a.currencyCode,
       creditLimitMinor:
         a.creditLimitMinor == null ? null : a.creditLimitMinor.toString(),
+      annualRateBps: a.annualRateBps,
+      accrualDayOfMonth: a.accrualDayOfMonth,
       statementDayOfMonth: a.statementDayOfMonth,
       dueDayOfMonth: a.dueDayOfMonth,
       creditGraceObligations: a.creditGraceObligations.map((o) => ({
