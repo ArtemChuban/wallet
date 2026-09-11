@@ -10,7 +10,7 @@ export function registerGetNetWorth(server: McpServer) {
       description:
         "Read net worth / Капитал as-of a calendar date (YYYY-MM-DD). " +
         "Returns totalPrimaryMinor (string) + isPartial + per-account rows with excludeReason. " +
-        "Server converts FX; do not multiply rates yourself. Accounts-only — no debts/income.",
+        "Accounts-only historical LOCF — no debts/income/grace. Server converts FX; do not multiply rates yourself.",
       inputSchema: z.object({
         asOf: optionalAsOfSchema,
       }),

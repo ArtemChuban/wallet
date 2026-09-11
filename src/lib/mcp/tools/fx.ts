@@ -6,7 +6,7 @@ import { loadFxRatesAsOf } from "@/lib/mcp/reads/load-fx-rates-asof";
 /** Exported for CAP-04 description contract tests (D-03). */
 export const LIST_FX_RATES_DESCRIPTION =
   "List FX rates / Курсы as-of a calendar date (YYYY-MM-DD): primary↔other LOCF snapshot. " +
-  "Transparency only — not a currency converter; agents must not convert or multiply rates. " +
+  "Transparency only — not a currency converter; do not convert or multiply rates. " +
   "Primary amounts come only from get_net_worth or get_account_balance. " +
   "Optional currencyCode filters one non-primary code.";
 

@@ -9,7 +9,7 @@ export function registerGetAccountBalance(server: McpServer) {
     {
       description:
         "Read one account's native and primary balance as-of a calendar date (YYYY-MM-DD). " +
-        "Server converts FX; returns conversionOk false + null primaryAmountMinor when snapshot/FX missing. " +
+        "Accounts-only transparency: server converts FX; returns conversionOk false + null primaryAmountMinor when snapshot/FX missing. " +
         "Do not multiply rates yourself. Unknown accountId → success with error account_not_found.",
       inputSchema: z.object({
         accountId: z.number().int().positive(),

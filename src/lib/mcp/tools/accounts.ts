@@ -70,7 +70,7 @@ export function registerListAccounts(server: McpServer) {
     "list_accounts",
     {
       description:
-        "List wallet accounts / счета with type, currency, creditLimitMinor, and isCredit. " +
+        "List wallet accounts / счета (accounts-only catalog): type, currency, creditLimitMinor, isCredit. " +
         "Metadata only — no live available or debt balances (use get_account_balance).",
       inputSchema: z.object({}),
       annotations: {
