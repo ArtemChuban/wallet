@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A local, single-user personal finance site for tracking net worth across accounts (asset + credit), a parallel «Долги» side ledger, a «Доходы» income ledger with plan vs actual and NW forecast from recurring pay, and credit-card grace-period tracking with A′ NW-neutral payment amounts on the Капитал «Прогноз» overlay. Runs in Docker with SQLite on the host; no cloud accounts. Not budgeting or transaction categorization.
+A local, single-user personal finance site for tracking net worth across accounts (asset + credit), a parallel «Долги» side ledger, a «Доходы» income ledger with plan vs actual and NW forecast from recurring pay, and credit-card grace-period tracking with A′ NW-neutral payment amounts on the Капитал «Прогноз» overlay. Exposes an in-app read-only MCP server at `/api/mcp` (localhost only) so external CLI agents query the same capital + side-ledger data. Runs in Docker with SQLite on the host; no cloud accounts. Not budgeting or transaction categorization.
 
 ## Core Value
 
@@ -10,19 +10,13 @@ At any moment, see true net worth (assets minus credit-card debt) in the primary
 
 ## Current State
 
-**Shipped:** v1.0 MVP (2026-09-04); **v1.1 Долги людям (2026-09-07)**; **v1.2 Доходы (2026-09-08)**; **v1.3 Кредитка (2026-09-10)**.
+**Shipped:** v1.0 MVP (2026-09-04); **v1.1 Долги людям (2026-09-07)**; **v1.2 Доходы (2026-09-08)**; **v1.3 Кредитка (2026-09-10)**; **v1.4 Local MCP (2026-09-11)**.
 
-Local Dockerized net-worth tracker + personal-debts + income + credit-grace ledgers: SQLite → currencies/accounts → dated balances → dated FX → NW dashboard/charts with dashed «Прогноз» from income and open grace obligations (A′ ΔNW=0) → `/debts` + `/income` + account «Грейс». Stack: Next.js 16 App Router, Prisma 7 + SQLite, shadcn/ui, recharts, Vitest. Russian-first UI. Debts never change NW (DISOL-01). Income never writes BalanceSnapshot / past LOCF (ISO-01). Grace never writes BalanceSnapshot / past LOCF (GRISO-01).
+Local Dockerized net-worth tracker + personal-debts + income + credit-grace ledgers + in-process MCP: SQLite → currencies/accounts → dated balances → dated FX → NW dashboard/charts with dashed «Прогноз» from income and open grace obligations (A′ ΔNW=0) → `/debts` + `/income` + account «Грейс» → Streamable HTTP MCP at `http://127.0.0.1:3000/api/mcp` (Host/Origin + Compose loopback). Stack: Next.js 16 App Router, Prisma 7 + SQLite, mcp-handler / MCP SDK, shadcn/ui, recharts, Vitest. Russian-first UI. Debts never change NW (DISOL-01). Income never writes BalanceSnapshot / past LOCF (ISO-01 / INISO-01). Grace never writes BalanceSnapshot / past LOCF (GRISO-01). Agents stay at UI parity (PARITY-01).
 
-## Current Milestone: v1.4 Local MCP
+## Next Milestone Goals
 
-**Goal:** In-app read-only MCP server (same Next.js process) over localhost HTTP/SSE so external CLI agents connect without the app spawning subprocesses.
-
-**Target features:**
-- MCP hosted inside the running wallet app (Docker / `npm run dev` lifecycle)
-- Read-only tools covering accounts, balances/NW, FX, debts, income, grace
-- Connect docs for Claude Code / Cursor CLI → localhost MCP
-- No write tools, no in-app chat UI, no agent subprocess spawn
+Planning next milestone via `/gsd-new-milestone`. Candidates from deferred backlog: savings account type + interest NW forecast; timezone settings; MCP write tools / chat UI remain out of scope until explicitly promoted.
 
 ## Requirements
 
@@ -69,13 +63,18 @@ Local Dockerized net-worth tracker + personal-debts + income + credit-grace ledg
 - ✓ Капитал «Прогноз» shows open grace obligations as A′ NW-neutral (ΔNW=0 + tooltip; FX LOCF honesty) — Phase 21 (GRFCST-01/02)
 - ✓ Grace never writes BalanceSnapshot or changes historical NW LOCF (GRISO regression twin) — Phase 22 (GRISO-01)
 
+### Validated (v1.4)
+
+- ✓ Running wallet exposes in-process Streamable HTTP MCP at `/api/mcp` (same Next.js lifecycle; no sidecar / agent spawn) — Phase 23 (HOST-01)
+- ✓ MCP accepts only localhost clients (Host/Origin guard + Compose `127.0.0.1` publish) — Phase 23 (HOST-02)
+- ✓ Agent can list accounts / get NW as-of / get account balance / list FX rates via MCP with page-parity honesty — Phase 24 (CAP-01…04)
+- ✓ Agent can list debts, income, grace obligations, and forecast overlay via MCP without folding side ledgers into historical NW — Phase 25 (SIDE-01…04; DISOL/INISO/GRISO)
+- ✓ MCP tools declare `readOnlyHint` + named isolation copy; Claude Code / Cursor connect docs — Phase 26 (CLI-01/02)
+- ✓ Standing PARITY-01 rule in AGENTS.md — new user-visible read surfaces ship matching MCP tools same phase — Phase 26
+
 ### Active
 
-- [ ] HOST-01/02 — in-app Streamable HTTP MCP at `/api/mcp` + localhost Host/Origin + `127.0.0.1` publish
-- [ ] CAP-01…04 — read-only accounts, NW, balances, FX via MCP
-- [ ] SIDE-01…04 — read-only debts, income, grace, forecast overlay via MCP (DISOL/INISO/GRISO)
-- [x] CLI-01/02 — readOnlyHint + isolation copy; Claude Code / Cursor connect docs
-- [x] PARITY-01 — new user-visible read surfaces always ship matching MCP read tools same phase
+(None — define next milestone via `/gsd-new-milestone`)
 
 ### Out of Scope
 
@@ -95,13 +94,14 @@ Local Dockerized net-worth tracker + personal-debts + income + credit-grace ledg
 - Automatic FX from external APIs — deferred; manual rates only
 - FX between arbitrary non-primary pairs — primary ↔ other only
 - Multi-user / auth / cloud sync — single local user
-- Timezone selection in settings — deferred (Moscow calendar still default unless promoted)
+- Timezone selection in settings — deferred (Moscow calendar still default; todo acknowledged at v1.4 close)
 - Local AI agent via subprocess spawn from app — superseded by in-app MCP host; CLI agent stays external
-- MCP write / mutate tools — deferred (v1.4 read-only)
+- MCP write / mutate tools — deferred (v1.4 shipped read-only)
 - In-app chat / «Ассистент» UI — deferred (CLI connects to MCP)
 - Nav «Валюты» discoverability / account delete (ACCT-04) — residual debt
 - Chart legend separating доходы vs обязательства on «Прогноз» — deferred
 - Cash / APR / min-payment / «missed min voids grace» bank rules — D-07…D-10 OOS
+- Publish MCP on `0.0.0.0` / LAN — locked out (localhost only)
 
 ## Context
 
@@ -111,9 +111,9 @@ v1.1: personal debts as parallel domain; DISOL-01.
 
 v1.2: income side ledger + Капитал «Прогноз» from open planned pay; INISO-01.
 
-v1.3 (2026-09-10): credit grace dual-DOM schedules, manual «Платёж для беспроцентного», A′ overlay, GRISO isolation. Audit `tech_debt`: Nyquist VALIDATION still draft on phases 19–22.
+v1.3 (2026-09-10): credit grace dual-DOM schedules, manual «Платёж для беспроцентного», A′ overlay, GRISO isolation. Audit `tech_debt`: Nyquist VALIDATION still draft on phases 19–22 (carry-forward).
 
-v1.4 (planning): in-app read-only MCP over localhost HTTP/SSE so external CLI agents query wallet data; no subprocess agent, no write tools, no chat UI.
+v1.4 (2026-09-11): in-app read-only MCP (`mcp-handler` + Streamable HTTP) with capital + side-ledger tools, named DISOL/INISO/GRISO annotations, Claude/Cursor connect docs, PARITY-01 AGENTS block. Audit `tech_debt`: SUMMARY transport wording, 25-01 frontmatter, 26-VERIFICATION/UAT doc drift. Nyquist 23–26 compliant. Deferred todo: savings account + interest NW forecast.
 
 **UI constitution — destructive actions:** Never use `window.confirm` for deletes or irreversible actions. In-app second step with Russian copy. App-wide from Phase 9.
 
@@ -127,7 +127,7 @@ v1.4 (planning): in-app read-only MCP over localhost HTTP/SSE so external CLI ag
 - **FX v1**: Manual dated rates, primary ↔ other only
 - **Balances v1**: Manual dated snapshots, not double-entry ledger
 - **MCP parity (PARITY-01)**: Any new user-visible read surface must expose matching read-only MCP tool(s) in the same milestone/phase — agents stay at UI parity
-- **MCP v1.4**: Read-only; localhost only; no app-spawned agent; no in-app chat
+- **MCP**: Read-only; localhost only; no app-spawned agent; no in-app chat (writes/chat deferred)
 
 ## Key Decisions
 
@@ -160,8 +160,12 @@ v1.4 (planning): in-app read-only MCP over localhost HTTP/SSE so external CLI ag
 | Bank contract study before grace-rule lock | User supplies contract; avoid guessing revolving/grace semantics | ✓ Good — Phase 18 |
 | Dual DOM (statement + due next month) over sole graceDurationDays | Matches T-Bank Platinum ТП 7.90 calendar (21→15) | ✓ Good — Phase 18–19 |
 | GRISO twin of INISO (`griso.test.ts` + never-calls ×5) | Regression-proof historical NW free of grace | ✓ Good — Phase 22 |
-| In-app MCP host (not sidecar / not app-spawned agent) | CLI agent stays external; wallet exposes tools on localhost | — Pending v1.4 |
-| MCP v1.4 = read-only + HTTP/SSE | Thin slice; writes + chat UI deferred | — Pending v1.4 |
+| In-app MCP host (not sidecar / not app-spawned agent) | CLI agent stays external; wallet exposes tools on localhost | ✓ Good — Phase 23 |
+| MCP v1.4 = read-only + Streamable HTTP on `/api/mcp` | Thin slice; writes + chat UI deferred | ✓ Good — Phases 23–26 |
+| Localhost Host/Origin + Compose `127.0.0.1` publish only | Finance data must not hit LAN by default | ✓ Good — Phase 23 |
+| String bigint minors + server-side convert (no agent FX invent) | Match Капитал honesty / partial totals | ✓ Good — Phase 24 |
+| SIDE tools page-parity + named DISOL/INISO/GRISO in descriptions only | Isolation walls without payload meta flags | ✓ Good — Phases 25–26 |
+| PARITY-01 via AGENTS.md BEGIN/END only (no .cursor/rules) | Standing rule survives agent runtime swaps | ✓ Good — Phase 26 |
 
 ## Evolution
 
@@ -181,4 +185,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-10 after starting v1.4 Local MCP*
+*Last updated: 2026-09-11 after v1.4 Local MCP*

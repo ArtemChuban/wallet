@@ -179,6 +179,49 @@
 
 ---
 
+## Milestone: v1.4 — Local MCP
+
+**Shipped:** 2026-09-11
+**Phases:** 4 | **Plans:** 14 | **Tasks:** 36
+
+### What Was Built
+
+- In-process Streamable HTTP MCP at `/api/mcp` with Host/Origin + Compose `127.0.0.1` guard
+- Capital read tools: list_accounts, get_net_worth, get_account_balance, list_fx_rates
+- Side-ledger tools: list_debts, list_income, list_grace_obligations, get_forecast_overlay
+- Named DISOL/INISO/GRISO annotations + Claude/Cursor connect docs + PARITY-01 AGENTS rule
+
+### What Worked
+
+- Page-parity adapters (reuse loaders/serialize) kept MCP honesty aligned with UI
+- Isolation-contract Vitest walls scaled from DISOL → INISO/GRISO without new design
+- validate-phase 23+25 before close avoided another Nyquist draft-debt miss
+
+### What Was Inefficient
+
+- Audit still found doc drift (SUMMARY transport claim; 26-VERIFICATION vs UAT status)
+- 25-01 SUMMARY missing requirements-completed frontmatter (SIDE covered later)
+
+### Patterns Established
+
+- MCP host = same Next process; never sidecar / app-spawned agent
+- String bigint minors + server convert; agents never invent FX
+- PARITY-01 lives in AGENTS.md BEGIN/END (runtime-agnostic)
+
+### Key Lessons
+
+1. Ship connect docs + parity rule in same milestone as tools — agents need both
+2. Named isolation in tool descriptions beats payload meta flags for CLI clarity
+3. Close Nyquist gaps before `/gsd-complete-milestone` — v1.4 did; v1.3 did not
+
+### Cost Observations
+
+- Timeline: ~2 calendar days (2026-09-10 → 2026-09-11)
+- Plans: 14; ~130 commits since v1.3; src +3698 LOC
+- Notable: densest work in CAP honesty + SIDE catalog; Phase 26 mostly docs/contracts
+
+---
+
 ## Cross-Milestone Trends
 
 ### Process Evolution
@@ -189,6 +232,7 @@
 | v1.1 | — | 5 | Audit inserted Phase 12; side-ledger domain + DISOL isolation |
 | v1.2 | — | 5 | Second side ledger (income) + forecast overlay; Nyquist closed in-phase |
 | v1.3 | — | 5 | Credit grace + A′ forecast; Nyquist draft 19–22 accepted as tech_debt |
+| v1.4 | — | 4 | In-app MCP host; Nyquist 23–26 validated before close |
 
 ### Cumulative Quality
 
@@ -198,6 +242,7 @@
 | v1.1 | ~265 | — | Debts domain + disol scan + forgive error helper |
 | v1.2 | ~296 | — | Income domain + INISO scan + nw-forecast overlay |
 | v1.3 | — | — | credit-grace domain + GRISO twin + grace forecast slots |
+| v1.4 | — | — | mcp-handler host + CAP/SIDE tools + isolation-contract |
 
 ### Top Lessons (Verified Across Milestones)
 
@@ -207,3 +252,4 @@
 4. Audit-open todos/debug/quick must be cleared or acknowledged before milestone close
 5. Side ledgers (debts, income, grace) stay out of historical NW via explicit isolation suites
 6. Bank/contract study before schema beats guessing calendar semantics mid-build
+7. MCP tools must reuse page loaders + honesty adapters — duplicate math drifts from UI

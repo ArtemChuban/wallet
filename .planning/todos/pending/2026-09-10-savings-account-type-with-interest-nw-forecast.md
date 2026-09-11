@@ -5,6 +5,9 @@ area: general
 severity: minor
 files: []
 captured_during: phase-23-discuss
+audit_acknowledged:
+  milestone: v1.4
+  at: 2026-09-11
 ---
 
 ## Problem

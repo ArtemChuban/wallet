@@ -2,14 +2,12 @@
 gsd_state_version: 1.0
 milestone: v1.4
 milestone_name: Local MCP
-current_phase: 26
-current_phase_name: Connect Docs + Policy
-status: milestone_audited
-stopped_at: v1.4 Nyquist 23+25 validated — ready for complete-milestone
-last_updated: "2026-09-11T11:08:00Z"
+status: Awaiting next milestone
+stopped_at: null
+last_updated: "2026-09-11T11:30:00Z"
 last_activity: 2026-09-11
-last_activity_desc: validate-phase 23+25 — both nyquist_compliant true
-state_head: bb71523
+last_activity_desc: Milestone v1.4 archived — awaiting /gsd-new-milestone
+state_head: edf425befdcc152e2db7597821ad2ccacb5f6287
 progress:
   total_phases: 4
   completed_phases: 4
@@ -22,29 +20,29 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-09-10 — v1.4 Local MCP)
+See: .planning/PROJECT.md (updated 2026-09-11 after v1.4 Local MCP)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** v1.4 Nyquist reconciled — `/gsd-complete-milestone v1.4`
+**Current focus:** Planning next milestone
 
 ## Current Position
 
-Phase: 26 of 26 (Connect Docs + Policy)
-Plan: 4 of 04 complete
-Status: Milestone audited; phases 23+25 VALIDATION validated / nyquist_compliant
-Last activity: 2026-09-11 — `/gsd-validate-phase 23 25` reconciled (0 new test gaps)
+Phase: Milestone v1.4 complete (shipped 2026-09-11)
+Plan: —
+Status: Awaiting next milestone
+Last activity: 2026-09-11 — archived v1.4 Local MCP
 
-Progress: [██████████] 100%
+Progress: [██████████] 100% (v1.4)
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 69 (v1.0: 24 + v1.1: 18 + v1.2: 14 + v1.3: 13)
+- Total plans completed: 83 (v1.0: 24 + v1.1: 18 + v1.2: 14 + v1.3: 13 + v1.4: 14)
 - Average duration: —
 - Total execution time: —
 
-**By Phase:** v1.3 complete (18–22). v1.4 Local MCP complete (23–26).
+**By Phase:** v1.4 Local MCP complete (23–26).
 
 *Updated after each plan completion*
 **Per-Plan Metrics:**
@@ -64,44 +62,18 @@ Progress: [██████████] 100%
 
 ### Decisions
 
-Decisions are logged in PROJECT.md Key Decisions table.
-
-v1.4 locks (pending execution):
-
-- In-app MCP host (not sidecar / not app-spawned agent)
-- MCP v1.4 = read-only + Streamable HTTP on `/api/mcp`
-- Localhost Host/Origin + Compose `127.0.0.1` publish only
-- [Phase 25]: optionalHorizonEndSchema YYYY-MM-DD; default today+365 stays in forecast loader (D-04)
-- [Phase 25]: optionalIncomeRangeSchema both-or-neither from/to for list_income (A2)
-- [Phase 25]: disol MCP walls on load-net-worth-asof + tools/net-worth only (D-05)
-- [Phase 25]: Anchor via loadNetWorthAsOf(today) accounts-only; rates/income/grace batched beside it
-- [Phase 25]: Horizon default stays in resolveForecastHorizonEnd — not resolveAsOf (D-04)
-- [Phase 25]: Instructions list get_forecast_overlay now; list_* tools named as next (Plan 03–04)
-- [Phase 25]: Totals colocated in list_debts (no get_debt_totals tool)
-- [Phase 25]: Default OPEN filter via filterDebtsForList; includeClosed optional widen
-- [Phase 25]: D-08 isolation one-liner in LIST_DEBTS_DESCRIPTION only — no payload meta flags
-- [Phase 25]: Default list_income = next_open page parity; range only when both from+to set (A2)
-- [Phase 25]: Grace CTA rows included with kind open|cta; CLOSED omitted
-- [Phase 25]: D-08 one-liners in descriptions + instructions only — no payload meta; no named essay
-- [Phase 26]: Forecast overlay cites combined INISO-01/GRISO-01 in create-handler instructions
-- [Phase 26]: wave_0_complete stays false until Plan 02 income/grace/forecast regexes
-- [Phase 26]: README MCP: Claude transport http + Cursor type http/url for 127.0.0.1:3000/api/mcp; no smoke/PARITY/mcp-remote
-- [Phase 26]: Forecast overlay uses combined INISO-01/GRISO-01 sentence — no FORECAST-01
-- [Phase 26]: CAP polish is accounts-only / transparency / do-not-multiply only — no SIDE rule ids
-- [Phase 26]: wave_0_complete + nyquist_compliant true after full mcp suite green
-- [Phase 26]: PARITY-01 vehicle = AGENTS.md BEGIN/END only (D-12/D-13); no .cursor/rules
-- [Phase 26]: mcp-remote mentioned only in UAT deferred_on_http_fail — not pre-documented
-- [Phase 26]: Constraints MCP parity sentence retained while Active checkboxes marked [x]
+Decisions are logged in PROJECT.md Key Decisions table. v1.4 MCP locks shipped (in-app host, read-only Streamable HTTP, localhost-only, CAP+SIDE tools, PARITY-01).
 
 ### Pending Todos
 
 - Add timezone selection to settings (general, minor)
+- Savings account type with interest NW forecast (deferred at v1.4 close)
 
 ### Blockers/Concerns
 
-- None blocking v1.4 ship
-- Nyquist VALIDATION still draft on archived phases 19–22 (carry-forward)
-- 26-VERIFICATION body UAT-pending note stale vs 26-UAT complete
+- None blocking next milestone planning
+- Nyquist VALIDATION still draft on archived phases 19–22 (carry-forward tech_debt from v1.3)
+- v1.4 audit tech_debt: SUMMARY transport wording; 25-01 frontmatter; 26-VERIFICATION/UAT doc drift
 
 ### Roadmap Evolution
 
@@ -109,7 +81,7 @@ v1.4 locks (pending execution):
 - Phase 8–12: debts refresh + Nyquist 10–11 (v1.1)
 - Phases 13–17: v1.2 Доходы — SHIPPED 2026-09-08
 - Phases 18–22: v1.3 Кредитка — SHIPPED 2026-09-10
-- Phases 23–26: v1.4 Local MCP — roadmap created 2026-09-10
+- Phases 23–26: v1.4 Local MCP — SHIPPED 2026-09-11
 
 ## Deferred Items
 
@@ -117,6 +89,7 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 | Category | Item | Status | Deferred At | Milestone |
 |----------|------|--------|-------------|-----------|
+| todos | 2026-09-10-savings-account-type-with-interest-nw-forecast.md | (presence-only) | 2026-09-11 | v1.4 |
 | todos | 2026-09-05-add-salary-income-tracking-with-forecast.md | promoted → v1.2 (shipped) | 2026-09-07 | v1.1 |
 | todos | 2026-09-05-add-timezone-selection-to-settings.md | (presence-only) | 2026-09-07 | v1.1 |
 | todos | 2026-09-05-improve-credit-account-type-with-limit-grace-period-and-fore.md | folded/closed via Phase 18 CONT-01 (dual DOM + A′) | 2026-09-08 | v1.3 |
@@ -126,6 +99,10 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-11T11:08:00Z
-Stopped at: validate-phase 23+25 done — next /gsd-complete-milestone v1.4
-Resume file: .planning/v1.4-MILESTONE-AUDIT.md
+Last session: 2026-09-11T11:30:00Z
+Stopped at: v1.4 archived — next `/gsd-new-milestone`
+Resume file: .planning/MILESTONES.md
+
+## Operator Next Steps
+
+- Start the next milestone with `/gsd-new-milestone`

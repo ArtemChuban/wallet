@@ -1,5 +1,24 @@
 # Milestones
 
+## v1.4 Local MCP (Shipped: 2026-09-11)
+
+**Closeout:** override_closeout  
+**Known verification overrides:** 1 newly acknowledged, 1 carried forward from a prior close (see STATE.md Deferred Items)  
+**Audit:** tech_debt (doc nits only; 13/13 reqs, Nyquist 23–26 compliant)  
+**Phases completed:** 4 phases, 14 plans, 36 tasks  
+**Git range:** `v1.3` → `v1.4` (~130 commits, 114 files, +16k/−879; src +3698)  
+**Timeline:** 2026-09-10 → 2026-09-11 (~2 days)
+
+**Key accomplishments:**
+
+- In-process `/api/mcp` Streamable HTTP + localhost Host/Origin/`127.0.0.1` guard (`wallet_ping`)
+- Capital read tools: accounts, NW as-of, balance, FX — string-minor honesty
+- Side-ledger tools: debts, income, grace, forecast overlay — DISOL/INISO/GRISO walls
+- Named isolation annotations + CAP honesty polish; full MCP suite green
+- Claude/Cursor connect docs + AGENTS.md PARITY-01 standing rule + dual-client UAT
+
+---
+
 ## v1.3 Кредитка (Shipped: 2026-09-10)
 
 **Closeout:** override_closeout  
