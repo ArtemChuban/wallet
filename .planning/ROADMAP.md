@@ -95,7 +95,12 @@ Full detail: [milestones/v1.4-ROADMAP.md](./milestones/v1.4-ROADMAP.md)
   2. User can edit and see annual rate + accrual day on SAVINGS list/detail and create/edit forms
   3. SAVINGS account balances appear in Капитал net-worth totals and history like other asset accounts
   4. Manual BalanceSnapshot path for SAVINGS works the same as other asset accounts (no auto interest write)
-**Plans**: TBD
+**Plans**: 4 plans
+Plans:
+- [ ] 27-01-PLAN.md — Wave 0 red Vitest contracts (Zod/soft/NW/display/actions)
+- [ ] 27-02-PLAN.md — One-way CHECK gate + create tracer (schema→form) + migrate deploy
+- [ ] 27-03-PLAN.md — Coherent SAVINGS edit action + AccountFormDialog chrome
+- [ ] 27-04-PLAN.md — List rate%+countdown + page props + D-16 snapshot honesty
 **UI hint**: yes
 
 ### Phase 28: Interest math + forecast kind

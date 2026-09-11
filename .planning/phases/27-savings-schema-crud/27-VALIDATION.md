@@ -38,26 +38,28 @@ created: "2026-09-11"
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 27-W0 | 00 | 0 | ACCT-01…03 | — | N/A | stubs | extend listed tests | ❌ W0 | ⬜ pending |
-| TBD | 01+ | 1+ | ACCT-01 | T-27-01 | Zod+CHECK reject bad rate/DOM | unit | `npx vitest run src/lib/validations/account.test.ts` | ✅ extend | ⬜ pending |
-| TBD | 01+ | 1+ | ACCT-02 | — | SAVINGS in NW asset path | unit | `npx vitest run src/lib/net-worth.test.ts src/lib/account-type.test.ts` | ✅ extend | ⬜ pending |
-| TBD | 01+ | 1+ | ACCT-03 | — | days-until / list helpers | unit | `npx vitest run src/lib/savings-accrual-display.test.ts` | ❌ W0 | ⬜ pending |
-| TBD | 01+ | 1+ | ACCT-01 | T-27-02 | create/update no snapshot side effects | unit | `npx vitest run src/app/accounts/actions.test.ts` | ✅ extend | ⬜ pending |
+| 27-01-T1 | 01 | 0 | ACCT-01…03 | T-27-02/03/04 | Red Zod/soft/NW contracts | stubs | `npx vitest run src/lib/validations/account.test.ts src/lib/account-type.test.ts src/lib/net-worth.test.ts; test $? -ne 0` | ✅ extend | ⬜ pending |
+| 27-01-T2 | 01 | 0 | ACCT-01/03 | T-27-05 | Red display + actions contracts | stubs | `npx vitest run src/lib/savings-accrual-display.test.ts src/app/accounts/actions.test.ts; test $? -ne 0` | ❌→✅ W0 | ⬜ pending |
+| 27-02-T2 | 02 | 1 | ACCT-01/02 | T-27-01…04 | Zod+CHECK+create+NW | unit | `npx vitest run src/lib/validations/account.test.ts src/lib/account-type.test.ts src/lib/net-worth.test.ts src/app/accounts/actions.test.ts` | ✅ | ⬜ pending |
+| 27-02-T3 | 02 | 1 | ACCT-01 | — | migrate deploy live | migrate | `DATABASE_URL=file:./data/wallet.db npx prisma migrate deploy` | ✅ | ⬜ pending |
+| 27-03-T1 | 03 | 2 | ACCT-01 | T-27-01/05 | update SAVINGS; no snapshot | unit | `npx vitest run src/app/accounts/actions.test.ts src/lib/validations/account.test.ts` | ✅ | ⬜ pending |
+| 27-03-T2 | 03 | 2 | ACCT-03 | — | form labels/title | source+unit | `grep -q 'Изменить счёт' src/components/accounts/AccountFormDialog.tsx` | ✅ | ⬜ pending |
+| 27-04-T1 | 04 | 3 | ACCT-03 | — | days-until clamp | unit | `npx vitest run src/lib/savings-accrual-display.test.ts` | ❌→✅ | ⬜ pending |
+| 27-04-T2 | 04 | 3 | ACCT-03 | — | list rate+countdown | source+unit | `grep -q annualRateBps src/app/accounts/page.tsx` | ✅ | ⬜ pending |
+| 27-04-T3 | 04 | 3 | ACCT-02 | T-27-05 | SAVINGS snapshot manual only | unit | `npx vitest run src/app/accounts/actions.test.ts && npm test` | ✅ | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
-
-*Planner fills concrete Task IDs when PLAN.md lands.*
 
 ---
 
 ## Wave 0 Requirements
 
-- [ ] Extend `src/lib/validations/account.test.ts` — SAVINGS create/update refine (ACCT-01)
-- [ ] Extend `src/lib/account-type.test.ts` — SAVINGS label + `isAssetType` (ACCT-02/03)
-- [ ] Extend `src/lib/net-worth.test.ts` — SAVINGS inclusion (ACCT-02)
-- [ ] New `src/lib/savings-accrual-display.test.ts` — clamp + today/next month (ACCT-03)
-- [ ] Extend `src/app/accounts/actions.test.ts` — create/update SAVINGS; no BalanceSnapshot on metadata update
-- [ ] Optional: UI source scan for «Годовой %» / «День начисления» / «Накопительный»
+- [ ] Extend `src/lib/validations/account.test.ts` — SAVINGS create/update refine (ACCT-01) — **27-01-T1**
+- [ ] Extend `src/lib/account-type.test.ts` — SAVINGS label + `isAssetType` (ACCT-02/03) — **27-01-T1**
+- [ ] Extend `src/lib/net-worth.test.ts` — SAVINGS inclusion (ACCT-02) — **27-01-T1**
+- [ ] New `src/lib/savings-accrual-display.test.ts` — clamp + today/next month (ACCT-03) — **27-01-T2**
+- [ ] Extend `src/app/accounts/actions.test.ts` — create/update SAVINGS; no BalanceSnapshot on metadata update — **27-01-T2**
+- [ ] Optional: UI source scan for «Годовой %» / «День начисления» / «Накопительный» — covered in 27-02/03/04 greps
 
 *Existing Vitest infrastructure covers framework — no install Wave 0.*
 

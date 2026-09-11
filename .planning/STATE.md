@@ -4,16 +4,16 @@ milestone: v1.5
 milestone_name: Сберегательный счет (Phases 27–30)
 current_phase: 27
 current_phase_name: SAVINGS schema + CRUD
-status: planning
-stopped_at: Phase 27 UI-SPEC draft
-last_updated: "2026-09-11T15:50:00.000Z"
+status: planned
+stopped_at: Phase 27 plans written (27-01…04)
+last_updated: "2026-09-11T15:57:56.764Z"
 last_activity: 2026-09-11
-last_activity_desc: Phase 27 UI-SPEC.md written
+last_activity_desc: Phase 27 PLAN.md set created (4 plans)
 state_head: 7ac1624fe70c2e8c0ffdf17ac8534d9c625686a3
 progress:
   total_phases: 4
   completed_phases: 0
-  total_plans: 0
+  total_plans: 4
   completed_plans: 0
   percent: 0
 ---
@@ -30,9 +30,9 @@ See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательн�
 ## Current Position
 
 Phase: 27 of 30 (SAVINGS schema + CRUD)
-Plan: —
-Status: Ready to plan (research + UI-SPEC draft)
-Last activity: 2026-09-11 — Phase 27 UI-SPEC.md draft complete
+Plan: 27-01 … 27-04
+Status: Ready to execute (4 plans)
+Last activity: 2026-09-11 — Phase 27 plans written
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -102,10 +102,10 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-11T15:46:00.000Z
-Stopped at: Phase 27 research complete
-Resume file: .planning/phases/27-savings-schema-crud/27-RESEARCH.md
+Last session: 2026-09-11T15:57:56.764Z
+Stopped at: Phase 27 planning complete
+Resume file: .planning/phases/27-savings-schema-crud/27-01-PLAN.md
 
 ## Operator Next Steps
 
-- Plan Phase 27: continue `/gsd-plan-phase 27` (research ready for planner)
+- Execute Phase 27: `/gsd-execute-phase 27` (Wave 0 → tracer+migrate → edit UI → list/D-16)
