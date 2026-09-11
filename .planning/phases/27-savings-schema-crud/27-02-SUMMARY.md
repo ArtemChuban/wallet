@@ -127,7 +127,7 @@ status: complete
 2. **Task 2: End-to-end create SAVINGS — schema through create form** - `f96d8e8` (feat)
 3. **Task 3: Host prisma migrate deploy after savings schema** - `478c110` (chore)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `9ffc8d5` (docs: complete plan)
 
 ## Files Created/Modified
 - `prisma/schema.prisma` — SAVINGS enum; annualRateBps; accrualDayOfMonth
