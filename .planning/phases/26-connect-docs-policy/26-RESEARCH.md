@@ -374,17 +374,13 @@ Insert new `## MCP (Claude Code / Cursor)` (name discretionary) **after** Quick 
 
 **If empty:** N/A — table has items needing UAT/discretion confirmation.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Cursor `type: http` acceptance**
+1. **Cursor `type: http` acceptance** — **RESOLVED:** Ship D-06 (`type: http` + `url`) in README; confirm live in dual-client UAT (D-16/D-19). On fail, record in `26-UAT.md` and consider mcp-remote only then (D-17) — do not weaken README preemptively.
    - What we know: Official Cursor docs show url-only; D-06 locks type+url; Claude requires type.
-   - What's unclear: This machine’s Cursor agent parser behavior.
-   - Recommendation: Plan UAT first with D-06 snippet; on fail record in UAT + deferred note — do not weaken README preemptively (D-17/D-19).
 
-2. **Forecast rule naming**
+2. **Forecast rule naming** — **RESOLVED:** Use combined `INISO-01/GRISO-01` sentence on `get_forecast_overlay` (matches overlay membership: income + A′ grace). Plans 01–02 bake this in.
    - What we know: D-09 lists `get_forecast_overlay` among SIDE tools that get named rules.
-   - What's unclear: Single id vs INISO+GRISO pair.
-   - Recommendation: Use `INISO-01/GRISO-01` combined sentence (matches overlay membership).
 
 ## Environment Availability
 
