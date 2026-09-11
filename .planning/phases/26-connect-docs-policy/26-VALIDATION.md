@@ -41,8 +41,8 @@ created: "2026-09-11"
 | 26-01-01 | 01 | 0 | CLI-01 | — | Named DISOL/INISO/GRISO required in contract tests | unit | `npx vitest run src/lib/mcp/isolation-contract.test.ts` | ✅ extend | ✅ green |
 | 26-01-01b | 01 | 0 | CLI-01 | — | list_debts DESCRIPTION exports DISOL-01 | unit | `npx vitest run src/lib/mcp/tools/debts.test.ts` | ✅ update | ✅ green |
 | 26-02-* | 02 | 0 | CLI-01 | — | income/grace/forecast SIDE descriptions contain rule ids | unit | `npx vitest run src/lib/mcp/tools/income.test.ts src/lib/mcp/tools/grace.test.ts src/lib/mcp/tools/forecast.test.ts` | ✅ update | ✅ green |
-| 26-*-* | * | * | CLI-02 | — | README has Claude+Cursor configs + URL | docs/UAT | phase UAT dual-client | ❌ UAT | ⬜ pending |
-| 26-*-* | * | * | PARITY-01 | — | AGENTS.md BEGIN/END parity block | docs | grep AGENTS.md / plan verify | ❌ create | ⬜ pending |
+| 26-*-* | * | * | CLI-02 | — | README has Claude+Cursor configs + URL | docs/UAT | phase UAT dual-client (`26-UAT.md`) | ✅ README | ⬜ UAT pending |
+| 26-04-01 | 04 | 3 | PARITY-01 | — | AGENTS.md BEGIN/END parity block | docs | grep AGENTS.md / plan verify | ✅ present | ✅ green |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -63,9 +63,9 @@ created: "2026-09-11"
 
 | Behavior | Requirement | Why Manual | Test Instructions |
 |----------|-------------|------------|-------------------|
-| Claude Code live MCP connect | CLI-02 / D-16 | External CLI | `26-UAT.md` — app running; Claude `type: http` to `http://127.0.0.1:3000/api/mcp` |
-| Cursor live MCP connect | CLI-02 / D-16 | External CLI | `26-UAT.md` — Cursor `type: http` + `url`; mcp-remote only if native fails |
-| PROJECT Active checkboxes | CLI-01/02, PARITY-01 | Docs | Mark `[x]` when materialization done |
+| Claude Code live MCP connect | CLI-02 / D-16 | External CLI | See `.planning/phases/26-connect-docs-policy/26-UAT.md` Test 1 — app running; Claude `type: http` to `http://127.0.0.1:3000/api/mcp` |
+| Cursor live MCP connect | CLI-02 / D-16 | External CLI | See `.planning/phases/26-connect-docs-policy/26-UAT.md` Test 2 — Cursor `type: http` + `url`; mcp-remote only after real fail note |
+| PROJECT Active checkboxes | CLI-01/02, PARITY-01 | Docs | Closed in 26-04 — CLI-01/02 + PARITY-01 `[x]`; Constraints PARITY text retained |
 
 ---
 
