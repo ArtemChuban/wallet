@@ -38,8 +38,9 @@ created: "2026-09-11"
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 26-01-01 | 01 | 0 | CLI-01 | — | Named DISOL/INISO/GRISO required in contract tests | unit | `npx vitest run src/lib/mcp/isolation-contract.test.ts` | ✅ extend | ⬜ pending |
-| 26-*-* | * | * | CLI-01 | — | SIDE descriptions contain rule ids | unit | `npx vitest run src/lib/mcp/tools/debts.test.ts src/lib/mcp/tools/income.test.ts src/lib/mcp/tools/grace.test.ts src/lib/mcp/tools/forecast.test.ts` | ✅ update | ⬜ pending |
+| 26-01-01 | 01 | 0 | CLI-01 | — | Named DISOL/INISO/GRISO required in contract tests | unit | `npx vitest run src/lib/mcp/isolation-contract.test.ts` | ✅ extend | ✅ green |
+| 26-01-01b | 01 | 0 | CLI-01 | — | list_debts DESCRIPTION exports DISOL-01 | unit | `npx vitest run src/lib/mcp/tools/debts.test.ts` | ✅ update | ✅ green |
+| 26-02-* | 02 | 0 | CLI-01 | — | income/grace/forecast SIDE descriptions contain rule ids | unit | `npx vitest run src/lib/mcp/tools/income.test.ts src/lib/mcp/tools/grace.test.ts src/lib/mcp/tools/forecast.test.ts` | ✅ update | ⬜ pending |
 | 26-*-* | * | * | CLI-02 | — | README has Claude+Cursor configs + URL | docs/UAT | phase UAT dual-client | ❌ UAT | ⬜ pending |
 | 26-*-* | * | * | PARITY-01 | — | AGENTS.md BEGIN/END parity block | docs | grep AGENTS.md / plan verify | ❌ create | ⬜ pending |
 
@@ -49,11 +50,12 @@ created: "2026-09-11"
 
 ## Wave 0 Requirements
 
-- [ ] Flip `src/lib/mcp/isolation-contract.test.ts` — require named DISOL-01/INISO-01/GRISO-01 + `wallet_ping` annotations (was asserting absence)
-- [ ] Update SIDE description regexes in debts/income/grace/forecast tests for rule ids
-- [ ] Optional fold `wallet_ping` annotation assert into isolation-contract
+- [x] Flip `src/lib/mcp/isolation-contract.test.ts` — require named DISOL-01/INISO-01/GRISO-01 + `wallet_ping` annotations (was asserting absence) — **tracer-done (26-01)**
+- [x] Debts description regexes for DISOL-01 / do-not-fold — **tracer-done (26-01)**
+- [ ] Update SIDE description regexes in income/grace/forecast tests for rule ids — **Plan-02-pending**
+- [x] Optional fold `wallet_ping` annotation assert into isolation-contract — **tracer-done (26-01)**
 
-*Existing Vitest infrastructure covers unit verification; dual-client connect is manual UAT.*
+*wave_0_complete stays false until Plan 02 closes remaining SIDE regex bullets. Existing Vitest infrastructure covers unit verification; dual-client connect is manual UAT.*
 
 ---
 
