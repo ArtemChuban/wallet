@@ -98,12 +98,12 @@ Full detail: [milestones/v1.4-ROADMAP.md](./milestones/v1.4-ROADMAP.md)
   3. SAVINGS account balances appear in Капитал net-worth totals and history like other asset accounts
   4. Manual BalanceSnapshot path for SAVINGS works the same as other asset accounts (no auto interest write)
 
-**Plans**: 2/4 plans executed
+**Plans**: 3/4 plans executed
 Plans:
 
 - [x] 27-01-PLAN.md — Wave 0 red Vitest contracts (Zod/soft/NW/display/actions)
 - [x] 27-02-PLAN.md — One-way CHECK gate + create tracer (schema→form) + migrate deploy
-- [ ] 27-03-PLAN.md — Coherent SAVINGS edit action + AccountFormDialog chrome
+- [x] 27-03-PLAN.md — Coherent SAVINGS edit action + AccountFormDialog chrome
 - [ ] 27-04-PLAN.md — List rate%+countdown + page props + D-16 snapshot honesty
 
 **UI hint**: yes
@@ -155,7 +155,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 27. SAVINGS schema + CRUD | 2/4 | In Progress|  |
+| 27. SAVINGS schema + CRUD | 3/4 | In Progress|  |
 | 28. Interest math + forecast kind | 0/? | Not started | - |
 | 29. Капитал overlay + SAVISO | 0/? | Not started | - |
 | 30. MCP PARITY + verify | 0/? | Not started | - |

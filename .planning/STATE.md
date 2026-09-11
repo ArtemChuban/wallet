@@ -5,16 +5,16 @@ milestone_name: Сберегательный счет (Phases 27–30)
 current_phase: 27
 current_phase_name: SAVINGS schema + CRUD
 status: in_progress
-stopped_at: Completed 27-02-PLAN.md
-last_updated: "2026-09-11T16:18:38.579Z"
+stopped_at: Completed 27-03-PLAN.md
+last_updated: "2026-09-11T16:24:31.296Z"
 last_activity: 2026-09-11
 last_activity_desc: Phase 27 Plan 01 Wave 0 red contracts complete
-state_head: 478c110e6e4926b4add6da098c60caf21bcb0929
+state_head: 68d286be2c4305bf00f39aa9dc5d80f580337a8b
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 4
-  completed_plans: 2
+  completed_plans: 3
   percent: 0
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательн�
 ## Current Position
 
 Phase: 27 of 30 (SAVINGS schema + CRUD)
-Plan: 3 of 4
+Plan: 4 of 4
 Status: In progress — 27-01 Wave 0 complete; next 27-02 tracer
 Last activity: 2026-09-11 — Completed 27-01-PLAN.md (Wave 0 red SAVINGS contracts)
 
@@ -61,6 +61,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 26 P04 | 2min | 3 tasks | 5 files |
 | Phase 27 P01 | 3min | 2 tasks | 5 files |
 | Phase 27 P02 | 4min | 3 tasks | 10 files |
+| Phase 27 P03 | 4min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -72,6 +73,9 @@ Decisions are logged in PROJECT.md Key Decisions table. v1.5 locks from scoping/
 - [Phase 27]: formatAccrualCountdown(today, nextAsOf) locked in Wave 0 tests for Plan 04
 - [Phase 27]: Auto-selected savings-check-enum (D-14/D-15) for Account_savings_rate_invariant
 - [Phase 27]: createAccount omits savings columns for non-SAVINGS; form gates FormData
+- [Phase 27]: Single updateAccount action; updateAccountName kept as alias
+- [Phase 27]: Zod updateAccountSchema optional rate/DOM; SAVINGS requiredness after findUnique
+- [Phase 27]: Page/list pass annualRateBps+DOM for edit prefill (countdown Plan 04)
 
 ### Pending Todos
 
@@ -109,8 +113,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-11T16:18:38.556Z
-Stopped at: Completed 27-02-PLAN.md
+Last session: 2026-09-11T16:24:31.273Z
+Stopped at: Completed 27-03-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
