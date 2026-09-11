@@ -164,6 +164,9 @@ describe("prisma migrate deploy host gate (PLAT-01 / 01-03-03)", () => {
       expect(
         applied.some((r) => r.migration_name.includes("credit_grace_dual_dom")),
       ).toBe(true);
+      expect(
+        applied.some((r) => r.migration_name.includes("savings_account")),
+      ).toBe(true);
 
       const rub = db
         .prepare(
