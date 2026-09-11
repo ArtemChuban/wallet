@@ -4,16 +4,16 @@ milestone: v1.4
 milestone_name: Local MCP
 current_phase: 26
 current_phase_name: Connect Docs + Policy
-status: planning
-stopped_at: Phase 26 research complete
-last_updated: "2026-09-11T09:58:10.593Z"
-last_activity: 2026-09-10
-last_activity_desc: Phase 25 complete, transitioned to Phase 26
+status: planned
+stopped_at: Phase 26 plans ready for execute
+last_updated: "2026-09-11T12:20:00.000Z"
+last_activity: 2026-09-11
+last_activity_desc: Phase 26 planned — 4 plans across 3 waves
 state_head: aa5947ae9af9f92e2783b0ffacb54170a811cfcb
 progress:
   total_phases: 4
   completed_phases: 2
-  total_plans: 10
+  total_plans: 14
   completed_plans: 10
   percent: 50
 ---
@@ -25,16 +25,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-10 — v1.4 Local MCP)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 25 executing — next 25-02 get_forecast_overlay tracer
+**Current focus:** Phase 26 planned — execute 26-01 tracer next
 
 ## Current Position
 
 Phase: 26 of 26 (Connect Docs + Policy)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-09-10 — Phase 25 complete, transitioned to Phase 26
+Plan: 01 of 04 (not started)
+Status: Ready to execute
+Last activity: 2026-09-11 — Phase 26 plans created (4 plans / 3 waves)
 
-Progress: [███░░░░░░░] 25%
+Progress: [█████░░░░░] 50%
 
 ## Performance Metrics
 
@@ -44,7 +44,7 @@ Progress: [███░░░░░░░] 25%
 - Average duration: —
 - Total execution time: —
 
-**By Phase:** v1.3 complete (18–22). v1.4: Phase 23 complete; Phase 24 verified — next Phase 25.
+**By Phase:** v1.3 complete (18–22). v1.4: Phases 23–25 complete; Phase 26 planned.
 
 *Updated after each plan completion*
 **Per-Plan Metrics:**
@@ -113,6 +113,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-11T09:58:10.470Z
-Stopped at: Phase 26 research complete
-Resume file: .planning/phases/26-connect-docs-policy/26-RESEARCH.md
+Last session: 2026-09-11T12:20:00.000Z
+Stopped at: Phase 26 plans ready — run /gsd-execute-phase 26
+Resume file: .planning/phases/26-connect-docs-policy/26-01-PLAN.md
