@@ -3,11 +3,11 @@ import { z } from "zod";
 import { calendarDateToday } from "@/lib/dates";
 import { loadGrace } from "@/lib/mcp/reads/load-grace";
 
-/** D-08 Грейс side-ledger one-liner — isolation in description, not payload meta. */
+/** D-08/GRISO-01 Грейс side-ledger — isolation in description, not payload meta. */
 export const LIST_GRACE_OBLIGATIONS_DESCRIPTION =
   "List Грейс / credit grace obligations: OPEN rows + CTA candidates (kind open|cta). " +
   "Overdue via isGraceOverdue; CLOSED omitted from list (CreditGraceDialog parity). " +
-  "Side ledger (Грейс); not historical net worth / Капитал LOCF.";
+  "GRISO-01: Грейс side ledger — do not fold into historical NW / Капитал LOCF.";
 
 export function registerListGraceObligations(server: McpServer) {
   server.registerTool(

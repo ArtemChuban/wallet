@@ -7,11 +7,11 @@ import {
 } from "@/lib/mcp/as-of";
 import { loadIncome } from "@/lib/mcp/reads/load-income";
 
-/** D-08 Доходы side-ledger one-liner — isolation in description, not payload meta. */
+/** D-08/INISO-01 Доходы side-ledger — isolation in description, not payload meta. */
 export const LIST_INCOME_DESCRIPTION =
   "List Доходы / income defs with nextPlannedAsOf, hasActual, overdue (income page parity). " +
   "Optional paired from+to (YYYY-MM-DD both required) dumps listAllInRange occurrences with overdue. " +
-  "Side ledger (Доходы); not historical net worth / Капитал LOCF.";
+  "INISO-01: Доходы side ledger — do not fold into historical NW / Капитал LOCF.";
 
 export function registerListIncome(server: McpServer) {
   server.registerTool(
