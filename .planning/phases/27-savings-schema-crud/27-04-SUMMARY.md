@@ -110,7 +110,7 @@ status: complete
 2. **Task 2: AccountList secondary + page serialize rate/DOM/today** - `8f6b487` (feat)
 3. **Task 3: D-16 manual snapshot path for SAVINGS unchanged** - `0d5db9c` (test)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `df58f17` (docs: complete plan)
 
 ## Files Created/Modified
 
