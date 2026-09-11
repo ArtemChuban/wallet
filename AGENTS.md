@@ -16,3 +16,11 @@ Before `/gsd-verify-work` or any UAT: read `.planning/OPERATOR.md`.
 Agent drives app (`npm run dev`) + Orca browser (`orca-ide` / `orca`). Ask human only for subjective judgment, true parallel races, or hard blockers.
 
 <!-- END:wallet-operator -->
+
+<!-- BEGIN:wallet-mcp-parity -->
+
+# MCP parity (PARITY-01)
+
+Any new user-visible read surface must ship matching read-only MCP tool(s) in the same milestone/phase — agents stay at UI parity. See `.planning/PROJECT.md` Constraints.
+
+<!-- END:wallet-mcp-parity -->
