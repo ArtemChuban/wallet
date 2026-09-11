@@ -57,27 +57,25 @@
 
 ## Traceability
 
-Filled by roadmap.
-
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ACCT-01 | — | Pending |
-| ACCT-02 | — | Pending |
-| ACCT-03 | — | Pending |
-| INT-01 | — | Pending |
-| INT-02 | — | Pending |
-| INT-03 | — | Pending |
-| SAVISO-01 | — | Pending |
-| SAVISO-02 | — | Pending |
-| MCP-01 | — | Pending |
-| MCP-02 | — | Pending |
-| PARITY-01 | — | Pending |
+| ACCT-01 | Phase 27 | Pending |
+| ACCT-02 | Phase 27 | Pending |
+| ACCT-03 | Phase 27 | Pending |
+| INT-01 | Phase 28 | Pending |
+| INT-02 | Phase 29 | Pending |
+| INT-03 | Phase 29 | Pending |
+| SAVISO-01 | Phase 29 | Pending |
+| SAVISO-02 | Phase 29 | Pending |
+| MCP-01 | Phase 30 | Pending |
+| MCP-02 | Phase 30 | Pending |
+| PARITY-01 | Phase 30 | Pending |
 
 **Coverage:**
 - v1.5 requirements: 11 total
-- Mapped to phases: 0
-- Unmapped: 11 ⚠️
+- Mapped to phases: 11
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-09-11*
-*Last updated: 2026-09-11 after v1.5 scoping*
+*Last updated: 2026-09-11 after v1.5 roadmap*

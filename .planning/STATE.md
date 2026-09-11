@@ -3,10 +3,10 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Сберегательный счет
 status: planning
-last_updated: "2026-09-11T12:31:53.767Z"
+last_updated: "2026-09-11T13:20:00.000Z"
 last_activity: 2026-09-11
 progress:
-  total_phases: 0
+  total_phases: 4
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -17,17 +17,19 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-09-11 after v1.4 Local MCP)
+See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательный счет)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Planning next milestone
+**Current focus:** Phase 27 — SAVINGS schema + CRUD
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 27 of 30 (SAVINGS schema + CRUD)
 Plan: —
-Status: Defining requirements
-Last activity: 2026-09-11 — Milestone v1.5 started
+Status: Ready to plan
+Last activity: 2026-09-11 — v1.5 roadmap created (phases 27–30)
+
+Progress: [░░░░░░░░░░] 0%
 
 ## Performance Metrics
 
@@ -37,7 +39,7 @@ Last activity: 2026-09-11 — Milestone v1.5 started
 - Average duration: —
 - Total execution time: —
 
-**By Phase:** v1.4 Local MCP complete (23–26).
+**By Phase:** v1.5 not started. Prior: v1.4 Local MCP complete (23–26).
 
 *Updated after each plan completion*
 **Per-Plan Metrics:**
@@ -57,18 +59,18 @@ Last activity: 2026-09-11 — Milestone v1.5 started
 
 ### Decisions
 
-Decisions are logged in PROJECT.md Key Decisions table. v1.4 MCP locks shipped (in-app host, read-only Streamable HTTP, localhost-only, CAP+SIDE tools, PARITY-01).
+Decisions are logged in PROJECT.md Key Decisions table. v1.5 locks from scoping/research: distinct `SAVINGS` AccountType (not flag on debit); annual%÷12 monthly; forecast overlay only (no auto BalanceSnapshot); SAVISO twin of INISO/GRISO; PARITY-01 MCP in same milestone.
 
 ### Pending Todos
 
 - Add timezone selection to settings (general, minor)
-- Savings account type with interest NW forecast (deferred at v1.4 close)
 
 ### Blockers/Concerns
 
-- None blocking next milestone planning
+- None blocking Phase 27 planning
 - Nyquist VALIDATION still draft on archived phases 19–22 (carry-forward tech_debt from v1.3)
 - v1.4 audit tech_debt: SUMMARY transport wording; 25-01 frontmatter; 26-VERIFICATION/UAT doc drift
+- Phase 28 plan must lock principal LOCF as-of policy (today-anchor flat vs as-of accrual) + truncate policy for bps÷12
 
 ### Roadmap Evolution
 
@@ -77,6 +79,7 @@ Decisions are logged in PROJECT.md Key Decisions table. v1.4 MCP locks shipped (
 - Phases 13–17: v1.2 Доходы — SHIPPED 2026-09-08
 - Phases 18–22: v1.3 Кредитка — SHIPPED 2026-09-10
 - Phases 23–26: v1.4 Local MCP — SHIPPED 2026-09-11
+- Phases 27–30: v1.5 Сберегательный счет — roadmap created 2026-09-11
 
 ## Deferred Items
 
@@ -84,7 +87,7 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 | Category | Item | Status | Deferred At | Milestone |
 |----------|------|--------|-------------|-----------|
-| todos | 2026-09-10-savings-account-type-with-interest-nw-forecast.md | (presence-only) | 2026-09-11 | v1.4 |
+| todos | 2026-09-10-savings-account-type-with-interest-nw-forecast.md | promoted → v1.5 (active) | 2026-09-11 | v1.4 |
 | todos | 2026-09-05-add-salary-income-tracking-with-forecast.md | promoted → v1.2 (shipped) | 2026-09-07 | v1.1 |
 | todos | 2026-09-05-add-timezone-selection-to-settings.md | (presence-only) | 2026-09-07 | v1.1 |
 | todos | 2026-09-05-improve-credit-account-type-with-limit-grace-period-and-fore.md | folded/closed via Phase 18 CONT-01 (dual DOM + A′) | 2026-09-08 | v1.3 |
@@ -94,10 +97,10 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-11T11:30:00Z
-Stopped at: v1.4 archived — next `/gsd-new-milestone`
-Resume file: .planning/MILESTONES.md
+Last session: 2026-09-11T13:20:00Z
+Stopped at: v1.5 ROADMAP written (phases 27–30) — next `/gsd-plan-phase 27` or discuss
+Resume file: None
 
 ## Operator Next Steps
 
-- Start the next milestone with `/gsd-new-milestone`
+- Plan Phase 27: `/gsd-plan-phase 27` (or `/gsd-discuss-phase 27` first)

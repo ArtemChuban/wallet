@@ -7,6 +7,7 @@
 - ✅ **v1.2 Доходы** — Phases 13–17 (shipped 2026-09-08)
 - ✅ **v1.3 Кредитка** — Phases 18–22 (shipped 2026-09-10)
 - ✅ **v1.4 Local MCP** — Phases 23–26 (shipped 2026-09-11)
+- **v1.5 Сберегательный счет** — Phases 27–30 (in progress)
 
 ## Phases
 
@@ -75,3 +76,70 @@ Full detail: [milestones/v1.3-ROADMAP.md](./milestones/v1.3-ROADMAP.md)
 Full detail: [milestones/v1.4-ROADMAP.md](./milestones/v1.4-ROADMAP.md)
 
 </details>
+
+### v1.5 Сберегательный счет (Phases 27–30)
+
+- [ ] **Phase 27: SAVINGS schema + CRUD** - Distinct SAVINGS type with rate/DOM fields; principal in NW
+- [ ] **Phase 28: Interest math + forecast kind** - Pure monthly interest + `interest` forecast slot kind
+- [ ] **Phase 29: Капитал overlay + SAVISO** - Dashed «Прогноз» interest credits + isolation twin
+- [ ] **Phase 30: MCP PARITY + verify** - Agent reads SAVINGS fields + interest overlay events
+
+## Phase Details
+
+### Phase 27: SAVINGS schema + CRUD
+**Goal**: Users can create and manage SAVINGS accounts whose balances count in net worth like other assets
+**Depends on**: Nothing (v1.5 start; builds on shipped capital accounts)
+**Requirements**: ACCT-01, ACCT-02, ACCT-03
+**Success Criteria** (what must be TRUE):
+  1. User can create a SAVINGS account with name, currency, annual interest rate, and accrual day-of-month (type distinct from debit/credit/crypto/cash)
+  2. User can edit and see annual rate + accrual day on SAVINGS list/detail and create/edit forms
+  3. SAVINGS account balances appear in Капитал net-worth totals and history like other asset accounts
+  4. Manual BalanceSnapshot path for SAVINGS works the same as other asset accounts (no auto interest write)
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 28: Interest math + forecast kind
+**Goal**: Expected monthly interest is a locked, reusable formula ready for the forecast overlay
+**Depends on**: Phase 27
+**Requirements**: INT-01
+**Success Criteria** (what must be TRUE):
+  1. Expected monthly interest for a SAVINGS account equals LOCF balance × annual rate / 12 (no silent compound/APY)
+  2. Accrual dates use the account's day-of-month with `clampDayOfMonth` (incl. short months / Feb)
+  3. Forecast slot kind `"interest"` carries ΔNW = +interest (positive credit, not grace A′=0)
+  4. Interest membership is future-only (accrual dates after today) so past fact line stays untouched by the formula path
+**Plans**: TBD
+
+### Phase 29: Капитал overlay + SAVISO
+**Goal**: Users see future SAVINGS interest on dashed «Прогноз» without rewriting historical NW
+**Depends on**: Phase 28
+**Requirements**: INT-02, INT-03, SAVISO-01, SAVISO-02
+**Success Criteria** (what must be TRUE):
+  1. On Капитал `/`, dashed «Прогноз» includes future SAVINGS interest credits alongside income and grace
+  2. Missing FX for non-primary SAVINGS shows the same partial-honesty banner pattern as other overlay sources
+  3. Recording/viewing interest forecast never creates BalanceSnapshot and never changes historical NW LOCF
+  4. Regression suite proves SAVISO (never-calls on snapshot mutates + golden historical series identity without interest)
+**Plans**: TBD
+**UI hint**: yes
+
+### Phase 30: MCP PARITY + verify
+**Goal**: Agents see the same SAVINGS read surfaces as the UI (PARITY-01)
+**Depends on**: Phase 29
+**Requirements**: MCP-01, MCP-02, PARITY-01
+**Success Criteria** (what must be TRUE):
+  1. Agent can list accounts via MCP including SAVINGS type with annual rate and accrual day-of-month
+  2. Agent can get Капитал forecast overlay via MCP including `interest` events with income and grace
+  3. New savings read surfaces ship matching MCP read tool fields in the same milestone (PARITY-01 upheld)
+  4. MCP descriptions/isolation contract name SAVISO alongside INISO/GRISO; Orca/Nyquist verify overlay visible and historical NW unchanged without new snaps
+**Plans**: TBD
+
+## Progress
+
+| Phase | Plans Complete | Status | Completed |
+|-------|----------------|--------|-----------|
+| 27. SAVINGS schema + CRUD | 0/? | Not started | - |
+| 28. Interest math + forecast kind | 0/? | Not started | - |
+| 29. Капитал overlay + SAVISO | 0/? | Not started | - |
+| 30. MCP PARITY + verify | 0/? | Not started | - |
+
+---
+*Roadmap updated: 2026-09-11 — v1.5 Сберегательный счет phases 27–30*
