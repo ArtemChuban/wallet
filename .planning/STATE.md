@@ -5,11 +5,11 @@ milestone_name: Local MCP
 current_phase: 26
 current_phase_name: Connect Docs + Policy
 status: verifying
-stopped_at: Completed 26-04-PLAN.md
-last_updated: "2026-09-11T10:36:30.453Z"
+stopped_at: Phase 26 executed — dual-client UAT pending
+last_updated: "2026-09-11T10:41:23.807Z"
 last_activity: 2026-09-11
 last_activity_desc: Phase 26 planned — 4 plans across 3 waves
-state_head: 83b75048f9a27a7392b6dd3626122177e140d78f
+state_head: 9baa61586e34574cdb3bfa394b9571f4c5c5702f
 progress:
   total_phases: 4
   completed_phases: 2
@@ -126,6 +126,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-11T10:36:30.324Z
-Stopped at: Completed 26-04-PLAN.md
-Resume file: None
+Last session: 2026-09-11T10:41:23.632Z
+Stopped at: Phase 26 executed — dual-client UAT pending
+Resume file: .planning/phases/26-connect-docs-policy/26-UAT.md
