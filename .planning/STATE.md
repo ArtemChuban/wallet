@@ -1,10 +1,15 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.5
-milestone_name: Сберегательный счет
+milestone_name: Сберегательный счет (Phases 27–30)
+current_phase: 27
+current_phase_name: SAVINGS schema + CRUD
 status: planning
-last_updated: "2026-09-11T13:20:00.000Z"
+stopped_at: Phase 27 context gathered
+last_updated: "2026-09-11T15:40:15.391Z"
 last_activity: 2026-09-11
+last_activity_desc: v1.5 roadmap created (phases 27–30)
+state_head: 7ac1624fe70c2e8c0ffdf17ac8534d9c625686a3
 progress:
   total_phases: 4
   completed_phases: 0
@@ -97,9 +102,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-11T13:20:00Z
-Stopped at: v1.5 ROADMAP written (phases 27–30) — next `/gsd-plan-phase 27` or discuss
-Resume file: None
+Last session: 2026-09-11T15:40:15.363Z
+Stopped at: Phase 27 context gathered
+Resume file: .planning/phases/27-savings-schema-crud/27-CONTEXT.md
 
 ## Operator Next Steps
 
