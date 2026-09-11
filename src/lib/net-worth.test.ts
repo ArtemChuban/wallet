@@ -36,8 +36,7 @@ describe("computeNetWorthRows (NW-01–03, ACCT-03)", () => {
     const { totalPrimaryMinor, isPartial, rows } = computeNetWorthRows([
       input({
         id: 27,
-        // Wave 0: NetWorthAccountType lacks SAVINGS until Plan 02 — cast keeps runtime contract.
-        type: "SAVINGS" as NetWorthAccountInput["type"],
+        type: "SAVINGS",
         locfAmountMinor: 250_000n,
       }),
     ]);

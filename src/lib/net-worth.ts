@@ -9,7 +9,8 @@ export type NetWorthAccountType =
   | "FIAT_DEBIT"
   | "FIAT_CREDIT"
   | "CRYPTO"
-  | "CASH";
+  | "CASH"
+  | "SAVINGS";
 
 export type NetWorthAccountInput = {
   id: number;

@@ -12,6 +12,7 @@ import {
   updateAccountNameSchema,
   updateGraceScheduleSchema,
 } from "@/lib/validations/account";
+import { parsePercentToBps } from "@/lib/savings-rate";
 import {
   deleteBalanceSchema,
   setBalanceSchema,
@@ -28,6 +29,8 @@ export type AccountActionState = {
     type?: string[];
     currencyCode?: string[];
     creditLimitMajor?: string[];
+    annualRatePercentMajor?: string[];
+    accrualDayOfMonth?: string[];
     accountId?: string[];
     id?: string[];
     statementDayOfMonth?: string[];
@@ -69,7 +72,7 @@ function fracDigitCount(major: string): number {
   return m?.[1]?.length ?? 0;
 }
 
-/** Create typed account; creditLimitMinor only for FIAT_CREDIT (D-09, D-10). */
+/** Create typed account; creditLimitMinor for FIAT_CREDIT; rate+DOM for SAVINGS. */
 export async function createAccount(
   _prev: AccountActionState,
   formData: FormData,
@@ -80,11 +83,25 @@ export async function createAccount(
       ? creditRaw
       : undefined;
 
+  const rateRaw = formData.get("annualRatePercentMajor");
+  const annualRatePercentMajor =
+    typeof rateRaw === "string" && rateRaw.trim() !== ""
+      ? rateRaw
+      : undefined;
+
+  const accrualRaw = formData.get("accrualDayOfMonth");
+  const accrualDayOfMonth =
+    typeof accrualRaw === "string" && accrualRaw.trim() !== ""
+      ? accrualRaw
+      : undefined;
+
   const validated = createAccountSchema.safeParse({
     name: formData.get("name"),
     type: formData.get("type"),
     currencyCode: formData.get("currencyCode"),
     creditLimitMajor,
+    annualRatePercentMajor,
+    accrualDayOfMonth,
   });
 
   if (!validated.success) {
@@ -133,12 +150,32 @@ export async function createAccount(
       }
     }
 
+    let annualRateBps: number | null = null;
+    let accrualDom: number | null = null;
+    if (type === "SAVINGS") {
+      const percent = validated.data.annualRatePercentMajor!;
+      try {
+        annualRateBps = parsePercentToBps(percent);
+      } catch {
+        return {
+          errors: { annualRatePercentMajor: ["Некорректный процент"] },
+        };
+      }
+      accrualDom = validated.data.accrualDayOfMonth!;
+    }
+
     await prisma.account.create({
       data: {
         name,
         type,
         currencyCode,
         creditLimitMinor,
+        ...(type === "SAVINGS"
+          ? {
+              annualRateBps: annualRateBps!,
+              accrualDayOfMonth: accrualDom!,
+            }
+          : {}),
       },
     });
   } catch (error) {

@@ -72,6 +72,7 @@ const initialState: AccountActionState = {};
 const TYPE_OPTIONS = [
   { value: "ASSET", label: "Актив" },
   { value: "FIAT_CREDIT", label: "Кредитный" },
+  { value: "SAVINGS", label: "Накопительный" },
 ] as const;
 
 function AccountFormBody({
@@ -109,6 +110,7 @@ function AccountFormBody({
   const title = mode === "create" ? "Новый счёт" : "Изменить название";
   const submitLabel = mode === "create" ? "Добавить счёт" : "Сохранить";
   const showCreditLimit = mode === "create" && isCreditType(accountType);
+  const showSavingsFields = mode === "create" && accountType === "SAVINGS";
 
   const editLimit =
     mode === "edit" &&
@@ -260,6 +262,43 @@ function AccountFormBody({
             </p>
           ) : null}
         </div>
+      ) : null}
+
+      {showSavingsFields ? (
+        <>
+          <div className="grid gap-2">
+            <Label htmlFor="annual-rate">Годовой %</Label>
+            <Input
+              id="annual-rate"
+              name="annualRatePercentMajor"
+              inputMode="decimal"
+              autoComplete="off"
+              aria-invalid={Boolean(state.errors?.annualRatePercentMajor)}
+              disabled={isPending}
+            />
+            {state.errors?.annualRatePercentMajor?.[0] ? (
+              <p className="text-sm text-destructive" role="alert">
+                {state.errors.annualRatePercentMajor[0]}
+              </p>
+            ) : null}
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="accrual-dom">День начисления</Label>
+            <Input
+              id="accrual-dom"
+              name="accrualDayOfMonth"
+              inputMode="numeric"
+              autoComplete="off"
+              aria-invalid={Boolean(state.errors?.accrualDayOfMonth)}
+              disabled={isPending}
+            />
+            {state.errors?.accrualDayOfMonth?.[0] ? (
+              <p className="text-sm text-destructive" role="alert">
+                {state.errors.accrualDayOfMonth[0]}
+              </p>
+            ) : null}
+          </div>
+        </>
       ) : null}
 
       {mode === "edit" && editLimit ? (

@@ -15,6 +15,7 @@ enum AccountType {
   FIAT_CREDIT
   CRYPTO
   CASH
+  SAVINGS
 }
 
 model Currency {
@@ -106,6 +107,11 @@ model Account {
   /// Dual DOM schedule — FIAT_CREDIT only; both null or both set (Account_grace_dom_invariant).
   statementDayOfMonth Int?
   dueDayOfMonth       Int?
+  /// Annual rate in bps (1650 = 16.50%). Required iff type == SAVINGS (D-01, D-14, D-15).
+  /// SQLite CHECK Account_savings_rate_invariant enforces SAVINGS ↔ rate+DOM (else null).
+  annualRateBps       Int?
+  /// Accrual day-of-month 1–31. Required iff type == SAVINGS (D-05, D-15).
+  accrualDayOfMonth   Int?
   createdAt        DateTime    @default(now())
   updatedAt        DateTime    @updatedAt
   balanceSnapshots BalanceSnapshot[]

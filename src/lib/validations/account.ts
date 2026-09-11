@@ -2,8 +2,8 @@ import { z } from "zod";
 
 const accountNameSchema = z.string().trim().min(1).max(120);
 
-/** Write-path only: new accounts are ASSET or FIAT_CREDIT (D-02 soft-compat). */
-const accountTypeSchema = z.enum(["ASSET", "FIAT_CREDIT"]);
+/** Write-path only: new accounts are ASSET, FIAT_CREDIT, or SAVINGS (D-14, D-15). */
+const accountTypeSchema = z.enum(["ASSET", "FIAT_CREDIT", "SAVINGS"]);
 
 /** Printable currency code matching Currency.code identity. */
 const currencyCodeSchema = z.string().trim().min(1).max(16);
@@ -23,13 +23,31 @@ function isStrictlyPositiveMajor(major: string): boolean {
   return digits.length > 0;
 }
 
-/** Create account: type/currency locked after create; credit limit only for FIAT_CREDIT. */
+/** Non-negative major (0 OK); rejects negatives / invalid (D-02, D-03). */
+function isNonNegativeMajor(major: string): boolean {
+  const trimmed = major.trim();
+  if (!trimmed || /[eE]/.test(trimmed)) return false;
+  const match = MAJOR_NON_EMPTY.exec(trimmed);
+  if (!match) return false;
+  if (match[1] === "-") return false;
+  return true;
+}
+
+/** Optional DOM coerce — empty/missing → undefined so SAVINGS refine can require it. */
+const optionalDayOfMonthSchema = z.preprocess((val) => {
+  if (val === "" || val === undefined || val === null) return undefined;
+  return val;
+}, z.coerce.number().int().min(1).max(31).optional());
+
+/** Create account: type/currency locked after create; credit / savings fields type-gated. */
 export const createAccountSchema = z
   .object({
     name: accountNameSchema,
     type: accountTypeSchema,
     currencyCode: currencyCodeSchema,
     creditLimitMajor: z.string().optional(),
+    annualRatePercentMajor: z.string().optional(),
+    accrualDayOfMonth: optionalDayOfMonthSchema,
   })
   .strict()
   .superRefine((val, ctx) => {
@@ -37,7 +55,20 @@ export const createAccountSchema = z
     const hasLimit =
       typeof raw === "string" && raw.trim().length > 0;
 
+    const rateRaw = val.annualRatePercentMajor;
+    const hasRate =
+      typeof rateRaw === "string" && rateRaw.trim().length > 0;
+    const hasDom =
+      val.accrualDayOfMonth !== undefined && val.accrualDayOfMonth !== null;
+
     if (val.type === "FIAT_CREDIT") {
+      if (hasRate || hasDom) {
+        ctx.addIssue({
+          code: "custom",
+          path: hasRate ? ["annualRatePercentMajor"] : ["accrualDayOfMonth"],
+          message: "Ставка только для накопительного счёта",
+        });
+      }
       if (!hasLimit) {
         ctx.addIssue({
           code: "custom",
@@ -53,16 +84,58 @@ export const createAccountSchema = z
           message: "Введите сумму больше 0",
         });
       }
-    } else if (hasLimit) {
+      return;
+    }
+
+    if (val.type === "SAVINGS") {
+      if (hasLimit) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["creditLimitMajor"],
+          message: "Лимит только для кредитного счёта",
+        });
+      }
+      if (!hasRate) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["annualRatePercentMajor"],
+          message: "Укажите годовой процент",
+        });
+      } else if (!isNonNegativeMajor(rateRaw!)) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["annualRatePercentMajor"],
+          message: "Процент не может быть отрицательным",
+        });
+      }
+      if (!hasDom) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["accrualDayOfMonth"],
+          message: "Укажите день начисления",
+        });
+      }
+      return;
+    }
+
+    // ASSET (and any future non-credit/non-savings write type)
+    if (hasLimit) {
       ctx.addIssue({
         code: "custom",
         path: ["creditLimitMajor"],
         message: "Лимит только для кредитного счёта",
       });
     }
+    if (hasRate || hasDom) {
+      ctx.addIssue({
+        code: "custom",
+        path: hasRate ? ["annualRatePercentMajor"] : ["accrualDayOfMonth"],
+        message: "Ставка только для накопительного счёта",
+      });
+    }
   });
 
-/** Update account: name only (D-15). */
+/** Update account: name only (D-15). Plan 03 extends SAVINGS edit. */
 export const updateAccountNameSchema = z.object({
   name: accountNameSchema,
 });

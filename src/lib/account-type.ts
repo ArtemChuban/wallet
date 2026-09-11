@@ -5,16 +5,18 @@ export type AccountTypeSoft =
   | "FIAT_CREDIT"
   | "FIAT_DEBIT"
   | "CRYPTO"
-  | "CASH";
+  | "CASH"
+  | "SAVINGS";
 
 export function isCreditType(t: string): boolean {
   return t === "FIAT_CREDIT";
 }
 
-/** True for canonical ASSET and legacy non-credit members. */
+/** True for canonical ASSET, SAVINGS, and legacy non-credit members. */
 export function isAssetType(t: string): boolean {
   return (
     t === "ASSET" ||
+    t === "SAVINGS" ||
     t === "FIAT_DEBIT" ||
     t === "CRYPTO" ||
     t === "CASH"
@@ -22,5 +24,7 @@ export function isAssetType(t: string): boolean {
 }
 
 export function accountTypeLabel(t: string): string {
-  return isCreditType(t) ? "Кредитный" : "Актив";
+  if (isCreditType(t)) return "Кредитный";
+  if (t === "SAVINGS") return "Накопительный";
+  return "Актив";
 }
