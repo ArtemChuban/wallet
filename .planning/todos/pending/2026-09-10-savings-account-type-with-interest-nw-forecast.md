@@ -3,6 +3,7 @@ created: 2026-09-10T12:35:00.000Z
 title: Savings account type with interest NW forecast
 area: general
 severity: minor
+resolves_phase: 27
 files: []
 captured_during: phase-23-discuss
 audit_acknowledged:

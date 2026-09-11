@@ -12,6 +12,8 @@ At any moment, see true net worth (assets minus credit-card debt) in the primary
 
 **Shipped:** v1.0 MVP (2026-09-04); **v1.1 Долги людям (2026-09-07)**; **v1.2 Доходы (2026-09-08)**; **v1.3 Кредитка (2026-09-10)**; **v1.4 Local MCP (2026-09-11)**.
 
+**Building:** v1.5 Сберегательный счет — SAVINGS account type + monthly interest forecast overlay on Капитал «Прогноз» (no auto BalanceSnapshot).
+
 Local Dockerized net-worth tracker + personal-debts + income + credit-grace ledgers + in-process MCP: SQLite → currencies/accounts → dated balances → dated FX → NW dashboard/charts with dashed «Прогноз» from income and open grace obligations (A′ ΔNW=0) → `/debts` + `/income` + account «Грейс» → Streamable HTTP MCP at `http://127.0.0.1:3000/api/mcp` (Host/Origin + Compose loopback). Stack: Next.js 16 App Router, Prisma 7 + SQLite, mcp-handler / MCP SDK, shadcn/ui, recharts, Vitest. Russian-first UI. Debts never change NW (DISOL-01). Income never writes BalanceSnapshot / past LOCF (ISO-01 / INISO-01). Grace never writes BalanceSnapshot / past LOCF (GRISO-01). Agents stay at UI parity (PARITY-01).
 
 ## Current Milestone: v1.5 Сберегательный счет
