@@ -2,20 +2,20 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Сберегательный счет (Phases 27–30)
-current_phase: 27
-current_phase_name: SAVINGS schema + CRUD
-status: in_progress
-stopped_at: Phase 27 UAT passed
-last_updated: "2026-09-11T16:42:47.322Z"
+current_phase: 28
+current_phase_name: Interest math + forecast kind
+status: planning
+stopped_at: Phase 27 complete, ready to plan Phase 28
+last_updated: "2026-09-11T16:43:26.993Z"
 last_activity: 2026-09-11
-last_activity_desc: Phase 27 Plan 01 Wave 0 red contracts complete
-state_head: 8b4c193430f95550bb0060da2901dab8ff161b95
+last_activity_desc: Phase 27 complete, transitioned to Phase 28
+state_head: 268b0fb225dd6d7af35677f5998fe13a9bb07020
 progress:
   total_phases: 4
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 4
   completed_plans: 4
-  percent: 0
+  percent: 25
 ---
 
 # Project State
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательн�
 
 ## Current Position
 
-Phase: 27 of 30 (SAVINGS schema + CRUD)
-Plan: 4 of 4
-Status: In progress — 27-01 Wave 0 complete; next 27-02 tracer
-Last activity: 2026-09-11 — Completed 27-01-PLAN.md (Wave 0 red SAVINGS contracts)
+Phase: 28 of 30 (Interest math + forecast kind)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-09-11 — Phase 27 complete, transitioned to Phase 28
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -118,7 +118,7 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-09-11T16:42:47.258Z
-Stopped at: Phase 27 UAT passed
+Stopped at: Phase 27 complete, ready to plan Phase 28
 Resume file: .planning/phases/27-savings-schema-crud/27-UAT.md
 
 ## Operator Next Steps

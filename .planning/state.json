@@ -6,7 +6,7 @@
     {
       "number": "27",
       "name": "SAVINGS schema + CRUD",
-      "status": "in_progress"
+      "status": "complete"
     },
     {
       "number": "28",
@@ -26,8 +26,8 @@
   ],
   "next": {
     "command": "/gsd:progress --next",
-    "label": "Advance to the next step",
-    "reason": "Phase 27 of 4 · 0% · executing"
+    "label": "Advance to the next step (plan phase 28)",
+    "reason": "Phase 28 of 4 — needs a plan"
   },
-  "updated_at": "2026-09-11T16:24:30.346Z"
+  "updated_at": "2026-09-11T16:43:27.010Z"
 }
