@@ -5,17 +5,17 @@ milestone_name: Сберегательный счет (Phases 27–30)
 current_phase: 27
 current_phase_name: SAVINGS schema + CRUD
 status: in_progress
-stopped_at: Completed 27-01-PLAN.md
-last_updated: "2026-09-11T16:12:26.505Z"
+stopped_at: Completed 27-02-PLAN.md
+last_updated: "2026-09-11T16:18:38.579Z"
 last_activity: 2026-09-11
 last_activity_desc: Phase 27 Plan 01 Wave 0 red contracts complete
-state_head: 470fe02158a94dc4b15d5de6909dfdd18d467d9a
+state_head: 478c110e6e4926b4add6da098c60caf21bcb0929
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 4
-  completed_plans: 1
-  percent: 25
+  completed_plans: 2
+  percent: 0
 ---
 
 # Project State
@@ -30,11 +30,11 @@ See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательн�
 ## Current Position
 
 Phase: 27 of 30 (SAVINGS schema + CRUD)
-Plan: 2 of 4
+Plan: 3 of 4
 Status: In progress — 27-01 Wave 0 complete; next 27-02 tracer
 Last activity: 2026-09-11 — Completed 27-01-PLAN.md (Wave 0 red SAVINGS contracts)
 
-Progress: [██░░░░░░░░] 25%
+Progress: [░░░░░░░░░░] 0%
 
 ## Performance Metrics
 
@@ -60,6 +60,7 @@ Progress: [██░░░░░░░░] 25%
 | Phase 26 P02 | 3min | 3 tasks | 11 files |
 | Phase 26 P04 | 2min | 3 tasks | 5 files |
 | Phase 27 P01 | 3min | 2 tasks | 5 files |
+| Phase 27 P02 | 4min | 3 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -69,6 +70,8 @@ Decisions are logged in PROJECT.md Key Decisions table. v1.5 locks from scoping/
 
 - [Phase 27]: Wave 0: update/D-16 as describe.skip+it.todo only (Plan 03); create hard-fail
 - [Phase 27]: formatAccrualCountdown(today, nextAsOf) locked in Wave 0 tests for Plan 04
+- [Phase 27]: Auto-selected savings-check-enum (D-14/D-15) for Account_savings_rate_invariant
+- [Phase 27]: createAccount omits savings columns for non-SAVINGS; form gates FormData
 
 ### Pending Todos
 
@@ -106,8 +109,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-11T16:12:26.483Z
-Stopped at: Completed 27-01-PLAN.md
+Last session: 2026-09-11T16:18:38.556Z
+Stopped at: Completed 27-02-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
