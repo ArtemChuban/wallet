@@ -86,8 +86,9 @@ describe("list_grace_obligations (SIDE-03)", () => {
     );
     expect(loader).toMatch(/mergeGraceListRows/);
     expect(loader).toMatch(/isGraceOverdue/);
-    expect(LIST_GRACE_OBLIGATIONS_DESCRIPTION).toMatch(/Side ledger \(Грейс\)/);
-    expect(LIST_GRACE_OBLIGATIONS_DESCRIPTION).toMatch(/not historical net worth/);
+    expect(LIST_GRACE_OBLIGATIONS_DESCRIPTION).toMatch(/GRISO-01/);
+    expect(LIST_GRACE_OBLIGATIONS_DESCRIPTION).toMatch(/do not fold/);
+    expect(LIST_GRACE_OBLIGATIONS_DESCRIPTION).toMatch(/historical NW|historical net worth/);
   });
 
   it("grace MCP sources never rewrite historical LOCF / BalanceSnapshot", () => {

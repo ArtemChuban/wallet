@@ -133,8 +133,9 @@ describe("list_income (SIDE-02)", () => {
   });
 
   it("income MCP sources never write BalanceSnapshot / historical LOCF", () => {
-    expect(LIST_INCOME_DESCRIPTION).toMatch(/Side ledger \(Доходы\)/);
-    expect(LIST_INCOME_DESCRIPTION).toMatch(/not historical net worth/);
+    expect(LIST_INCOME_DESCRIPTION).toMatch(/INISO-01/);
+    expect(LIST_INCOME_DESCRIPTION).toMatch(/do not fold/);
+    expect(LIST_INCOME_DESCRIPTION).toMatch(/historical NW|historical net worth/);
     const loader = readFileSync(
       resolve(process.cwd(), "src/lib/mcp/reads/load-income.ts"),
       "utf8",
