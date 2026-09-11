@@ -1,28 +1,17 @@
 ---
 phase: 27-savings-schema-crud
-verified: 2026-09-11T16:32:50Z
-status: human_needed
+verified: 2026-09-11T16:45:00Z
+status: passed
 score: 8/8 must-haves verified
 behavior_unverified: 0
 overrides_applied: 0
-re_verification: false
+re_verification: true
 decision_coverage:
   honored: 16
   total: 16
   not_honored: []
-human_verification:
-  - test: "Create SAVINGS on /accounts — name, currency, Годовой %, День начисления; switch type away/back"
-    expected: "Persists; gated fields only for Накопительный; no DOM default; 0% allowed"
-    why_human: "Browser form gating + submit UX"
-  - test: "Edit existing SAVINGS — change name, rate, DOM; open non-SAVINGS edit"
-    expected: "Prefill rate+DOM; title «Изменить счёт»; non-SAVINGS has no rate/DOM; type/currency locked"
-    why_human: "Visual edit chrome + immutability UX"
-  - test: "SAVINGS list row secondary meta + LOCF + Задать баланс"
-    expected: "Накопительный · CCY · {rate}% · сегодня|через N дн. (no raw DOM); manual snapshot works"
-    why_human: "List layout / countdown chrome"
-  - test: "Капитал / includes SAVINGS LOCF in hero total like ASSET"
-    expected: "Principal in NW totals/history; no Прогноз interest overlay"
-    why_human: "Dashboard visual confirmation"
+human_verification: []
+uat_resolved: "27-UAT.md — 4/4 pass via Orca 2026-09-11"
 prohibitions_review:
   - statement: "MUST NOT deliver interest ÷12 / ForecastSlotKind interest / Капитал Прогноз overlay / MCP rate fields (Phases 28–30)"
     disposition: honored
