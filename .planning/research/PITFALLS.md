@@ -1,184 +1,173 @@
 # Pitfalls Research
 
-**Domain:** Adding in-app read-only MCP host (localhost HTTP/SSE / Streamable HTTP) to existing Next.js + Prisma + Docker SQLite Wallet
-**Researched:** 2026-09-10
-**Confidence:** HIGH (MCP transport/security from official spec + SDK; Docker compose already correct); MEDIUM (CLI client type-string quirks across Cursor vs Claude Code)
-**Milestone:** v1.4 Local MCP
+**Domain:** Adding SAVINGS account type + monthly interest forecast overlay to existing Wallet (INISO/GRISO walls, LOCF NW, PARITY-01 MCP)
+**Researched:** 2026-09-11
+**Confidence:** HIGH (isolation/integration pitfalls from shipped INISO/GRISO/forecast code); MEDIUM (APR/APY industry math vs user-locked annual%÷12)
+**Milestone:** v1.5 Сберегательный счет
 
 ## Critical Pitfalls
 
-### Pitfall 1: Docker bind confusion — `0.0.0.0` inside vs publish on host
+### Pitfall 1: Treating SAVINGS like income/grace side ledger (exclude principal from NW)
 
 **What goes wrong:**
-MCP “works in container logs” but CLI on host cannot connect — OR LAN/WAN can reach personal finance data. Two opposite mistakes:
-1. Bind Node/`HOSTNAME` to `127.0.0.1` **inside** the container → host published port never reaches the process.
-2. Change compose `ports` from `127.0.0.1:3000:3000` to `3000:3000` (or `0.0.0.0:3000:3000`) → MCP + whole app exposed on all interfaces.
+Implementer copies DISOL/INISO mental model and keeps SAVINGS out of `computeNetWorthRows` / LOCF — or puts principal only in forecast. Hero NW understates capital. Or inverse: treats interest like balance and writes it into historical series.
 
 **Why it happens:**
-MCP spec says local servers SHOULD bind localhost. Docker mental model collapses “localhost” with “loopback of the container.” Copy-paste Docker examples publish `0.0.0.0`. Wallet already does the right split (`HOSTNAME=0.0.0.0` in image + `127.0.0.1:3000:3000` in compose) — easy to “fix for MCP.”
+v1.2–v1.3 trained the team that “new money domain = side ledger, never LOCF.” SAVINGS breaks that pattern: **principal is a real account asset** (BalanceSnapshot LOCF); **interest accrual is forecast-only**. Two layers, one type name.
 
 **How to avoid:**
-- Keep container listen `0.0.0.0:3000`; keep **host publish** locked to `127.0.0.1:3000:3000`.
-- Document explicitly: “localhost for clients = host loopback; container still binds all interfaces.”
-- Add a compose/regression check (comment + optional CI grep) that forbids unscoped `ports: - "3000:3000"`.
-- Prefer same port/path as the web app (`/api/mcp` or `/mcp` on :3000) — do not open a second published port “for MCP.”
+- Extend `AccountType` + `isAssetType` / `NetWorthAccountType` so SAVINGS contributes like ASSET/FIAT_DEBIT/CASH/CRYPTO.
+- Interest slots only enter `buildNetWorthForecastSeries` (new `ForecastSlotKind`, e.g. `"interest"`), never `BuildNetWorthSeriesInput`.
+- Schema: rate + accrual DOM nullable and **required iff SAVINGS** (mirror FIAT_CREDIT ↔ creditLimitMinor CHECK pattern).
 
 **Warning signs:**
-- Compose diff removes `127.0.0.1:` prefix
-- New `EXPOSE` / second `-p` for MCP
-- Docs say “bind MCP to 127.0.0.1” without distinguishing container vs host
-- `ss`/`docker port` shows `0.0.0.0:3000->3000` on host
+- `isAssetType("SAVINGS") === false`
+- SAVINGS missing from `NetWorthAccountType` union
+- Interest fields on RecurringIncome-like tables instead of Account
+- Past LOCF totals change when rate/DOM edited with no new snapshots
 
 **Phase to address:**
-MCP host + Docker wiring (first integration phase) — before tool catalog polish
+Account type / schema phase (first) — before forecast math
 
 ---
 
-### Pitfall 2: No Origin/Host validation (DNS rebinding) on unauthenticated local HTTP
+### Pitfall 2: Auto BalanceSnapshot on accrual day (breaks user lock + INISO twin)
 
 **What goes wrong:**
-Browser on a malicious site rebinds DNS to `127.0.0.1` and calls the MCP endpoint. Spec Security Warning: servers MUST validate `Origin` on Streamable HTTP; SHOULD bind localhost + authenticate. Without checks, read-only tools still **exfiltrate** accounts, balances, debts, income, grace. Tenable WAS-114885 class issue for SSE/HTTP MCP lacking Host/Origin enforcement.
+Cron, server action, or “helpful” UI writes `balanceSnapshot.upsert` when accrual DOM arrives. Historical LOCF jumps without user edit. Overlay + fact double-count. Violates PROJECT Out of Scope: “Auto BalanceSnapshot when savings interest accrues — deferred.”
 
 **Why it happens:**
-“Single-user local, no auth” feels safe. Read-only milestone lowers urgency. Next.js route handler ships without SDK `hostHeaderValidation` / `localhostHostValidation` / Origin allowlist.
+Banks post interest to balance; natural instinct is mirror that. Income actual already ≠ BalanceSnapshot (ISO-01) — easy to “fix” for savings by writing the snapshot income refused.
 
 **How to avoid:**
-- On every MCP request: validate `Host` ∈ `{localhost,127.0.0.1,[::1]}` (port-agnostic) and reject bad/missing `Origin` per MCP transport rules.
-- Use SDK helpers (`hostHeaderValidation` / web-standard equivalents) — do not hand-roll half-checks.
-- Optional shared secret header for CLI clients (even local) — cheap defense-in-depth; document in connect docs.
-- Never enable wide-open CORS (`Access-Control-Allow-Origin: *`) on MCP just to “make browser clients work.”
+- Ship forecast overlay only; accrual never calls `balanceSnapshot.create|update|upsert|delete`.
+- Clone GRISO never-call pattern: SAVINGS create/update actions + any interest helper assert zero BalanceSnapshot mutates (file-scan + action tests).
+- New isolation id (e.g. SAVISO-01) twin of `iniso.test.ts` / `griso.test.ts`: import bans on `net-worth.ts` / `historical-series.ts`; `nw-forecast.ts` still bans prisma/BalanceSnapshot.
 
 **Warning signs:**
-- MCP route has zero header checks
-- CORS `*` on `/api/mcp`
-- “Auth deferred forever” with no Host/Origin either
-- Tools answer from `curl` with forged `Host: evil.example`
+- Interest helper imports `@/app/accounts/actions` or prisma BalanceSnapshot
+- Accrual date “mark received” button that upserts balance
+- Past series golden identity fails when SAVINGS rate fixtures present
 
 **Phase to address:**
-Same phase as route/transport stand-up (security is not a later hardening pass)
+Interest forecast + isolation regression phase (same wave as overlay wire) — not deferred polish
 
 ---
 
-### Pitfall 3: Wrong / incomplete transport — legacy SSE-only or missing HTTP methods
+### Pitfall 3: Folding interest into `buildNetWorthSeries` / past LOCF
 
 **What goes wrong:**
-Ship only deprecated HTTP+SSE (`/sse` + `/message`) or Streamable HTTP missing GET/POST/DELETE. Claude Code prefers `type: "http"` (Streamable HTTP); SSE marked deprecated. Some clients fail silently when DELETE (session end) or GET (SSE listen/resume) absent. Docs say “HTTP/SSE” and implement neither correctly.
+Interest for accrual dates ≤ today baked into fact line. Chart “history” includes expected interest never snapshotted. Breaks Core Value (“history you can trust”) and INISO/GRISO contract that forecast is overlay-only.
 
 **Why it happens:**
-Training data + old tutorials teach 2024-11-05 SSE. PROJECT wording “HTTP/SSE” read as “SSE transport” instead of “Streamable HTTP that may use SSE streams.” Vercel/`mcp-handler` blogs mix serverless Redis concerns into local Docker.
+`mergeFactAndForecast` already merges on dates; tempting shortcut is mutate fact points or pass interest into series builder. `ForecastSlotKind` today is only `"income" | "grace"` — wrong kind semantics (grace ΔNW=0) hide the bug until UAT.
 
 **How to avoid:**
-- Implement **one** MCP endpoint with Streamable HTTP (`WebStandardStreamableHTTPServerTransport` or current `mcp-handler`).
-- Export **GET + POST + DELETE** (+ OPTIONS only if you intentionally support browsers).
-- Prefer **stateless** mode (`sessionIdGenerator: undefined`) for read-only Wallet — no Redis, no sticky sessions.
-- If supporting ancient clients, dual-host legacy SSE **explicitly**; do not make it the only path.
-- Connect docs: Claude Code `type: "http"`; Cursor `url` / `streamable-http` — not “stdio command.”
+- Membership: interest slots only when accrual sample date **> today** (same gate as income in `slotInWindow` / `load-forecast-overlay`).
+- Addend: interest uses **positive** primary minor (like income), never grace `0n`.
+- Keep `buildNetWorthSeries` API free of interest/rate fields; extend INISO-style type-level `AssertNever` forbidden keys.
+- Wire both `DashboardChartsShell` and `loadForecastOverlay` from one membership helper — MCP/UI parity.
 
 **Warning signs:**
-- Only `GET` SSE handler; POST goes 405
-- Client log: `MCP server has url but no type` / treated as stdio
-- `410 Gone` on `/sse` after upgrading handler major while docs still point there
-- Custom Node server added “because SSE needs it” while App Router + Node runtime would suffice
+- Solid NW line jumps on future accrual dates without BalanceSnapshot
+- `kind === "grace"` used for interest “because tooltip”
+- MCP `get_forecast_overlay` description still says only “income + A′ grace”
 
 **Phase to address:**
-Transport/host phase before any domain tools
+Forecast overlay integration phase
 
 ---
 
-### Pitfall 4: Reimplement NW / domain math in MCP tools (break DISOL / INISO / GRISO)
+### Pitfall 4: Silent “correct” compound/APY/daily engine vs locked annual%÷12
 
 **What goes wrong:**
-MCP tools invent ad-hoc SQL or copy UI page loaders. Agent reports NW that includes debts, folds income/grace into historical LOCF, or treats grace amount-due as a second liability. Core Value trust dies — agent sounds authoritative with wrong numbers.
+Implement `(1+r)^(1/12)-1`, daily APR/365, or interest-on-forecast-interest across horizon. Numbers disagree with user lock (`balance × annual%/12`). UI shows APY language while math is simple monthly.
 
 **Why it happens:**
-MCP tutorials show “tool = prisma.x.findMany.” Faster than importing `@/lib/net-worth`, `@/lib/debts`, `@/lib/nw-forecast`, `@/lib/credit-grace`. Tool authors do not know isolation locks.
+Industry material warns “don’t divide APY by 12” (compound monthly factor differs). Banks often accrue daily on nominal rate. Engineers “fix” the locked simple formula. Multi-month overlay then compounds projected interest into next month’s base without a product decision.
 
 **How to avoid:**
-- Tools call **existing pure libs** only — same path as pages/charts.
-- Hard rules in tool layer: debts never enter NW; income/grace never write BalanceSnapshot; forecast overlays labeled as forecast.
-- Add twin tests: MCP tool fixtures assert DISOL/INISO/GRISO (or reuse lib unit tests + thin MCP adapter tests).
-- Ban importing `src/app/**/actions.ts` mutate paths from MCP modules.
+- Lock formula in CONTEXT + unit tests: `interestMinor = balanceLocfMinor * annualRate / 12` (exact bigint/scale rules spelled once).
+- OOS: compound/daily engines (already in PROJECT Out of Scope).
+- Label: «годовой %» matching ÷12 — do not label APY unless formula changes.
+- Multi-month base: default **each slot from current LOCF principal** (non-compounding forecast). If product later wants compound-in-overlay, explicit CONTEXT lock + tests — not silent.
 
 **Warning signs:**
-- MCP package imports Prisma models directly for NW totals
-- Tool description says “net worth including debts”
-- Grace/income tools return values that change when only historical series code runs
-- Duplicate money formatting (floats) instead of minor units from `@/lib/money`
+- Float `Math.pow` in interest path
+- Tests assert APY monthly factor instead of ÷12
+- Horizon forecast grows faster than 12× single month interest on fixed LOCF
 
 **Phase to address:**
-Read-only tool catalog phase (after transport) — with isolation tests in same wave
+Interest math design / CONTEXT lock before implementation; verified in overlay unit tests
 
 ---
 
-### Pitfall 5: “Read-only” that can still mutate (shared Prisma / actions bleed)
+### Pitfall 5: Day-of-month without `clampDayOfMonth` (31 → Feb)
 
 **What goes wrong:**
-No write *tools* registered, but handlers import server actions, run `$executeRaw`, or share a helper that upserts “for convenience.” Agent prompt injection / confused tool args still trigger writes. Or a future “just one mutate” lands without auth.
+Accrual on DOM 31 skips February or throws invalid dates. Forecast missing months; user thinks rate broken.
 
 **Why it happens:**
-Single Prisma client is write-capable. Code reuse of `actions.ts` is tempting. Read-only enforced only by tool list, not by code boundary.
+Income (`listAllInRange`) and grace dual-DOM already clamp; new savings path reinvents calendar math.
 
 **How to avoid:**
-- MCP module boundary: only functions typed/documented as reads; eslint/path forbid `actions` imports under `mcp/`.
-- Prefer `prisma.*.find*` wrappers; no `create`/`update`/`delete` in MCP tree (CI grep).
-- Keep milestone lock: write tools OOS; require new milestone for mutates + explicit auth story.
+- Reuse `@/lib/dates` `clampDayOfMonth` exactly like `income.ts` / `credit-grace.ts`.
+- Vitest: DOM 31 × Feb non-leap + leap fixtures.
+- Validate DOM 1–31 at write; clamp only at occurrence expand.
 
 **Warning signs:**
-- MCP file imports `revalidatePath` or mutation actions
-- SQLite WAL shows writes during MCP-only smoke test
-- Tool named `list_*` that calls `upsert`
+- Raw `new Date(y, m, day)` without clamp
+- Missing Feb fixture in savings forecast tests
+- Occurrences hole in short months
 
 **Phase to address:**
-Tool catalog + CI guard (same phase as Pitfall 4)
+Interest slot generation (with math phase)
 
 ---
 
-### Pitfall 6: Client connect docs wrong — `type` missing, path wrong, app not running
+### Pitfall 6: PARITY-01 skip — UI SAVINGS/forecast without MCP
 
 **What goes wrong:**
-Users (and agents) “connect MCP” but nothing works. Claude Code: JSON with `url` and **no** `type` → treated as stdio → skipped / confusing errors. Cursor: needs full restart after `mcp.json` edit; type string differs (`http` vs `streamable-http` vs `streamableHttp`). Wrong path (`/` instead of `/api/mcp`) → endpoint not found. Docs assume stdio child process (PROJECT out of scope).
+Ship account form + dashed Прогноз; agents still see old `AccountType` / forecast kinds. AGENTS.md PARITY-01 violated; SIDE isolation copy stale (no SAVISO).
 
 **Why it happens:**
-Each CLI documents slightly different JSON. Copy from remote SaaS OAuth examples. App must already be up (`docker compose` / `npm run dev`) — unlike stdio MCP that spawns on connect.
+v1.4 made MCP feel “done.” Forecast tool description hardcodes “income + A′ grace.” `isolation-contract.test.ts` catalog freeze omits savings.
 
 **How to avoid:**
-- Ship **copy-paste** snippets per client: Claude Code (`type: "http"`, url) and Cursor (documented type + url).
-- State prerequisites: Wallet container/dev server healthy; URL `http://127.0.0.1:3000/<exact-path>`.
-- Smoke: `curl` initialize POST with correct `Accept` headers; document expected status.
-- Never document `command`/`npx` stdio for Wallet MCP in v1.4.
+- Same milestone: `list_accounts` (or fields) expose rate + accrual DOM; `get_forecast_overlay` includes interest events; update `create-handler` instructions + named SAVISO/INISO/GRISO prose.
+- Extend SIDE never-write scans to new loaders/tools.
+- Do not invent FORECAST-01 — follow Pattern 1 combined rule ids in descriptions.
 
 **Warning signs:**
-- Docs only show stdio
-- Single generic JSON without client names
-- Support thread: `command: expected string, received undefined` / `url but no type`
-- Works in MCP Inspector, fails in Claude Code due to missing `type`
+- UI chart shows interest tooltips; MCP points lack `kind: "interest"`
+- CAP/SIDE description tests fail after type extend
+- Docs connect guide omit savings fields
 
 **Phase to address:**
-Connect-docs phase after endpoint exists (verify with real Claude Code + Cursor configs)
+Final MCP parity phase of milestone (or same phase as overlay if thin)
 
 ---
 
-### Pitfall 7: Edge runtime / serverless assumptions break SQLite MCP
+### Pitfall 7: Double-count after user manually snapshots accrued interest
 
 **What goes wrong:**
-Route set to `runtime = 'edge'` or copied Vercel Fluid/Redis session pattern. `better-sqlite3` / Prisma native bindings fail or sessions evaporate. Or separate MCP sidecar process diverges from app lifecycle (PROJECT: same Next.js process).
+User updates BalanceSnapshot when bank posts interest → LOCF anchor rises. Overlay still adds “this month’s” interest if membership includes today/past or compounds on raised base incorrectly → dashed line overshoots.
 
 **Why it happens:**
-Popular “MCP on Next.js SaaS” posts target Vercel. Wallet is Docker **standalone** Node + SQLite file volume.
+Forecast-not-fact UX inherited from income, but savings principal **is** the same account users edit. Mental model blur: “I already recorded interest.”
 
 **How to avoid:**
-- Force `runtime = 'nodejs'` on MCP route.
-- Stateless Streamable HTTP — no Redis for v1.4.
-- Same process as wallet web; lifecycle = compose/`npm run dev` only.
-- Do not add custom Express server unless App Router transport proven blocked.
+- Strict future-only slots (`accrualAsOf > today`).
+- Copy near rate fields / overlay: прогноз ожидаемых процентов; факт — только снимок баланса.
+- Optional later (OOS now): suppress next accrual once snapshot lands on accrual day — needs CONTEXT; do not invent without lock.
 
 **Warning signs:**
-- `next/dist/compiled` edge errors on MCP hit
-- New `redis` dependency “for MCP sessions”
-- Second container service `mcp:` in compose
+- Hinge today includes interest addend
+- UAT: snapshot + same-day overlay both bump NW
+- Tooltip interest on dates ≤ today
 
 **Phase to address:**
-Transport/host phase
+Overlay membership + UX copy; UAT checklist
 
 ---
 
@@ -186,107 +175,114 @@ Transport/host phase
 
 | Shortcut | Immediate Benefit | Long-term Cost | When Acceptable |
 |----------|-------------------|----------------|-----------------|
-| Skip shared-secret auth on localhost | Faster connect | DNS rebinding / LAN mis-publish = full data leak | Only if Host+Origin locked **and** publish is loopback-only; still prefer token |
-| Stateless-only (no sessions) | No Redis; simple Docker | No server-push notifications | **Always OK** for read-only v1.4 |
-| Dual legacy SSE + Streamable HTTP | Old clients work | Two codepaths, docs drift | Only if a required client cannot speak Streamable HTTP |
-| Tools return raw Prisma rows | Fast | Schema leak, wrong semantics, huge payloads | Never for NW/debts/grace — map via lib DTOs |
-| Sidecar MCP process | Isolates crashes | Lifecycle/port drift; PROJECT anti-goal | Never in v1.4 |
-| Wide CORS for “browser MCP” | Demo in web UI | Browser rebinding surface | Never without Origin allowlist + auth |
+| Reuse `kind: "income"` for interest slots | No ForecastSlotKind widen | Wrong tooltips, MCP honesty, grace filters | Never |
+| Flag on FIAT_DEBIT instead of SAVINGS enum | Skip migration | Rate/DOM on debit cards; CHECK hell; soft-read chaos | Never — user lock SAVINGS type |
+| Skip SAVISO twin; “INISO covers forecast” | Faster ship | Interest regresses into LOCF unnoticed | Never — retros: twins scale |
+| Compound-in-overlay without CONTEXT | “More realistic” chart | Diverges from ÷12 lock; hard to unwind | Never in v1.5 |
+| Soft-revalidate skip on `/` after SAVINGS edit | Faster actions | Капитал lag (known income tradeoff) | Only if CONTEXT locks UX; prefer revalidate `/` |
+| One-off grep instead of isolation-contract extend | Quick PR | MCP write sneak / catalog drift | Never for SIDE surfaces |
 
 ## Integration Gotchas
 
 | Integration | Common Mistake | Correct Approach |
 |-------------|----------------|------------------|
-| Docker Compose publish | `ports: ["3000:3000"]` | `127.0.0.1:3000:3000` only |
-| Container `HOSTNAME` | Set `127.0.0.1` “for security” | Keep `0.0.0.0` inside; lock publish on host |
-| Claude Code `.mcp.json` | `url` without `type` | `"type": "http"` (+ url to MCP path) |
-| Cursor MCP | Edit json, expect hot reload | Quit/restart Cursor; use documented streamable HTTP type |
-| MCP SDK transport | Node `StreamableHTTPServerTransport` in Edge route | `WebStandardStreamableHTTPServerTransport` + Node runtime |
-| Domain reads | New SQL for NW | Reuse `@/lib/net-worth`, LOCF, debts, income, credit-grace |
-| Legacy SSE clients | Only `/sse` | Streamable HTTP primary; legacy optional dual |
-| Healthchecks | Health OK ⇒ MCP OK | Separate smoke for MCP initialize + one tool |
+| `nw-forecast.ts` | Import account/prisma to “read rate” | Pure slots in; loaders expand SAVINGS → slots |
+| `historical-series.ts` / `net-worth.ts` | Import savings interest helper | Keep import ban; SAVISO scan |
+| `DashboardChartsShell` vs `loadForecastOverlay` | Wire interest only in UI shell | Shared membership helper; both callers |
+| FX LOCF | Invent rate for foreign SAVINGS interest | Same gate as income: exclude + partial banner + `excludedMissingFxCurrencies` |
+| Prisma CHECK | Rate columns on all accounts unconstrained | SAVINGS ↔ (annualRate + accrualDOM) invariant like credit limit |
+| Soft-read ASSET merge | Forget SAVINGS in `AccountTypeSoft` / labels | Extend soft unions + RU label («Сберегательный») |
+| Grace A′ | Interest ΔNW=0 by copy-paste | Interest adds; grace stays 0n |
+| MCP `isolation-contract` | Leave forecast description income+grace only | Update description + handler catalog same phase |
 
 ## Performance Traps
 
 | Trap | Symptoms | Prevention | When It Breaks |
 |------|----------|------------|----------------|
-| Dump full history series in one tool | Agent context blow-up; slow SQLite | Paginate / as-of params; summarize defaults | Dozens of accounts × years of snapshots |
-| N+1 Prisma in each tool | Multi-second tool calls | Batch Maps like pages (LOCF maps) | ~10+ accounts with dense snapshots |
-| Stateful SSE held open idle | Connection pile-up under HMR/dev | Stateless JSON responses where possible | Dev reload + many CLI reconnects |
-| Huge tool JSON with BigInt poorly serialized | Runtime errors / stringly money | Explicit DTO serialization (minor units as string/number policy) | First credit/debt tool call |
+| Per-day N account interest loop without date set | Slow Капитал preset switch | Sparse dates only (today, horizon, accrual days) like current forecast | Dozens of SAVINGS × 365 samples |
+| Re-query all snapshots per accrual month | Loader latency | One LOCF balance per SAVINGS account for slot amounts | Many accounts + long horizon |
+| Client recomputes interest in chart + server MCP diverge | Parity bugs | Single pure builder; UI/MCP adapters only | First second client |
 
-Scale note: single-user local — optimize for **correctness + payload size for LLM context**, not multi-tenant QPS.
+Local single-user SQLite — scale risk low; correctness > micro-opt.
 
 ## Security Mistakes
 
 | Mistake | Risk | Prevention |
 |---------|------|------------|
-| No Origin/Host validation | DNS rebinding → data exfil | Spec MUST Origin; SDK Host allowlist |
-| Publish on `0.0.0.0` | LAN peers read finance DB via MCP | Compose loopback publish lock |
-| CORS `*` on MCP | Browser malware can call tools | No browser CORS unless allowlisted + auth |
-| Rely on “read-only tools” alone | Mutate bleed / future write tools | Code boundary + CI grep |
-| Commit bearer token in `.mcp.json` | Token in git | `${ENV}` expansion; local-only secrets |
-| Log full tool results | Disk logs hold balances | Log tool name + counts, not payloads |
+| MCP write tool “apply interest” | Agent mutates balances | Keep read-only; never-call scans |
+| Expose rate fields without readOnlyHint refresh | Agent confusion, not exfil | Annotations + SAVISO prose |
+| LAN publish “for testing savings UI” | Finance data exposure | Unrelated to savings — keep 127.0.0.1 compose lock |
+
+Domain risk is **data integrity / agent honesty**, not new auth surface.
 
 ## UX Pitfalls
 
 | Pitfall | User Impact | Better Approach |
 |---------|-------------|-----------------|
-| Docs assume MCP always on | Agent fails mysteriously | Prerequisite: start Wallet; show health + MCP smoke |
-| One config snippet for all CLIs | Half of clients never connect | Per-client copy-paste (Claude Code + Cursor) |
-| Tool names/descriptions English-only jargon | Agent mis-asks; user confused in RU UI app | Clear tool descriptions; map RU domain terms (Капитал, Долги, Грейс) in docs |
-| No “forecast vs fact” in tool text | Agent treats Прогноз as historical NW | Descriptions + fields mark overlay vs LOCF fact |
-| Silent empty tool list when DB empty | Feels broken | Empty arrays + hint to seed via UI |
+| No copy that interest ≠ auto balance | User waits for balance to change | Explicit «только прогноз»; manual снимок |
+| Rate shown as APY | Expects bank compound match | «Годовая ставка» + simple monthly math |
+| Interest looks like income in tooltip | Confuses зарплата vs вклад | Distinct kind + RU block («Проценты») |
+| SAVINGS create missing rate/DOM | Silent zero forecast | Required fields on create; validate |
+| Credit-like fields on SAVINGS form | User enters limit/grace | Type-gated form sections |
+| Chart legend still income-only (known OOS) | Hard to split sources | Accept OOS; tooltip kind must still distinguish |
 
 ## "Looks Done But Isn't" Checklist
 
-- [ ] **Transport:** GET+POST+DELETE on single MCP path — verify with client initialize, not only browser GET
-- [ ] **Runtime:** `nodejs` (not edge) — verify Prisma tool call succeeds in Docker image
-- [ ] **Publish:** compose still `127.0.0.1:3000:3000` — verify host listen address
-- [ ] **Rebinding:** Host/Origin rejection tested with forged headers
-- [ ] **Read-only guard:** CI/path ban on mutate imports under MCP tree
-- [ ] **Domain honesty:** NW tool matches Капитал (DISOL); income/grace not in historical LOCF (INISO/GRISO)
-- [ ] **Client docs:** Claude Code `type: http` snippet + Cursor snippet; both smoke-tested
-- [ ] **No stdio spawn:** docs never tell app to launch agent subprocess
-- [ ] **Path accuracy:** documented URL equals real route (no `/mcp` vs `/api/mcp` drift)
-- [ ] **DTO money:** no float drift; minor units policy documented for agents
+- [ ] **SAVINGS in NW:** `isAssetType` + `NetWorthAccountType` + LOCF contribution — verify hero includes savings principal
+- [ ] **Interest overlay:** dashed Прогноз moves on accrual DOM — verify fact LOCF unchanged without new snapshot
+- [ ] **SAVISO twin:** `saviso.test.ts` (or named twin) import bans + golden identity + never-calls — verify suite green
+- [ ] **Formula ÷12:** unit tests on known minors — verify no APY/`pow` path
+- [ ] **DOM clamp:** 31×Feb fixtures — verify occurrence dates
+- [ ] **FX partial:** non-primary SAVINGS interest — verify banner + exclude count
+- [ ] **MCP parity:** forecast events + account fields + handler instructions — verify isolation-contract
+- [ ] **Grace unbroken:** A′ still ΔNW=0 with interest slots present — verify nw-forecast tests
+- [ ] **No auto snapshot:** accrual actions — verify zero `balanceSnapshot.*` mutates
+- [ ] **UI/MCP same membership:** shell + `loadForecastOverlay` — verify shared helper
 
 ## Recovery Strategies
 
 | Pitfall | Recovery Cost | Recovery Steps |
 |---------|---------------|----------------|
-| Accidental `0.0.0.0` publish | LOW | Revert compose; restart; rotate any optional token; check LAN exposure window |
-| Missing Origin/Host checks | MEDIUM | Patch middleware; add tests; bump SDK if needed |
-| Wrong transport only SSE | MEDIUM | Add Streamable HTTP endpoint; update docs; keep SSE temporarily if needed |
-| Bad NW tool math | HIGH | Delete ad-hoc SQL; wire libs; add isolation tests; tell users to distrust prior agent answers |
-| Mutate bleed | HIGH | Audit DB/migrations; restore SQLite backup from `./data`; tighten boundaries |
-| Docs/`type` confusion | LOW | Fix snippets; re-run client connect UAT |
+| Auto snapshots already written | MEDIUM | Stop writer; document manual cleanup; add never-call tests before next mutate |
+| Interest folded into historical series | HIGH | Revert series API; restore golden identity; re-overlay only |
+| Wrong compound math shipped | MEDIUM | Flip formula + regenerate tests; CONTEXT note honesty of prior forecasts |
+| SAVINGS excluded from NW | LOW | Fix `isAssetType` / type unions; add regression test |
+| MCP/UI drift | LOW | Port membership helper; update descriptions; PARITY checklist |
+| Double-count UX confusion | LOW | Tighten membership > today; improve copy |
 
 ## Pitfall-to-Phase Mapping
 
-| Pitfall | Prevention Phase | Verification |
-|--------|------------------|--------------|
-| Docker bind / publish | MCP host + Docker wiring | `docker port` shows `127.0.0.1`; host CLI connects; forged LAN assumption documented |
-| Origin/Host / rebinding | MCP host + Docker wiring | Unit/integration: bad Host/Origin → 4xx; good localhost → initialize OK |
-| Incomplete Streamable HTTP | MCP host transport | Claude Code + Cursor initialize; GET/POST/DELETE present |
-| Edge/Redis/sidecar | MCP host transport | Single compose service; nodejs runtime; no redis dep |
-| Domain math reuse / isolation | Read-only tools | Tool outputs match UI fixtures; DISOL/INISO/GRISO tests green |
-| Mutate bleed | Read-only tools | CI grep + MCP-only smoke leaves DB mtime/hash unchanged |
-| Client connect docs | Connect docs / UAT | Fresh Claude Code + Cursor configs from docs succeed |
+How roadmap phases should address these pitfalls.
 
-Suggested roadmap order: **(1) host+transport+localhost safety → (2) read-only tools on libs + isolation tests → (3) connect docs + multi-client UAT**. Do not ship tools before Host/Origin and publish locks.
+| Pitfall | Prevention Phase | Verification |
+|---------|------------------|--------------|
+| SAVINGS principal vs interest layers | Phase: schema + account type | Asset inclusion tests; CHECK invariant; form type gate |
+| Auto BalanceSnapshot | Phase: account CRUD / interest actions | Never-call ×N + SAVISO file scan |
+| Fold into past LOCF | Phase: forecast overlay wire | Golden identity; chart fact≠forecast without snaps |
+| ÷12 vs APY/compound | Phase: math + CONTEXT lock | Pure unit tests; code ban on `pow` interest |
+| DOM clamp | Phase: slot expansion | Feb/leap fixtures |
+| Double-count after manual snap | Phase: membership + UX | Future-only slots; UAT script |
+| PARITY-01 / MCP copy | Phase: MCP parity | isolation-contract + forecast.test kind |
+| FX honesty | Phase: overlay wire | Partial banner parity with income |
+| Break grace A′ | Phase: overlay wire | Existing grace ΔNW=0 tests still green |
+
+**Suggested phase order (dependency):**
+1. Schema/type/UI CRUD for SAVINGS (principal in NW) — avoids Pitfall 1
+2. Pure interest math + slot expand (clamp, ÷12, future-only) — avoids 4, 5, 7
+3. Overlay wire (shell + MCP loader) + kind/tooltips — avoids 3, FX, grace regress
+4. SAVISO twin + never-calls — locks Pitfall 2
+5. PARITY-01 descriptions/catalog — locks Pitfall 6
 
 ## Sources
 
-- MCP Spec (2025-03-26) Transports — Streamable HTTP Security Warning (Origin validation, localhost bind, auth): https://modelcontextprotocol.io/specification/2025-03-26/basic/transports — confidence HIGH (official)
-- MCP TypeScript SDK `@modelcontextprotocol/sdk` — `hostHeaderValidation` / `localhostHostValidation`; `WebStandardStreamableHTTPServerTransport` (in-tree via shadcn dep + npm 1.30.0) — confidence HIGH
-- Claude Code MCP docs — HTTP vs deprecated SSE; `type` required with `url`: https://code.claude.com/docs/en/mcp — confidence HIGH (official)
-- Cursor MCP docs — stdio / SSE / Streamable HTTP; `url` remote config: https://cursor.com/docs/mcp — confidence HIGH (official)
-- Tenable WAS-114885 — MCP SSE DNS rebinding without Origin/Host checks — confidence MEDIUM (vendor advisory)
-- Wallet `docker-compose.yml` — existing `127.0.0.1:3000:3000` + `HOSTNAME=0.0.0.0` pattern — confidence HIGH (codebase)
-- Wallet PROJECT.md v1.4 locks — in-app host, read-only, no subprocess, no write tools — confidence HIGH
-- Community Next.js MCP posts (stateless sessionIdGenerator, GET/POST/DELETE) — confidence MEDIUM (cross-checked with spec)
+- Shipped isolation twins: `src/lib/iniso.test.ts`, `src/lib/griso.test.ts`, `src/lib/mcp/isolation-contract.test.ts`
+- Forecast overlay: `src/lib/nw-forecast.ts`, `src/lib/mcp/reads/load-forecast-overlay.ts`, `src/components/dashboard/DashboardChartsShell.tsx`
+- Account type soft-read: `src/lib/account-type.ts`, `src/lib/net-worth.ts`, `prisma/schema.prisma`
+- PROJECT.md v1.5 locks: SAVINGS type; annual%/12; forecast only; no auto BalanceSnapshot; PARITY-01
+- Retrospective: isolation twins scale (v1.2–v1.4); forecast = overlay not LOCF mutation
+- Web (MEDIUM): APY monthly ≠ rate÷12 compound factor — [Gerald APY monthly](https://joingerald.com/learn/saving--investing/calculate-apy-monthly-step-by-step); reinforces **do not silently “fix”** locked ÷12
+- codegraph: callers of `buildNetWorthForecastSeries` (UI shell + MCP loader only)
 
 ---
-*Pitfalls research for: in-app localhost MCP host on Next.js Docker SQLite Wallet*
-*Researched: 2026-09-10*
+*Pitfalls research for: Wallet v1.5 savings account + interest NW forecast*
+*Researched: 2026-09-11*

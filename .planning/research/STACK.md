@@ -1,173 +1,152 @@
 # Stack Research
 
-**Domain:** In-app read-only MCP host (HTTP Streamable) inside Next.js wallet
-**Researched:** 2026-09-10
+**Domain:** SAVINGS account type + monthly interest NW forecast overlay (v1.5)
+**Researched:** 2026-09-11
 **Confidence:** HIGH
-**Milestone:** v1.4 Local MCP (subsequent — ADD to existing app; do not replace core stack)
+**Milestone:** v1.5 Сберегательный счет (subsequent — ADD to existing app; do not replace core stack)
 
 ## Recommended Stack
 
-### Core Technologies (reuse — do NOT replace)
+### Core Technologies (reuse — do NOT replace / do NOT bump for savings alone)
 
-| Technology | Version (pinned in `package.json`) | Purpose for v1.4 | Why recommended |
+| Technology | Version (pinned in `package.json`) | Purpose for v1.5 | Why recommended |
 |------------|--------------------------------------|------------------|-----------------|
-| Next.js | 16.3.4 App Router | Host MCP at Route Handler in same process as UI + Prisma | Already Dockerized; no custom server; matches `src/app/api/health/route.ts` pattern |
-| Prisma | 7.10.0 + better-sqlite3 13.0.3 | Read-only tool backends (accounts, NW, FX, debts, income, grace) | Same SQLite + domain libs; no second data path |
-| Zod | 4.5.4 | Tool `inputSchema` (MCP SDK v2 Standard Schema) | Already app standard; satisfies `@modelcontextprotocol/server` peer `zod@^4.2.0` |
-| Vitest | 4.1.11 | Pure tests for tool adapters + Host/Origin guards | Keep Prisma out of unit math; mirror existing domain tests |
-| Docker | existing `node:24-bookworm-slim` | Ship MCP with app lifecycle (`npm run dev` / container) | Image already Node 24 (≥20 required by MCP SDK v2); `EXPOSE 3000` + `HOSTNAME=0.0.0.0` |
+| Prisma | 7.10.0 + `@prisma/adapter-better-sqlite3` 7.10.0 + `better-sqlite3` 13.0.3 | `AccountType.SAVINGS` enum value + nullable rate/DOM columns on `Account` + SQLite CHECK invariant | Same SQLite path as credit DOM; Prisma Enum→TEXT on SQLite (Client validates; DB CHECK for field coupling) |
+| Next.js | 16.3.4 App Router | Account CRUD forms + Капитал `/` forecast wiring | Already hosts UI + MCP; no new runtime |
+| Zod | 4.5.4 | Create/update schemas for annual % + accrual day; MCP tool `inputSchema` | App-wide validation; MCP Standard Schema peer already satisfied |
+| Vitest | 4.1.11 | Pure interest math + SAVISO isolation twin (never-calls BalanceSnapshot / historical NW) | Mirror `griso.test.ts` / `iniso` patterns — no new test runner |
+| recharts | 3.10.1 | Existing dashed «Прогноз» `Line` (`strokeDasharray`) | Interest feeds **same** forecast series — no second chart lib / no second dashed Line (legend split OOS) |
+| mcp-handler | 2.1.1 | Same `/api/mcp` host | PARITY-01 tools stay in-process; no new transport |
+| `@modelcontextprotocol/server` | 2.0.0 | `registerTool` + `readOnlyHint` / `openWorldHint: false` | Extend existing CAP/SIDE tools; no new MCP packages |
 
-### New packages (v1.4 additions)
+### New packages (v1.5)
 
-| Technology | Version | Purpose | Why recommended |
-|------------|---------|---------|-----------------|
-| `mcp-handler` | **2.1.1** (`^2`) | Next.js-friendly wrapper around SDK `createMcpHandler` → `(Request) => Promise<Response>` | Official Vercel adapter; mounts as App Router exports; dual-era (2026-07-28 + 2025 Streamable HTTP fallback); **no Redis**; legacy HTTP+SSE endpoints removed |
-| `@modelcontextprotocol/server` | **2.0.0** (`^2`) | `McpServer`, `createMcpHandler`, `registerTool`, Host/Origin helpers | Current MCP TypeScript server package (v2 split from monolith `@modelcontextprotocol/sdk`); Streamable HTTP is the remote transport Claude Code / Cursor expect |
+**None.** Install step is empty. All capability = schema + `@/lib/*` + MCP tool/description updates.
 
-Transitive (do not pin unless needed): `@modelcontextprotocol/core@2.0.0` via server package.
+### Supporting Libraries (in-repo — prefer over npm)
 
-### Supporting Libraries (prefer in-repo over new npm)
-
-| Library / module | Version | Purpose | When to use |
-|------------------|---------|---------|-------------|
-| Existing `@/lib/*` domain reads | — | Tool handlers call same LOCF / NW / debts / income / grace paths as pages | **Always** — MCP is a thin transport over existing reads |
-| `@modelcontextprotocol/server` Host/Origin guards | 2.0.0 | `hostHeaderValidationResponse` + `originValidationResponse` + `localhostAllowedHostnames` / `localhostAllowedOrigins` | Wrap MCP route **before** handler — DNS-rebinding defense while container binds `0.0.0.0` |
-| Optional shared-secret header | env only | Lightweight local auth (`Authorization: Bearer …`) | Only if docs need non-browser CLI lock; **not** OAuth/CIMD for v1.4 |
+| Module | Version | Purpose | When to use |
+|--------|---------|---------|-------------|
+| `@/lib/money.ts` (`RATE_SCALE_E8`, `parseMajorToMinor`, bigint convert) | — | Exact monthly interest: `balanceMinor × rate / 12` without Float | Always for interest amount → primary forecast slots |
+| `@/lib/dates.ts` + existing `clampDayOfMonth` (income/grace) | — | Accrual day-of-month 1–31 clamp on short months | Occurrence dates for forecast slots |
+| `@/lib/nw-forecast.ts` | — | Extend `ForecastSlotKind` with `"interest"` (or `"savings"`); ΔNW = +interest (unlike grace A′=0) | Single stair-step «Прогноз» with income + grace + interest |
+| `@/lib/account-type.ts` | — | `isAssetType` / labels: SAVINGS is asset-like for historical NW | Soft-read + write-path alongside ASSET |
+| `@/lib/mcp/reads/load-forecast-overlay.ts` + `tools/forecast.ts` | — | Page-parity MCP `get_forecast_overlay` events include interest | PARITY-01 same milestone |
+| `@/lib/mcp/tools/accounts.ts` (+ optional thin list) | — | Expose `annualRate*` + `accrualDayOfMonth` on savings rows | Agents see same fields as UI |
+| SQLite `CHECK` (migration RedefineTables) | — | `Account_savings_rate_invariant`: rate+DOM both set iff `type = 'SAVINGS'`; DOM 1–31 | Twin of `Account_grace_dom_invariant` / credit-limit CHECK |
 
 ### Development Tools
 
 | Tool | Purpose | Notes |
 |------|---------|-------|
-| MCP Inspector / `curl` JSON-RPC | Smoke Streamable HTTP endpoint | Verify POST initialize + tools/list before CLI wiring |
-| Claude Code CLI | External agent client | `claude mcp add --transport http wallet http://127.0.0.1:3000/api/mcp` |
-| Cursor (`mcp.json` / CLI) | External agent client | Prefer `"type": "http"` + `url` (CLI rejects/`streamable-http` can drop whole file) |
-| Vitest | Tool adapter + guard unit tests | No live MCP client required for domain math |
+| `prisma migrate dev` | Enum + columns + CHECK | SQLite enum add is TEXT — no ALTER ENUM; RedefineTables when adding CHECK |
+| Vitest file-scan / never-calls | SAVISO twin of GRISO/INISO | Ban forecast/savings writers from `computeNetWorthRows` / LOCF history |
+| MCP Inspector / existing forecast tests | `get_forecast_overlay` event `kind` includes interest | Keep string bigint minors + FX LOCF honesty |
 
 ## Installation
 
 ```bash
-# v1.4 — only these new runtime deps
-npm install mcp-handler@^2 @modelcontextprotocol/server@^2
+# v1.5 — no new runtime or dev dependencies
+# (schema + domain + MCP only)
 
-# Already present — do not bump for MCP alone
-# next@16.3.4 zod@4.5.4 prisma@7.10.0 vitest@4.1.11
+# Already present — do not bump for savings alone
+# next@16.3.4 prisma@7.10.0 zod@4.5.4 recharts@3.10.1
+# mcp-handler@2.1.1 @modelcontextprotocol/server@2.0.0 vitest@4.1.11
 ```
 
 **Integration sketch (opinionated):**
 
-```typescript
-// src/app/api/mcp/route.ts
-import { createMcpHandler } from "mcp-handler";
-import {
-  hostHeaderValidationResponse,
-  localhostAllowedHostnames,
-  localhostAllowedOrigins,
-  originValidationResponse,
-} from "@modelcontextprotocol/server";
-import { z } from "zod";
-// register read-only tools that call @/lib/* — no mutations
-
-export const runtime = "nodejs"; // Prisma / better-sqlite3
-export const dynamic = "force-dynamic";
-
-const mcp = createMcpHandler(
-  (server) => {
-    server.registerTool(
-      "wallet_ping",
-      {
-        description: "Liveness check for wallet MCP",
-        inputSchema: z.object({}),
-      },
-      async () => ({ content: [{ type: "text", text: "ok" }] }),
-    );
-    // …accounts, balances/NW, FX, debts, income, grace — read-only
-  },
-  { serverInfo: { name: "wallet", version: "1.4.0" } },
-);
-
-async function handle(req: Request) {
-  const rejected =
-    hostHeaderValidationResponse(req, localhostAllowedHostnames()) ??
-    originValidationResponse(req, localhostAllowedOrigins());
-  if (rejected) return rejected;
-  return mcp(req);
+```prisma
+enum AccountType {
+  ASSET
+  FIAT_DEBIT
+  FIAT_CREDIT
+  CRYPTO
+  CASH
+  SAVINGS // NEW — write-path peer of ASSET; NW like asset
 }
 
-export { handle as GET, handle as POST, handle as DELETE };
+model Account {
+  // …
+  /// Annual rate in basis points (850 = 8.50%). Required iff type == SAVINGS.
+  annualRateBps       Int?
+  /// Accrual day-of-month 1–31 (clamp). Required iff type == SAVINGS.
+  accrualDayOfMonth   Int?
+}
 ```
 
-**Client docs targets (localhost):**
+```typescript
+// Pure — @/lib/savings-interest.ts (new file; money-only imports)
+// monthlyInterestMinor = (balanceMinor * BigInt(annualRateBps)) / (10_000n * 12n)
+// Round policy: truncate toward 0 once per accrual slot (document in CONTEXT)
 
-| Client | Config |
-|--------|--------|
-| Claude Code | `claude mcp add --transport http wallet http://127.0.0.1:3000/api/mcp` — JSON: `"type": "http"`, `"url": "…"` (`streamable-http` alias OK in Claude) |
-| Cursor IDE / CLI | `.cursor/mcp.json` → `"type": "http"`, `"url": "http://127.0.0.1:3000/api/mcp"` — avoid `"type": "streamable-http"` on Cursor CLI |
+// @/lib/nw-forecast.ts — ForecastSlotKind = "income" | "grace" | "interest"
+// interest: primaryMinor = converted interest (ΔNW > 0); grace stays 0n
 
-**Docker:** no new image stages. Publish host `3000→3000` (already). CLI agents on host hit `127.0.0.1:3000`; container still listens `0.0.0.0` — Host/Origin guards required.
+// MCP — extend get_forecast_overlay description: INISO/GRISO + SAVISO-01
+// list_accounts: include annualRateBps + accrualDayOfMonth when type=SAVINGS
+```
+
+**Rate storage decision (locked recommendation):** store **`annualRateBps: Int`** (1 bps = 0.01%). Why not reuse `RATE_SCALE_E8`: FX scale means “primary per 1 other,” not percent — overloading confuses MCP/UI. Why not `Float`/`Decimal`: wallet money path is bigint-only; industry default for APR is integer bps. UI parses percent major string (e.g. `8.5`) → `850` via Zod + integer scale-2 helper (mirror `parseMajorToMinor` at scale 2, or thin `parsePercentToBps`).
 
 ## Alternatives Considered
 
 | Recommended | Alternative | When alternative wins |
 |-------------|-------------|------------------------|
-| `mcp-handler@2` + `@modelcontextprotocol/server@2` | Raw `@modelcontextprotocol/sdk@1.30.0` + `WebStandardStreamableHTTPServerTransport` per-request | Only if forced to stay on SDK v1; more wiring, dual-package risk, weaker Next DX |
-| App Router Route Handler (same process) | Sidecar Express/Hono MCP on second port | Never for v1.4 goal — breaks “same Next.js process” + Docker simplicity |
-| Streamable HTTP (single `/api/mcp`) | Legacy HTTP+SSE (`SSEServerTransport` + `/sse` + `/message`) | Never as primary — Claude Code marks SSE deprecated; mcp-handler 2.x removed it |
-| Stateless factory per request | Stateful sessions + Redis | Never for local single-user read-only; mcp-handler 2.x dropped Redis |
-| Host/Origin localhost guards | Full OAuth / CIMD | Defer — single local user; OAuth is for public remote MCP |
-| Direct HTTP clients | `mcp-remote` stdio bridge | Only document as fallback for **stdio-only** clients; Claude Code + Cursor speak HTTP |
+| **Zero new npm** + Prisma fields on `Account` | Separate `SavingsAccount` / interest ledger tables | Only if later auto BalanceSnapshot / accrual journal ships — OOS for v1.5 |
+| `annualRateBps: Int` | `annualRateScaled BigInt` @ 1e8 fraction | If rates need >2 decimal places (e.g. 8.125%) — not needed for RU retail savings UI |
+| Extend `buildNetWorthForecastSeries` + one dashed Line | Second recharts series / chart library | Never for v1.5 — product is one «Прогноз» overlay; legend split deferred |
+| Extend `list_accounts` + `get_forecast_overlay` | New sidecar MCP package / write tools | Never — PARITY-01 read-only; same handler |
+| Integer bigint monthly ÷12 | `decimal.js` / Dinero / finance-js | Only if compound/daily engines enter scope (explicitly OOS) |
+| SAVINGS as asset-like NW | Side ledger like income/debts | Wrong — savings **balance** already in NW; only **interest expectation** is overlay |
 
 ## What NOT to Use
 
 | Avoid | Why | Use instead |
 |-------|-----|-------------|
-| `@modelcontextprotocol/sdk` 1.x **and** server 2.x together | Two protocol stacks; confusing imports; zod peer drift | Only `@modelcontextprotocol/server@^2` (+ `mcp-handler@^2`) |
-| `@vercel/mcp-adapter` | Renamed/superseded by `mcp-handler` | `mcp-handler@2.1.1` |
-| `mcp-handler@1.x` | Still tied to SDK 1.x + old SSE/Redis options | `mcp-handler@^2` |
-| Next.js **custom server** / `server.js` | Breaks standalone Docker output; fights App Router | Route Handler only |
-| Express / Fastify / Hono **sidecar** process | Second port, second lifecycle, not “in-app” | Same-process `/api/mcp` |
-| `SSEServerTransport` as main surface | Deprecated remote transport; dual endpoints | Streamable HTTP via `createMcpHandler` |
-| Redis / session stores | Useless for stateless read-only local MCP | Stateless handler (default) |
-| OAuth / CIMD / `withMcpAuth` as MVP | Overkill for localhost single-user | Host/Origin guards (+ optional bearer later) |
-| AI SDK / chat UI / agent spawn packages | Explicitly OOS (no chat, no subprocess agent) | External CLI connects to URL |
-| Write/mutate MCP tools | Locked OOS for v1.4 | Read-only `registerTool` over existing libs |
-| `window.confirm` / new UI | No in-app assistant UI this milestone | Docs only |
+| `decimal.js`, `big.js`, Dinero, `currency.js` | New money stack fights existing bigint minors; monthly ÷12 is exact with bps | `@/lib/money` + bps Int |
+| `Float` / `Number` APR fields in Prisma | Silent drift; breaks money constitution | `annualRateBps Int` |
+| Compound / daily accrual libraries | Explicit OOS (simple annual%÷12 only) | One pure helper + Vitest |
+| Auto `BalanceSnapshot` on accrual day | Locked OOS — forecast overlay only (SAVISO) | Manual balances stay source of truth |
+| New chart package / second dashed Line | Clutters Капитал; legend split deferred | Same `forecast` key + interest slots |
+| New MCP packages / mutate tools | Host already shipped; writes deferred | Extend `registerTool` read-only |
+| Treating SAVINGS as income side ledger | Balance already capital; would double-count if folded wrong | Asset NW + interest overlay only |
+| Storing rate as FX `rateToPrimaryScaled` | Semantic collision with FX LOCF | Dedicated `annualRateBps` |
 
 ## Stack Patterns by Variant
 
-**If `npm run dev` on host (no Docker):**
-- MCP URL `http://127.0.0.1:3000/api/mcp` (or whatever `next dev` port)
-- Same Route Handler; Host headers are already localhost
+**If SAVINGS in primary currency:**
+- Interest minor stays native; forecast slot `isPrimaryCurrency: true` — no FX gate
 
-**If Docker published port:**
-- Same URL from host CLI via published port
-- Keep `HOSTNAME=0.0.0.0` for container listen; **do not** expose MCP without Host/Origin checks
-- Prefer documenting `127.0.0.1` over `localhost` to avoid IPv6 surprises
+**If SAVINGS in other currency:**
+- Same FX LOCF honesty as income slots — missing rate → partial banner / exclude slot (do not invent)
 
-**If a client only supports stdio:**
-- Document `npx mcp-remote http://127.0.0.1:3000/api/mcp` as bridge — do **not** change server transport
+**If write-path account types:**
+- Extend Zod write enum: `ASSET | FIAT_CREDIT | SAVINGS` (keep rejecting legacy FIAT_DEBIT/CRYPTO/CASH creates)
+- Soft-read: add `SAVINGS` to `AccountTypeSoft` + `isAssetType` (+ `NetWorthAccountType`)
 
-**If tools need mid-call progress streams:**
-- Leave default Streamable HTTP streaming; otherwise consider `responseMode: 'json'` on handler for simpler read-only JSON responses (SDK drops mid-call notifications in json mode)
+**If MCP surface:**
+- Prefer enriching `list_accounts` + `get_forecast_overlay` over a third SIDE tool unless UI gains a dedicated savings page (v1.5 is account-type + overlay — accounts list is enough)
+- Description copy must name **SAVISO-01** (twin of INISO/GRISO): interest forecast never folds into historical NW LOCF
 
 ## Version Compatibility
 
 | Package A | Compatible With | Notes |
 |-----------|-----------------|-------|
-| `mcp-handler@2.1.1` | `@modelcontextprotocol/server@^2.0.0`, `next@>=13`, Node **≥20** | Wallet: Next 16.3.4 + Node 24 image — OK |
-| `@modelcontextprotocol/server@2.0.0` | `zod@^4.2.0` | Wallet `zod@4.5.4` — OK |
-| Claude Code `--transport http` | Streamable HTTP endpoint | Prefer over `--transport sse` |
-| Cursor CLI MCP | `"type": "http"` | `"streamable-http"` can break CLI config parse |
-| Prisma / better-sqlite3 | `runtime = 'nodejs'` on MCP route | Edge runtime incompatible with native SQLite |
+| Prisma 7.10.0 SQLite | Enum `SAVINGS` as TEXT + Int columns | Official map Enum→TEXT; enforce allowed values in Client + CHECK for rate/DOM coupling |
+| Zod 4.5.4 | mcp-handler / MCP server tool schemas | No bump |
+| recharts 3.10.1 | Existing `NetWorthHistoryChart` forecast Line | Interest is data-only change |
+| Vitest 4.1.11 | Isolation file-scan tests | Same pattern as `griso.test.ts` |
+| Node 24 Docker image | better-sqlite3 native | Unchanged |
 
 ## Sources
 
-- npm `mcp-handler@2.1.1` README — Next.js `createMcpHandler` mount; Streamable HTTP; SSE removed in 2.x; peer `@modelcontextprotocol/server@^2` — **HIGH** (registry + package tarball)
-- npm `@modelcontextprotocol/server@2.0.0` — `createMcpHandler`, Host/Origin validation exports — **HIGH**
-- Official MCP TS docs — [Serve over HTTP](https://ts.sdk.modelcontextprotocol.io/v2/serving/http.html) — factory per request, Streamable HTTP, localhost guards — **HIGH**
-- Claude Code docs — [MCP servers](https://code.claude.com/docs/en/mcp-servers) — `--transport http`, SSE deprecated, `type: http` / `streamable-http` alias — **HIGH**
-- Cursor docs — [MCP](https://cursor.com/docs/mcp) + help — remote `url` Streamable HTTP; forum note: CLI wants `type: http` not `streamable-http` — **HIGH** / CLI quirk **MEDIUM**
-- Existing wallet `package.json` + `Dockerfile` — Next 16.3.4, Zod 4.5.4, Node 24, port 3000 — **HIGH**
+- Existing wallet `package.json` + `prisma/schema.prisma` + `Account_grace_dom_invariant` migration — **HIGH** (repo)
+- `@/lib/nw-forecast.ts`, `NetWorthHistoryChart` dashed «Прогноз», MCP `get_forecast_overlay` — **HIGH** (repo patterns for income/grace overlay)
+- Prisma 7 SQLite docs — Enum→TEXT; Client runtime validation; migrate for schema changes — **HIGH** ([prisma.io SQLite connector](https://www.prisma.io/docs/orm/v7/core-concepts/supported-databases/sqlite))
+- Industry money practice: integer minors + basis-point rates; avoid IEEE754 for APR — **MEDIUM** (cross-checked web: Axiom Labs currency guide, DEV accrued-interest bigint examples; classify-confidence websearch --verified → MEDIUM)
+- PROJECT.md v1.5 scope: no auto snapshot, no compound engine, PARITY-01 MCP — **HIGH** (product lock)
 
 ---
-*Stack research for: Wallet v1.4 in-app read-only MCP (HTTP Streamable)*
-*Researched: 2026-09-10*
+*Stack research for: Wallet v1.5 SAVINGS + interest NW forecast*
+*Researched: 2026-09-11*
