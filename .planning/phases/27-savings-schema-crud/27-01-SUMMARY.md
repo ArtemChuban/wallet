@@ -116,7 +116,7 @@ status: complete
 1. **Task 1: Wave 0 red Zod + soft-read + NW SAVINGS contracts** - `3d1f268` (test)
 2. **Task 2: Wave 0 red accrual-display + actions SAVINGS contracts** - `470fe02` (test)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `d9ccab0` (docs: complete plan)
 
 ## Files Created/Modified
 

@@ -112,4 +112,4 @@ Resume file: None
 
 ## Operator Next Steps
 
-- Execute Phase 27: `/gsd-execute-phase 27` (Wave 0 → tracer+migrate → edit UI → list/D-16)
+- Continue Phase 27: `/gsd-execute-phase 27` (next: 27-02 tracer+migrate)
