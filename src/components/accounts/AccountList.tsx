@@ -22,6 +22,11 @@ import {
 import { isGraceOverdue } from "@/lib/credit-grace";
 import { formatAsOfDisplay } from "@/lib/dates";
 import { creditDebtMinor, formatMinorToMajor } from "@/lib/money";
+import {
+  formatAccrualCountdown,
+  nextAccrualAsOf,
+} from "@/lib/savings-accrual-display";
+import { formatBpsToPercentMajor } from "@/lib/savings-rate";
 
 export type AccountCurrencyOption = {
   code: string;
@@ -176,6 +181,17 @@ function AccountRow({
     isCreditType(account.type) && account.creditLimitMinor != null
       ? `${formatMinorToMajor(BigInt(account.creditLimitMinor), account.currency.scale)} ${account.currencyCode}`
       : null;
+  const savingsRateText =
+    account.type === "SAVINGS" && account.annualRateBps != null
+      ? `${formatBpsToPercentMajor(account.annualRateBps)}%`
+      : null;
+  const savingsCountdownText =
+    account.type === "SAVINGS" && account.accrualDayOfMonth != null
+      ? formatAccrualCountdown(
+          today,
+          nextAccrualAsOf(today, account.accrualDayOfMonth),
+        )
+      : null;
   const hasOverdueOpen = account.creditGraceObligations.some(
     (o) => o.status === "OPEN" && isGraceOverdue(o.dueAsOf, today),
   );
@@ -254,6 +270,18 @@ function AccountRow({
               <>
                 <span className="mx-2">·</span>
                 <span className="font-mono">лимит {limitText}</span>
+              </>
+            ) : null}
+            {savingsRateText ? (
+              <>
+                <span className="mx-2">·</span>
+                <span className="font-mono">{savingsRateText}</span>
+              </>
+            ) : null}
+            {savingsCountdownText ? (
+              <>
+                <span className="mx-2">·</span>
+                <span>{savingsCountdownText}</span>
               </>
             ) : null}
           </p>
