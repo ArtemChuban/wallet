@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.4
 milestone_name: Local MCP
-current_phase: 24
-current_phase_name: Capital Read Tools
-status: planning
-stopped_at: Phase 23 complete, ready to plan Phase 24
-last_updated: "2026-09-11T10:57:43.038Z"
+current_phase: 26
+current_phase_name: Connect Docs + Policy
+status: milestone_complete
+stopped_at: v1.4 all phases verified — ready for complete-milestone
+last_updated: "2026-09-11T10:58:00Z"
 last_activity: 2026-09-11
-last_activity_desc: Phase 23 complete, transitioned to Phase 24
-state_head: d547c638008c915f44edb6df8634b73130301de5
+last_activity_desc: Phases 23+26 UAT + security passed; v1.4 Local MCP complete
+state_head: bb71523
 progress:
   total_phases: 4
   completed_phases: 4
@@ -25,16 +25,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-10 — v1.4 Local MCP)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 26 planned — execute 26-01 tracer next
+**Current focus:** v1.4 Local MCP complete — `/gsd-complete-milestone` next
 
 ## Current Position
 
-Phase: 24 of 26 (Capital Read Tools)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-09-11 — Phase 23 complete, transitioned to Phase 24
+Phase: 26 of 26 (Connect Docs + Policy)
+Plan: 4 of 04 complete
+Status: Milestone complete — all phases verified
+Last activity: 2026-09-11 — Phase 23+26 UAT/security closed; dual-client MCP connect proved
 
-Progress: [█████░░░░░] 50%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
