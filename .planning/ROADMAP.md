@@ -71,7 +71,7 @@ Full detail: [milestones/v1.3-ROADMAP.md](./milestones/v1.3-ROADMAP.md)
 - [x] **Phase 23: MCP Host + Localhost Safety** - In-process Streamable HTTP at `/api/mcp` with Host/Origin + loopback publish
 - [x] **Phase 24: Capital Read Tools** - Accounts, NW, balances, FX via read-only MCP (completed 2026-09-10)
 - [x] **Phase 25: Side-Ledger Tools + Isolation** - Debts, income, grace, forecast overlay; DISOL/INISO/GRISO locked (completed 2026-09-10)
-- [ ] **Phase 26: Connect Docs + Policy** - Claude/Cursor connect snippets, readOnlyHint + isolation copy, PARITY-01 materialization
+- [x] **Phase 26: Connect Docs + Policy** - Claude/Cursor connect snippets, readOnlyHint + isolation copy, PARITY-01 materialization (completed 2026-09-11)
 
 ## Phase Details
 
@@ -181,7 +181,7 @@ Plans:
 | 20. Obligation CRUD + cycle UI | v1.3 | 3/3 | Complete | 2026-09-09 |
 | 21. Капитал forecast integration | v1.3 | 3/3 | Complete | 2026-09-09 |
 | 22. GRACEISO regression + polish | v1.3 | 2/2 | Complete | 2026-09-10 |
-| 23. MCP Host + Localhost Safety | v1.4 | 2/2 | Complete | 2026-09-10 |
+| 23. MCP Host + Localhost Safety | v1.4 | 2/2 | Complete    | 2026-09-10 |
 | 24. Capital Read Tools | v1.4 | 4/4 | Complete    | 2026-09-10 |
 | 25. Side-Ledger Tools + Isolation | v1.4 | 4/4 | Complete    | 2026-09-10 |
-| 26. Connect Docs + Policy | v1.4 | 4/4 | In Progress|  |
+| 26. Connect Docs + Policy | v1.4 | 4/4 | Complete    | 2026-09-11 |

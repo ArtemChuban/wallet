@@ -131,13 +131,13 @@
     {
       "number": "26",
       "name": "Connect Docs + Policy",
-      "status": "pending"
+      "status": "complete"
     }
   ],
   "next": {
     "command": "/gsd:progress --next",
-    "label": "Advance to the next step (plan phase 26)",
-    "reason": "Phase 26 of 4 — needs a plan"
+    "label": "Advance to the next step (plan phase 24)",
+    "reason": "Phase 24 of 4 — needs a plan"
   },
-  "updated_at": "2026-09-10T18:03:54.859Z"
+  "updated_at": "2026-09-11T10:57:43.052Z"
 }
