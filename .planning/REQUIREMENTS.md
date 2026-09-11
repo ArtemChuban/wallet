@@ -7,9 +7,9 @@
 
 ### Account
 
-- [ ] **ACCT-01**: User can create and manage accounts of type `SAVINGS` (distinct from debit/credit/crypto/cash) with name, currency, annual interest rate, and accrual day-of-month
-- [ ] **ACCT-02**: SAVINGS account balances are included in net worth totals and history like other asset accounts (not excluded as a side ledger)
-- [ ] **ACCT-03**: User can see annual interest rate and accrual day-of-month on SAVINGS account UI (list/detail and create/edit)
+- [x] **ACCT-01**: User can create and manage accounts of type `SAVINGS` (distinct from debit/credit/crypto/cash) with name, currency, annual interest rate, and accrual day-of-month
+- [x] **ACCT-02**: SAVINGS account balances are included in net worth totals and history like other asset accounts (not excluded as a side ledger)
+- [x] **ACCT-03**: User can see annual interest rate and accrual day-of-month on SAVINGS account UI (list/detail and create/edit)
 
 ### Interest forecast
 
@@ -59,9 +59,9 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ACCT-01 | Phase 27 | Pending |
-| ACCT-02 | Phase 27 | Pending |
-| ACCT-03 | Phase 27 | Pending |
+| ACCT-01 | Phase 27 | Complete |
+| ACCT-02 | Phase 27 | Complete |
+| ACCT-03 | Phase 27 | Complete |
 | INT-01 | Phase 28 | Pending |
 | INT-02 | Phase 29 | Pending |
 | INT-03 | Phase 29 | Pending |
@@ -72,6 +72,7 @@
 | PARITY-01 | Phase 30 | Pending |
 
 **Coverage:**
+
 - v1.5 requirements: 11 total
 - Mapped to phases: 11
 - Unmapped: 0 ✓

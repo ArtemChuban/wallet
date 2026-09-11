@@ -4,18 +4,18 @@ milestone: v1.5
 milestone_name: Сберегательный счет (Phases 27–30)
 current_phase: 27
 current_phase_name: SAVINGS schema + CRUD
-status: planned
-stopped_at: Phase 27 plans revised (checker blockers)
-last_updated: "2026-09-11T16:05:00.000Z"
+status: in_progress
+stopped_at: Completed 27-01-PLAN.md
+last_updated: "2026-09-11T16:12:26.505Z"
 last_activity: 2026-09-11
-last_activity_desc: Phase 27 plan-checker revision (verify poison + RESEARCH RESOLVED)
-state_head: 7ac1624fe70c2e8c0ffdf17ac8534d9c625686a3
+last_activity_desc: Phase 27 Plan 01 Wave 0 red contracts complete
+state_head: 470fe02158a94dc4b15d5de6909dfdd18d467d9a
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 4
-  completed_plans: 0
-  percent: 0
+  completed_plans: 1
+  percent: 25
 ---
 
 # Project State
@@ -30,11 +30,11 @@ See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательн�
 ## Current Position
 
 Phase: 27 of 30 (SAVINGS schema + CRUD)
-Plan: 27-01 … 27-04
-Status: Planned — checker revision applied; re-check then execute
-Last activity: 2026-09-11 — Phase 27 plans revised for PLAN-CHECK blockers
+Plan: 2 of 4
+Status: In progress — 27-01 Wave 0 complete; next 27-02 tracer
+Last activity: 2026-09-11 — Completed 27-01-PLAN.md (Wave 0 red SAVINGS contracts)
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [██░░░░░░░░] 25%
 
 ## Performance Metrics
 
@@ -59,12 +59,16 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 26 P03 | 4min | 2 tasks | 1 files |
 | Phase 26 P02 | 3min | 3 tasks | 11 files |
 | Phase 26 P04 | 2min | 3 tasks | 5 files |
+| Phase 27 P01 | 3min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
 ### Decisions
 
 Decisions are logged in PROJECT.md Key Decisions table. v1.5 locks from scoping/research: distinct `SAVINGS` AccountType (not flag on debit); annual%÷12 monthly; forecast overlay only (no auto BalanceSnapshot); SAVISO twin of INISO/GRISO; PARITY-01 MCP in same milestone.
+
+- [Phase 27]: Wave 0: update/D-16 as describe.skip+it.todo only (Plan 03); create hard-fail
+- [Phase 27]: formatAccrualCountdown(today, nextAsOf) locked in Wave 0 tests for Plan 04
 
 ### Pending Todos
 
@@ -102,9 +106,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-11T15:57:56.764Z
-Stopped at: Phase 27 planning complete
-Resume file: .planning/phases/27-savings-schema-crud/27-01-PLAN.md
+Last session: 2026-09-11T16:12:26.483Z
+Stopped at: Completed 27-01-PLAN.md
+Resume file: None
 
 ## Operator Next Steps
 

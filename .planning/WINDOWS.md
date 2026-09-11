@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 22
+open_count: 24
 waived_count: 0
 fixed_count: 5
-total_count: 27
-last_updated: 2026-09-10T17:37:01.270Z
+total_count: 29
+last_updated: 2026-09-11T16:12:25.646Z
 ---
 
 # Broken Windows Ledger
@@ -42,6 +42,8 @@ last_updated: 2026-09-10T17:37:01.270Z
 | 25 | 25 | stub | src/lib/mcp/tools/income.test.ts |  | Wave 0 it.todo stubs for SIDE tool suite — filled by later plans | open |  | 2026-09-10T17:37:01.029Z |  |
 | 26 | 25 | stub | src/lib/mcp/tools/grace.test.ts |  | Wave 0 it.todo stubs for SIDE tool suite — filled by later plans | open |  | 2026-09-10T17:37:01.147Z |  |
 | 27 | 25 | stub | src/lib/mcp/tools/forecast.test.ts |  | Wave 0 it.todo stubs for SIDE tool suite — filled by later plans | open |  | 2026-09-10T17:37:01.270Z |  |
+| 28 | 27 | stub | src/app/accounts/actions.test.ts |  | describe.skip updateAccount SAVINGS + D-16 — owned by Plan 03 | open |  | 2026-09-11T16:12:25.522Z |  |
+| 29 | 27 | skipped-test | src/app/accounts/actions.test.ts |  | it.todo Plan 03 updateAccount SAVINGS name+rate+DOM + D-16 no-snapshot | open |  | 2026-09-11T16:12:25.646Z |  |
 
 ````json
 [
@@ -367,6 +369,30 @@ last_updated: 2026-09-10T17:37:01.270Z
     "status": "open",
     "reason": "",
     "recorded_at": "2026-09-10T17:37:01.270Z",
+    "resolved_at": null
+  },
+  {
+    "id": 28,
+    "kind": "stub",
+    "phase": "27",
+    "file": "src/app/accounts/actions.test.ts",
+    "line": null,
+    "description": "describe.skip updateAccount SAVINGS + D-16 — owned by Plan 03",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-11T16:12:25.522Z",
+    "resolved_at": null
+  },
+  {
+    "id": 29,
+    "kind": "skipped-test",
+    "phase": "27",
+    "file": "src/app/accounts/actions.test.ts",
+    "line": null,
+    "description": "it.todo Plan 03 updateAccount SAVINGS name+rate+DOM + D-16 no-snapshot",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-11T16:12:25.646Z",
     "resolved_at": null
   }
 ]
