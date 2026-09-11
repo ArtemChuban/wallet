@@ -153,6 +153,105 @@ describe("createAccountSchema (ACCT-01 / QUICK-0i7 ASSET)", () => {
   });
 });
 
+describe("createAccountSchema SAVINGS (ACCT-01 / D-01…D-05 / D-07 / D-15)", () => {
+  it("accepts SAVINGS with annualRatePercentMajor 16.50 and accrualDayOfMonth 15", () => {
+    const result = createAccountSchema.safeParse({
+      name: "Накопительный",
+      type: "SAVINGS",
+      currencyCode: "RUB",
+      annualRatePercentMajor: "16.50",
+      accrualDayOfMonth: 15,
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.type).toBe("SAVINGS");
+      expect(result.data.annualRatePercentMajor).toBe("16.50");
+      expect(result.data.accrualDayOfMonth).toBe(15);
+    }
+  });
+
+  it("accepts annualRatePercentMajor 0 for SAVINGS (D-02)", () => {
+    const result = createAccountSchema.safeParse({
+      name: "Ноль %",
+      type: "SAVINGS",
+      currencyCode: "RUB",
+      annualRatePercentMajor: "0",
+      accrualDayOfMonth: 1,
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.annualRatePercentMajor).toBe("0");
+    }
+  });
+
+  it("rejects SAVINGS without annualRatePercentMajor (D-02 / D-04)", () => {
+    const result = createAccountSchema.safeParse({
+      name: "Без ставки",
+      type: "SAVINGS",
+      currencyCode: "RUB",
+      accrualDayOfMonth: 15,
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects SAVINGS with empty/whitespace rate (D-02 / D-07)", () => {
+    for (const annualRatePercentMajor of ["", "   "] as const) {
+      const result = createAccountSchema.safeParse({
+        name: "Пустая ставка",
+        type: "SAVINGS",
+        currencyCode: "RUB",
+        annualRatePercentMajor,
+        accrualDayOfMonth: 15,
+      });
+      expect(result.success).toBe(false);
+    }
+  });
+
+  it("rejects SAVINGS without accrualDayOfMonth (D-04 / D-05 / D-07)", () => {
+    const result = createAccountSchema.safeParse({
+      name: "Без DOM",
+      type: "SAVINGS",
+      currencyCode: "RUB",
+      annualRatePercentMajor: "16.50",
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects negative annualRatePercentMajor for SAVINGS (D-03)", () => {
+    const result = createAccountSchema.safeParse({
+      name: "Отрицательный %",
+      type: "SAVINGS",
+      currencyCode: "RUB",
+      annualRatePercentMajor: "-1",
+      accrualDayOfMonth: 15,
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects savings fields when type is ASSET (D-15)", () => {
+    const result = createAccountSchema.safeParse({
+      name: "Актив",
+      type: "ASSET",
+      currencyCode: "RUB",
+      annualRatePercentMajor: "16.50",
+      accrualDayOfMonth: 15,
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects creditLimitMajor when type is SAVINGS (D-15)", () => {
+    const result = createAccountSchema.safeParse({
+      name: "Накопительный",
+      type: "SAVINGS",
+      currencyCode: "RUB",
+      annualRatePercentMajor: "16.50",
+      accrualDayOfMonth: 15,
+      creditLimitMajor: "1000",
+    });
+    expect(result.success).toBe(false);
+  });
+});
+
 describe("updateAccountNameSchema (ACCT-01 / D-15)", () => {
   it("accepts name only", () => {
     const result = updateAccountNameSchema.safeParse({ name: "Новое имя" });

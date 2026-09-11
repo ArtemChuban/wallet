@@ -19,4 +19,10 @@ describe("accountTypeLabel / soft-read helpers (QUICK-0i7)", () => {
     expect(isCreditType("FIAT_CREDIT")).toBe(true);
     expect(isAssetType("FIAT_CREDIT")).toBe(false);
   });
+
+  it("SAVINGS is asset soft-read with label Накопительный (D-11 / D-14 / ACCT-02 / ACCT-03)", () => {
+    expect(isAssetType("SAVINGS")).toBe(true);
+    expect(isCreditType("SAVINGS")).toBe(false);
+    expect(accountTypeLabel("SAVINGS")).toBe("Накопительный");
+  });
 });

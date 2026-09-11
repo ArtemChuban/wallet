@@ -32,6 +32,22 @@ describe("computeNetWorthRows (NW-01–03, ACCT-03)", () => {
     expect(rows[0]!.includedInTotal).toBe(true);
   });
 
+  it("SAVINGS LOCF contributes positive like ASSET (D-14 / ACCT-02)", () => {
+    const { totalPrimaryMinor, isPartial, rows } = computeNetWorthRows([
+      input({
+        id: 27,
+        // Wave 0: NetWorthAccountType lacks SAVINGS until Plan 02 — cast keeps runtime contract.
+        type: "SAVINGS" as NetWorthAccountInput["type"],
+        locfAmountMinor: 250_000n,
+      }),
+    ]);
+    expect(totalPrimaryMinor).toBe(250_000n);
+    expect(isPartial).toBe(false);
+    expect(rows[0]!.contributionPrimaryMinor).toBe(250_000n);
+    expect(rows[0]!.includedInTotal).toBe(true);
+    expect(rows[0]!.debtNativeMinor).toBeNull();
+  });
+
   it("soft-read: legacy FIAT_DEBIT still sums as asset", () => {
     const { totalPrimaryMinor, rows } = computeNetWorthRows([
       input({
