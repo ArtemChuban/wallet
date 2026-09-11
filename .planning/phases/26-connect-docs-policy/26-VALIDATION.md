@@ -1,9 +1,9 @@
 ---
 phase: "26"
 slug: "connect-docs-policy"
-status: draft
-nyquist_compliant: false
-wave_0_complete: false
+status: compliant
+nyquist_compliant: true
+wave_0_complete: true
 created: "2026-09-11"
 ---
 
@@ -40,7 +40,7 @@ created: "2026-09-11"
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
 | 26-01-01 | 01 | 0 | CLI-01 | — | Named DISOL/INISO/GRISO required in contract tests | unit | `npx vitest run src/lib/mcp/isolation-contract.test.ts` | ✅ extend | ✅ green |
 | 26-01-01b | 01 | 0 | CLI-01 | — | list_debts DESCRIPTION exports DISOL-01 | unit | `npx vitest run src/lib/mcp/tools/debts.test.ts` | ✅ update | ✅ green |
-| 26-02-* | 02 | 0 | CLI-01 | — | income/grace/forecast SIDE descriptions contain rule ids | unit | `npx vitest run src/lib/mcp/tools/income.test.ts src/lib/mcp/tools/grace.test.ts src/lib/mcp/tools/forecast.test.ts` | ✅ update | ⬜ pending |
+| 26-02-* | 02 | 0 | CLI-01 | — | income/grace/forecast SIDE descriptions contain rule ids | unit | `npx vitest run src/lib/mcp/tools/income.test.ts src/lib/mcp/tools/grace.test.ts src/lib/mcp/tools/forecast.test.ts` | ✅ update | ✅ green |
 | 26-*-* | * | * | CLI-02 | — | README has Claude+Cursor configs + URL | docs/UAT | phase UAT dual-client | ❌ UAT | ⬜ pending |
 | 26-*-* | * | * | PARITY-01 | — | AGENTS.md BEGIN/END parity block | docs | grep AGENTS.md / plan verify | ❌ create | ⬜ pending |
 
@@ -52,10 +52,10 @@ created: "2026-09-11"
 
 - [x] Flip `src/lib/mcp/isolation-contract.test.ts` — require named DISOL-01/INISO-01/GRISO-01 + `wallet_ping` annotations (was asserting absence) — **tracer-done (26-01)**
 - [x] Debts description regexes for DISOL-01 / do-not-fold — **tracer-done (26-01)**
-- [ ] Update SIDE description regexes in income/grace/forecast tests for rule ids — **Plan-02-pending**
+- [x] Update SIDE description regexes in income/grace/forecast tests for rule ids — **Plan-02-done**
 - [x] Optional fold `wallet_ping` annotation assert into isolation-contract — **tracer-done (26-01)**
 
-*wave_0_complete stays false until Plan 02 closes remaining SIDE regex bullets. Existing Vitest infrastructure covers unit verification; dual-client connect is manual UAT.*
+*wave_0_complete true after Plan 02 closed remaining SIDE regex bullets. Unit contracts Nyquist-compliant; dual-client connect remains manual UAT (CLI-02).*
 
 ---
 
@@ -71,11 +71,11 @@ created: "2026-09-11"
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 60s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 covers all MISSING references
+- [x] No watch-mode flags
+- [x] Feedback latency < 60s
+- [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** unit contracts approved (26-02); dual-client UAT still pending
