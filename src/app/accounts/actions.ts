@@ -9,7 +9,7 @@ import { dueAsOfForCycle } from "@/lib/credit-grace";
 import {
   assertGraceDomAllowedForType,
   createAccountSchema,
-  updateAccountNameSchema,
+  updateAccountSchema,
   updateGraceScheduleSchema,
 } from "@/lib/validations/account";
 import { parsePercentToBps } from "@/lib/savings-rate";
@@ -192,8 +192,11 @@ export async function createAccount(
   return { success: true, message: "Сохранено" };
 }
 
-/** Update account name only — ignore tampered type/currency/limit (D-15, T-02-01). */
-export async function updateAccountName(
+/**
+ * Update account metadata. Name always; SAVINGS also requires rate+DOM (D-06, D-08).
+ * Loads type from DB — ignores client type/currency (T-27-01). Never writes BalanceSnapshot (D-16).
+ */
+export async function updateAccount(
   _prev: AccountActionState,
   formData: FormData,
 ): Promise<AccountActionState> {
@@ -210,8 +213,22 @@ export async function updateAccountName(
     };
   }
 
-  const validated = updateAccountNameSchema.safeParse({
+  const rateRaw = formData.get("annualRatePercentMajor");
+  const annualRatePercentMajor =
+    typeof rateRaw === "string" && rateRaw.trim() !== ""
+      ? rateRaw
+      : undefined;
+
+  const accrualRaw = formData.get("accrualDayOfMonth");
+  const accrualDayOfMonth =
+    typeof accrualRaw === "string" && accrualRaw.trim() !== ""
+      ? accrualRaw
+      : undefined;
+
+  const validated = updateAccountSchema.safeParse({
     name: formData.get("name"),
+    annualRatePercentMajor,
+    accrualDayOfMonth,
   });
 
   if (!validated.success) {
@@ -220,10 +237,53 @@ export async function updateAccountName(
 
   try {
     await ensureSqlitePragmas();
-    await prisma.account.update({
+
+    const account = await prisma.account.findUnique({
       where: { id },
-      data: { name: validated.data.name },
     });
+    if (!account) {
+      return {
+        message: "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+      };
+    }
+
+    if (account.type === "SAVINGS") {
+      const rate = validated.data.annualRatePercentMajor;
+      const dom = validated.data.accrualDayOfMonth;
+      if (rate === undefined) {
+        return {
+          errors: { annualRatePercentMajor: ["Укажите годовой процент"] },
+        };
+      }
+      if (dom === undefined) {
+        return {
+          errors: { accrualDayOfMonth: ["Укажите день начисления"] },
+        };
+      }
+
+      let annualRateBps: number;
+      try {
+        annualRateBps = parsePercentToBps(rate);
+      } catch {
+        return {
+          errors: { annualRatePercentMajor: ["Некорректный процент"] },
+        };
+      }
+
+      await prisma.account.update({
+        where: { id },
+        data: {
+          name: validated.data.name,
+          annualRateBps,
+          accrualDayOfMonth: dom,
+        },
+      });
+    } else {
+      await prisma.account.update({
+        where: { id },
+        data: { name: validated.data.name },
+      });
+    }
   } catch (error) {
     if (isUniqueNameViolation(error)) {
       return { errors: { name: ["Счёт с таким названием уже есть"] } };
@@ -237,6 +297,9 @@ export async function updateAccountName(
   revalidatePath("/");
   return { success: true, message: "Сохранено" };
 }
+
+/** @deprecated Prefer updateAccount — alias for name-only / legacy callers. */
+export const updateAccountName = updateAccount;
 
 /**
  * Persist dual DOM schedule on FIAT_CREDIT only (CYCLE-01 / D-01 / D-02).

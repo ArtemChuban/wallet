@@ -135,7 +135,14 @@ export const createAccountSchema = z
     }
   });
 
-/** Update account: name only (D-15). Plan 03 extends SAVINGS edit. */
+/** Update account: name always; optional savings fields (action gates by DB type D-08). */
+export const updateAccountSchema = z.object({
+  name: accountNameSchema,
+  annualRatePercentMajor: z.string().optional(),
+  accrualDayOfMonth: optionalDayOfMonthSchema,
+});
+
+/** Name-only subset (legacy / non-SAVINGS callers). */
 export const updateAccountNameSchema = z.object({
   name: accountNameSchema,
 });
@@ -196,5 +203,6 @@ export const updateGraceScheduleSchema = z
   });
 
 export type CreateAccountInput = z.infer<typeof createAccountSchema>;
+export type UpdateAccountInput = z.infer<typeof updateAccountSchema>;
 export type UpdateAccountNameInput = z.infer<typeof updateAccountNameSchema>;
 export type UpdateGraceScheduleInput = z.infer<typeof updateGraceScheduleSchema>;
