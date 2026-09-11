@@ -1,10 +1,6 @@
 import type { McpServer } from "@modelcontextprotocol/server";
-import { z } from "zod";
 import { calendarDateToday } from "@/lib/dates";
-import {
-  optionalIncomeRangeSchema,
-  yyyyMmDdSchema,
-} from "@/lib/mcp/as-of";
+import { optionalIncomeRangeSchema } from "@/lib/mcp/as-of";
 import { loadIncome } from "@/lib/mcp/reads/load-income";
 
 /** D-08/INISO-01 Доходы side-ledger — isolation in description, not payload meta. */
@@ -18,19 +14,9 @@ export function registerListIncome(server: McpServer) {
     "list_income",
     {
       description: LIST_INCOME_DESCRIPTION,
-      inputSchema: z
-        .object({
-          from: yyyyMmDdSchema.optional(),
-          to: yyyyMmDdSchema.optional(),
-        })
-        .superRefine((val, ctx) => {
-          const parsed = optionalIncomeRangeSchema.safeParse(val);
-          if (!parsed.success) {
-            for (const issue of parsed.error.issues) {
-              ctx.addIssue(issue);
-            }
-          }
-        }),
+      // Zod 4: use shared schema directly — do not forward ZodError.$ZodIssue into ctx.addIssue
+      // (addIssue expects $ZodSuperRefineIssue; forwarding causes TS2345).
+      inputSchema: optionalIncomeRangeSchema,
       annotations: {
         readOnlyHint: true,
         openWorldHint: false,

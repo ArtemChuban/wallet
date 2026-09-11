@@ -150,4 +150,14 @@ describe("list_income (SIDE-02)", () => {
       expect(src).not.toMatch(/@\/lib\/historical-series/);
     }
   });
+
+  it("list_income uses optionalIncomeRangeSchema as inputSchema (no $ZodIssue→addIssue forward)", () => {
+    const src = readFileSync(
+      resolve(process.cwd(), "src/lib/mcp/tools/income.ts"),
+      "utf8",
+    );
+    expect(src).toMatch(/inputSchema:\s*optionalIncomeRangeSchema/);
+    expect(src).not.toMatch(/ctx\.addIssue\(\s*issue\s*\)/);
+    expect(src).not.toMatch(/parsed\.error\.issues/);
+  });
 });
