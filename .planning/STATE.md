@@ -4,11 +4,11 @@ milestone: v1.4
 milestone_name: Local MCP
 current_phase: 26
 current_phase_name: Connect Docs + Policy
-status: milestone_complete
-stopped_at: v1.4 all phases verified — ready for complete-milestone
-last_updated: "2026-09-11T10:58:00Z"
+status: milestone_audited
+stopped_at: v1.4 Nyquist 23+25 validated — ready for complete-milestone
+last_updated: "2026-09-11T11:08:00Z"
 last_activity: 2026-09-11
-last_activity_desc: Phases 23+26 UAT + security passed; v1.4 Local MCP complete
+last_activity_desc: validate-phase 23+25 — both nyquist_compliant true
 state_head: bb71523
 progress:
   total_phases: 4
@@ -25,14 +25,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-10 — v1.4 Local MCP)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** v1.4 Local MCP complete — `/gsd-complete-milestone` next
+**Current focus:** v1.4 Nyquist reconciled — `/gsd-complete-milestone v1.4`
 
 ## Current Position
 
 Phase: 26 of 26 (Connect Docs + Policy)
 Plan: 4 of 04 complete
-Status: Milestone complete — all phases verified
-Last activity: 2026-09-11 — Phase 23+26 UAT/security closed; dual-client MCP connect proved
+Status: Milestone audited; phases 23+25 VALIDATION validated / nyquist_compliant
+Last activity: 2026-09-11 — `/gsd-validate-phase 23 25` reconciled (0 new test gaps)
 
 Progress: [██████████] 100%
 
@@ -44,7 +44,7 @@ Progress: [██████████] 100%
 - Average duration: —
 - Total execution time: —
 
-**By Phase:** v1.3 complete (18–22). v1.4: Phases 23–25 complete; Phase 26 planned.
+**By Phase:** v1.3 complete (18–22). v1.4 Local MCP complete (23–26).
 
 *Updated after each plan completion*
 **Per-Plan Metrics:**
@@ -99,9 +99,9 @@ v1.4 locks (pending execution):
 
 ### Blockers/Concerns
 
-- mcp-handler export shape — verify at Phase 23 install (research flag; not blocking roadmap)
-- Cursor CLI transport string — smoke in Phase 26; `mcp-remote` only on real fail
-- Nyquist VALIDATION still draft on archived phases 19–22 (carry-forward tech debt)
+- None blocking v1.4 ship
+- Nyquist VALIDATION still draft on archived phases 19–22 (carry-forward)
+- 26-VERIFICATION body UAT-pending note stale vs 26-UAT complete
 
 ### Roadmap Evolution
 
@@ -126,6 +126,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-11T10:41:23.632Z
-Stopped at: Phase 23 complete, ready to plan Phase 24
-Resume file: .planning/phases/26-connect-docs-policy/26-UAT.md
+Last session: 2026-09-11T11:08:00Z
+Stopped at: validate-phase 23+25 done — next /gsd-complete-milestone v1.4
+Resume file: .planning/v1.4-MILESTONE-AUDIT.md
