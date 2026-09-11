@@ -5,10 +5,10 @@ milestone_name: Сберегательный счет (Phases 27–30)
 current_phase: 27
 current_phase_name: SAVINGS schema + CRUD
 status: planning
-stopped_at: Phase 27 research complete
-last_updated: "2026-09-11T15:46:00.000Z"
+stopped_at: Phase 27 UI-SPEC draft
+last_updated: "2026-09-11T15:50:00.000Z"
 last_activity: 2026-09-11
-last_activity_desc: Phase 27 RESEARCH.md written
+last_activity_desc: Phase 27 UI-SPEC.md written
 state_head: 7ac1624fe70c2e8c0ffdf17ac8534d9c625686a3
 progress:
   total_phases: 4
@@ -31,8 +31,8 @@ See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательн�
 
 Phase: 27 of 30 (SAVINGS schema + CRUD)
 Plan: —
-Status: Ready to plan (research done)
-Last activity: 2026-09-11 — Phase 27 RESEARCH.md complete
+Status: Ready to plan (research + UI-SPEC draft)
+Last activity: 2026-09-11 — Phase 27 UI-SPEC.md draft complete
 
 Progress: [░░░░░░░░░░] 0%
 
