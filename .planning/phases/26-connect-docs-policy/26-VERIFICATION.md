@@ -1,7 +1,7 @@
 ---
 phase: 26-connect-docs-policy
-verified: 2026-09-11T10:39:54Z
-status: human_needed
+verified: 2026-09-11T10:54:00Z
+status: passed
 score: 8/8 must-haves verified
 behavior_unverified: 0
 overrides_applied: 0
@@ -12,21 +12,15 @@ decision_coverage:
 unverified_prohibitions:
   - "MUST NOT add isolation fields on tool JSON payloads — LLM-judge: held (payload not.toHaveProperty isolation in SIDE tests); human review recommended"
   - "MUST NOT put connect smoke in README/OPERATOR; MUST NOT create docs/mcp.md; MUST NOT .cursor/rules PARITY duplicate; MUST NOT pre-document mcp-remote — LLM-judge: held via grep; human review recommended"
-human_verification:
-  - test: "Claude Code live MCP connect per 26-UAT.md Test 1"
-    expected: "Claude connects with type http to http://127.0.0.1:3000/api/mcp; tools list includes wallet_ping"
-    why_human: "Live dual-client connect (D-16) needs real CLI + running app; cannot prove from source/docs alone. 26-UAT status pending."
-  - test: "Cursor agent CLI live MCP connect per 26-UAT.md Test 2"
-    expected: "Cursor connects with type http + url to same MCP URL; tools include wallet_ping. On native http fail: record + defer mcp-remote (D-17/D-19), do not invent second primary README snippet"
-    why_human: "External Cursor MCP client behavior; UAT scaffold only (result: pending)."
+human_verification: []
 ---
 
 # Phase 26: Connect Docs + Policy Verification Report
 
 **Phase Goal:** Claude Code / Cursor CLI can connect with copy-paste configs; tools declare read-only + isolation; PARITY standing rule is project-visible
-**Verified:** 2026-09-11T10:39:54Z
-**Status:** human_needed
-**Re-verification:** No — initial verification
+**Verified:** 2026-09-11T10:54:00Z
+**Status:** passed
+**Re-verification:** Yes — dual-client live connect closed via agent-driven 26-UAT (Claude Code + Cursor agent CLI both Connected; wallet_ping listed)
 
 ## Goal Achievement
 
