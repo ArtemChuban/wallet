@@ -119,7 +119,7 @@ Each task was committed atomically:
 2. **Task 2: Forecast INISO/GRISO + CAP polish** - `3f06f49` (test) → `ad727dc` (feat)
 3. **Task 3: Full mcp suite + VALIDATION nyquist** - `2fd821a` (chore)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `b6112da` (docs: complete plan)
 
 ## Files Created/Modified
 
