@@ -184,6 +184,84 @@ describe("createAccount types (ACCT-01)", () => {
       },
     });
   });
+
+  it("persists SAVINGS annualRateBps + accrualDayOfMonth (ACCT-01 / D-01 / D-04)", async () => {
+    const formData = new FormData();
+    formData.set("name", "Накопительный");
+    formData.set("type", "SAVINGS");
+    formData.set("currencyCode", "RUB");
+    formData.set("annualRatePercentMajor", "16.50");
+    formData.set("accrualDayOfMonth", "15");
+
+    const result = await createAccount({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.account.create).toHaveBeenCalledWith({
+      data: {
+        name: "Накопительный",
+        type: "SAVINGS",
+        currencyCode: "RUB",
+        creditLimitMinor: null,
+        annualRateBps: 1650,
+        accrualDayOfMonth: 15,
+      },
+    });
+  });
+
+  it("persists SAVINGS annualRateBps 0 when percent is 0 (D-02)", async () => {
+    const formData = new FormData();
+    formData.set("name", "Ноль %");
+    formData.set("type", "SAVINGS");
+    formData.set("currencyCode", "RUB");
+    formData.set("annualRatePercentMajor", "0");
+    formData.set("accrualDayOfMonth", "1");
+
+    const result = await createAccount({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.account.create).toHaveBeenCalledWith({
+      data: {
+        name: "Ноль %",
+        type: "SAVINGS",
+        currencyCode: "RUB",
+        creditLimitMinor: null,
+        annualRateBps: 0,
+        accrualDayOfMonth: 1,
+      },
+    });
+  });
+});
+
+/**
+ * Plan 03 owns update SAVINGS + D-16 no-BalanceSnapshot — Wave 0 plants
+ * contracts as todo/skip only (Phase 20 poison-fix: no hard-fail cross-wave).
+ * Plan 03 unskips / converts these to real expects.
+ */
+describe.skip("updateAccount SAVINGS — owned by Plan 03 (D-08 / D-16)", () => {
+  it("updates SAVINGS name + annualRateBps + accrualDayOfMonth together", async () => {
+    // Coherent updateAccount (or evolved updateAccountName) — Plan 03 greens.
+    const formData = new FormData();
+    formData.set("id", "9");
+    formData.set("name", "Накопительный v2");
+    formData.set("annualRatePercentMajor", "12.00");
+    formData.set("accrualDayOfMonth", "10");
+    // Expect: prisma.account.update with name + annualRateBps 1200 + DOM 10
+    expect(prisma.account.update).toHaveBeenCalled();
+  });
+
+  it("does not call BalanceSnapshot on SAVINGS metadata update (D-16)", async () => {
+    expect(prisma.balanceSnapshot.upsert).not.toHaveBeenCalled();
+    expect(prisma.balanceSnapshot.delete).not.toHaveBeenCalled();
+  });
+});
+
+describe("updateAccount SAVINGS Plan-03 todos (D-08 / D-16)", () => {
+  it.todo(
+    "Plan 03: updateAccount SAVINGS persists name + annualRateBps + accrualDayOfMonth",
+  );
+  it.todo(
+    "Plan 03: updateAccount SAVINGS metadata never writes BalanceSnapshot (D-16)",
+  );
 });
 
 describe("upsertBalanceSnapshot (BAL-01 / D-09 / D-12)", () => {
