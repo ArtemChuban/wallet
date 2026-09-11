@@ -21,6 +21,44 @@ docker compose down
 
 SQLite file `./data/wallet.db` remains on the host (bind mount `./data:/data`, `DATABASE_URL=file:/data/wallet.db` in the container).
 
+## MCP (Claude Code / Cursor)
+
+Wallet must already be running on `127.0.0.1:3000` (Quick start above).
+
+### Claude Code
+
+```bash
+claude mcp add --transport http wallet http://127.0.0.1:3000/api/mcp
+```
+
+Or add to Claude MCP config:
+
+```json
+{
+  "mcpServers": {
+    "wallet": {
+      "type": "http",
+      "url": "http://127.0.0.1:3000/api/mcp"
+    }
+  }
+}
+```
+
+### Cursor
+
+Project `.cursor/mcp.json` or user `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "wallet": {
+      "type": "http",
+      "url": "http://127.0.0.1:3000/api/mcp"
+    }
+  }
+}
+```
+
 ## Host data contract
 
 | Path | Role |
