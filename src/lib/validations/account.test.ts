@@ -3,6 +3,7 @@ import {
   assertGraceDomAllowedForType,
   createAccountSchema,
   updateAccountNameSchema,
+  updateAccountSchema,
   updateGraceScheduleSchema,
 } from "./account";
 
@@ -265,6 +266,53 @@ describe("updateAccountNameSchema (ACCT-01 / D-15)", () => {
   it("rejects empty name", () => {
     expect(updateAccountNameSchema.safeParse({ name: "" }).success).toBe(false);
     expect(updateAccountNameSchema.safeParse({ name: "  " }).success).toBe(false);
+  });
+});
+
+describe("updateAccountSchema (ACCT-01 / D-06 / D-08)", () => {
+  it("accepts name + rate + DOM for SAVINGS edit payload", () => {
+    const result = updateAccountSchema.safeParse({
+      name: "Накопительный v2",
+      annualRatePercentMajor: "12.00",
+      accrualDayOfMonth: 10,
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.name).toBe("Накопительный v2");
+      expect(result.data.annualRatePercentMajor).toBe("12.00");
+      expect(result.data.accrualDayOfMonth).toBe(10);
+    }
+  });
+
+  it("accepts name-only (non-SAVINGS edit; action ignores savings cols)", () => {
+    const result = updateAccountSchema.safeParse({ name: "Актив" });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.name).toBe("Актив");
+      expect(result.data.annualRatePercentMajor).toBeUndefined();
+      expect(result.data.accrualDayOfMonth).toBeUndefined();
+    }
+  });
+
+  it("rejects empty name", () => {
+    expect(updateAccountSchema.safeParse({ name: "" }).success).toBe(false);
+  });
+
+  it("rejects DOM outside 1–31", () => {
+    expect(
+      updateAccountSchema.safeParse({
+        name: "x",
+        annualRatePercentMajor: "1",
+        accrualDayOfMonth: 0,
+      }).success,
+    ).toBe(false);
+    expect(
+      updateAccountSchema.safeParse({
+        name: "x",
+        annualRatePercentMajor: "1",
+        accrualDayOfMonth: 32,
+      }).success,
+    ).toBe(false);
   });
 });
 

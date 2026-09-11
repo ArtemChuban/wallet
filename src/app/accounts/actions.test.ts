@@ -58,6 +58,7 @@ import {
   closeCreditGraceObligation,
   deleteBalanceSnapshot,
   reopenCreditGraceObligation,
+  updateAccount,
   updateAccountName,
   updateCreditGraceObligation,
   updateGraceSchedule,
@@ -70,6 +71,7 @@ describe("accounts/actions exports (D-14 / T-02-10)", () => {
     expect(names).toEqual(
       expect.arrayContaining([
         "createAccount",
+        "updateAccount",
         "updateAccountName",
         "updateGraceSchedule",
         "upsertBalanceSnapshot",
@@ -91,6 +93,12 @@ describe("updateAccountName immutability (D-15 / T-02-01)", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+    vi.mocked(prisma.account.findUnique).mockResolvedValue({
+      id: 7,
+      name: "Старое",
+      type: "ASSET",
+      currencyCode: "RUB",
+    } as never);
     vi.mocked(prisma.account.update).mockResolvedValue({} as never);
   });
 
@@ -102,10 +110,13 @@ describe("updateAccountName immutability (D-15 / T-02-01)", () => {
     formData.set("currencyCode", "USDT");
     formData.set("creditLimitMajor", "99999");
     formData.set("creditLimitMinor", "99999");
+    formData.set("annualRatePercentMajor", "99");
+    formData.set("accrualDayOfMonth", "1");
 
     const result = await updateAccountName({}, formData);
 
     expect(result.success).toBe(true);
+    expect(prisma.account.findUnique).toHaveBeenCalledWith({ where: { id: 7 } });
     expect(prisma.account.update).toHaveBeenCalledTimes(1);
     expect(prisma.account.update).toHaveBeenCalledWith({
       where: { id: 7 },
@@ -232,36 +243,93 @@ describe("createAccount types (ACCT-01)", () => {
   });
 });
 
-/**
- * Plan 03 owns update SAVINGS + D-16 no-BalanceSnapshot — Wave 0 plants
- * contracts as todo/skip only (Phase 20 poison-fix: no hard-fail cross-wave).
- * Plan 03 unskips / converts these to real expects.
- */
-describe.skip("updateAccount SAVINGS — owned by Plan 03 (D-08 / D-16)", () => {
+describe("updateAccount SAVINGS (D-08 / D-16 / ACCT-01)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+    vi.mocked(prisma.account.findUnique).mockResolvedValue({
+      id: 9,
+      name: "Накопительный",
+      type: "SAVINGS",
+      currencyCode: "RUB",
+      annualRateBps: 1650,
+      accrualDayOfMonth: 15,
+    } as never);
+    vi.mocked(prisma.account.update).mockResolvedValue({} as never);
+  });
+
   it("updates SAVINGS name + annualRateBps + accrualDayOfMonth together", async () => {
-    // Coherent updateAccount (or evolved updateAccountName) — Plan 03 greens.
     const formData = new FormData();
     formData.set("id", "9");
     formData.set("name", "Накопительный v2");
     formData.set("annualRatePercentMajor", "12.00");
     formData.set("accrualDayOfMonth", "10");
-    // Expect: prisma.account.update with name + annualRateBps 1200 + DOM 10
-    expect(prisma.account.update).toHaveBeenCalled();
+    formData.set("type", "ASSET");
+    formData.set("currencyCode", "USD");
+
+    const result = await updateAccount({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.account.update).toHaveBeenCalledWith({
+      where: { id: 9 },
+      data: {
+        name: "Накопительный v2",
+        annualRateBps: 1200,
+        accrualDayOfMonth: 10,
+      },
+    });
+    const data = vi.mocked(prisma.account.update).mock.calls[0]![0]!.data;
+    expect(Object.keys(data as object).sort()).toEqual(
+      ["accrualDayOfMonth", "annualRateBps", "name"].sort(),
+    );
   });
 
   it("does not call BalanceSnapshot on SAVINGS metadata update (D-16)", async () => {
+    const formData = new FormData();
+    formData.set("id", "9");
+    formData.set("name", "Накопительный v2");
+    formData.set("annualRatePercentMajor", "12.00");
+    formData.set("accrualDayOfMonth", "10");
+
+    const result = await updateAccount({}, formData);
+
+    expect(result.success).toBe(true);
     expect(prisma.balanceSnapshot.upsert).not.toHaveBeenCalled();
     expect(prisma.balanceSnapshot.delete).not.toHaveBeenCalled();
   });
-});
 
-describe("updateAccount SAVINGS Plan-03 todos (D-08 / D-16)", () => {
-  it.todo(
-    "Plan 03: updateAccount SAVINGS persists name + annualRateBps + accrualDayOfMonth",
-  );
-  it.todo(
-    "Plan 03: updateAccount SAVINGS metadata never writes BalanceSnapshot (D-16)",
-  );
+  it("rejects empty rate or DOM on SAVINGS update (D-06)", async () => {
+    for (const payload of [
+      { annualRatePercentMajor: "", accrualDayOfMonth: "10" },
+      { annualRatePercentMajor: "12.00", accrualDayOfMonth: "" },
+      { annualRatePercentMajor: "12.00" },
+      { accrualDayOfMonth: "10" },
+    ] as const) {
+      vi.mocked(prisma.account.update).mockClear();
+      const formData = new FormData();
+      formData.set("id", "9");
+      formData.set("name", "Накопительный v2");
+      if ("annualRatePercentMajor" in payload) {
+        formData.set(
+          "annualRatePercentMajor",
+          payload.annualRatePercentMajor as string,
+        );
+      }
+      if ("accrualDayOfMonth" in payload) {
+        formData.set("accrualDayOfMonth", payload.accrualDayOfMonth as string);
+      }
+
+      const result = await updateAccount({}, formData);
+
+      expect(result.success).toBeUndefined();
+      expect(prisma.account.update).not.toHaveBeenCalled();
+      expect(
+        result.errors?.annualRatePercentMajor?.[0] ||
+          result.errors?.accrualDayOfMonth?.[0] ||
+          result.message,
+      ).toBeTruthy();
+    }
+  });
 });
 
 describe("upsertBalanceSnapshot (BAL-01 / D-09 / D-12)", () => {
