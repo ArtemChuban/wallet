@@ -5,11 +5,11 @@ milestone_name: Сберегательный счет (Phases 27–30)
 current_phase: 27
 current_phase_name: SAVINGS schema + CRUD
 status: in_progress
-stopped_at: Completed 27-04-PLAN.md
-last_updated: "2026-09-11T16:28:38.267Z"
+stopped_at: Phase 27 UAT passed
+last_updated: "2026-09-11T16:42:47.322Z"
 last_activity: 2026-09-11
 last_activity_desc: Phase 27 Plan 01 Wave 0 red contracts complete
-state_head: 0d5db9ca480e107c6aceaed34563dc1e9eb783a0
+state_head: 8b4c193430f95550bb0060da2901dab8ff161b95
 progress:
   total_phases: 4
   completed_phases: 0
@@ -117,9 +117,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-11T16:28:38.241Z
-Stopped at: Completed 27-04-PLAN.md
-Resume file: None
+Last session: 2026-09-11T16:42:47.258Z
+Stopped at: Phase 27 UAT passed
+Resume file: .planning/phases/27-savings-schema-crud/27-UAT.md
 
 ## Operator Next Steps
 

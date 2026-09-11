@@ -1,12 +1,33 @@
 {
   "contract": "1.0.0",
   "flavor": "core",
-  "milestone": "v1.5",
-  "phases": [],
+  "milestone": "v1.5 — Сберегательный счет (Phases 27–30)",
+  "phases": [
+    {
+      "number": "27",
+      "name": "SAVINGS schema + CRUD",
+      "status": "in_progress"
+    },
+    {
+      "number": "28",
+      "name": "Interest math + forecast kind",
+      "status": "pending"
+    },
+    {
+      "number": "29",
+      "name": "Капитал overlay + SAVISO",
+      "status": "pending"
+    },
+    {
+      "number": "30",
+      "name": "MCP PARITY + verify",
+      "status": "pending"
+    }
+  ],
   "next": {
-    "command": "/gsd:discuss-phase",
-    "label": "Discuss the first phase",
-    "reason": "Project initialized — plan your first phase"
+    "command": "/gsd:progress --next",
+    "label": "Advance to the next step",
+    "reason": "Phase 27 of 4 · 0% · executing"
   },
-  "updated_at": "2026-09-11T12:31:53.770Z"
+  "updated_at": "2026-09-11T16:24:30.346Z"
 }
