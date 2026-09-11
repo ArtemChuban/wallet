@@ -84,7 +84,7 @@ status: complete
 1. **Task 1: Insert English README MCP section after Quick start** - `4c12c82` (docs)
 2. **Task 2: Guard README MCP section against smoke and policy bleed** - verify-only (no diff; already clean)
 
-**Plan metadata:** (pending final docs commit)
+**Plan metadata:** `96fd3ae` (docs: complete plan)
 
 ## Files Created/Modified
 
