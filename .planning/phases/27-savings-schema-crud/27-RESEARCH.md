@@ -435,14 +435,14 @@ model Account {
 
 **If this table is empty:** — not empty; confirm A1–A2 only if UAT copy feels wrong.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **MCP timing vs AGENTS.md parity wording**
+1. **MCP timing vs AGENTS.md parity wording** — RESOLVED: no MCP in Phase 27; MCP-01/PARITY-01 stay Phase 30 (matches 27 plans).
    - What we know: CONTEXT + REQUIREMENTS map MCP-01/PARITY-01 → Phase 30; Phase 27 UI will show rate/DOM.
    - What's unclear: Whether any interim MCP stub is desired mid-milestone.
    - Recommendation: **Do not** implement MCP in Phase 27 plans; Phase 30 closes parity in same milestone.
 
-2. **Edit description string for non-SAVINGS**
+2. **Edit description string for non-SAVINGS** — RESOLVED: use «Тип и валюта не меняются.» (Plan 03 / D-09; no field inventory).
    - What we know: D-09 locks title «Изменить счёт»; forbids listing fields.
    - What's unclear: Exact muted description when only name is editable.
    - Recommendation: Short generic e.g. «Тип и валюта не меняются.» (discretion) — no field inventory.

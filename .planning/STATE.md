@@ -5,10 +5,10 @@ milestone_name: Сберегательный счет (Phases 27–30)
 current_phase: 27
 current_phase_name: SAVINGS schema + CRUD
 status: planned
-stopped_at: Phase 27 plans written (27-01…04)
-last_updated: "2026-09-11T15:57:56.764Z"
+stopped_at: Phase 27 plans revised (checker blockers)
+last_updated: "2026-09-11T16:05:00.000Z"
 last_activity: 2026-09-11
-last_activity_desc: Phase 27 PLAN.md set created (4 plans)
+last_activity_desc: Phase 27 plan-checker revision (verify poison + RESEARCH RESOLVED)
 state_head: 7ac1624fe70c2e8c0ffdf17ac8534d9c625686a3
 progress:
   total_phases: 4
@@ -31,8 +31,8 @@ See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательн�
 
 Phase: 27 of 30 (SAVINGS schema + CRUD)
 Plan: 27-01 … 27-04
-Status: Ready to execute (4 plans)
-Last activity: 2026-09-11 — Phase 27 plans written
+Status: Planned — checker revision applied; re-check then execute
+Last activity: 2026-09-11 — Phase 27 plans revised for PLAN-CHECK blockers
 
 Progress: [░░░░░░░░░░] 0%
 
