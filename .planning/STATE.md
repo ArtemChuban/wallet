@@ -5,16 +5,16 @@ milestone_name: Сберегательный счет (Phases 27–30)
 current_phase: 27
 current_phase_name: SAVINGS schema + CRUD
 status: in_progress
-stopped_at: Completed 27-03-PLAN.md
-last_updated: "2026-09-11T16:24:31.296Z"
+stopped_at: Completed 27-04-PLAN.md
+last_updated: "2026-09-11T16:28:38.267Z"
 last_activity: 2026-09-11
 last_activity_desc: Phase 27 Plan 01 Wave 0 red contracts complete
-state_head: 68d286be2c4305bf00f39aa9dc5d80f580337a8b
+state_head: 0d5db9ca480e107c6aceaed34563dc1e9eb783a0
 progress:
   total_phases: 4
   completed_phases: 0
   total_plans: 4
-  completed_plans: 3
+  completed_plans: 4
   percent: 0
 ---
 
@@ -62,6 +62,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 27 P01 | 3min | 2 tasks | 5 files |
 | Phase 27 P02 | 4min | 3 tasks | 10 files |
 | Phase 27 P03 | 4min | 2 tasks | 7 files |
+| Phase 27 P04 | 3min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -76,6 +77,9 @@ Decisions are logged in PROJECT.md Key Decisions table. v1.5 locks from scoping/
 - [Phase 27]: Single updateAccount action; updateAccountName kept as alias
 - [Phase 27]: Zod updateAccountSchema optional rate/DOM; SAVINGS requiredness after findUnique
 - [Phase 27]: Page/list pass annualRateBps+DOM for edit prefill (countdown Plan 04)
+- [Phase 27]: formatAccrualCountdown(today, nextAsOf) two-arg; days via UTC calendar delta
+- [Phase 27]: page.tsx rate/DOM serialize from 27-03; 27-04 wired list secondary only
+- [Phase 27]: No interest ÷12 / auto snapshot writer (Phases 28–30)
 
 ### Pending Todos
 
@@ -113,8 +117,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-11T16:24:31.273Z
-Stopped at: Completed 27-03-PLAN.md
+Last session: 2026-09-11T16:28:38.241Z
+Stopped at: Completed 27-04-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
