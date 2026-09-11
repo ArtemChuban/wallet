@@ -179,9 +179,10 @@ describe("list_debts (SIDE-01)", () => {
     expect(nw.rows[0]).toHaveProperty("debtNativeMinor");
   });
 
-  it("list_debts description has D-08 side-ledger one-liner; loader uses domain totals", () => {
-    expect(LIST_DEBTS_DESCRIPTION).toMatch(/Side ledger \(Долги\)/);
-    expect(LIST_DEBTS_DESCRIPTION).toMatch(/not historical net worth/);
+  it("list_debts description has D-08/DISOL-01 side-ledger one-liner; loader uses domain totals", () => {
+    expect(LIST_DEBTS_DESCRIPTION).toMatch(/DISOL-01/);
+    expect(LIST_DEBTS_DESCRIPTION).toMatch(/do not fold/);
+    expect(LIST_DEBTS_DESCRIPTION).toMatch(/historical NW|historical net worth/);
     const loader = readFileSync(
       resolve(process.cwd(), "src/lib/mcp/reads/load-debts.ts"),
       "utf8",

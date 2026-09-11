@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 /**
  * D-05 thin MCP isolation wall across SIDE tool + read adapters.
  * Never-write BalanceSnapshot mutates; never import app route actions modules.
- * Named DISOL/INISO/GRISO essay prose stays Phase 26 - this is source contract only.
+ * Phase 26 CLI-01: named DISOL/INISO/GRISO + wallet_ping annotations required.
  */
 const SIDE_MCP_SOURCES = [
   "src/lib/mcp/tools/debts.ts",
@@ -58,7 +58,18 @@ describe("SIDE MCP isolation-contract (D-05)", () => {
     expect(src).toMatch(/registerListGraceObligations/);
     expect(src).not.toMatch(/come later/i);
     expect(src).not.toMatch(/list_grace_obligations next/);
-    // No named essay keys in instructions this phase
-    expect(src).not.toMatch(/DISOL-01|INISO-01|GRISO-01/);
+    // Phase 26 CLI-01: named isolation rules required in instructions
+    expect(src).toMatch(/DISOL-01/);
+    expect(src).toMatch(/INISO-01/);
+    expect(src).toMatch(/GRISO-01/);
+  });
+
+  it("wallet_ping declares readOnlyHint true and openWorldHint false (D-10)", () => {
+    const src = readFileSync(
+      resolve(process.cwd(), "src/lib/mcp/tools/wallet-ping.ts"),
+      "utf8",
+    );
+    expect(src).toMatch(/readOnlyHint:\s*true/);
+    expect(src).toMatch(/openWorldHint:\s*false/);
   });
 });
