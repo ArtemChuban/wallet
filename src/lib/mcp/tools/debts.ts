@@ -3,12 +3,12 @@ import { z } from "zod";
 import { calendarDateToday } from "@/lib/dates";
 import { loadDebts } from "@/lib/mcp/reads/load-debts";
 
-/** D-08 Долги side-ledger one-liner — isolation in description, not payload meta. */
+/** D-08/DISOL-01 Долги side-ledger — isolation in description, not payload meta. */
 export const LIST_DEBTS_DESCRIPTION =
   "List Долги / debts with remainingMinor and colocated primary totals " +
   "(iOwePrimaryMinor / theyOwePrimaryMinor / isPartial). " +
   "Optional includeClosed (default false = OPEN only, DebtsList focus). " +
-  "Side ledger (Долги); not historical net worth / Капитал LOCF.";
+  "DISOL-01: Долги side ledger — do not fold into historical NW / Капитал LOCF.";
 
 export function registerListDebts(server: McpServer) {
   server.registerTool(

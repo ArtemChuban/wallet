@@ -7,6 +7,10 @@ export function registerWalletPing(server: McpServer) {
     {
       description: "Liveness check for wallet MCP transport",
       inputSchema: z.object({}),
+      annotations: {
+        readOnlyHint: true,
+        openWorldHint: false,
+      },
     },
     async () => {
       const payload = {

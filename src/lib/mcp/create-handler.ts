@@ -28,10 +28,11 @@ export function createWalletMcpHandler() {
             "list_fx_rates is transparency only, not a currency converter; " +
             "do not multiply rates — primary amounts come from get_net_worth / get_account_balance. " +
             "SIDE: get_forecast_overlay, list_debts, list_income, list_grace_obligations. " +
-            "Капитал forecast overlay (Прогноз): income + A′ grace; not historical NW LOCF. " +
-            "list_debts is Долги side ledger — not historical NW. " +
-            "list_income is Доходы side ledger — not historical NW. " +
-            "list_grace_obligations is Грейс side ledger — not historical NW.",
+            "INISO-01/GRISO-01: Капитал forecast overlay (Прогноз) is income + A′ grace — " +
+            "do not fold into historical NW LOCF. " +
+            "DISOL-01: Долги side ledger — do not fold into historical NW / Капитал LOCF. " +
+            "INISO-01: Доходы side ledger — do not fold into historical NW / Капитал LOCF. " +
+            "GRISO-01: Грейс side ledger — do not fold into historical NW / Капитал LOCF.",
         },
       );
       registerWalletPing(server);
