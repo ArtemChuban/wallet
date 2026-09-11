@@ -4,17 +4,17 @@ milestone: v1.4
 milestone_name: Local MCP
 current_phase: 26
 current_phase_name: Connect Docs + Policy
-status: planned
-stopped_at: Completed 26-02-PLAN.md
-last_updated: "2026-09-11T10:31:54.442Z"
+status: verifying
+stopped_at: Completed 26-04-PLAN.md
+last_updated: "2026-09-11T10:36:30.453Z"
 last_activity: 2026-09-11
 last_activity_desc: Phase 26 planned — 4 plans across 3 waves
-state_head: 2fd821aedbc3a71c7feb9788d27431e17b2d3466
+state_head: 83b75048f9a27a7392b6dd3626122177e140d78f
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 14
-  completed_plans: 13
+  completed_plans: 14
   percent: 50
 ---
 
@@ -31,7 +31,7 @@ See: .planning/PROJECT.md (updated 2026-09-10 — v1.4 Local MCP)
 
 Phase: 26 of 26 (Connect Docs + Policy)
 Plan: 4 of 04 (not started)
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-09-11 — Phase 26 plans created (4 plans / 3 waves)
 
 Progress: [█████░░░░░] 50%
@@ -58,6 +58,7 @@ Progress: [█████░░░░░] 50%
 | Phase 26 P01 | 2min | 2 tasks | 6 files |
 | Phase 26 P03 | 4min | 2 tasks | 1 files |
 | Phase 26 P02 | 3min | 3 tasks | 11 files |
+| Phase 26 P04 | 2min | 3 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -88,6 +89,9 @@ v1.4 locks (pending execution):
 - [Phase 26]: Forecast overlay uses combined INISO-01/GRISO-01 sentence — no FORECAST-01
 - [Phase 26]: CAP polish is accounts-only / transparency / do-not-multiply only — no SIDE rule ids
 - [Phase 26]: wave_0_complete + nyquist_compliant true after full mcp suite green
+- [Phase 26]: PARITY-01 vehicle = AGENTS.md BEGIN/END only (D-12/D-13); no .cursor/rules
+- [Phase 26]: mcp-remote mentioned only in UAT deferred_on_http_fail — not pre-documented
+- [Phase 26]: Constraints MCP parity sentence retained while Active checkboxes marked [x]
 
 ### Pending Todos
 
@@ -122,6 +126,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-11T10:31:54.340Z
-Stopped at: Completed 26-02-PLAN.md
+Last session: 2026-09-11T10:36:30.324Z
+Stopped at: Completed 26-04-PLAN.md
 Resume file: None
