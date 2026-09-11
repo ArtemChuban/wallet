@@ -29,7 +29,7 @@ Requirements for this milestone. Each maps to roadmap phases.
 ### Client / policy
 
 - [x] **CLI-01**: MCP tools declare `readOnlyHint` and isolation rules (DISOL/INISO/GRISO) in server/tool descriptions
-- [ ] **CLI-02**: Docs show Claude Code and Cursor CLI how to connect to the localhost MCP URL (copy-paste configs; app must already be running)
+- [x] **CLI-02**: Docs show Claude Code and Cursor CLI how to connect to the localhost MCP URL (copy-paste configs; app must already be running)
 - [ ] **PARITY-01**: Standing project rule — any new user-visible read surface ships matching MCP read tool(s) in the same milestone/phase (recorded in PROJECT Constraints)
 
 ## Future Requirements
@@ -79,7 +79,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | SIDE-03 | Phase 25 | Complete |
 | SIDE-04 | Phase 25 | Complete |
 | CLI-01 | Phase 26 | Complete |
-| CLI-02 | Phase 26 | Pending |
+| CLI-02 | Phase 26 | Complete |
 | PARITY-01 | Phase 26 | Pending |
 
 **Coverage:**

@@ -5,16 +5,16 @@ milestone_name: Local MCP
 current_phase: 26
 current_phase_name: Connect Docs + Policy
 status: planned
-stopped_at: Completed 26-01-PLAN.md
-last_updated: "2026-09-11T10:24:38.269Z"
+stopped_at: Completed 26-03-PLAN.md
+last_updated: "2026-09-11T10:26:54.071Z"
 last_activity: 2026-09-11
 last_activity_desc: Phase 26 planned — 4 plans across 3 waves
-state_head: 54be823032bd58de44c8a5b8f468379f7b0bc1fd
+state_head: 4c12c825602b95e22180fd0bafa6fdf41680e1d8
 progress:
   total_phases: 4
   completed_phases: 2
   total_plans: 14
-  completed_plans: 11
+  completed_plans: 12
   percent: 50
 ---
 
@@ -30,7 +30,7 @@ See: .planning/PROJECT.md (updated 2026-09-10 — v1.4 Local MCP)
 ## Current Position
 
 Phase: 26 of 26 (Connect Docs + Policy)
-Plan: 2 of 04 (not started)
+Plan: 3 of 04 (not started)
 Status: Ready to execute
 Last activity: 2026-09-11 — Phase 26 plans created (4 plans / 3 waves)
 
@@ -56,6 +56,7 @@ Progress: [█████░░░░░] 50%
 | Phase 25 P03 | 4min | 2 tasks | 4 files |
 | Phase 25 P04 | 5min | 3 tasks | 8 files |
 | Phase 26 P01 | 2min | 2 tasks | 6 files |
+| Phase 26 P03 | 4min | 2 tasks | 1 files |
 
 ## Accumulated Context
 
@@ -82,6 +83,7 @@ v1.4 locks (pending execution):
 - [Phase 25]: D-08 one-liners in descriptions + instructions only — no payload meta; no named essay
 - [Phase 26]: Forecast overlay cites combined INISO-01/GRISO-01 in create-handler instructions
 - [Phase 26]: wave_0_complete stays false until Plan 02 income/grace/forecast regexes
+- [Phase 26]: README MCP: Claude transport http + Cursor type http/url for 127.0.0.1:3000/api/mcp; no smoke/PARITY/mcp-remote
 
 ### Pending Todos
 
@@ -116,6 +118,6 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-11T10:24:38.152Z
-Stopped at: Completed 26-01-PLAN.md
+Last session: 2026-09-11T10:26:53.965Z
+Stopped at: Completed 26-03-PLAN.md
 Resume file: None

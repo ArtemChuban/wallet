@@ -146,13 +146,13 @@ Plans:
   2. Docs show Claude Code (`type: http`) and Cursor (`url`) copy-paste configs for the localhost MCP URL, with prerequisite that the wallet app is already running
   3. PARITY-01 is materialized as a standing project constraint/rule so any new user-visible read surface ships matching MCP read tool(s) in the same milestone/phase
 
-**Plans**: 1/4 plans executed
+**Plans**: 2/4 plans executed
 
 Plans:
 
 - [x] 26-01-PLAN.md — CLI-01 tracer: flip isolation-contract, annotate wallet_ping, named instructions + list_debts DISOL
 - [ ] 26-02-PLAN.md — CLI-01 expand: income/grace/forecast named prose + CAP polish + full mcp suite
-- [ ] 26-03-PLAN.md — CLI-02 README Claude/Cursor copy-paste configs after Quick start
+- [x] 26-03-PLAN.md — CLI-02 README Claude/Cursor copy-paste configs after Quick start
 - [ ] 26-04-PLAN.md — PARITY-01 AGENTS block + PROJECT/REQUIREMENTS close-out + 26-UAT dual-client scaffold
 
 ## Progress
@@ -184,4 +184,4 @@ Plans:
 | 23. MCP Host + Localhost Safety | v1.4 | 2/2 | Complete | 2026-09-10 |
 | 24. Capital Read Tools | v1.4 | 4/4 | Complete    | 2026-09-10 |
 | 25. Side-Ledger Tools + Isolation | v1.4 | 4/4 | Complete    | 2026-09-10 |
-| 26. Connect Docs + Policy | v1.4 | 1/4 | In Progress|  |
+| 26. Connect Docs + Policy | v1.4 | 2/4 | In Progress|  |
