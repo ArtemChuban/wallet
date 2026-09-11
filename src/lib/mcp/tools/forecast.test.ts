@@ -179,7 +179,10 @@ describe("get_forecast_overlay (SIDE-04)", () => {
         /from ["']@\/lib\/(?:historical-series|nw-series)["']|buildNetWorthSeries\s*\(/,
       );
     }
-    expect(GET_FORECAST_OVERLAY_DESCRIPTION).toMatch(/not historical NW LOCF/);
+    expect(GET_FORECAST_OVERLAY_DESCRIPTION).toMatch(/INISO-01/);
+    expect(GET_FORECAST_OVERLAY_DESCRIPTION).toMatch(/GRISO-01/);
+    expect(GET_FORECAST_OVERLAY_DESCRIPTION).toMatch(/do not fold/);
+    expect(GET_FORECAST_OVERLAY_DESCRIPTION).toMatch(/historical NW LOCF/);
     expect(GET_FORECAST_OVERLAY_DESCRIPTION).toMatch(/Прогноз/);
   });
 });
