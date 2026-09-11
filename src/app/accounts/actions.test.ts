@@ -217,6 +217,8 @@ describe("createAccount types (ACCT-01)", () => {
         accrualDayOfMonth: 15,
       },
     });
+    expect(prisma.balanceSnapshot.upsert).not.toHaveBeenCalled();
+    expect(prisma.balanceSnapshot.delete).not.toHaveBeenCalled();
   });
 
   it("persists SAVINGS annualRateBps 0 when percent is 0 (D-02)", async () => {
@@ -383,6 +385,60 @@ describe("upsertBalanceSnapshot (BAL-01 / D-09 / D-12)", () => {
     });
     expect(revalidatePath).toHaveBeenCalledWith("/accounts");
     expect(revalidatePath).toHaveBeenCalledWith("/");
+  });
+});
+
+describe("upsertBalanceSnapshot SAVINGS (D-16 / ACCT-02)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+    vi.mocked(calendarDateToday).mockReturnValue("2026-09-03");
+    vi.mocked(prisma.account.findUnique).mockResolvedValue({
+      id: 7,
+      name: "Накопительный",
+      type: "SAVINGS",
+      currencyCode: "RUB",
+      creditLimitMinor: null,
+      annualRateBps: 1650,
+      accrualDayOfMonth: 15,
+      currency: { code: "RUB", name: "Рубль", scale: 2, isPrimary: true },
+    } as never);
+    vi.mocked(prisma.balanceSnapshot.upsert).mockResolvedValue({} as never);
+  });
+
+  it("accepts non-credit ≥0 amount like ASSET (manual snapshot only)", async () => {
+    const formData = new FormData();
+    formData.set("accountId", "7");
+    formData.set("amountMajor", "1000.00");
+    formData.set("asOfDate", "2026-09-01");
+
+    const result = await upsertBalanceSnapshot({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.balanceSnapshot.upsert).toHaveBeenCalledWith({
+      where: {
+        accountId_asOfDate: { accountId: 7, asOfDate: "2026-09-01" },
+      },
+      update: { amountMinor: 100000n },
+      create: {
+        accountId: 7,
+        asOfDate: "2026-09-01",
+        amountMinor: 100000n,
+      },
+    });
+  });
+
+  it("rejects negative amount with non-credit message", async () => {
+    const formData = new FormData();
+    formData.set("accountId", "7");
+    formData.set("amountMajor", "-1");
+    formData.set("asOfDate", "2026-09-01");
+
+    const result = await upsertBalanceSnapshot({}, formData);
+
+    expect(result.success).toBeUndefined();
+    expect(result.errors?.amountMajor).toEqual(["Введите корректную сумму"]);
+    expect(prisma.balanceSnapshot.upsert).not.toHaveBeenCalled();
   });
 });
 
