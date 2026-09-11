@@ -105,7 +105,7 @@ Each task was committed atomically:
 2. **Task 2: Mark PROJECT Active + REQUIREMENTS CLI/PARITY complete** - `fb2de53` (docs)
 3. **Task 3: Author 26-UAT.md dual-client connect scaffold** - `83b7504` (docs)
 
-**Plan metadata:** (pending final docs commit)
+**Plan metadata:** `aa2829e` (docs: complete plan)
 
 ## Files Created/Modified
 - `AGENTS.md` — wallet-mcp-parity standing rule
