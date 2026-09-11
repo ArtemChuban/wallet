@@ -105,7 +105,7 @@ status: complete
 2. **Task 1 GREEN: updateAccount implementation** - `01cf269` (feat)
 3. **Task 2: AccountFormDialog edit/create chrome** - `68d286b` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `cb96f7d` (docs: complete plan)
 
 ## Deviations from Plan
 
