@@ -5,10 +5,10 @@ milestone_name: Сберегательный счет (Phases 27–30)
 current_phase: 27
 current_phase_name: SAVINGS schema + CRUD
 status: planning
-stopped_at: Phase 27 context gathered
-last_updated: "2026-09-11T15:40:15.391Z"
+stopped_at: Phase 27 research complete
+last_updated: "2026-09-11T15:46:00.000Z"
 last_activity: 2026-09-11
-last_activity_desc: v1.5 roadmap created (phases 27–30)
+last_activity_desc: Phase 27 RESEARCH.md written
 state_head: 7ac1624fe70c2e8c0ffdf17ac8534d9c625686a3
 progress:
   total_phases: 4
@@ -31,8 +31,8 @@ See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательн�
 
 Phase: 27 of 30 (SAVINGS schema + CRUD)
 Plan: —
-Status: Ready to plan
-Last activity: 2026-09-11 — v1.5 roadmap created (phases 27–30)
+Status: Ready to plan (research done)
+Last activity: 2026-09-11 — Phase 27 RESEARCH.md complete
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -102,10 +102,10 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-11T15:40:15.363Z
-Stopped at: Phase 27 context gathered
-Resume file: .planning/phases/27-savings-schema-crud/27-CONTEXT.md
+Last session: 2026-09-11T15:46:00.000Z
+Stopped at: Phase 27 research complete
+Resume file: .planning/phases/27-savings-schema-crud/27-RESEARCH.md
 
 ## Operator Next Steps
 
-- Plan Phase 27: `/gsd-plan-phase 27` (or `/gsd-discuss-phase 27` first)
+- Plan Phase 27: continue `/gsd-plan-phase 27` (research ready for planner)
