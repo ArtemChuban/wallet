@@ -74,8 +74,8 @@ Local Dockerized net-worth tracker + personal-debts + income + credit-grace ledg
 - [ ] HOST-01/02 — in-app Streamable HTTP MCP at `/api/mcp` + localhost Host/Origin + `127.0.0.1` publish
 - [ ] CAP-01…04 — read-only accounts, NW, balances, FX via MCP
 - [ ] SIDE-01…04 — read-only debts, income, grace, forecast overlay via MCP (DISOL/INISO/GRISO)
-- [ ] CLI-01/02 — readOnlyHint + isolation copy; Claude Code / Cursor connect docs
-- [ ] PARITY-01 — new user-visible read surfaces always ship matching MCP read tools same phase
+- [x] CLI-01/02 — readOnlyHint + isolation copy; Claude Code / Cursor connect docs
+- [x] PARITY-01 — new user-visible read surfaces always ship matching MCP read tools same phase
 
 ### Out of Scope
 
