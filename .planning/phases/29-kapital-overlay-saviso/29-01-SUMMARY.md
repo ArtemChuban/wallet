@@ -106,7 +106,7 @@ Each task was committed atomically:
 2. **Task 2: Wave 0: signed grace totals and FX boundary** - `854139d` (test)
 3. **Task 3: Wave 0: tooltip and shell file-scan** - `a87ff88` (test)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `edf5a78` (docs: complete plan)
 
 ## Files Created/Modified
 

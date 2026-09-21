@@ -4,12 +4,12 @@ milestone: v1.5
 milestone_name: Сберегательный счет (Phases 27–31)
 current_phase: 29
 current_phase_name: Капитал overlay + SAVISO
-status: planned
+status: executing
 stopped_at: Completed 29-01-PLAN.md
-last_updated: "2026-09-21T16:25:56.879Z"
+last_updated: "2026-09-21T16:26:30.000Z"
 last_activity: 2026-09-21
-last_activity_desc: Phase 29 plans created
-state_head: a87ff8890bfcdab0b2b18545a6be021db3c80db7
+last_activity_desc: Completed 29-01 Wave 0 overlay + SAVISO contracts
+state_head: edf5a78
 progress:
   total_phases: 5
   completed_phases: 2
@@ -25,14 +25,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательный счет)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 29 — Капитал overlay + SAVISO (2 plans, ready to execute)
+**Current focus:** Phase 29 — Капитал overlay + SAVISO (29-01 done; 29-02 next)
 
 ## Current Position
 
-Phase: 29 (Капитал overlay + SAVISO) — READY TO EXECUTE
-Plan: 2 plans (29-01 wave 0, 29-02 wave 1)
-Status: Plans created, ready to execute
-Last activity: 2026-09-21 — Phase 29 plans created
+Phase: 29 (Капитал overlay + SAVISO) — IN PROGRESS
+Plan: 2 of 2
+Status: 29-01 complete — ready for 29-02
+Last activity: 2026-09-21 — Completed 29-01 Wave 0 contracts
 
 Progress: [████░░░░░░] 40%
 
