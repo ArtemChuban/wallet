@@ -139,7 +139,7 @@ Tighten the existing non-primary interest FX unit so `excludedMissingFxCurrencie
             }}
 ```
 
-Map SAVINGS rows the same way: `type === "SAVINGS"`, non-null `annualRateBps` and `accrualDayOfMonth`, `balanceMinor: (locf?.amountMinor ?? 0n).toString()`, plus `id`, `name`, `currencyCode`, `currency.scale`, `currency.isPrimary`. Missing LOCF may be omitted or passed as `"0"` — `listInterestSlotsInRange` emits nothing when `balanceMinor <= 0n`. Do not pass overlay income/grace slots into the interest enumerator. Do not call `balanceSnapshot.create/update/upsert/delete`.
+Map SAVINGS rows onto `InterestAccountInput` (`src/lib/savings-interest.ts`). Filter `type === "SAVINGS"` and non-null `annualRateBps` and `accrualDayOfMonth`. The RSC object uses string `balanceMinor`. Keys: `accountId`, `accountName`, `balanceMinor: (locf?.amountMinor ?? 0n).toString()`, `annualRateBps`, `accrualDayOfMonth`, `currencyCode`, `currencyScale` from `currency.scale`, `isPrimaryCurrency` from `currency.isPrimary`. Missing LOCF is the string `0` — `listInterestSlotsInRange` emits nothing when `balanceMinor <= 0n`. Do not pass overlay income/grace slots into the interest enumerator. Do not call `balanceSnapshot.create/update/upsert/delete`.
 
 `ChartAccountPayload` (shell lines 32-40) has no rate or DOM. Keep historical `accounts=` as it is. Add a dedicated `forecastSavings` prop; do not overload `reviveAccounts`.
 
@@ -182,7 +182,7 @@ type DashboardChartsShellProps = {
 };
 ```
 
-Add `forecastSavings` beside `forecastGrace`. Revive `balanceMinor` with `BigInt(...)`, same as `BigInt(o.amountMinor)` on grace (line 345). Do not use `Number` / `parseFloat`.
+Add `forecastSavings` beside `forecastGrace`. The object passed to `listInterestSlotsInRange` uses `InterestAccountInput` keys: `accountId`, `accountName`, `balanceMinor: BigInt(row.balanceMinor)`, `annualRateBps`, `accrualDayOfMonth`, `currencyCode`, `currencyScale`, `isPrimaryCurrency`. Revive `balanceMinor` with `BigInt(...)`, same as `BigInt(o.amountMinor)` on grace (line 345). Do not use `Number` / `parseFloat`.
 
 **Core slot concat** (lines 340-375) — map enumerator output to `ForecastSlot`, then spread beside income and grace:
 
@@ -228,7 +228,16 @@ Interest map (call inside this memo, after `horizonEnd = forecastHorizonEnd(rang
 
 ```typescript
 const interestSlots: ForecastSlot[] = listInterestSlotsInRange(
-  savingsAccounts,
+  forecastSavings.accounts.map((row) => ({
+    accountId: row.accountId,
+    accountName: row.accountName,
+    balanceMinor: BigInt(row.balanceMinor),
+    annualRateBps: row.annualRateBps,
+    accrualDayOfMonth: row.accrualDayOfMonth,
+    currencyCode: row.currencyCode,
+    currencyScale: row.currencyScale,
+    isPrimaryCurrency: row.isPrimaryCurrency,
+  })),
   today,
   horizonEnd,
 ).map((s) => ({
