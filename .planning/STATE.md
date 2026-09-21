@@ -5,11 +5,11 @@ milestone_name: Сберегательный счет (Phases 27–31)
 current_phase: 29
 current_phase_name: Капитал overlay + SAVISO
 status: planning
-stopped_at: Phase 29 UI design contract drafted
-last_updated: "2026-09-21T15:40:00.000Z"
+stopped_at: Phase 29 UI-SPEC approved
+last_updated: "2026-09-21T15:51:12.841Z"
 last_activity: 2026-09-21
 last_activity_desc: Phase 29 UI-SPEC drafted
-state_head: 68a68ca9da716fbe1d2528085c442cf44c93cfa2
+state_head: 116f9d1e793636864fc155637decef91e1a03f63
 progress:
   total_phases: 5
   completed_phases: 2
@@ -125,8 +125,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-21T15:22:39.832Z
-Stopped at: Phase 29 UI design contract drafted
+Last session: 2026-09-21T15:51:12.747Z
+Stopped at: Phase 29 UI-SPEC approved
 Resume file: .planning/phases/29-kapital-overlay-saviso/29-UI-SPEC.md
 
 ## Operator Next Steps
