@@ -54,8 +54,8 @@ describe("plan-02 banner FX codes (GRFCST-02 / D-15)", () => {
     expect(shellSrc).toMatch(/excludedMissingFxCurrencies/);
     expect(shellSrc).toMatch(/\.join\(", "\)/);
     expect(shellSrc).toMatch(/нет курса/);
-    // D-16: currency codes only — no income/grace kind tags in banner copy
-    expect(shellSrc).not.toMatch(/доходы|грейс/);
+    // D-16 / C-03: currency codes only — no income/grace/savings kind tags in banner copy
+    expect(shellSrc).not.toMatch(/доходы|грейс|накопительный/i);
   });
 
   it("partial banner keeps role=status (quiet)", () => {
@@ -64,20 +64,64 @@ describe("plan-02 banner FX codes (GRFCST-02 / D-15)", () => {
   });
 });
 
-/** Plan 03 owner — locked tooltip RU from C-04; single dashed series (D-08). */
-describe("plan-03 tooltip RU (C-04 / GRFCST-01)", () => {
-  it("tooltip includes «Платёж для беспроцентного»", () => {
+/** Phase 29 Wave 0 — tooltip RU + shell interest wiring (D-01…D-10 / INT-02 / C-01). */
+describe("phase-29 tooltip and shell file-scan", () => {
+  const pageSrc = readFileSync("src/app/page.tsx", "utf8");
+
+  it("tooltip keeps «Платёж для беспроцентного» header (D-09)", () => {
     expect(chartSrc).toMatch(/Платёж для беспроцентного/);
   });
 
-  it("tooltip includes «NW без изменения (оплата карты)»", () => {
-    expect(chartSrc).toMatch(/NW без изменения \(оплата карты\)/);
+  it("tooltip locks interest/grace copy strings (D-04, D-05, D-09)", () => {
+    expect(chartSrc).toMatch(/Накопительный/);
+    expect(chartSrc).toMatch(/Ожидаемое начисление/);
+    expect(chartSrc).toMatch(/Ожидаемый платёж/);
+    expect(chartSrc).not.toMatch(/NW без изменения \(оплата карты\)/);
   });
 
-  it("single dashed Line pattern retained (D-08 / C-02)", () => {
+  it("interest plus and grace minus prefixes; Прогноз level unsigned (D-08, D-09, D-10)", () => {
+    expect(chartSrc).toMatch(/`\+\$\{formatChartNumber/);
+    expect(chartSrc).toMatch(/`-\$\{formatChartNumber/);
+    // Прогноз level: formatChartNumber(forecastVal) with no leading plus template
+    expect(chartSrc).toMatch(
+      /Прогноз[\s\S]{0,400}formatChartNumber\(forecastVal\)/,
+    );
+    expect(chartSrc).not.toMatch(
+      /Прогноз[\s\S]{0,400}`\+\$\{formatChartNumber\(forecastVal\)\}/,
+    );
+  });
+
+  it("interest rows sort localeCompare ru base; missing name is счёт+accountId (D-01, D-02)", () => {
+    expect(chartSrc).toMatch(
+      /localeCompare\([^)]*["']ru["'][^)]*sensitivity:\s*["']base["']/,
+    );
+    expect(chartSrc).toMatch(/счёт \$\{(?:ev\.)?accountId\}/);
+  });
+
+  it("tooltip card roots use text-sm not text-xs (UI-SPEC Label)", () => {
+    expect(chartSrc).toMatch(
+      /rounded-lg border border-border\/50 bg-background[\s\S]*?text-sm/,
+    );
+    expect(chartSrc).not.toMatch(
+      /rounded-lg border border-border\/50 bg-background[\s\S]*?text-xs/,
+    );
+  });
+
+  it("shell calls listInterestSlotsInRange with kind interest (INT-02)", () => {
+    expect(shellSrc).toMatch(/listInterestSlotsInRange/);
+    expect(shellSrc).toMatch(/kind:\s*["']interest["']/);
+  });
+
+  it("page and shell forecastSavings carry annualRateBps and accrualDayOfMonth (INT-02)", () => {
+    expect(pageSrc).toMatch(/annualRateBps/);
+    expect(pageSrc).toMatch(/accrualDayOfMonth/);
+    expect(shellSrc).toMatch(/annualRateBps/);
+    expect(shellSrc).toMatch(/accrualDayOfMonth/);
+  });
+
+  it("single dashed Line pattern retained (C-01)", () => {
     const dashMatches = chartSrc.match(/strokeDasharray/g) ?? [];
     expect(dashMatches.length).toBeGreaterThanOrEqual(1);
-    // Exactly one Line with strokeDasharray in paint path
     expect(chartSrc).toMatch(
       /<Line[\s\S]*?strokeDasharray=["']5 5["'][\s\S]*?\/>/,
     );
