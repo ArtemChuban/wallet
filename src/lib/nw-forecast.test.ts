@@ -1,5 +1,8 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { RATE_SCALE_E8 } from "@/lib/money";
+import { listInterestSlotsInRange } from "./savings-interest";
 import {
   buildNetWorthForecastSeries,
   forecastHorizonEnd,
@@ -547,5 +550,83 @@ describe("interest forecast kind (D-07 / D-12 / D-13)", () => {
       "grace",
       "interest",
     ]);
+  });
+
+  it("two accounts stair-step precomputed interest; builder does not recompute (D-03, D-04)", () => {
+    const membership = listInterestSlotsInRange(
+      [
+        {
+          accountId: 1,
+          balanceMinor: 1_000_000n,
+          annualRateBps: 1200,
+          accrualDayOfMonth: 15,
+          currencyCode: "RUB",
+          currencyScale: 2,
+          isPrimaryCurrency: true,
+        },
+        {
+          accountId: 2,
+          balanceMinor: 2_000_000n,
+          annualRateBps: 1200,
+          accrualDayOfMonth: 15,
+          currencyCode: "RUB",
+          currencyScale: 2,
+          isPrimaryCurrency: true,
+        },
+      ],
+      "2026-03-01",
+      "2026-03-31",
+    );
+    expect(membership.map((s) => [s.plannedAsOf, s.interestMinor, s.parentId])).toEqual([
+      ["2026-03-15", 10000n, 1],
+      ["2026-03-15", 20000n, 2],
+    ]);
+    expect(new Set(membership.map((s) => s.parentId)).size).toBe(2);
+
+    const slots: ForecastSlot[] = membership.map((s) => ({
+      kind: "interest",
+      parentId: s.accountId,
+      plannedAsOf: s.plannedAsOf,
+      plannedAmountMinor: s.interestMinor,
+      currencyCode: s.currencyCode,
+      currencyScale: s.currencyScale,
+      isPrimaryCurrency: true,
+      accountId: s.accountId,
+    }));
+    const result = buildNetWorthForecastSeries({
+      anchorPrimaryMinor: 0n,
+      slots,
+      rates: [],
+      primaryScale: 2,
+      today: "2026-03-01",
+      horizonEnd: "2026-03-31",
+    });
+    expect(
+      result.points.find((p) => p.asOfDate === "2026-03-15")?.forecastPrimaryMinor,
+    ).toBe(30000n);
+  });
+
+  it("does not import the interest module", () => {
+    const src = readFileSync(join(process.cwd(), "src/lib/nw-forecast.ts"), "utf8");
+    expect(src).not.toMatch(/savings-interest/);
+  });
+
+  it("non-primary interest without a rate is excluded as missing FX (D-06)", () => {
+    const result = buildNetWorthForecastSeries({
+      anchorPrimaryMinor: 0n,
+      slots: [
+        interestSlot(3, "2026-03-15", 10000n, {
+          currencyCode: "USD",
+          isPrimaryCurrency: false,
+        }),
+      ],
+      rates: [],
+      primaryScale: 2,
+      today,
+      horizonEnd: "2026-03-31",
+    });
+    expect(result.excludedMissingFxCount).toBeGreaterThanOrEqual(1);
+    expect(result.isPartialForecast).toBe(true);
+    expect(result.includedSlotCount).toBe(0);
   });
 });
