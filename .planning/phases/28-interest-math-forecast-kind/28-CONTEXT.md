@@ -114,7 +114,7 @@ Does **not** deliver: Dashboard/shell overlay concat, SAVISO suite, FX partial b
 <deferred>
 ## Deferred Ideas
 
-- **ASSET ↔ SAVINGS type conversion in account settings** — user wants edit-type both ways; **separate roadmap phase** (reopens Phase 27 D-08 type immutability). Not Phase 28–30.
+- **ASSET ↔ SAVINGS type conversion in account settings** — Phase 31 (ACCT-04). Reopens Phase 27 D-08 type immutability for this pair only. Not Phase 28–30.
 - Капитал dashed «Прогноз» wire + FX partial banner + SAVISO — Phase 29
 - MCP list_accounts / forecast interest events + PARITY-01 — Phase 30
 - Rate history, auto BalanceSnapshot, daily/min-balance engines, legend split by kind — PROJECT / REQUIREMENTS Out of Scope

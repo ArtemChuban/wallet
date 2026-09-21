@@ -77,12 +77,13 @@ Full detail: [milestones/v1.4-ROADMAP.md](./milestones/v1.4-ROADMAP.md)
 
 </details>
 
-### v1.5 Сберегательный счет (Phases 27–30)
+### v1.5 Сберегательный счет (Phases 27–31)
 
 - [x] **Phase 27: SAVINGS schema + CRUD** - Distinct SAVINGS type with rate/DOM fields; principal in NW (completed 2026-09-11)
 - [x] **Phase 28: Interest math + forecast kind** - Pure monthly interest + `interest` forecast slot kind (completed 2026-09-21)
 - [ ] **Phase 29: Капитал overlay + SAVISO** - Dashed «Прогноз» interest credits + isolation twin
 - [ ] **Phase 30: MCP PARITY + verify** - Agent reads SAVINGS fields + interest overlay events
+- [ ] **Phase 31: ASSET ↔ SAVINGS type conversion** - Switch type both ways in account settings
 
 ## Phase Details
 
@@ -156,6 +157,21 @@ Plans:
 
 **Plans**: TBD
 
+### Phase 31: ASSET ↔ SAVINGS type conversion
+
+**Goal**: User can switch an existing account between `ASSET` and `SAVINGS` in account settings, both directions
+**Depends on**: Phase 27 (SAVINGS schema + edit form). Does not block Phases 29–30
+**Requirements**: ACCT-04
+**Success Criteria** (what must be TRUE):
+
+  1. In account settings, user can change type `ASSET` → `SAVINGS` and must set annual rate + accrual day-of-month (same invariants as create)
+  2. User can change type `SAVINGS` → `ASSET`; rate and accrual day clear so the non-SAVINGS CHECK holds
+  3. Balance snapshots and historical NW stay; conversion does not write a new snapshot and does not drop history
+  4. Other types (`FIAT_CREDIT` and legacy asset aliases) stay immutable — only `ASSET` ↔ `SAVINGS`
+
+**Plans**: TBD
+**UI hint**: yes
+
 ## Progress
 
 | Phase | Plans Complete | Status | Completed |
@@ -164,6 +180,7 @@ Plans:
 | 28. Interest math + forecast kind | 2/2 | Complete    | 2026-09-21 |
 | 29. Капитал overlay + SAVISO | 0/? | Not started | - |
 | 30. MCP PARITY + verify | 0/? | Not started | - |
+| 31. ASSET ↔ SAVINGS type conversion | 0/? | Not started | - |
 
 ---
-*Roadmap updated: 2026-09-11 — v1.5 Сберегательный счет phases 27–30*
+*Roadmap updated: 2026-09-21 — v1.5 adds Phase 31 ASSET ↔ SAVINGS conversion*

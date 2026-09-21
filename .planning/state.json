@@ -1,7 +1,7 @@
 {
   "contract": "1.0.0",
   "flavor": "core",
-  "milestone": "v1.5 — Сберегательный счет (Phases 27–30)",
+  "milestone": "v1.5 — Сберегательный счет (Phases 27–31)",
   "phases": [
     {
       "number": "27",
@@ -11,7 +11,7 @@
     {
       "number": "28",
       "name": "Interest math + forecast kind",
-      "status": "in_progress"
+      "status": "complete"
     },
     {
       "number": "29",
@@ -22,12 +22,17 @@
       "number": "30",
       "name": "MCP PARITY + verify",
       "status": "pending"
+    },
+    {
+      "number": "31",
+      "name": "ASSET ↔ SAVINGS type conversion",
+      "status": "pending"
     }
   ],
   "next": {
     "command": "/gsd:progress --next",
-    "label": "Advance to the next step (verify)",
-    "reason": "Phase 28 of 4 · 25% · ready to verify"
+    "label": "Advance to the next step (plan phase 29)",
+    "reason": "Phase 29 of 5 — needs a plan"
   },
-  "updated_at": "2026-09-21T11:30:18.180Z"
+  "updated_at": "2026-09-21T11:38:57.708Z"
 }

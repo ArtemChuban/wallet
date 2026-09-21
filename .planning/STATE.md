@@ -1,7 +1,7 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.5
-milestone_name: Сберегательный счет (Phases 27–30)
+milestone_name: Сберегательный счет (Phases 27–31)
 current_phase: 29
 current_phase_name: Капитал overlay + SAVISO
 status: planning
@@ -11,11 +11,11 @@ last_activity: 2026-09-21
 last_activity_desc: Phase 28 complete, transitioned to Phase 29
 state_head: 79e631711e8696010d563d5379d1582abfe50412
 progress:
-  total_phases: 4
+  total_phases: 5
   completed_phases: 2
   total_plans: 6
   completed_plans: 6
-  percent: 50
+  percent: 40
 ---
 
 # Project State
@@ -29,7 +29,7 @@ See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательн�
 
 ## Current Position
 
-Phase: 29 of 30 (Капитал overlay + SAVISO)
+Phase: 29 of 31 (Капитал overlay + SAVISO)
 Plan: Not started
 Status: Ready to plan
 Last activity: 2026-09-21 — Phase 28 complete, transitioned to Phase 29
@@ -107,6 +107,7 @@ Decisions are logged in PROJECT.md Key Decisions table. v1.5 locks from scoping/
 - Phases 18–22: v1.3 Кредитка — SHIPPED 2026-09-10
 - Phases 23–26: v1.4 Local MCP — SHIPPED 2026-09-11
 - Phases 27–30: v1.5 Сберегательный счет — roadmap created 2026-09-11
+- Phase 31 added: ASSET ↔ SAVINGS type conversion in account settings (both ways; reopens Phase 27 type immutability for this pair only)
 
 ## Deferred Items
 
