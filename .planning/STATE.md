@@ -4,17 +4,17 @@ milestone: v1.5
 milestone_name: Сберегательный счет (Phases 27–30)
 current_phase: 28
 current_phase_name: Interest math + forecast kind
-status: ready_to_execute
-stopped_at: Completed 28-01-PLAN.md
-last_updated: "2026-09-21T11:22:30.975Z"
+status: verifying
+stopped_at: Completed 28-02-PLAN.md
+last_updated: "2026-09-21T11:30:19.127Z"
 last_activity: 2026-09-21
 last_activity_desc: Completed 28-01 red contracts
-state_head: 46d89f5b1f311878bc745a8be539db66c48b2c06
+state_head: 90ce13c96a696fe9dfeae59ba62930b097c5f29e
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 6
-  completed_plans: 5
+  completed_plans: 6
   percent: 25
 ---
 
@@ -31,7 +31,7 @@ See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательн�
 
 Phase: 28 of 30 (Interest math + forecast kind)
 Plan: 2 of 2
-Status: Ready to execute
+Status: Phase complete — ready for verification
 Last activity: 2026-09-21 — Completed 28-01 red contracts
 
 Progress: [███░░░░░░░] 25%
@@ -64,6 +64,7 @@ Progress: [███░░░░░░░] 25%
 | Phase 27 P03 | 4min | 2 tasks | 7 files |
 | Phase 27 P04 | 3min | 3 tasks | 3 files |
 | Phase 28-interest-math-forecast-kind P01 | 6min | 2 tasks | 2 files |
+| Phase 28-interest-math-forecast-kind P02 | 5min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -84,6 +85,8 @@ Decisions are logged in PROJECT.md Key Decisions table. v1.5 locks from scoping/
 - [Phase 28]: Month-2 compound expect is 10100n, not a second flat 10000n (D-02 overrides research flat LOCF)
 - [Phase 28]: InterestAccountInput and InterestForecastSlot field names match Plan 28-02 so GREEN does not rewrite expects
 - [Phase 28]: Today-dated interest includedSlotCount 0 is the hard fail; future +ΔNW already passes on the non-grace addend
+- [Phase 28]: Month-2 credit is the truncated interest on principal grown by month 1 only (10000n then 10100n)
+- [Phase 28]: slotInWindow and ΔNW both exhaust ForecastSlotKind so interest cannot fall through to the grace predicate or a silent addend
 
 ### Pending Todos
 
@@ -121,8 +124,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-21T11:21:10.092Z
-Stopped at: Completed 28-01-PLAN.md
+Last session: 2026-09-21T11:30:19.071Z
+Stopped at: Completed 28-02-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
