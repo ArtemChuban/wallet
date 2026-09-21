@@ -5,11 +5,11 @@ milestone_name: Сберегательный счет (Phases 27–30)
 current_phase: 28
 current_phase_name: Interest math + forecast kind
 status: planning
-stopped_at: Phase 27 complete, ready to plan Phase 28
-last_updated: "2026-09-11T16:43:26.993Z"
+stopped_at: Phase 28 context gathered
+last_updated: "2026-09-21T10:37:07.334Z"
 last_activity: 2026-09-11
 last_activity_desc: Phase 27 complete, transitioned to Phase 28
-state_head: 268b0fb225dd6d7af35677f5998fe13a9bb07020
+state_head: 81ff0b18024ff1632bb1709c84caadd6c976e370
 progress:
   total_phases: 4
   completed_phases: 1
@@ -117,9 +117,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-11T16:42:47.258Z
-Stopped at: Phase 27 complete, ready to plan Phase 28
-Resume file: .planning/phases/27-savings-schema-crud/27-UAT.md
+Last session: 2026-09-21T10:37:07.275Z
+Stopped at: Phase 28 context gathered
+Resume file: .planning/phases/28-interest-math-forecast-kind/28-CONTEXT.md
 
 ## Operator Next Steps
 
