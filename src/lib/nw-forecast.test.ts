@@ -321,8 +321,8 @@ describe("forecast FX", () => {
   });
 });
 
-describe("grace A′ / membership / FX codes", () => {
-  it("future OPEN grace sampled with ΔNW=0 (A′ / C-01 / D-06 / GRFCST-01)", () => {
+describe("grace signed dip / membership / FX codes", () => {
+  it("future OPEN grace dips line by payment (D-11)", () => {
     const slots: ForecastSlot[] = [
       graceSlot(1, "2026-03-15", 50_000n, { dueAsOf: "2026-03-15" }),
     ];
@@ -342,11 +342,14 @@ describe("grace A′ / membership / FX codes", () => {
       "2026-03-31",
     ]);
     expect(
-      result.points.find((p) => p.asOfDate === "2026-03-15")?.forecastPrimaryMinor,
+      result.points.find((p) => p.asOfDate === today)?.forecastPrimaryMinor,
     ).toBe(1_000_000n);
     expect(
+      result.points.find((p) => p.asOfDate === "2026-03-15")?.forecastPrimaryMinor,
+    ).toBe(950_000n);
+    expect(
       result.points.find((p) => p.asOfDate === "2026-03-31")?.forecastPrimaryMinor,
-    ).toBe(1_000_000n);
+    ).toBe(950_000n);
     const duePoint = result.points.find((p) => p.asOfDate === "2026-03-15");
     expect(duePoint?.forecastEvents).toEqual([
       expect.objectContaining({
@@ -357,7 +360,7 @@ describe("grace A′ / membership / FX codes", () => {
     ]);
   });
 
-  it("overdue OPEN fold → today sampleAsOf (D-01 / D-02 / D-03)", () => {
+  it("overdue OPEN fold → today sampleAsOf dips by payment (D-11)", () => {
     // Caller folds before builder — feed sampleAsOf=today, retain original dueAsOf.
     const slots: ForecastSlot[] = [
       graceSlot(1, today, 50_000n, { dueAsOf: "2026-02-15" }),
@@ -373,7 +376,10 @@ describe("grace A′ / membership / FX codes", () => {
 
     expect(result.includedSlotCount).toBe(1);
     expect(result.points[0]?.asOfDate).toBe(today);
-    expect(result.points[0]?.forecastPrimaryMinor).toBe(500_000n);
+    expect(result.points[0]?.forecastPrimaryMinor).toBe(450_000n);
+    for (const p of result.points) {
+      expect(p.forecastPrimaryMinor).toBe(450_000n);
+    }
     expect(result.points[0]?.forecastEvents).toEqual([
       expect.objectContaining({
         kind: "grace",
@@ -383,7 +389,7 @@ describe("grace A′ / membership / FX codes", () => {
     ]);
   });
 
-  it("grace-only horizon → non-empty flat points (D-07)", () => {
+  it("grace-only horizon → non-empty dipped points (D-11)", () => {
     const slots: ForecastSlot[] = [
       graceSlot(1, "2026-03-20", 10_000n),
     ];
@@ -403,12 +409,18 @@ describe("grace A′ / membership / FX codes", () => {
       "2026-03-20",
       "2026-03-31",
     ]);
-    for (const p of result.points) {
-      expect(p.forecastPrimaryMinor).toBe(800_000n);
-    }
+    expect(
+      result.points.find((p) => p.asOfDate === today)?.forecastPrimaryMinor,
+    ).toBe(800_000n);
+    expect(
+      result.points.find((p) => p.asOfDate === "2026-03-20")?.forecastPrimaryMinor,
+    ).toBe(790_000n);
+    expect(
+      result.points.find((p) => p.asOfDate === "2026-03-31")?.forecastPrimaryMinor,
+    ).toBe(790_000n);
   });
 
-  it("same-day income+grace: NW moves by income only (C-03 / D-06)", () => {
+  it("same-day income+grace: NW moves by income minus grace (D-11)", () => {
     const slots: ForecastSlot[] = [
       primarySlot(1, "2026-03-15", 100_000n),
       graceSlot(2, "2026-03-15", 50_000n, { dueAsOf: "2026-03-15" }),
@@ -424,7 +436,7 @@ describe("grace A′ / membership / FX codes", () => {
 
     expect(result.includedSlotCount).toBe(2);
     const day = result.points.find((p) => p.asOfDate === "2026-03-15");
-    expect(day?.forecastPrimaryMinor).toBe(1_100_000n);
+    expect(day?.forecastPrimaryMinor).toBe(1_050_000n);
     expect(day?.forecastEvents?.map((e) => e.kind).sort()).toEqual([
       "grace",
       "income",
@@ -530,7 +542,7 @@ describe("interest forecast kind (D-07 / D-12 / D-13)", () => {
     expect(result.points).toEqual([]);
   });
 
-  it("same-day interest+grace: NW moves by interest only (D-03 / D-12)", () => {
+  it("same-day interest+grace: NW moves by interest minus grace (D-11)", () => {
     const slots: ForecastSlot[] = [
       interestSlot(10, "2026-03-15", 50_000n),
       graceSlot(2, "2026-03-15", 50_000n, { dueAsOf: "2026-03-15" }),
@@ -545,7 +557,7 @@ describe("interest forecast kind (D-07 / D-12 / D-13)", () => {
     });
     expect(result.includedSlotCount).toBe(2);
     const day = result.points.find((p) => p.asOfDate === "2026-03-15");
-    expect(day?.forecastPrimaryMinor).toBe(1_050_000n);
+    expect(day?.forecastPrimaryMinor).toBe(1_000_000n);
     expect(day?.forecastEvents?.map((e) => e.kind).sort()).toEqual([
       "grace",
       "interest",
@@ -611,7 +623,15 @@ describe("interest forecast kind (D-07 / D-12 / D-13)", () => {
     expect(src).not.toMatch(/savings-interest/);
   });
 
-  it("non-primary interest without a rate is excluded as missing FX (D-06)", () => {
+  it("FX conversion stays on convertOtherMinorToPrimaryMinor; no second rounding helper (INT-03)", () => {
+    const src = readFileSync(join(process.cwd(), "src/lib/nw-forecast.ts"), "utf8");
+    expect(src).toMatch(/convertOtherMinorToPrimaryMinor/);
+    expect(src).not.toMatch(
+      /round(Half|HalfUp|HalfEven|AwayFromZero)|Math\.round|toFixed\(/,
+    );
+  });
+
+  it("non-primary interest without a rate lists USD and includes nothing (INT-03)", () => {
     const result = buildNetWorthForecastSeries({
       anchorPrimaryMinor: 0n,
       slots: [
@@ -625,8 +645,94 @@ describe("interest forecast kind (D-07 / D-12 / D-13)", () => {
       today,
       horizonEnd: "2026-03-31",
     });
-    expect(result.excludedMissingFxCount).toBeGreaterThanOrEqual(1);
+    expect(result.excludedMissingFxCurrencies).toEqual(["USD"]);
     expect(result.isPartialForecast).toBe(true);
     expect(result.includedSlotCount).toBe(0);
+  });
+
+  it("non-primary interest with USD rate asOf today is included (INT-03)", () => {
+    const result = buildNetWorthForecastSeries({
+      anchorPrimaryMinor: 0n,
+      slots: [
+        interestSlot(3, "2026-03-15", 10_000n, {
+          currencyCode: "USD",
+          isPrimaryCurrency: false,
+        }),
+      ],
+      rates: [
+        {
+          currencyCode: "USD",
+          asOfDate: today,
+          rateToPrimaryScaled: 90n * RATE_SCALE_E8,
+        },
+      ],
+      primaryScale: 2,
+      today,
+      horizonEnd: "2026-03-31",
+    });
+    expect(result.includedSlotCount).toBe(1);
+    expect(result.excludedMissingFxCurrencies).toEqual([]);
+    expect(result.isPartialForecast).toBe(false);
+  });
+
+  it("non-primary interest with USD rate dated day after today is dropped (INT-03 LOCF)", () => {
+    const result = buildNetWorthForecastSeries({
+      anchorPrimaryMinor: 0n,
+      slots: [
+        interestSlot(3, "2026-03-15", 10_000n, {
+          currencyCode: "USD",
+          isPrimaryCurrency: false,
+        }),
+      ],
+      rates: [
+        {
+          currencyCode: "USD",
+          asOfDate: "2026-03-02",
+          rateToPrimaryScaled: 90n * RATE_SCALE_E8,
+        },
+      ],
+      primaryScale: 2,
+      today,
+      horizonEnd: "2026-03-31",
+    });
+    expect(result.includedSlotCount).toBe(0);
+    expect(result.excludedMissingFxCurrencies).toEqual(["USD"]);
+    expect(result.isPartialForecast).toBe(true);
+  });
+
+  it("FX miss codes unique alphabetical across income+interest (INT-03)", () => {
+    const slots: ForecastSlot[] = [
+      usdSlot(1, "2026-03-10", 10_000n),
+      interestSlot(3, "2026-03-15", 1_000n, {
+        currencyCode: "EUR",
+        isPrimaryCurrency: false,
+      }),
+      {
+        kind: "income",
+        parentId: 4,
+        plannedAsOf: "2026-03-18",
+        plannedAmountMinor: 2_000n,
+        currencyCode: "EUR",
+        currencyScale: 2,
+        isPrimaryCurrency: false,
+      },
+      interestSlot(5, "2026-03-20", 3_000n, {
+        currencyCode: "USD",
+        isPrimaryCurrency: false,
+      }),
+    ];
+    const result = buildNetWorthForecastSeries({
+      anchorPrimaryMinor: 0n,
+      slots,
+      rates: [],
+      primaryScale: 2,
+      today,
+      horizonEnd: "2026-03-31",
+    });
+
+    expect(result.includedSlotCount).toBe(0);
+    expect(result.excludedMissingFxCurrencies).toEqual(["EUR", "USD"]);
+    expect(result.isPartialForecast).toBe(true);
+    expect(result.points).toEqual([]);
   });
 });
