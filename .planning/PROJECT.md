@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A local, single-user personal finance site for tracking net worth across accounts (asset + credit), a parallel «Долги» side ledger, a «Доходы» income ledger with plan vs actual and NW forecast from recurring pay, and credit-card grace-period tracking with A′ NW-neutral payment amounts on the Капитал «Прогноз» overlay. Exposes an in-app read-only MCP server at `/api/mcp` (localhost only) so external CLI agents query the same capital + side-ledger data. Runs in Docker with SQLite on the host; no cloud accounts. Not budgeting or transaction categorization.
+A local, single-user personal finance site for tracking net worth across accounts (asset + credit + SAVINGS), a parallel «Долги» side ledger, a «Доходы» income ledger with plan vs actual, and Капитал dashed «Прогноз» overlay (income + SAVINGS interest credits + grace payments that dip primary NW). Exposes an in-app read-only MCP server at `/api/mcp` (localhost only) so external CLI agents query the same capital + side-ledger data. Runs in Docker with SQLite on the host; no cloud accounts. Not budgeting or transaction categorization.
 
 ## Core Value
 
@@ -80,13 +80,13 @@ Local Dockerized net-worth tracker + personal-debts + income + credit-grace ledg
 - ✓ Agent can list debts, income, grace obligations, and forecast overlay via MCP without folding side ledgers into historical NW — Phase 25 (SIDE-01…04; DISOL/INISO/GRISO)
 - ✓ MCP tools declare `readOnlyHint` + named isolation copy; Claude Code / Cursor connect docs — Phase 26 (CLI-01/02)
 - ✓ Standing PARITY-01 rule in AGENTS.md — new user-visible read surfaces ship matching MCP tools same phase — Phase 26
+- ✓ User can create and manage SAVINGS accounts with annual interest rate and day-of-month accrual — Phase 27–28
+- ✓ User sees expected monthly interest on Капитал dashed «Прогноз» overlay; grace payment dips primary NW (D-11) — Phase 29 (INT-02/03, SAVISO)
+- ✓ Interest forecast never writes BalanceSnapshot or changes historical NW LOCF (SAVISO twin of INISO/GRISO) — Phase 29
 
 ### Active
 
-- User can create and manage SAVINGS accounts with annual interest rate and day-of-month accrual
-- User sees expected monthly interest (balance × rate / 12) on Капитал dashed «Прогноз» overlay
-- Interest forecast never writes BalanceSnapshot or changes historical NW LOCF (savings isolation twin of INISO/GRISO)
-- New savings read surfaces expose matching read-only MCP tools (PARITY-01)
+- New savings read surfaces expose matching read-only MCP tools (PARITY-01) — Phase 30
 
 ### Out of Scope
 
@@ -170,7 +170,8 @@ v1.4 (2026-09-11): in-app read-only MCP (`mcp-handler` + Streamable HTTP) with c
 | Income = side ledger; actual ≠ BalanceSnapshot; forecast overlay only | Keep historical NW account-only; ISO-01 | ✓ Good — Phase 17 INISO + Orca |
 | Forecast = dashed «Прогноз» Line + hinge; FX exclude → partial banner | Forecast-not-fact UX; never invent rates | ✓ Good — Phase 17 |
 | Credit grace amount due = manual entry (not derived from snapshots) | User lock for v1.3; snapshot history stays balance source of truth | ✓ Good — Phase 20 |
-| Credit grace obligations = forecast overlay only (no historical NW rewrite); A′ ΔNW=0 | Same isolation pattern as income ISO-01; FX banner honesty | ✓ Good — Phase 21–22 |
+| Credit grace obligations = forecast overlay only (no historical NW rewrite); A′ ΔNW=0 | Same isolation pattern as income ISO-01; FX banner honesty | ✓ Good — Phase 21–22; Phase 29 D-11 overrides A′: dashed line falls by payment in primary |
+| SAVISO: interest on dashed «Прогноз» only; never BalanceSnapshot / historical LOCF | Twin of INISO/GRISO; compound enumerator Phase 28 math | ✓ Good — Phase 29 |
 | Bank contract study before grace-rule lock | User supplies contract; avoid guessing revolving/grace semantics | ✓ Good — Phase 18 |
 | Dual DOM (statement + due next month) over sole graceDurationDays | Matches T-Bank Platinum ТП 7.90 calendar (21→15) | ✓ Good — Phase 18–19 |
 | GRISO twin of INISO (`griso.test.ts` + never-calls ×5) | Regression-proof historical NW free of grace | ✓ Good — Phase 22 |
