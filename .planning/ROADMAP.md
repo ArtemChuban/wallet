@@ -140,7 +140,12 @@ Plans:
   3. Recording/viewing interest forecast never creates BalanceSnapshot and never changes historical NW LOCF
   4. Regression suite proves SAVISO (never-calls on snapshot mutates + golden historical series identity without interest)
 
-**Plans**: TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 29-01-PLAN.md — Wave 0 red contracts: SAVISO isolation, signed grace totals, tooltip file-scan
+- [ ] 29-02-PLAN.md — Tracer: interest slots on Прогноз, grace line dip, tooltip block
+
 **UI hint**: yes
 
 ### Phase 30: MCP PARITY + verify

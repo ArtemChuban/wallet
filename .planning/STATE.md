@@ -4,11 +4,11 @@ milestone: v1.5
 milestone_name: Сберегательный счет (Phases 27–31)
 current_phase: 29
 current_phase_name: Капитал overlay + SAVISO
-status: planning
-stopped_at: Phase 29 UI-SPEC approved
+status: planned
+stopped_at: Phase 29 plans created
 last_updated: "2026-09-21T15:51:12.841Z"
 last_activity: 2026-09-21
-last_activity_desc: Phase 29 UI-SPEC drafted
+last_activity_desc: Phase 29 plans created
 state_head: 116f9d1e793636864fc155637decef91e1a03f63
 progress:
   total_phases: 5
@@ -25,14 +25,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательный счет)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 29 — Капитал overlay + SAVISO (UI contract drafted)
+**Current focus:** Phase 29 — Капитал overlay + SAVISO (2 plans, ready to execute)
 
 ## Current Position
 
 Phase: 29 of 31 (Капитал overlay + SAVISO)
-Plan: Not started
-Status: UI contract drafted, ready to plan
-Last activity: 2026-09-21 — Phase 29 UI-SPEC drafted
+Plan: 2 plans (29-01 wave 0, 29-02 wave 1)
+Status: Plans created, ready to execute
+Last activity: 2026-09-21 — Phase 29 plans created
 
 Progress: [███░░░░░░░] 25%
 
@@ -131,4 +131,4 @@ Resume file: .planning/phases/29-kapital-overlay-saviso/29-UI-SPEC.md
 
 ## Operator Next Steps
 
-- Execute Phase 28: `/gsd-execute-phase 28` (wave 0 red tests, then tracer)
+- Execute Phase 29: `/gsd-execute-phase 29` (wave 0 red tests, then tracer)
