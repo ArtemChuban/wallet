@@ -1,10 +1,10 @@
 ---
 schema_version: 1
-open_count: 25
+open_count: 26
 waived_count: 0
 fixed_count: 5
-total_count: 30
-last_updated: 2026-09-11T16:23:55.808Z
+total_count: 31
+last_updated: 2026-09-21T11:21:08.913Z
 ---
 
 # Broken Windows Ledger
@@ -45,6 +45,7 @@ last_updated: 2026-09-11T16:23:55.808Z
 | 28 | 27 | stub | src/app/accounts/actions.test.ts |  | describe.skip updateAccount SAVINGS + D-16 — owned by Plan 03 | open |  | 2026-09-11T16:12:25.522Z |  |
 | 29 | 27 | skipped-test | src/app/accounts/actions.test.ts |  | it.todo Plan 03 updateAccount SAVINGS name+rate+DOM + D-16 no-snapshot | open |  | 2026-09-11T16:12:25.646Z |  |
 | 30 | 27 | todo | src/lib/savings-accrual-display.test.ts | 5 | Wave 0 Plan-04 plant: imports missing savings-accrual-display (tsc error); owned by 27-04 | open |  | 2026-09-11T16:23:55.808Z |  |
+| 31 | 28 | deviation | src/lib/savings-interest.test.ts |  | Negative LOCF listInterestSlotsInRange expect [] added for T-28-04 | open |  | 2026-09-21T11:21:08.913Z |  |
 
 ````json
 [
@@ -406,6 +407,18 @@ last_updated: 2026-09-11T16:23:55.808Z
     "status": "open",
     "reason": "",
     "recorded_at": "2026-09-11T16:23:55.808Z",
+    "resolved_at": null
+  },
+  {
+    "id": 31,
+    "kind": "deviation",
+    "phase": "28",
+    "file": "src/lib/savings-interest.test.ts",
+    "line": null,
+    "description": "Negative LOCF listInterestSlotsInRange expect [] added for T-28-04",
+    "status": "open",
+    "reason": "",
+    "recorded_at": "2026-09-21T11:21:08.913Z",
     "resolved_at": null
   }
 ]

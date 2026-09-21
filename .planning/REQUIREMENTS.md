@@ -13,7 +13,7 @@
 
 ### Interest forecast
 
-- [ ] **INT-01**: Expected monthly interest for a SAVINGS account equals LOCF balance × annual rate / 12, credited on the account's accrual day-of-month (with `clampDayOfMonth`)
+- [x] **INT-01**: Expected monthly interest for a SAVINGS account equals LOCF balance × annual rate / 12, credited on the account's accrual day-of-month (with `clampDayOfMonth`)
 - [ ] **INT-02**: On Капитал `/`, dashed «Прогноз» includes future SAVINGS interest credits as overlay slots (ΔNW = +interest; future accrual dates only)
 - [ ] **INT-03**: Interest forecast slots use FX LOCF honesty (partial banner when primary conversion rate missing for non-primary SAVINGS)
 
@@ -62,7 +62,7 @@
 | ACCT-01 | Phase 27 | Complete |
 | ACCT-02 | Phase 27 | Complete |
 | ACCT-03 | Phase 27 | Complete |
-| INT-01 | Phase 28 | Pending |
+| INT-01 | Phase 28 | Complete |
 | INT-02 | Phase 29 | Pending |
 | INT-03 | Phase 29 | Pending |
 | SAVISO-01 | Phase 29 | Pending |

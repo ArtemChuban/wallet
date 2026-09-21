@@ -5,16 +5,16 @@ milestone_name: Сберегательный счет (Phases 27–30)
 current_phase: 28
 current_phase_name: Interest math + forecast kind
 status: ready_to_execute
-stopped_at: Phase 28 plans written
-last_updated: "2026-09-21T11:00:00.000Z"
+stopped_at: Completed 28-01-PLAN.md
+last_updated: "2026-09-21T11:22:30.975Z"
 last_activity: 2026-09-21
-last_activity_desc: Phase 28 plans written
-state_head: 81ff0b18024ff1632bb1709c84caadd6c976e370
+last_activity_desc: Completed 28-01 red contracts
+state_head: 46d89f5b1f311878bc745a8be539db66c48b2c06
 progress:
   total_phases: 4
   completed_phases: 1
   total_plans: 6
-  completed_plans: 4
+  completed_plans: 5
   percent: 25
 ---
 
@@ -30,11 +30,11 @@ See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательн�
 ## Current Position
 
 Phase: 28 of 30 (Interest math + forecast kind)
-Plan: 28-01 then 28-02 (not started)
-Status: Plans ready
-Last activity: 2026-09-21 — Phase 28 plans written
+Plan: 2 of 2
+Status: Ready to execute
+Last activity: 2026-09-21 — Completed 28-01 red contracts
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [███░░░░░░░] 25%
 
 ## Performance Metrics
 
@@ -63,6 +63,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 27 P02 | 4min | 3 tasks | 10 files |
 | Phase 27 P03 | 4min | 2 tasks | 7 files |
 | Phase 27 P04 | 3min | 3 tasks | 3 files |
+| Phase 28-interest-math-forecast-kind P01 | 6min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -80,6 +81,9 @@ Decisions are logged in PROJECT.md Key Decisions table. v1.5 locks from scoping/
 - [Phase 27]: formatAccrualCountdown(today, nextAsOf) two-arg; days via UTC calendar delta
 - [Phase 27]: page.tsx rate/DOM serialize from 27-03; 27-04 wired list secondary only
 - [Phase 27]: No interest ÷12 / auto snapshot writer (Phases 28–30)
+- [Phase 28]: Month-2 compound expect is 10100n, not a second flat 10000n (D-02 overrides research flat LOCF)
+- [Phase 28]: InterestAccountInput and InterestForecastSlot field names match Plan 28-02 so GREEN does not rewrite expects
+- [Phase 28]: Today-dated interest includedSlotCount 0 is the hard fail; future +ΔNW already passes on the non-grace addend
 
 ### Pending Todos
 
@@ -117,9 +121,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-21T11:00:00.000Z
-Stopped at: Phase 28 plans written
-Resume file: .planning/phases/28-interest-math-forecast-kind/28-01-PLAN.md
+Last session: 2026-09-21T11:21:10.092Z
+Stopped at: Completed 28-01-PLAN.md
+Resume file: None
 
 ## Operator Next Steps
 

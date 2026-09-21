@@ -11,7 +11,7 @@
     {
       "number": "28",
       "name": "Interest math + forecast kind",
-      "status": "pending"
+      "status": "in_progress"
     },
     {
       "number": "29",
@@ -25,9 +25,9 @@
     }
   ],
   "next": {
-    "command": "/gsd:progress --next",
-    "label": "Advance to the next step (plan phase 28)",
-    "reason": "Phase 28 of 4 — needs a plan"
+    "command": "/gsd:progress",
+    "label": "Show progress",
+    "reason": "Unsure of state — showing progress"
   },
-  "updated_at": "2026-09-11T16:43:27.010Z"
+  "updated_at": "2026-09-21T11:22:30.988Z"
 }
