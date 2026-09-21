@@ -15,13 +15,13 @@
 ### Interest forecast
 
 - [x] **INT-01**: Expected monthly interest for a SAVINGS account equals LOCF balance × annual rate / 12, credited on the account's accrual day-of-month (with `clampDayOfMonth`)
-- [ ] **INT-02**: On Капитал `/`, dashed «Прогноз» includes future SAVINGS interest credits as overlay slots (ΔNW = +interest; future accrual dates only)
-- [ ] **INT-03**: Interest forecast slots use FX LOCF honesty (partial banner when primary conversion rate missing for non-primary SAVINGS)
+- [x] **INT-02**: On Капитал `/`, dashed «Прогноз» includes future SAVINGS interest credits as overlay slots (ΔNW = +interest; future accrual dates only)
+- [x] **INT-03**: Interest forecast slots use FX LOCF honesty (partial banner when primary conversion rate missing for non-primary SAVINGS)
 
 ### Isolation
 
-- [ ] **SAVISO-01**: Savings interest forecast never writes `BalanceSnapshot` or changes historical NW LOCF
-- [ ] **SAVISO-02**: Regression suite asserts SAVISO isolation (never-calls on snapshot mutates + golden historical series identity without interest)
+- [x] **SAVISO-01**: Savings interest forecast never writes `BalanceSnapshot` or changes historical NW LOCF
+- [x] **SAVISO-02**: Regression suite asserts SAVISO isolation (never-calls on snapshot mutates + golden historical series identity without interest)
 
 ### MCP
 
@@ -65,10 +65,10 @@
 | ACCT-03 | Phase 27 | Complete |
 | ACCT-04 | Phase 31 | Pending |
 | INT-01 | Phase 28 | Complete |
-| INT-02 | Phase 29 | Pending |
-| INT-03 | Phase 29 | Pending |
-| SAVISO-01 | Phase 29 | Pending |
-| SAVISO-02 | Phase 29 | Pending |
+| INT-02 | Phase 29 | Complete |
+| INT-03 | Phase 29 | Complete |
+| SAVISO-01 | Phase 29 | Complete |
+| SAVISO-02 | Phase 29 | Complete |
 | MCP-01 | Phase 30 | Pending |
 | MCP-02 | Phase 30 | Pending |
 | PARITY-01 | Phase 30 | Pending |

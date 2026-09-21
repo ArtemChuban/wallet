@@ -5,16 +5,16 @@ milestone_name: Сберегательный счет (Phases 27–31)
 current_phase: 29
 current_phase_name: Капитал overlay + SAVISO
 status: planned
-stopped_at: Phase 29 plans created
-last_updated: "2026-09-21T16:17:10.802Z"
+stopped_at: Completed 29-01-PLAN.md
+last_updated: "2026-09-21T16:25:56.879Z"
 last_activity: 2026-09-21
 last_activity_desc: Phase 29 plans created
-state_head: d778e120c5e90a0b589183ab6014abe0976949b9
+state_head: a87ff8890bfcdab0b2b18545a6be021db3c80db7
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 8
-  completed_plans: 6
+  completed_plans: 7
   percent: 40
 ---
 
@@ -34,7 +34,7 @@ Plan: 2 plans (29-01 wave 0, 29-02 wave 1)
 Status: Plans created, ready to execute
 Last activity: 2026-09-21 — Phase 29 plans created
 
-Progress: [███░░░░░░░] 25%
+Progress: [████░░░░░░] 40%
 
 ## Performance Metrics
 
@@ -65,6 +65,7 @@ Progress: [███░░░░░░░] 25%
 | Phase 27 P04 | 3min | 3 tasks | 3 files |
 | Phase 28-interest-math-forecast-kind P01 | 6min | 2 tasks | 2 files |
 | Phase 28-interest-math-forecast-kind P02 | 5min | 2 tasks | 4 files |
+| Phase 29 P01 | 5min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -87,6 +88,9 @@ Decisions are logged in PROJECT.md Key Decisions table. v1.5 locks from scoping/
 - [Phase 28]: Today-dated interest includedSlotCount 0 is the hard fail; future +ΔNW already passes on the non-grace addend
 - [Phase 28]: Month-2 credit is the truncated interest on principal grown by month 1 only (10000n then 10100n)
 - [Phase 28]: slotInWindow and ΔNW both exhaust ForecastSlotKind so interest cannot fall through to the grace predicate or a silent addend
+- [Phase 29]: SAVINGS golden series equals snapshot minors only; unused interest fixture voided (SAVISO-02)
+- [Phase 29]: D-11 Wave 0 red locks dipped primary grace totals; plannedAmountMinor stays positive
+- [Phase 29]: INT-03 FX: missing lists USD; today-dated rate includes; next-day rate drops
 
 ### Pending Todos
 
@@ -125,9 +129,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-21T15:51:12.747Z
-Stopped at: Phase 29 UI-SPEC approved
-Resume file: .planning/phases/29-kapital-overlay-saviso/29-UI-SPEC.md
+Last session: 2026-09-21T16:25:56.806Z
+Stopped at: Completed 29-01-PLAN.md
+Resume file: None
 
 ## Operator Next Steps
 
