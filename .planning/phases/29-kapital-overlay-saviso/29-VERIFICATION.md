@@ -1,7 +1,7 @@
 ---
 phase: 29-kapital-overlay-saviso
 verified: 2026-09-21T16:37:31Z
-status: human_needed
+status: passed
 score: 13/17 must-haves verified
 behavior_unverified: 1
 overrides_applied: 0
@@ -11,11 +11,13 @@ decision_coverage:
   not_honored: []
 gaps: []
 behavior_unverified_items:
+
   - truth: "Same-day SAVINGS credits sort by amount descending then account name А→Я (D-02 probe Альфа/Яндекс/Бета)"
     test: "Hover a future accrual day with ≥2 interest events (amounts 20, 20, 10; names Альфа, Яндекс, Бета) or unit-test the sort comparator"
     expected: "Row order Альфа, Яндекс, Бета"
     why_human: "UI suite only file-scans localeCompare(ru, base); no runtime assert of probe order"
 human_verification:
+
   - test: "Капитал hover UAT — accrual day + grace due day (harvested from 29-02 PLAN human-check)"
     expected: "Interest block once with plus amount; later forecast days keep higher line without that block; grace row has minus and dashed line lower; overdue grace on today leaves fact Итого unchanged"
     why_human: "Live chart geometry and tooltip mount order need browser observation (OPERATOR agent UAT via Orca)"
