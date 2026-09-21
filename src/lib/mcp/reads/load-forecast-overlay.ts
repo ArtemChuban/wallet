@@ -29,7 +29,7 @@ export function resolveForecastHorizonEnd(
 }
 
 export type SerializedForecastEvent = {
-  kind: "income" | "grace";
+  kind: "income" | "grace" | "interest";
   parentId: number;
   plannedAmountMinor: string;
   displayPrimaryMajor: number;

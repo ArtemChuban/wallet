@@ -1,7 +1,7 @@
 /**
  * Pure NW forecast overlay (Phase 17+21).
- * Cumulative stair-step from accounts-only today anchor + open future planned income
- * and A′ NW-neutral OPEN grace slots (ΔNW=0 after FX gate).
+ * Cumulative stair-step from accounts-only today anchor + open future planned income,
+ * future SAVINGS interest credits (+ΔNW), and A′ NW-neutral OPEN grace slots (ΔNW=0 after FX gate).
  * Import wall (D-18): money / locf / dates only — never NW history, credit-grace, or DB clients.
  */
 
@@ -15,12 +15,12 @@ import {
   minorToMajorNumber,
 } from "@/lib/money";
 
-export type ForecastSlotKind = "income" | "grace";
+export type ForecastSlotKind = "income" | "grace" | "interest";
 
 export type ForecastSlot = {
   kind: ForecastSlotKind;
   parentId: number;
-  /** Sample date after membership fold (income: due > today; grace: today or future due). */
+  /** Sample date after membership fold (income and interest: > today; grace: today or future due). */
   plannedAsOf: string;
   plannedAmountMinor: bigint;
   currencyCode: string;
@@ -78,6 +78,23 @@ export function forecastHorizonEnd(preset: RangePreset, today: string): string {
   }
 }
 
+function forecastDeltaMinor(
+  kind: ForecastSlotKind,
+  displayPrimaryMinor: bigint,
+): bigint {
+  switch (kind) {
+    case "income":
+    case "interest":
+      return displayPrimaryMinor;
+    case "grace":
+      return 0n;
+    default: {
+      const _exhaustive: never = kind;
+      throw new Error(`unknown kind: ${_exhaustive}`);
+    }
+  }
+}
+
 function slotInWindow(
   kind: ForecastSlotKind,
   plannedAsOf: string,
@@ -85,11 +102,18 @@ function slotInWindow(
   horizonEnd: string,
 ): boolean {
   if (plannedAsOf > horizonEnd) return false;
-  if (kind === "income") {
-    return plannedAsOf > today;
+  switch (kind) {
+    case "income":
+    case "interest":
+      return plannedAsOf > today;
+    case "grace":
+      // grace: allows today after overdue fold (D-01, D-04)
+      return plannedAsOf >= today;
+    default: {
+      const _exhaustive: never = kind;
+      throw new Error(`unknown kind: ${_exhaustive}`);
+    }
   }
-  // grace: allows today after overdue fold (D-01, D-04)
-  return plannedAsOf >= today;
 }
 
 /**
@@ -146,7 +170,7 @@ export function buildNetWorthForecastSeries(input: {
       );
     }
 
-    const primaryMinor = slot.kind === "grace" ? 0n : displayPrimaryMinor;
+    const primaryMinor = forecastDeltaMinor(slot.kind, displayPrimaryMinor);
     converted.push({
       plannedAsOf: slot.plannedAsOf,
       primaryMinor,
