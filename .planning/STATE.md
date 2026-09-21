@@ -5,11 +5,11 @@ milestone_name: Сберегательный счет (Phases 27–31)
 current_phase: 29
 current_phase_name: Капитал overlay + SAVISO
 status: executing
-stopped_at: Completed 29-02-PLAN.md
-last_updated: "2026-09-21T16:32:04.685Z"
+stopped_at: Phase 29 human verification needed
+last_updated: "2026-09-21T16:39:10.066Z"
 last_activity: 2026-09-21
 last_activity_desc: Completed 29-01 Wave 0 overlay + SAVISO contracts
-state_head: 16b8d6a00d7087166fa67eeb66db19e9dac14cce
+state_head: 906576ea743efae4d77b6a4de1c058a0cd6b51e2
 progress:
   total_phases: 5
   completed_phases: 2
@@ -133,9 +133,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-21T16:32:04.608Z
-Stopped at: Completed 29-02-PLAN.md
-Resume file: None
+Last session: 2026-09-21T16:39:09.880Z
+Stopped at: Phase 29 human verification needed
+Resume file: .planning/phases/29-kapital-overlay-saviso/29-UAT.md
 
 ## Operator Next Steps
 
