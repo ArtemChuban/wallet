@@ -140,12 +140,12 @@ Plans:
   3. Recording/viewing interest forecast never creates BalanceSnapshot and never changes historical NW LOCF
   4. Regression suite proves SAVISO (never-calls on snapshot mutates + golden historical series identity without interest)
 
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans executed
 
 Plans:
 
 - [x] 29-01-PLAN.md — Wave 0 red contracts: SAVISO isolation, signed grace totals, tooltip file-scan
-- [ ] 29-02-PLAN.md — Tracer: interest slots on Прогноз, grace line dip, tooltip block
+- [x] 29-02-PLAN.md — Tracer: interest slots on Прогноз, grace line dip, tooltip block
 
 **UI hint**: yes
 
@@ -184,7 +184,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 27. SAVINGS schema + CRUD | 4/4 | Complete    | 2026-09-11 |
 | 28. Interest math + forecast kind | 2/2 | Complete    | 2026-09-21 |
-| 29. Капитал overlay + SAVISO | 1/2 | In Progress|  |
+| 29. Капитал overlay + SAVISO | 2/2 | In Progress|  |
 | 30. MCP PARITY + verify | 0/? | Not started | - |
 | 31. ASSET ↔ SAVINGS type conversion | 0/? | Not started | - |
 

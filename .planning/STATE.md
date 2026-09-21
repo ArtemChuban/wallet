@@ -5,16 +5,16 @@ milestone_name: Сберегательный счет (Phases 27–31)
 current_phase: 29
 current_phase_name: Капитал overlay + SAVISO
 status: executing
-stopped_at: Completed 29-01-PLAN.md
-last_updated: "2026-09-21T16:26:30.000Z"
+stopped_at: Completed 29-02-PLAN.md
+last_updated: "2026-09-21T16:32:04.685Z"
 last_activity: 2026-09-21
 last_activity_desc: Completed 29-01 Wave 0 overlay + SAVISO contracts
-state_head: edf5a78
+state_head: 16b8d6a00d7087166fa67eeb66db19e9dac14cce
 progress:
   total_phases: 5
   completed_phases: 2
   total_plans: 8
-  completed_plans: 7
+  completed_plans: 8
   percent: 40
 ---
 
@@ -66,6 +66,7 @@ Progress: [████░░░░░░] 40%
 | Phase 28-interest-math-forecast-kind P01 | 6min | 2 tasks | 2 files |
 | Phase 28-interest-math-forecast-kind P02 | 5min | 2 tasks | 4 files |
 | Phase 29 P01 | 5min | 3 tasks | 3 files |
+| Phase 29 P02 | 3min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -91,6 +92,9 @@ Decisions are logged in PROJECT.md Key Decisions table. v1.5 locks from scoping/
 - [Phase 29]: SAVINGS golden series equals snapshot minors only; unused interest fixture voided (SAVISO-02)
 - [Phase 29]: D-11 Wave 0 red locks dipped primary grace totals; plannedAmountMinor stays positive
 - [Phase 29]: INT-03 FX: missing lists USD; today-dated rate includes; next-day rate drops
+- [Phase 29]: D-11 grace line addend is -displayPrimaryMinor; plannedAmountMinor and displayPrimaryMajor stay positive
+- [Phase 29]: forecastSavings uses InterestAccountInput keys; balanceMinor string on RSC, BigInt in shell
+- [Phase 29]: Interest block mounts only on future tooltip between Прогноз level and grace (D-06)
 
 ### Pending Todos
 
@@ -129,8 +133,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-21T16:25:56.806Z
-Stopped at: Completed 29-01-PLAN.md
+Last session: 2026-09-21T16:32:04.608Z
+Stopped at: Completed 29-02-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
