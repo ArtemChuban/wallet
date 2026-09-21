@@ -63,7 +63,7 @@ Declared values (must be multiples of 4):
 | Token | Value | Usage |
 |-------|-------|-------|
 | xs | 4px | Tooltip block gaps (`gap-1`); interest/grace separator `mt-1` + `pt-1` |
-| sm | 8px | Chart margins (`left/right/top: 8`); section chrome `gap-2`; row `gap-2` |
+| sm | 8px | Chart margins (`left/right/top: 8`); section chrome `gap-2`; row `gap-2`; tooltip card `px-2 py-2` |
 | md | 16px | Partial banner padding `p-4` |
 | lg | 24px | Section internal rhythm |
 | xl | 32px | Page gap between Капитал sections (unchanged) |
@@ -73,7 +73,6 @@ Declared values (must be multiples of 4):
 Exceptions:
 - Chart height stays **200px** (`h-[200px]`).
 - Minimum tap target **44×44px** for existing range-control segments. No new controls.
-- Tooltip card padding stays the shipped `px-2.5 py-1.5`. Do not restyle the card.
 - Interest block separator matches grace: `mt-1 grid gap-1 border-t border-border/50 pt-1`.
 
 Source: Phase 21 Spacing; `NetWorthHistoryChart` `ForecastGraceTooltipBlock`; CONTEXT discretion (mirror grace DOM).
@@ -97,7 +96,7 @@ Usage this phase:
 - **Body** — unused on the tooltip and banner.
 - **Label** — banner title «Прогноз неполный» (weight **600**); banner « · нет курса …» (weight **400**, muted); tooltip date (weight **600**); «Прогноз», «Накопительный», «Ожидаемое начисление», «Платёж для беспроцентного», «Ожидаемый платёж», account names (weight **400**, muted). Amounts: Geist Mono, Label size, weight **600**.
 
-Tooltip card stays existing `text-xs` (chart Label voice already shipped). Banner stays `text-sm`. Do not introduce a fifth size.
+Tooltip and banner both use Label **14px** via `text-sm`. `text-xs` is not used.
 
 Sources: Phase 21 Typography; CONTEXT D-04…D-10.
 
