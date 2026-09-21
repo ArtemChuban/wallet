@@ -4,16 +4,16 @@ milestone: v1.5
 milestone_name: Сберегательный счет (Phases 27–30)
 current_phase: 28
 current_phase_name: Interest math + forecast kind
-status: planning
-stopped_at: Phase 28 research written
-last_updated: "2026-09-21T10:45:00.000Z"
-last_activity: 2026-09-11
-last_activity_desc: Phase 27 complete, transitioned to Phase 28
+status: ready_to_execute
+stopped_at: Phase 28 plans written
+last_updated: "2026-09-21T11:00:00.000Z"
+last_activity: 2026-09-21
+last_activity_desc: Phase 28 plans written
 state_head: 81ff0b18024ff1632bb1709c84caadd6c976e370
 progress:
   total_phases: 4
   completed_phases: 1
-  total_plans: 4
+  total_plans: 6
   completed_plans: 4
   percent: 25
 ---
@@ -25,14 +25,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательный счет)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 27 — SAVINGS schema + CRUD
+**Current focus:** Phase 28 — interest math + forecast kind (2 plans)
 
 ## Current Position
 
 Phase: 28 of 30 (Interest math + forecast kind)
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-09-11 — Phase 27 complete, transitioned to Phase 28
+Plan: 28-01 then 28-02 (not started)
+Status: Plans ready
+Last activity: 2026-09-21 — Phase 28 plans written
 
 Progress: [░░░░░░░░░░] 0%
 
@@ -117,10 +117,10 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-21T10:45:00.000Z
-Stopped at: Phase 28 research written
-Resume file: .planning/phases/28-interest-math-forecast-kind/28-RESEARCH.md
+Last session: 2026-09-21T11:00:00.000Z
+Stopped at: Phase 28 plans written
+Resume file: .planning/phases/28-interest-math-forecast-kind/28-01-PLAN.md
 
 ## Operator Next Steps
 
-- Continue Phase 27: `/gsd-execute-phase 27` (next: 27-02 tracer+migrate)
+- Execute Phase 28: `/gsd-execute-phase 28` (wave 0 red tests, then tracer)

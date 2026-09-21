@@ -120,7 +120,11 @@ Plans:
   3. Forecast slot kind `"interest"` carries ΔNW = +interest (positive credit, not grace A′=0)
   4. Interest membership is future-only (accrual dates after today) so past fact line stays untouched by the formula path
 
-**Plans**: TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 28-01-PLAN.md — Wave 0 red Vitest contracts (÷12 compound chain + interest kind window)
+- [ ] 28-02-PLAN.md — Tracer: compound enumerator + interest ΔNW kind + serialized union
 
 ### Phase 29: Капитал overlay + SAVISO
 

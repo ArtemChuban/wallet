@@ -38,9 +38,10 @@ created: "2026-09-21"
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 28-W0-01 | 01 | 0 | INT-01 | — | N/A | unit stubs | `./node_modules/.bin/vitest run src/lib/savings-interest.test.ts` | ❌ W0 | ⬜ pending |
-| 28-W0-02 | 01 | 0 | INT-01 | — | N/A | unit stubs | `./node_modules/.bin/vitest run src/lib/nw-forecast.test.ts` | ✅ file / ❌ cases | ⬜ pending |
-| TBD | TBD | 1+ | INT-01 | T-28-* | bigint ÷12 only; no Math.pow; future-only | unit | `./node_modules/.bin/vitest run src/lib/savings-interest.test.ts src/lib/nw-forecast.test.ts` | ❌ W0 | ⬜ pending |
+| 28-01-01 | 01 | 0 | INT-01 | T-28-01, T-28-04 | N/A (red contracts) | unit stubs | `./node_modules/.bin/vitest run src/lib/savings-interest.test.ts` | ❌ W0 | ⬜ pending |
+| 28-01-02 | 01 | 0 | INT-01 | T-28-02 | N/A (red contracts) | unit stubs | `./node_modules/.bin/vitest run src/lib/nw-forecast.test.ts` | ✅ file / ❌ cases | ⬜ pending |
+| 28-02-01 | 02 | 1 | INT-01 | T-28-01, T-28-02, T-28-03 | bigint ÷12 only; future-only window; no snapshot write | unit | `./node_modules/.bin/vitest run src/lib/savings-interest.test.ts src/lib/nw-forecast.test.ts` | ❌ W0 | ⬜ pending |
+| 28-02-02 | 02 | 1 | INT-01 | T-28-03, T-28-05 | independent principals; missing FX excludes interest | unit | `./node_modules/.bin/vitest run src/lib/savings-interest.test.ts src/lib/nw-forecast.test.ts` | ❌ W0 | ⬜ pending |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
