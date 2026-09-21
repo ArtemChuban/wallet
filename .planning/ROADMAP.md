@@ -81,7 +81,7 @@ Full detail: [milestones/v1.4-ROADMAP.md](./milestones/v1.4-ROADMAP.md)
 
 - [x] **Phase 27: SAVINGS schema + CRUD** - Distinct SAVINGS type with rate/DOM fields; principal in NW (completed 2026-09-11)
 - [x] **Phase 28: Interest math + forecast kind** - Pure monthly interest + `interest` forecast slot kind (completed 2026-09-21)
-- [ ] **Phase 29: Капитал overlay + SAVISO** - Dashed «Прогноз» interest credits + isolation twin
+- [x] **Phase 29: Капитал overlay + SAVISO** - Dashed «Прогноз» interest credits + isolation twin (completed 2026-09-21)
 - [ ] **Phase 30: MCP PARITY + verify** - Agent reads SAVINGS fields + interest overlay events
 - [ ] **Phase 31: ASSET ↔ SAVINGS type conversion** - Switch type both ways in account settings
 
@@ -140,7 +140,7 @@ Plans:
   3. Recording/viewing interest forecast never creates BalanceSnapshot and never changes historical NW LOCF
   4. Regression suite proves SAVISO (never-calls on snapshot mutates + golden historical series identity without interest)
 
-**Plans:** 2/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 
@@ -184,7 +184,7 @@ Plans:
 |-------|----------------|--------|-----------|
 | 27. SAVINGS schema + CRUD | 4/4 | Complete    | 2026-09-11 |
 | 28. Interest math + forecast kind | 2/2 | Complete    | 2026-09-21 |
-| 29. Капитал overlay + SAVISO | 2/2 | In Progress|  |
+| 29. Капитал overlay + SAVISO | 2/2 | Complete    | 2026-09-21 |
 | 30. MCP PARITY + verify | 0/? | Not started | - |
 | 31. ASSET ↔ SAVINGS type conversion | 0/? | Not started | - |
 

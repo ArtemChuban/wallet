@@ -2,20 +2,20 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Сберегательный счет (Phases 27–31)
-current_phase: 29
-current_phase_name: Капитал overlay + SAVISO
-status: executing
-stopped_at: Phase 29 human verification needed
-last_updated: "2026-09-21T16:39:10.066Z"
+current_phase: 30
+current_phase_name: MCP PARITY + verify
+status: planning
+stopped_at: Phase 29 complete, ready to plan Phase 30
+last_updated: "2026-09-21T16:50:58.416Z"
 last_activity: 2026-09-21
-last_activity_desc: Completed 29-01 Wave 0 overlay + SAVISO contracts
-state_head: 906576ea743efae4d77b6a4de1c058a0cd6b51e2
+last_activity_desc: Phase 29 complete, transitioned to Phase 30
+state_head: eaf445e5759c727e16b8218a6d76d132562ff1f6
 progress:
   total_phases: 5
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 8
   completed_plans: 8
-  percent: 40
+  percent: 60
 ---
 
 # Project State
@@ -25,16 +25,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательный счет)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 29 — Капитал overlay + SAVISO (29-01 done; 29-02 next)
+**Current focus:** Phase 30 — MCP PARITY + verify
 
 ## Current Position
 
-Phase: 29 (Капитал overlay + SAVISO) — IN PROGRESS
-Plan: 2 of 2
-Status: 29-01 complete — ready for 29-02
-Last activity: 2026-09-21 — Completed 29-01 Wave 0 contracts
+Phase: 30 — MCP PARITY + verify
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-09-21 — Phase 29 complete, transitioned to Phase 30
 
-Progress: [████░░░░░░] 40%
+Progress: [██████░░░░] 60%
 
 ## Performance Metrics
 
@@ -134,7 +134,7 @@ Items acknowledged and deferred at milestone close, most recent first:
 ## Session Continuity
 
 Last session: 2026-09-21T16:39:09.880Z
-Stopped at: Phase 29 human verification needed
+Stopped at: Phase 29 complete, ready to plan Phase 30
 Resume file: .planning/phases/29-kapital-overlay-saviso/29-UAT.md
 
 ## Operator Next Steps

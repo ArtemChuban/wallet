@@ -16,7 +16,7 @@
     {
       "number": "29",
       "name": "Капитал overlay + SAVISO",
-      "status": "pending"
+      "status": "complete"
     },
     {
       "number": "30",
@@ -30,9 +30,9 @@
     }
   ],
   "next": {
-    "command": "/gsd:progress --next",
-    "label": "Advance to the next step (plan phase 29)",
-    "reason": "Phase 29 of 5 — needs a plan"
+    "command": "/gsd-progress --next",
+    "label": "Advance to the next step (plan phase 30)",
+    "reason": "Phase 30 of 5 — needs a plan"
   },
-  "updated_at": "2026-09-21T16:17:10.816Z"
+  "updated_at": "2026-09-21T16:50:58.441Z"
 }
