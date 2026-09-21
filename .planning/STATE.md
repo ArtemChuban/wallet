@@ -5,10 +5,10 @@ milestone_name: Сберегательный счет (Phases 27–31)
 current_phase: 29
 current_phase_name: Капитал overlay + SAVISO
 status: planning
-stopped_at: Phase 29 context gathered
-last_updated: "2026-09-21T15:22:39.929Z"
+stopped_at: Phase 29 research written
+last_updated: "2026-09-21T15:32:24.000Z"
 last_activity: 2026-09-21
-last_activity_desc: Phase 28 complete, transitioned to Phase 29
+last_activity_desc: Phase 29 research complete
 state_head: 68a68ca9da716fbe1d2528085c442cf44c93cfa2
 progress:
   total_phases: 5
@@ -25,14 +25,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательный счет)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 28 — interest math + forecast kind (2 plans)
+**Current focus:** Phase 29 — Капитал overlay + SAVISO (research written)
 
 ## Current Position
 
 Phase: 29 of 31 (Капитал overlay + SAVISO)
 Plan: Not started
-Status: Ready to plan
-Last activity: 2026-09-21 — Phase 28 complete, transitioned to Phase 29
+Status: Research written, ready to plan
+Last activity: 2026-09-21 — Phase 29 research complete
 
 Progress: [███░░░░░░░] 25%
 
