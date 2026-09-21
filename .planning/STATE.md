@@ -2,20 +2,20 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Сберегательный счет (Phases 27–30)
-current_phase: 28
-current_phase_name: Interest math + forecast kind
-status: verifying
-stopped_at: Completed 28-02-PLAN.md
-last_updated: "2026-09-21T11:30:19.127Z"
+current_phase: 29
+current_phase_name: Капитал overlay + SAVISO
+status: planning
+stopped_at: Phase 28 complete
+last_updated: "2026-09-21T11:38:03.133Z"
 last_activity: 2026-09-21
-last_activity_desc: Completed 28-01 red contracts
-state_head: 90ce13c96a696fe9dfeae59ba62930b097c5f29e
+last_activity_desc: Phase 28 complete, transitioned to Phase 29
+state_head: 79e631711e8696010d563d5379d1582abfe50412
 progress:
   total_phases: 4
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 6
   completed_plans: 6
-  percent: 25
+  percent: 50
 ---
 
 # Project State
@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательн�
 
 ## Current Position
 
-Phase: 28 of 30 (Interest math + forecast kind)
-Plan: 2 of 2
-Status: Phase complete — ready for verification
-Last activity: 2026-09-21 — Completed 28-01 red contracts
+Phase: 29 of 30 (Капитал overlay + SAVISO)
+Plan: Not started
+Status: Ready to plan
+Last activity: 2026-09-21 — Phase 28 complete, transitioned to Phase 29
 
 Progress: [███░░░░░░░] 25%
 
@@ -124,9 +124,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-21T11:30:19.071Z
-Stopped at: Completed 28-02-PLAN.md
-Resume file: None
+Last session: 2026-09-21T11:38:03.059Z
+Stopped at: Phase 28 complete
+Resume file: .planning/phases/28-interest-math-forecast-kind/28-VERIFICATION.md
 
 ## Operator Next Steps
 

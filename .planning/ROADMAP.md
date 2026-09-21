@@ -80,7 +80,7 @@ Full detail: [milestones/v1.4-ROADMAP.md](./milestones/v1.4-ROADMAP.md)
 ### v1.5 Сберегательный счет (Phases 27–30)
 
 - [x] **Phase 27: SAVINGS schema + CRUD** - Distinct SAVINGS type with rate/DOM fields; principal in NW (completed 2026-09-11)
-- [ ] **Phase 28: Interest math + forecast kind** - Pure monthly interest + `interest` forecast slot kind
+- [x] **Phase 28: Interest math + forecast kind** - Pure monthly interest + `interest` forecast slot kind (completed 2026-09-21)
 - [ ] **Phase 29: Капитал overlay + SAVISO** - Dashed «Прогноз» interest credits + isolation twin
 - [ ] **Phase 30: MCP PARITY + verify** - Agent reads SAVINGS fields + interest overlay events
 
@@ -120,7 +120,7 @@ Plans:
   3. Forecast slot kind `"interest"` carries ΔNW = +interest (positive credit, not grace A′=0)
   4. Interest membership is future-only (accrual dates after today) so past fact line stays untouched by the formula path
 
-**Plans:** 2/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 
@@ -161,7 +161,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 27. SAVINGS schema + CRUD | 4/4 | Complete    | 2026-09-11 |
-| 28. Interest math + forecast kind | 2/2 | In Progress|  |
+| 28. Interest math + forecast kind | 2/2 | Complete    | 2026-09-21 |
 | 29. Капитал overlay + SAVISO | 0/? | Not started | - |
 | 30. MCP PARITY + verify | 0/? | Not started | - |
 
