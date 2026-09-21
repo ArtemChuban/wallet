@@ -69,6 +69,27 @@ function graceSlot(
   };
 }
 
+function interestSlot(
+  accountId: number,
+  plannedAsOf: string,
+  amountMinor: bigint,
+  extras: Partial<
+    Pick<ForecastSlot, "currencyCode" | "isPrimaryCurrency" | "accountName">
+  > = {},
+): ForecastSlot {
+  return {
+    kind: "interest",
+    parentId: accountId,
+    plannedAsOf,
+    plannedAmountMinor: amountMinor,
+    currencyCode: extras.currencyCode ?? "RUB",
+    currencyScale: 2,
+    isPrimaryCurrency: extras.isPrimaryCurrency ?? true,
+    accountId,
+    accountName: extras.accountName ?? "Накопительный",
+  };
+}
+
 describe("forecastHorizonEnd", () => {
   it("30d → +30 from today (D-05)", () => {
     expect(forecastHorizonEnd("30d", today)).toBe("2026-03-31");
@@ -462,9 +483,69 @@ describe("grace A′ / membership / FX codes", () => {
     expect(result.points).toEqual([]);
   });
 
-  it("ForecastSlot kind is only income|grace — CLOSED never a slot (C-07)", () => {
+  it("ForecastSlot kind is only income|grace|interest — CLOSED never a slot (C-07 / D-12)", () => {
     // CLOSED filtered at openGraceForecastMembership; builder has no CLOSED status.
-    const kinds: ForecastSlot["kind"][] = ["income", "grace"];
+    const kinds: ForecastSlot["kind"][] = ["income", "grace", "interest"];
+    expect(kinds).toContain("interest");
     expect(kinds).not.toContain("CLOSED" as ForecastSlot["kind"]);
+  });
+});
+
+describe("interest forecast kind (D-07 / D-12 / D-13)", () => {
+  it("future interest slot adds planned amount to NW (D-12 / SC #3)", () => {
+    const slot = interestSlot(10, "2026-03-15", 50_000n);
+    expect(slot.parentId).toBe(slot.accountId);
+    expect(slot).not.toHaveProperty("dueAsOf");
+    const result = buildNetWorthForecastSeries({
+      anchorPrimaryMinor: 1_000_000n,
+      slots: [slot],
+      rates: [],
+      primaryScale: 2,
+      today,
+      horizonEnd: "2026-03-31",
+    });
+    expect(result.includedSlotCount).toBe(1);
+    expect(
+      result.points.find((p) => p.asOfDate === "2026-03-15")?.forecastPrimaryMinor,
+    ).toBe(1_050_000n);
+  });
+
+  it("interest plannedAsOf equal to today is excluded (D-07 / D-12 / SC #4)", () => {
+    const slot = interestSlot(10, today, 50_000n);
+    expect(slot.parentId).toBe(10);
+    expect(slot.accountId).toBe(10);
+    expect(slot).not.toHaveProperty("dueAsOf");
+    const result = buildNetWorthForecastSeries({
+      anchorPrimaryMinor: 1_000_000n,
+      slots: [slot],
+      rates: [],
+      primaryScale: 2,
+      today,
+      horizonEnd: "2026-03-31",
+    });
+    expect(result.includedSlotCount).toBe(0);
+    expect(result.points).toEqual([]);
+  });
+
+  it("same-day interest+grace: NW moves by interest only (D-03 / D-12)", () => {
+    const slots: ForecastSlot[] = [
+      interestSlot(10, "2026-03-15", 50_000n),
+      graceSlot(2, "2026-03-15", 50_000n, { dueAsOf: "2026-03-15" }),
+    ];
+    const result = buildNetWorthForecastSeries({
+      anchorPrimaryMinor: 1_000_000n,
+      slots,
+      rates: [],
+      primaryScale: 2,
+      today,
+      horizonEnd: "2026-03-31",
+    });
+    expect(result.includedSlotCount).toBe(2);
+    const day = result.points.find((p) => p.asOfDate === "2026-03-15");
+    expect(day?.forecastPrimaryMinor).toBe(1_050_000n);
+    expect(day?.forecastEvents?.map((e) => e.kind).sort()).toEqual([
+      "grace",
+      "interest",
+    ]);
   });
 });
