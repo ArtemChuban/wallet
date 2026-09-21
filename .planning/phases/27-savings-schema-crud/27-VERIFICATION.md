@@ -24,8 +24,8 @@ prohibitions_review:
 
 **Phase Goal:** Users can create and manage SAVINGS accounts whose balances count in net worth like other assets
 **Verified:** 2026-09-11T16:32:50Z
-**Status:** human_needed
-**Re-verification:** No — initial verification
+**Status:** passed
+**Re-verification:** Yes — UAT 4/4 via Orca; status promoted from human_needed
 
 ## Goal Achievement
 
