@@ -61,7 +61,17 @@ type NetWorthHistoryChartProps = {
 
 /** Interest block — D-01/D-04/D-05/D-08; future accrual day only (D-03). */
 function ForecastInterestTooltipBlock({ events }: { events: ForecastEvent[] }) {
-  const interestRows = events.filter((e) => e.kind === "interest");
+  const interestRows = events
+    .filter((e) => e.kind === "interest")
+    .slice()
+    .sort((a, b) => {
+      if (b.displayPrimaryMajor !== a.displayPrimaryMajor) {
+        return b.displayPrimaryMajor - a.displayPrimaryMajor;
+      }
+      const nameA = a.accountName ?? `счёт ${a.accountId}`;
+      const nameB = b.accountName ?? `счёт ${b.accountId}`;
+      return nameA.localeCompare(nameB, "ru", { sensitivity: "base" });
+    });
   if (interestRows.length === 0) return null;
 
   return (
@@ -144,7 +154,7 @@ function NetWorthChartTooltip({
         : null;
     if (forecastVal == null) return null;
     return (
-      <div className="grid min-w-40 items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl">
+      <div className="grid min-w-40 items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-sm shadow-xl">
         <div className="font-medium">{labelText}</div>
         <div className="flex w-full items-center gap-2">
           <div
@@ -178,7 +188,7 @@ function NetWorthChartTooltip({
   );
 
   return (
-    <div className="grid min-w-40 items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl">
+    <div className="grid min-w-40 items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-sm shadow-xl">
       <div className="font-medium">{labelText}</div>
       <div className="grid gap-1.5">
         {rows.map((item, index) => {
