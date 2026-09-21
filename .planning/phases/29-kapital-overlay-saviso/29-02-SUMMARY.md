@@ -119,7 +119,7 @@ Each task was committed atomically:
 1. **Task 1: End-to-end interest credit and grace dip on Прогноз** - `d1d4a5f` (feat)
 2. **Task 2: Tooltip sort, type size, and accrual-day-only rows** - `16b8d6a` (feat)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `6260aa5` (docs: complete plan)
 
 ## Files Created/Modified
 
