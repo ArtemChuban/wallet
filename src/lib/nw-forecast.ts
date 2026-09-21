@@ -1,7 +1,7 @@
 /**
- * Pure NW forecast overlay (Phase 17+21).
+ * Pure NW forecast overlay (Phase 17+21+29).
  * Cumulative stair-step from accounts-only today anchor + open future planned income,
- * future SAVINGS interest credits (+ΔNW), and A′ NW-neutral OPEN grace slots (ΔNW=0 after FX gate).
+ * future SAVINGS interest credits (+ΔNW), and OPEN grace slots that lower the line (−payment after FX gate, D-11).
  * Import wall (D-18): money / locf / dates only — never NW history, credit-grace, or DB clients.
  */
 
@@ -37,7 +37,7 @@ export type ForecastEvent = {
   kind: ForecastSlotKind;
   parentId: number;
   plannedAmountMinor: bigint;
-  /** Primary major after FX gate — tooltip amount even when ΔNW=0 (D-11). */
+  /** Primary major after FX gate — unsigned tooltip magnitude; line sign is forecastDeltaMinor (D-11). */
   displayPrimaryMajor: number;
   currencyCode: string;
   accountId?: number;
@@ -87,7 +87,7 @@ function forecastDeltaMinor(
     case "interest":
       return displayPrimaryMinor;
     case "grace":
-      return 0n;
+      return -displayPrimaryMinor;
     default: {
       const _exhaustive: never = kind;
       throw new Error(`unknown kind: ${_exhaustive}`);
@@ -139,7 +139,7 @@ export function buildNetWorthForecastSeries(input: {
 
   type Converted = {
     plannedAsOf: string;
-    /** NW cumulative addend — 0n for grace (A′ / C-01). */
+    /** NW cumulative addend — negative for grace (D-11). */
     primaryMinor: bigint;
     event: ForecastEvent;
   };

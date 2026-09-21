@@ -59,7 +59,33 @@ type NetWorthHistoryChartProps = {
   showForecast?: boolean;
 };
 
-/** Grace block B — C-04 / D-10…D-13; omit when no FX-included grace events. */
+/** Interest block — D-01/D-04/D-05/D-08; future accrual day only (D-03). */
+function ForecastInterestTooltipBlock({ events }: { events: ForecastEvent[] }) {
+  const interestRows = events.filter((e) => e.kind === "interest");
+  if (interestRows.length === 0) return null;
+
+  return (
+    <div className="mt-1 grid gap-1 border-t border-border/50 pt-1">
+      <span className="text-muted-foreground">Накопительный</span>
+      <span className="text-muted-foreground">Ожидаемое начисление</span>
+      {interestRows.map((ev) => (
+        <div
+          key={`${ev.parentId}-${ev.accountId ?? ""}-${ev.displayPrimaryMajor}`}
+          className="flex w-full items-start gap-2"
+        >
+          <span className="min-w-0 flex-1 break-words text-muted-foreground">
+            {ev.accountName ?? `счёт ${ev.accountId}`}
+          </span>
+          <span className="shrink-0 font-mono font-semibold text-foreground tabular-nums">
+            {`+${formatChartNumber(ev.displayPrimaryMajor)}`}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/** Grace block B — C-04 / D-09…D-13; omit when no FX-included grace events. */
 function ForecastGraceTooltipBlock({ events }: { events: ForecastEvent[] }) {
   const graceRows = events.filter((e) => e.kind === "grace");
   if (graceRows.length === 0) return null;
@@ -67,9 +93,7 @@ function ForecastGraceTooltipBlock({ events }: { events: ForecastEvent[] }) {
   return (
     <div className="mt-1 grid gap-1 border-t border-border/50 pt-1">
       <span className="text-muted-foreground">Платёж для беспроцентного</span>
-      <span className="text-muted-foreground">
-        NW без изменения (оплата карты)
-      </span>
+      <span className="text-muted-foreground">Ожидаемый платёж</span>
       {graceRows.map((ev) => (
         <div
           key={`${ev.parentId}-${ev.dueAsOf ?? ""}-${ev.accountId ?? ""}`}
@@ -79,7 +103,7 @@ function ForecastGraceTooltipBlock({ events }: { events: ForecastEvent[] }) {
             {ev.accountName ?? `обязательство ${ev.parentId}`}
           </span>
           <span className="shrink-0 font-mono font-semibold text-foreground tabular-nums">
-            {formatChartNumber(ev.displayPrimaryMajor)}
+            {`-${formatChartNumber(ev.displayPrimaryMajor)}`}
           </span>
         </div>
       ))}
@@ -132,6 +156,7 @@ function NetWorthChartTooltip({
             {formatChartNumber(forecastVal)}
           </span>
         </div>
+        <ForecastInterestTooltipBlock events={forecastEvents} />
         <ForecastGraceTooltipBlock events={forecastEvents} />
       </div>
     );

@@ -28,6 +28,7 @@ import {
   type ForecastEvent,
   type ForecastSlot,
 } from "@/lib/nw-forecast";
+import { listInterestSlotsInRange } from "@/lib/savings-interest";
 
 export type ChartAccountPayload = {
   id: number;
@@ -96,6 +97,20 @@ export type ForecastGracePayload = {
   }[];
 };
 
+/** SAVINGS rate/DOM rows for interest overlay — string balanceMinor across RSC (D-12). */
+export type ForecastSavingsPayload = {
+  accounts: {
+    accountId: number;
+    accountName: string;
+    balanceMinor: string;
+    annualRateBps: number;
+    accrualDayOfMonth: number;
+    currencyCode: string;
+    currencyScale: number;
+    isPrimaryCurrency: boolean;
+  }[];
+};
+
 type DashboardChartsShellProps = {
   accounts: ChartAccountPayload[];
   snapshots: ChartSnapshotPayload[];
@@ -107,6 +122,7 @@ type DashboardChartsShellProps = {
   anchorPrimaryMinor: string;
   forecastIncome: ForecastIncomePayload;
   forecastGrace: ForecastGracePayload;
+  forecastSavings: ForecastSavingsPayload;
 };
 
 function reviveAccounts(rows: ChartAccountPayload[]): SeriesAccount[] {
@@ -194,6 +210,7 @@ export function DashboardChartsShell({
   anchorPrimaryMinor,
   forecastIncome,
   forecastGrace,
+  forecastSavings,
 }: DashboardChartsShellProps) {
   const [range, setRange] = useState<RangePreset>("30d");
 
@@ -365,9 +382,35 @@ export function DashboardChartsShell({
       dueAsOf: m.dueAsOf,
     }));
 
+    // INT-02 / C-04: Phase 28 enumerator → kind interest; concat income, interest, grace.
+    const interestSlots: ForecastSlot[] = listInterestSlotsInRange(
+      forecastSavings.accounts.map((row) => ({
+        accountId: row.accountId,
+        accountName: row.accountName,
+        balanceMinor: BigInt(row.balanceMinor),
+        annualRateBps: row.annualRateBps,
+        accrualDayOfMonth: row.accrualDayOfMonth,
+        currencyCode: row.currencyCode,
+        currencyScale: row.currencyScale,
+        isPrimaryCurrency: row.isPrimaryCurrency,
+      })),
+      today,
+      horizonEnd,
+    ).map((s) => ({
+      kind: "interest" as const,
+      parentId: s.parentId,
+      plannedAsOf: s.plannedAsOf,
+      plannedAmountMinor: s.interestMinor,
+      currencyCode: s.currencyCode,
+      currencyScale: s.currencyScale,
+      isPrimaryCurrency: s.isPrimaryCurrency,
+      accountId: s.accountId,
+      ...(s.accountName !== undefined ? { accountName: s.accountName } : {}),
+    }));
+
     const built = buildNetWorthForecastSeries({
       anchorPrimaryMinor: anchorMinor,
-      slots: [...openSlots, ...graceSlots],
+      slots: [...openSlots, ...interestSlots, ...graceSlots],
       rates: seriesRates,
       primaryScale,
       today,
@@ -378,6 +421,7 @@ export function DashboardChartsShell({
   }, [
     forecastIncome,
     forecastGrace,
+    forecastSavings,
     range,
     today,
     anchorMinor,

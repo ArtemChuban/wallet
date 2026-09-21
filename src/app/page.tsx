@@ -311,6 +311,28 @@ export default async function Home() {
                 isPrimaryCurrency: o.account.currency.isPrimary,
               })),
             }}
+            forecastSavings={{
+              accounts: accounts
+                .filter(
+                  (a) =>
+                    a.type === "SAVINGS" &&
+                    a.annualRateBps != null &&
+                    a.accrualDayOfMonth != null,
+                )
+                .map((a) => {
+                  const locf = locfByAccount.get(a.id);
+                  return {
+                    accountId: a.id,
+                    accountName: a.name,
+                    balanceMinor: (locf?.amountMinor ?? 0n).toString(),
+                    annualRateBps: a.annualRateBps!,
+                    accrualDayOfMonth: a.accrualDayOfMonth!,
+                    currencyCode: a.currencyCode,
+                    currencyScale: a.currency.scale,
+                    isPrimaryCurrency: a.currency.isPrimary,
+                  };
+                }),
+            }}
           />
         ) : (
           <DashboardAccountList accounts={listRows} primaryCode={primaryCode} />
