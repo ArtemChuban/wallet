@@ -82,7 +82,7 @@ Full detail: [milestones/v1.4-ROADMAP.md](./milestones/v1.4-ROADMAP.md)
 - [x] **Phase 27: SAVINGS schema + CRUD** - Distinct SAVINGS type with rate/DOM fields; principal in NW (completed 2026-09-11)
 - [x] **Phase 28: Interest math + forecast kind** - Pure monthly interest + `interest` forecast slot kind (completed 2026-09-21)
 - [x] **Phase 29: Капитал overlay + SAVISO** - Dashed «Прогноз» interest credits + isolation twin (completed 2026-09-21)
-- [ ] **Phase 30: MCP PARITY + verify** - Agent reads SAVINGS fields + interest overlay events
+- [x] **Phase 30: MCP PARITY + verify** - Agent reads SAVINGS fields + interest overlay events (completed 2026-09-22)
 - [ ] **Phase 31: ASSET ↔ SAVINGS type conversion** - Switch type both ways in account settings
 
 ## Phase Details
@@ -161,7 +161,7 @@ Plans:
   3. New savings read surfaces ship matching MCP read tool fields in the same milestone (PARITY-01 upheld)
   4. MCP descriptions/isolation contract name SAVISO alongside INISO/GRISO; Orca/Nyquist verify overlay visible and historical NW unchanged without new snaps
 
-**Plans:** 2/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 **Wave 1**
@@ -200,7 +200,7 @@ Plans:
 | 27. SAVINGS schema + CRUD | 4/4 | Complete    | 2026-09-11 |
 | 28. Interest math + forecast kind | 2/2 | Complete    | 2026-09-21 |
 | 29. Капитал overlay + SAVISO | 2/2 | Complete    | 2026-09-21 |
-| 30. MCP PARITY + verify | 2/2 | In Progress|  |
+| 30. MCP PARITY + verify | 2/2 | Complete    | 2026-09-22 |
 | 31. ASSET ↔ SAVINGS type conversion | 0/? | Not started | - |
 
 ---
