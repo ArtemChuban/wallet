@@ -25,7 +25,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательный счет)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 30 — MCP PARITY + verify
+**Current focus:** Phase 31 — ASSET ↔ SAVINGS type conversion
 
 ## Current Position
 
