@@ -116,7 +116,7 @@ Each task was committed atomically:
 2. **Task 2: Catalog edge matrix and list_accounts description** - `70d86bc` (test)
 3. **Task 3: Interest event shape, copy close, never-write scans** - `81acec9` (test)
 
-**Plan metadata:** (pending docs commit)
+**Plan metadata:** `620cb19` (docs: complete plan)
 
 _Note: Tracer shipped production GREEN; Tasks 2–3 strengthened edge contracts (feature already present)._
 
