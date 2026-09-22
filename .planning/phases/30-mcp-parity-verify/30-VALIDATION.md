@@ -4,7 +4,7 @@ slug: "mcp-parity-verify"
 # status lifecycle: draft (seeded by plan-phase) → validated (set by validate-phase §6)
 # audit-milestone §5.5 distinguishes NOT-VALIDATED (draft) from PARTIAL (validated + nyquist_compliant: false) (#2117)
 status: validated
-nyquist_compliant: false
+nyquist_compliant: true
 wave_0_complete: true
 created: "2026-09-22"
 validated: "2026-09-22"
@@ -44,7 +44,7 @@ validated: "2026-09-22"
 | 30-W0-01 | 01 | 0 | MCP-01 | T-30-01 | Catalog keys only; no live balances leaked | unit | `npx vitest run src/lib/mcp/tools/accounts.test.ts` | ✅ | ✅ green |
 | 30-W0-02 | 01 | 0 | MCP-02 | T-30-02 | Forecast read never writes BalanceSnapshot | unit | `npx vitest run src/lib/mcp/tools/forecast.test.ts` | ✅ | ✅ green |
 | 30-W0-03 | 01 | 0 | MCP-02 / SAVISO | T-30-02 | Isolation copy names SAVISO-01; no A′ | unit | `npx vitest run src/lib/mcp/isolation-contract.test.ts src/lib/mcp/tools/forecast.test.ts` | ✅ | ✅ green |
-| 30-02-01 | 02 | 2 | PARITY-01 / D-16 | T-30-02 | COVERAGE no-external + savings todo still pending | unit | `npx vitest run src/lib/mcp/phase-30-parity-gate.test.ts` | ✅ | ❌ red (D-16 BLOCKER) |
+| 30-02-01 | 02 | 2 | PARITY-01 / D-16 | T-30-02 | COVERAGE no-external + savings todo still pending | unit | `npx vitest run src/lib/mcp/phase-30-parity-gate.test.ts` | ✅ | ✅ green |
 | 30-UAT | verify | — | PARITY-01 | T-30-02 | Overlay visible; snap count unchanged | Orca UAT | per OPERATOR.md | ❌ UAT | ⚠️ manual |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky/manual*
@@ -66,7 +66,6 @@ validated: "2026-09-22"
 | Behavior | Requirement | Why Manual | Test Instructions |
 |----------|-------------|------------|-------------------|
 | Orca: list_accounts SAVINGS fields + get_forecast_overlay interest + snap count unchanged | PARITY-01 / MCP-01 / MCP-02 | Live MCP + UI drive per OPERATOR.md | Agent: `npm run dev` + Orca; evidence in `30-UAT.md` |
-| D-16 savings todo must remain under `.planning/todos/pending/` until `/gsd-complete-milestone` v1.5 | PARITY-01 / D-16 | **ESCALATED BLOCKER** — file under `completed/`; auditor cannot move todos | Developer: `mv` todo to `pending/`; re-run `npx vitest run src/lib/mcp/phase-30-parity-gate.test.ts` (expect 2/2) |
 
 ---
 
@@ -77,9 +76,9 @@ validated: "2026-09-22"
 - [x] Wave 0 covers all MISSING references
 - [x] No watch-mode flags
 - [x] Feedback latency < 60s
-- [ ] `nyquist_compliant: true` set in frontmatter — **blocked on D-16** (todo prematurely under `completed/`)
+- [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** validated partial 2026-09-22 (Nyquist audit — D-16 BLOCKER)
+**Approval:** validated Nyquist-compliant 2026-09-22 (D-16 restored to pending/)
 
 ---
 
@@ -155,3 +154,27 @@ npx vitest run src/lib/mcp/phase-30-parity-gate.test.ts
 ```
 
 Expect 2/2 pass → set `nyquist_compliant: true`. Do not leave `it.skip` as FILLED.
+
+---
+
+## Validation Audit 2026-09-22 (D-16 artifact restore)
+
+| Metric | Count |
+|--------|-------|
+| Gaps found | 1 |
+| Resolved | 1 |
+| Escalated | 0 |
+
+### Gap detail
+
+| Gap | Requirement | Action | Result |
+|-----|-------------|--------|--------|
+| 30-02-01 / D-16 | Savings todo under `pending/` until v1.5 complete | `mv` completed → pending; re-ran gate + MCP quartet | FILLED — 2/2 gate, 27/27 quartet |
+
+### Evidence
+
+```text
+mv …/completed/2026-09-10-savings-…md …/pending/…
+npx vitest run src/lib/mcp/phase-30-parity-gate.test.ts → 2 passed
+npx vitest run (MCP quartet) → 27 passed
+```

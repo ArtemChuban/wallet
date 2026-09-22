@@ -3,11 +3,11 @@ gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Сберегательный счет (Phases 27–31)
 current_phase: 31
-status: completed
-stopped_at: Phase 31 complete — all phases complete
-last_updated: "2026-09-22T12:47:44.541Z"
+status: milestone_audit_tech_debt
+stopped_at: Milestone audit complete — tech_debt (Nyquist + light debt)
+last_updated: "2026-09-22T14:10:13Z"
 last_activity: 2026-09-22
-last_activity_desc: Phase 31 complete
+last_activity_desc: "Phase 30 Nyquist compliant — D-16 todo restored to pending/"
 state_head: b69409c82c5ac2f02bbbf26c428ea9b8ce1d74b9
 progress:
   total_phases: 5
@@ -24,16 +24,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательный счет)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** Phase 31 — ASSET ↔ SAVINGS type conversion
+**Current focus:** v1.5 audit done — Phase 30 Nyquist compliant; remaining Nyquist drafts 27/28/31
 
 ## Current Position
 
-Phase: 31
-Plan: Not started
-Status: All phases complete
-Last activity: 2026-09-22 — Phase 31 complete
+Phase: 31 (milestone complete)
+Plan: —
+Status: Milestone audited — tech_debt (see `.planning/v1.5-MILESTONE-AUDIT.md`)
+Last activity: 2026-09-22 — Phase 30 Nyquist D-16 restored (`nyquist_compliant: true`)
 
-Progress: [████████░░] 80%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -107,7 +107,7 @@ Decisions are logged in PROJECT.md Key Decisions table. v1.5 locks from scoping/
 - [Phase 31]: Forbidden non-peer transitions return generic Russian save failure (no type detail)
 - [Phase 31]: Same-type SAVINGS update omits type field; convert paths set type explicitly
 - [Phase 31]: Shared create/convert Select; CONVERT_TYPE_OPTIONS excludes FIAT_CREDIT
-- [Phase 31]: 31-UAT pending for end-of-phase Orca verify-work (OPERATOR)
+- [Phase 31]: 31-UAT 6/6 pass via Orca (agent-driven)
 
 ### Pending Todos
 
@@ -115,10 +115,10 @@ Decisions are logged in PROJECT.md Key Decisions table. v1.5 locks from scoping/
 
 ### Blockers/Concerns
 
-- None blocking Phase 27 planning
+- None blocking milestone close
+- v1.5 audit tech_debt: Nyquist VALIDATION draft on phases 27/28/31 (29+30 compliant); dual interest membership UI↔MCP; D-02 sort probe unit gap; empty-fact nw=forecast edge
 - Nyquist VALIDATION still draft on archived phases 19–22 (carry-forward tech_debt from v1.3)
 - v1.4 audit tech_debt: SUMMARY transport wording; 25-01 frontmatter; 26-VERIFICATION/UAT doc drift
-- Phase 28 plan must lock principal LOCF as-of policy (today-anchor flat vs as-of accrual) + truncate policy for bps÷12
 
 ### Roadmap Evolution
 
@@ -146,11 +146,12 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-22T12:46:59.009Z
-Stopped at: Phase 31 complete — all phases complete
-Resume file: 
+Last session: 2026-09-22T14:10:13Z
+Stopped at: Milestone audit complete — tech_debt
+Resume file: .planning/v1.5-MILESTONE-AUDIT.md
 
 ## Operator Next Steps
 
-- Next: execute `/gsd-execute-phase 31` plan 31-02 (AccountFormDialog unlock)
-- Or: `/gsd-execute-plan` for 31-02
+- A: `/gsd-complete-milestone v1.5` — accept tech debt, archive
+- B: `/gsd-validate-phase 27` (then 28, 31) — reconcile remaining Nyquist before close
+- Or insert cleanup phase for dual membership / D-02 sort probe
