@@ -5,16 +5,16 @@ milestone_name: Сберегательный счет (Phases 27–31)
 current_phase: 31
 current_phase_name: ASSET ↔ SAVINGS type conversion
 status: in_progress
-stopped_at: Completed 31-01-PLAN.md
-last_updated: "2026-09-22T12:32:29.962Z"
+stopped_at: Completed 31-02-PLAN.md
+last_updated: "2026-09-22T12:38:09.559Z"
 last_activity: 2026-09-22
 last_activity_desc: Completed 31-01 — Zod + updateAccount ASSET↔SAVINGS matrix
-state_head: 1f108440390d061be52a873ab34ab3f64bff9547
+state_head: 63e06f70f675b27d270808207df4cccacfbd75fc
 progress:
   total_phases: 5
   completed_phases: 4
   total_plans: 12
-  completed_plans: 11
+  completed_plans: 12
   percent: 80
 ---
 
@@ -70,6 +70,7 @@ Progress: [████████░░] 80%
 | Phase 30 P01 | 4min | 3 tasks | 7 files |
 | Phase 30 P02 | 2min | 2 tasks | 2 files |
 | Phase 31 P01 | 5min | 3 tasks | 4 files |
+| Phase 31 P02 | 3min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -106,6 +107,8 @@ Decisions are logged in PROJECT.md Key Decisions table. v1.5 locks from scoping/
 - [Phase 31]: Optional Zod type enum ASSET|SAVINGS only; FIAT_CREDIT/legacy rejected at schema
 - [Phase 31]: Forbidden non-peer transitions return generic Russian save failure (no type detail)
 - [Phase 31]: Same-type SAVINGS update omits type field; convert paths set type explicitly
+- [Phase 31]: Shared create/convert Select; CONVERT_TYPE_OPTIONS excludes FIAT_CREDIT
+- [Phase 31]: 31-UAT pending for end-of-phase Orca verify-work (OPERATOR)
 
 ### Pending Todos
 
@@ -144,8 +147,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-22T12:32:29.792Z
-Stopped at: Completed 31-01-PLAN.md
+Last session: 2026-09-22T12:38:09.426Z
+Stopped at: Completed 31-02-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
