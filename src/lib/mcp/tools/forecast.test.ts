@@ -236,5 +236,8 @@ describe("get_forecast_overlay (SIDE-04 / MCP-02)", () => {
     expect(src).toMatch(
       /slots:\s*\[\s*\.\.\.openSlots\s*,\s*\.\.\.interestSlots\s*,\s*\.\.\.graceSlots\s*\]/,
     );
+    expect(src).not.toMatch(/balanceSnapshot\.(create|update|upsert|delete)/);
+    expect(src).toMatch(/type:\s*"SAVINGS"/);
+    expect(src).toMatch(/firstHitLocfMap/);
   });
 });
