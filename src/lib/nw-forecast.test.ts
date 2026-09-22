@@ -623,6 +623,14 @@ describe("interest forecast kind (D-07 / D-12 / D-13)", () => {
     expect(src).not.toMatch(/savings-interest/);
   });
 
+  it("SerializedForecastEvent.kind union includes interest (D-12)", () => {
+    const src = readFileSync(
+      join(process.cwd(), "src/lib/mcp/reads/load-forecast-overlay.ts"),
+      "utf8",
+    );
+    expect(src).toMatch(/kind:\s*"income"\s*\|\s*"grace"\s*\|\s*"interest"/);
+  });
+
   it("FX conversion stays on convertOtherMinorToPrimaryMinor; no second rounding helper (INT-03)", () => {
     const src = readFileSync(join(process.cwd(), "src/lib/nw-forecast.ts"), "utf8");
     expect(src).toMatch(/convertOtherMinorToPrimaryMinor/);
@@ -631,7 +639,7 @@ describe("interest forecast kind (D-07 / D-12 / D-13)", () => {
     );
   });
 
-  it("non-primary interest without a rate lists USD and includes nothing (INT-03)", () => {
+  it("non-primary interest without a rate is excluded as missing FX (D-06 / INT-03)", () => {
     const result = buildNetWorthForecastSeries({
       anchorPrimaryMinor: 0n,
       slots: [
@@ -645,6 +653,7 @@ describe("interest forecast kind (D-07 / D-12 / D-13)", () => {
       today,
       horizonEnd: "2026-03-31",
     });
+    expect(result.excludedMissingFxCount).toBeGreaterThanOrEqual(1);
     expect(result.excludedMissingFxCurrencies).toEqual(["USD"]);
     expect(result.isPartialForecast).toBe(true);
     expect(result.includedSlotCount).toBe(0);
