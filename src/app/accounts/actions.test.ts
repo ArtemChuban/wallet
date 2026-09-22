@@ -245,6 +245,76 @@ describe("createAccount types (ACCT-01)", () => {
   });
 });
 
+describe("updateAccount ASSET↔SAVINGS (ACCT-04)", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    vi.mocked(ensureSqlitePragmas).mockResolvedValue(undefined);
+    vi.mocked(prisma.account.update).mockResolvedValue({} as never);
+  });
+
+  it("ASSET→SAVINGS persists type SAVINGS + annualRateBps + accrualDayOfMonth; currency ignored (D-02 / D-03 / D-15)", async () => {
+    vi.mocked(prisma.account.findUnique).mockResolvedValue({
+      id: 11,
+      name: "Актив",
+      type: "ASSET",
+      currencyCode: "RUB",
+      annualRateBps: null,
+      accrualDayOfMonth: null,
+    } as never);
+
+    const formData = new FormData();
+    formData.set("id", "11");
+    formData.set("name", "Накопительный");
+    formData.set("type", "SAVINGS");
+    formData.set("annualRatePercentMajor", "16.50");
+    formData.set("accrualDayOfMonth", "15");
+    formData.set("currencyCode", "USD");
+
+    const result = await updateAccount({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(result.message).toBe("Сохранено");
+    expect(prisma.account.update).toHaveBeenCalledWith({
+      where: { id: 11 },
+      data: {
+        name: "Накопительный",
+        type: "SAVINGS",
+        annualRateBps: 1650,
+        accrualDayOfMonth: 15,
+      },
+    });
+    const data = vi.mocked(prisma.account.update).mock.calls[0]![0]!.data;
+    expect(Object.keys(data as object).sort()).toEqual(
+      ["accrualDayOfMonth", "annualRateBps", "name", "type"].sort(),
+    );
+    expect(data).not.toHaveProperty("currencyCode");
+  });
+
+  it("ASSET→SAVINGS never calls BalanceSnapshot upsert/delete (D-16)", async () => {
+    vi.mocked(prisma.account.findUnique).mockResolvedValue({
+      id: 11,
+      name: "Актив",
+      type: "ASSET",
+      currencyCode: "RUB",
+      annualRateBps: null,
+      accrualDayOfMonth: null,
+    } as never);
+
+    const formData = new FormData();
+    formData.set("id", "11");
+    formData.set("name", "Накопительный");
+    formData.set("type", "SAVINGS");
+    formData.set("annualRatePercentMajor", "16.50");
+    formData.set("accrualDayOfMonth", "15");
+
+    const result = await updateAccount({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.balanceSnapshot.upsert).not.toHaveBeenCalled();
+    expect(prisma.balanceSnapshot.delete).not.toHaveBeenCalled();
+  });
+});
+
 describe("updateAccount SAVINGS (D-08 / D-16 / ACCT-01)", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -260,13 +330,12 @@ describe("updateAccount SAVINGS (D-08 / D-16 / ACCT-01)", () => {
     vi.mocked(prisma.account.update).mockResolvedValue({} as never);
   });
 
-  it("updates SAVINGS name + annualRateBps + accrualDayOfMonth together", async () => {
+  it("updates SAVINGS name + annualRateBps + accrualDayOfMonth together (same-type; currency ignored)", async () => {
     const formData = new FormData();
     formData.set("id", "9");
     formData.set("name", "Накопительный v2");
     formData.set("annualRatePercentMajor", "12.00");
     formData.set("accrualDayOfMonth", "10");
-    formData.set("type", "ASSET");
     formData.set("currencyCode", "USD");
 
     const result = await updateAccount({}, formData);
