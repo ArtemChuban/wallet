@@ -200,4 +200,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-11 — milestone v1.5 Сберегательный счет started*
+*Last updated: 2026-09-22 — Phase 30 MCP PARITY + verify complete (MCP-01/02, PARITY-01)*
