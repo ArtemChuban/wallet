@@ -383,17 +383,19 @@ Also assert `GET_FORECAST_OVERLAY_DESCRIPTION` and create-handler lack `A′`.
 
 **If empty besides A\*:** Core implementation claims are file-verified.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Shared helper location**
    - What we know: Shell map is inline in `DashboardChartsShell`; MCP needs same map (D-05/D-08).
    - What's unclear: Prefer `savings-interest.ts` vs `mcp/reads/` vs leave duplicated.
    - Recommendation: Extract next to enumerator (`savings-interest.ts` or sibling) so shell + MCP import one function.
+   - **RESOLVED:** Inline mirror in `load-forecast-overlay` (D-08 / `30-01` tracer action). No shell extract unless executor later needs it for DRY; numbers must still match UI.
 
 2. **Integration vs pure Vitest for loader membership**
    - What we know: All current MCP tool tests are SQLite-free.
    - What's unclear: Whether planner wants a thin source-scan that `load-forecast-overlay.ts` contains `listInterestSlotsInRange` + pure slot→serialize test only.
    - Recommendation: Pure + source-scan; Orca for live DB.
+   - **RESOLVED:** SQLite-free fixtures + source-scan for `listInterestSlotsInRange` in loader (`30-01`); live membership / BalanceSnapshot snap count via Orca UAT (`30-02`).
 
 ## Environment Availability
 
