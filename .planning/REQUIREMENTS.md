@@ -10,7 +10,7 @@
 - [x] **ACCT-01**: User can create and manage accounts of type `SAVINGS` (distinct from debit/credit/crypto/cash) with name, currency, annual interest rate, and accrual day-of-month
 - [x] **ACCT-02**: SAVINGS account balances are included in net worth totals and history like other asset accounts (not excluded as a side ledger)
 - [x] **ACCT-03**: User can see annual interest rate and accrual day-of-month on SAVINGS account UI (list/detail and create/edit)
-- [ ] **ACCT-04**: User can switch an existing account between `ASSET` and `SAVINGS` in account settings (both directions); `SAVINGS` requires rate + accrual day; leaving `SAVINGS` clears those fields; snapshots and historical NW stay; other types stay immutable
+- [x] **ACCT-04**: User can switch an existing account between `ASSET` and `SAVINGS` in account settings (both directions); `SAVINGS` requires rate + accrual day; leaving `SAVINGS` clears those fields; snapshots and historical NW stay; other types stay immutable
 
 ### Interest forecast
 
