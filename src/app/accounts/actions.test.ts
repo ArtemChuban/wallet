@@ -102,11 +102,10 @@ describe("updateAccountName immutability (D-15 / T-02-01)", () => {
     vi.mocked(prisma.account.update).mockResolvedValue({} as never);
   });
 
-  it("writes only name — ignores tampered type/currency/limit FormData", async () => {
+  it("writes only name — ignores tampered currency/limit FormData (D-03)", async () => {
     const formData = new FormData();
     formData.set("id", "7");
     formData.set("name", "Новое имя");
-    formData.set("type", "CRYPTO");
     formData.set("currencyCode", "USDT");
     formData.set("creditLimitMajor", "99999");
     formData.set("creditLimitMinor", "99999");

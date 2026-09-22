@@ -193,8 +193,9 @@ export async function createAccount(
 }
 
 /**
- * Update account metadata. Name always; SAVINGS also requires rate+DOM (D-06, D-08).
- * Loads type from DB — ignores client type/currency (T-27-01). Never writes BalanceSnapshot (D-16).
+ * Update account metadata. Name always; optional type ASSET↔SAVINGS only (ACCT-04 / D-15).
+ * Currency always ignored (D-03). Effective type after findUnique; SAVINGS needs rate+DOM (D-12).
+ * Never writes BalanceSnapshot (D-16).
  */
 export async function updateAccount(
   _prev: AccountActionState,
@@ -225,8 +226,15 @@ export async function updateAccount(
       ? accrualRaw
       : undefined;
 
+  const typeRaw = formData.get("type");
+  const type =
+    typeof typeRaw === "string" && typeRaw.trim() !== ""
+      ? typeRaw.trim()
+      : undefined;
+
   const validated = updateAccountSchema.safeParse({
     name: formData.get("name"),
+    type,
     annualRatePercentMajor,
     accrualDayOfMonth,
   });
@@ -247,7 +255,23 @@ export async function updateAccount(
       };
     }
 
-    if (account.type === "SAVINGS") {
+    const dbType = account.type;
+    const requested = validated.data.type;
+    const effectiveType = requested ?? dbType;
+
+    if (requested !== undefined && requested !== dbType) {
+      const convertiblePair =
+        (dbType === "ASSET" && requested === "SAVINGS") ||
+        (dbType === "SAVINGS" && requested === "ASSET");
+      if (!convertiblePair) {
+        return {
+          message:
+            "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+        };
+      }
+    }
+
+    if (effectiveType === "SAVINGS") {
       const rate = validated.data.annualRatePercentMajor;
       const dom = validated.data.accrualDayOfMonth;
       if (rate === undefined) {
@@ -274,8 +298,19 @@ export async function updateAccount(
         where: { id },
         data: {
           name: validated.data.name,
+          ...(dbType !== "SAVINGS" ? { type: "SAVINGS" as const } : {}),
           annualRateBps,
           accrualDayOfMonth: dom,
+        },
+      });
+    } else if (dbType === "SAVINGS" && effectiveType === "ASSET") {
+      await prisma.account.update({
+        where: { id },
+        data: {
+          name: validated.data.name,
+          type: "ASSET",
+          annualRateBps: null,
+          accrualDayOfMonth: null,
         },
       });
     } else {

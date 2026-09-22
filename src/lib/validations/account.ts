@@ -135,9 +135,13 @@ export const createAccountSchema = z
     }
   });
 
-/** Update account: name always; optional savings fields (action gates by DB type D-08). */
+/**
+ * Update account: name always; optional type ASSET|SAVINGS only (ACCT-04 / D-15).
+ * Rate/DOM optional at schema — action gates by effective DB type after findUnique.
+ */
 export const updateAccountSchema = z.object({
   name: accountNameSchema,
+  type: z.enum(["ASSET", "SAVINGS"]).optional(),
   annualRatePercentMajor: z.string().optional(),
   accrualDayOfMonth: optionalDayOfMonthSchema,
 });
