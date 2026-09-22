@@ -29,10 +29,10 @@ See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательн�
 
 ## Current Position
 
-Phase: 30 (mcp-parity-verify) — IN PROGRESS
-Plan: 2 of 2 (30-01 complete; next 30-02)
-Status: Ready to execute 30-02
-Last activity: 2026-09-22 — Completed 30-01 MCP PARITY catalog + interest + SAVISO
+Phase: 30 (mcp-parity-verify) — READY FOR VERIFICATION
+Plan: 2 of 2 (all plans complete)
+Status: Ready for /gsd-verify-work 30
+Last activity: 2026-09-22 — Completed 30-02 MCP PARITY verify + Orca UAT
 
 Progress: [██████░░░░] 60%
 
