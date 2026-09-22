@@ -80,6 +80,12 @@ const TYPE_OPTIONS = [
   { value: "SAVINGS", label: "Накопительный" },
 ] as const;
 
+/** Edit unlock peers only — never FIAT_CREDIT (D-13). */
+const CONVERT_TYPE_OPTIONS = [
+  { value: "ASSET", label: "Актив" },
+  { value: "SAVINGS", label: "Накопительный" },
+] as const;
+
 function AccountFormBody({
   mode,
   account,
@@ -137,9 +143,13 @@ function AccountFormBody({
   const title = mode === "create" ? "Новый счёт" : "Изменить счёт";
   const submitLabel = mode === "create" ? "Добавить счёт" : "Сохранить";
   const showCreditLimit = mode === "create" && isCreditType(accountType);
-  const showSavingsFields =
-    (mode === "create" && accountType === "SAVINGS") ||
-    (mode === "edit" && account?.type === "SAVINGS");
+  // Draft gate for create and edit (D-05) — not frozen account?.type
+  const showSavingsFields = accountType === "SAVINGS";
+  // Exact ASSET|SAVINGS only — never isAssetType (D-01, D-13, D-14)
+  const canConvertType =
+    mode === "edit" &&
+    account != null &&
+    (account.type === "ASSET" || account.type === "SAVINGS");
 
   const editLimit =
     mode === "edit" &&
@@ -149,6 +159,10 @@ function AccountFormBody({
       ? `${formatMinorToMajor(BigInt(account.creditLimitMinor), account.currency.scale)} ${account.currencyCode}`
       : null;
 
+  const editDescription = canConvertType
+    ? "Валюта не меняется."
+    : "Тип и валюта не меняются.";
+
   return (
     <form action={formAction} className="grid gap-4">
       <DialogHeader>
@@ -156,7 +170,7 @@ function AccountFormBody({
         <DialogDescription>
           {mode === "create"
             ? "Тип, валюта и кредитный лимит нельзя изменить после создания."
-            : "Тип и валюта не меняются."}
+            : editDescription}
         </DialogDescription>
       </DialogHeader>
 
@@ -185,7 +199,7 @@ function AccountFormBody({
 
       <div className="grid gap-2">
         <Label>Тип</Label>
-        {mode === "create" ? (
+        {mode === "create" || canConvertType ? (
           <>
             <input type="hidden" name="type" value={accountType} />
             <Select
@@ -213,11 +227,13 @@ function AccountFormBody({
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
-                {TYPE_OPTIONS.map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </SelectItem>
-                ))}
+                {(mode === "create" ? TYPE_OPTIONS : CONVERT_TYPE_OPTIONS).map(
+                  (opt) => (
+                    <SelectItem key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </SelectItem>
+                  ),
+                )}
               </SelectContent>
             </Select>
           </>
