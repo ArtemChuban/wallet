@@ -5,16 +5,16 @@ milestone_name: Сберегательный счет (Phases 27–31)
 current_phase: 30
 current_phase_name: mcp-parity-verify
 status: planning
-stopped_at: Phase 30 plans created
-last_updated: "2026-09-22T09:09:01.929Z"
+stopped_at: Completed 30-01-PLAN.md
+last_updated: "2026-09-22T09:16:37.821Z"
 last_activity: 2026-09-22
 last_activity_desc: Phase 30 PLAN.md files written (30-01, 30-02)
-state_head: d5789fd14a130bf673abc2e02fcc2ea1197d5bbb
+state_head: 620cb1950877b46c2937f42d38b39bc5ddcff359
 progress:
   total_phases: 5
   completed_phases: 3
   total_plans: 10
-  completed_plans: 8
+  completed_plans: 9
   percent: 60
 ---
 
@@ -67,6 +67,7 @@ Progress: [██████░░░░] 60%
 | Phase 28-interest-math-forecast-kind P02 | 5min | 2 tasks | 4 files |
 | Phase 29 P01 | 5min | 3 tasks | 3 files |
 | Phase 29 P02 | 3min | 2 tasks | 4 files |
+| Phase 30 P01 | 4min | 3 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -95,6 +96,9 @@ Decisions are logged in PROJECT.md Key Decisions table. v1.5 locks from scoping/
 - [Phase 29]: D-11 grace line addend is -displayPrimaryMinor; plannedAmountMinor and displayPrimaryMajor stay positive
 - [Phase 29]: forecastSavings uses InterestAccountInput keys; balanceMinor string on RSC, BigInt in shell
 - [Phase 29]: Interest block mounts only on future tooltip between Прогноз level and grace (D-06)
+- [Phase 30]: annualRatePercent via Number(formatBpsToPercentMajor(bps)) for SAVINGS only
+- [Phase 30]: Inline interest membership in loadForecastOverlay (no shell extract)
+- [Phase 30]: Triple-tag closer INISO-01/GRISO-01/SAVISO-01; drop A′ prose
 
 ### Pending Todos
 
@@ -133,9 +137,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-22
-Stopped at: Phase 30 plans created (30-01 tracer, 30-02 UAT)
-Resume file: .planning/phases/30-mcp-parity-verify/30-01-PLAN.md
+Last session: 2026-09-22T09:16:37.734Z
+Stopped at: Completed 30-01-PLAN.md
+Resume file: None
 
 ## Operator Next Steps
 

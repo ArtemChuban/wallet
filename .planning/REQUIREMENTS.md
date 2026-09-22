@@ -25,9 +25,9 @@
 
 ### MCP
 
-- [ ] **MCP-01**: Agent can list accounts via MCP including SAVINGS type with annual rate and accrual day-of-month fields
-- [ ] **MCP-02**: Agent can get Капитал forecast overlay via MCP including interest events alongside income and grace
-- [ ] **PARITY-01**: Standing rule upheld — new user-visible savings read surfaces ship matching MCP read tool fields in the same milestone
+- [x] **MCP-01**: Agent can list accounts via MCP including SAVINGS type with annual rate and accrual day-of-month fields
+- [x] **MCP-02**: Agent can get Капитал forecast overlay via MCP including interest events alongside income and grace
+- [x] **PARITY-01**: Standing rule upheld — new user-visible savings read surfaces ship matching MCP read tool fields in the same milestone
 
 ## Future Requirements
 
@@ -69,9 +69,9 @@
 | INT-03 | Phase 29 | Complete |
 | SAVISO-01 | Phase 29 | Complete |
 | SAVISO-02 | Phase 29 | Complete |
-| MCP-01 | Phase 30 | Pending |
-| MCP-02 | Phase 30 | Pending |
-| PARITY-01 | Phase 30 | Pending |
+| MCP-01 | Phase 30 | Complete |
+| MCP-02 | Phase 30 | Complete |
+| PARITY-01 | Phase 30 | Complete |
 
 **Coverage:**
 

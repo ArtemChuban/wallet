@@ -161,12 +161,12 @@ Plans:
   3. New savings read surfaces ship matching MCP read tool fields in the same milestone (PARITY-01 upheld)
   4. MCP descriptions/isolation contract name SAVISO alongside INISO/GRISO; Orca/Nyquist verify overlay visible and historical NW unchanged without new snaps
 
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
 **Wave 1**
 
-- [ ] 30-01-PLAN.md — Tracer: list_accounts SAVINGS fields + overlay interest + SAVISO Wave 0→green
+- [x] 30-01-PLAN.md — Tracer: list_accounts SAVINGS fields + overlay interest + SAVISO Wave 0→green
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -200,7 +200,7 @@ Plans:
 | 27. SAVINGS schema + CRUD | 4/4 | Complete    | 2026-09-11 |
 | 28. Interest math + forecast kind | 2/2 | Complete    | 2026-09-21 |
 | 29. Капитал overlay + SAVISO | 2/2 | Complete    | 2026-09-21 |
-| 30. MCP PARITY + verify | 0/2 | Planned | - |
+| 30. MCP PARITY + verify | 1/2 | In Progress|  |
 | 31. ASSET ↔ SAVINGS type conversion | 0/? | Not started | - |
 
 ---
