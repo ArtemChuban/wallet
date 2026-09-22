@@ -83,7 +83,7 @@ Full detail: [milestones/v1.4-ROADMAP.md](./milestones/v1.4-ROADMAP.md)
 - [x] **Phase 28: Interest math + forecast kind** - Pure monthly interest + `interest` forecast slot kind (completed 2026-09-21)
 - [x] **Phase 29: Капитал overlay + SAVISO** - Dashed «Прогноз» interest credits + isolation twin (completed 2026-09-21)
 - [x] **Phase 30: MCP PARITY + verify** - Agent reads SAVINGS fields + interest overlay events (completed 2026-09-22)
-- [ ] **Phase 31: ASSET ↔ SAVINGS type conversion** - Switch type both ways in account settings
+- [x] **Phase 31: ASSET ↔ SAVINGS type conversion** - Switch type both ways in account settings (completed 2026-09-22)
 
 ## Phase Details
 
@@ -190,7 +190,7 @@ Plans:
   3. Balance snapshots and historical NW stay; conversion does not write a new snapshot and does not drop history
   4. Other types (`FIAT_CREDIT` and legacy asset aliases) stay immutable — only `ASSET` ↔ `SAVINGS`
 
-**Plans:** 2/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 
@@ -207,7 +207,7 @@ Plans:
 | 28. Interest math + forecast kind | 2/2 | Complete    | 2026-09-21 |
 | 29. Капитал overlay + SAVISO | 2/2 | Complete    | 2026-09-21 |
 | 30. MCP PARITY + verify | 2/2 | Complete    | 2026-09-22 |
-| 31. ASSET ↔ SAVINGS type conversion | 2/2 | In Progress|  |
+| 31. ASSET ↔ SAVINGS type conversion | 2/2 | Complete    | 2026-09-22 |
 
 ---
 *Roadmap updated: 2026-09-21 — v1.5 adds Phase 31 ASSET ↔ SAVINGS conversion*

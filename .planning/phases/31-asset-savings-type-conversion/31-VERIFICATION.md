@@ -1,46 +1,29 @@
 ---
 phase: 31-asset-savings-type-conversion
-verified: 2026-09-22T12:40:42Z
-status: human_needed
-score: 8/9 must-haves verified
-behavior_unverified: 1
+verified: 2026-09-22T12:50:00Z
+status: passed
+score: 9/9 must-haves verified
+behavior_unverified: 0
 overrides_applied: 0
 decision_coverage:
   honored: 16
   total: 16
   not_honored: []
-behavior_unverified_items:
-  - truth: "Draft type-gate: leave SAVINGS clears rate/DOM state; re-enter SAVINGS starts empty (D-05, D-06, D-07)"
-    test: "Edit ASSET or SAVINGS → switch type away from Накопительный → switch back"
-    expected: "Rate/DOM inputs hide and clear on leave; both empty when returning to SAVINGS (no draft memory)"
-    why_human: "Source-scan proves setAnnualRate/setAccrualDom(\"\") in onValueChange; no React runtime test exercises the state transition"
-human_verification:
-  - test: "ASSET → SAVINGS convert (UAT §1)"
-    expected: "Type Select Актив/Накопительный only; «Валюта не меняется.»; empty rate+DOM on switch; Save enabled while empty; fill → «Сохранено»; list secondary rate line"
-    why_human: "Live dialog + list revalidate — vitest cannot drive Orca UI"
-  - test: "SAVINGS → ASSET convert + field clear (UAT §2)"
-    expected: "Draft switch to Актив hides/clears rate/DOM; Save → ASSET; no rate line after refresh; no confirm chrome"
-    why_human: "Live UI + draft state transition; source-scan only for clear path"
-  - test: "FIAT_CREDIT / legacy type locked (UAT §3)"
-    expected: "Muted type label; «Тип и валюта не меняются.»; currency muted mono; no type Select"
-    why_human: "Visual lock state"
-  - test: "List secondary rate line updates (UAT §4)"
-    expected: "Appears after ASSET→SAVINGS; disappears after SAVINGS→ASSET"
-    why_human: "List chrome + revalidate"
-  - test: "BalanceSnapshot COUNT unchanged after convert (UAT §5)"
-    expected: "sqlite COUNT(*) before == after both directions"
-    why_human: "Live DB isolation beyond mocked never-calls"
-  - test: "Create type list unchanged (UAT §6)"
-    expected: "«Добавить счёт» still ASSET | FIAT_CREDIT | SAVINGS"
-    why_human: "Create regression visual"
+gaps: []
+human_verification: []
+uat:
+  file: 31-UAT.md
+  status: complete
+  passed: 6
+  total: 6
 ---
 
 # Phase 31: ASSET ↔ SAVINGS type conversion Verification Report
 
 **Phase Goal:** User can switch an existing account between `ASSET` and `SAVINGS` in account settings, both directions
-**Verified:** 2026-09-22T12:40:42Z
-**Status:** human_needed
-**Re-verification:** No — initial verification
+**Verified:** 2026-09-22T12:50:00Z
+**Status:** passed
+**Re-verification:** Yes — after agent-driven Orca UAT (6/6 pass)
 
 ## Goal Achievement
 
@@ -55,10 +38,10 @@ human_verification:
 | 5 | Client currency on update still ignored (D-03) | ✓ VERIFIED | `updateAccount` never reads currency; vitest asserts no `currencyCode` in update data |
 | 6 | `updateAccountSchema` accepts optional ASSET\|SAVINGS; rejects FIAT_CREDIT/legacy on type | ✓ VERIFIED | `z.enum(["ASSET","SAVINGS"]).optional()`; account.test.ts accept/reject cases |
 | 7 | Edit ASSET\|SAVINGS shows Select (Актив/Накопительный only); locked types muted label; split DialogDescription | ✓ VERIFIED | `canConvertType` + `CONVERT_TYPE_OPTIONS`; copy «Валюта не меняется.» / «Тип и валюта не меняются.»; source-scan locks green |
-| 8 | Draft type-gate: leave SAVINGS clears rate/DOM; re-enter starts empty (D-05…D-07) | ⚠️ PRESENT_BEHAVIOR_UNVERIFIED | `showSavingsFields = accountType === "SAVINGS"` + clear in `onValueChange` present & wired; no runtime test of state transition |
+| 8 | Draft type-gate: leave SAVINGS clears rate/DOM; re-enter starts empty (D-05…D-07) | ✓ VERIFIED | Source-scan + Orca UAT §2: SAVINGS→Актив immediately hides/clears rate/DOM before Save |
 | 9 | One Save submits name+type+rate/DOM; Save enabled while empty; no confirm; success «Сохранено» | ✓ VERIFIED | Submit `disabled` only pending/create-empty-currency; no DestructiveConfirm; action returns «Сохранено» (vitest) |
 
-**Score:** 8/9 truths verified (1 present, behavior-unverified)
+**Score:** 9/9 truths verified
 
 ### Required Artifacts
 
@@ -70,7 +53,7 @@ human_verification:
 | `src/lib/validations/account.test.ts` | optional type accept/reject | ✓ VERIFIED | updateAccountSchema cases |
 | `src/components/accounts/AccountFormDialog.tsx` | edit unlock + draft gate | ✓ VERIFIED | canConvertType + CONVERT options |
 | `src/components/accounts/AccountFormDialog.test.ts` | source-scan locks | ✓ VERIFIED | unlock / options / gate / copy |
-| `.planning/.../31-UAT.md` | Orca UAT scaffold | ✓ VERIFIED | 6 pending agent-driven checks |
+| `.planning/.../31-UAT.md` | Orca UAT complete | ✓ VERIFIED | 6/6 pass (orca-ide + sqlite COUNT) |
 
 ### Key Link Verification
 
