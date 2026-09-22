@@ -5,11 +5,11 @@ milestone_name: Сберегательный счет (Phases 27–31)
 current_phase: 31
 current_phase_name: ASSET ↔ SAVINGS type conversion
 status: planning
-stopped_at: Phase 30 complete, ready to plan Phase 31
-last_updated: "2026-09-22T09:27:28.940Z"
+stopped_at: Phase 31 context gathered
+last_updated: "2026-09-22T12:00:00.155Z"
 last_activity: 2026-09-22
 last_activity_desc: Phase 30 complete, transitioned to Phase 31
-state_head: a90feb7c913311f9688815a4862d079809bbe246
+state_head: c4e33e8a6606c19cc3a73723393b834797dfc1c2
 progress:
   total_phases: 5
   completed_phases: 4
@@ -140,9 +140,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-22T09:21:04.634Z
-Stopped at: Phase 30 complete, ready to plan Phase 31
-Resume file: None
+Last session: 2026-09-22T12:00:00.010Z
+Stopped at: Phase 31 context gathered
+Resume file: .planning/phases/31-asset-savings-type-conversion/31-CONTEXT.md
 
 ## Operator Next Steps
 
