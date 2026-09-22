@@ -1,5 +1,5 @@
 ---
-status: passed
+status: complete
 phase: 27-savings-schema-crud
 source: [27-VERIFICATION.md]
 started: 2026-09-11T16:35:00Z
