@@ -164,8 +164,19 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
+**Wave 1**
+
 - [ ] 30-01-PLAN.md — Tracer: list_accounts SAVINGS fields + overlay interest + SAVISO Wave 0→green
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 30-02-PLAN.md — Orca UAT + COVERAGE.md + D-16 todo gate
+
+**Cross-cutting constraints:**
+
+- No visual changes this phase — MCP + Vitest + Orca only (UI-SPEC)
+- Do not reopen Phase 29 chart/tooltip/banner chrome (UI-SPEC)
+- Done bar is Vitest contracts plus Orca MCP tool calls, not chart DOM UAT (D-13, D-14, UI-SPEC)
 
 ### Phase 31: ASSET ↔ SAVINGS type conversion
 
