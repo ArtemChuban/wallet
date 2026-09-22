@@ -63,4 +63,18 @@ describe("AccountFormDialog edit ASSET↔SAVINGS unlock (ACCT-04 / 31-02)", () =
     expect(dialogSrc).toMatch(/setAccrualDom\(["']["']\)/);
     expect(dialogSrc).toMatch(/next\s*!==\s*["']SAVINGS["']/);
   });
+
+  it("create TYPE_OPTIONS still includes FIAT_CREDIT (D-04)", () => {
+    const createBlockMatch = dialogSrc.match(
+      /(?:^|\n)const TYPE_OPTIONS\s*=\s*\[[\s\S]*?\]\s*as const/,
+    );
+    expect(createBlockMatch).not.toBeNull();
+    expect(createBlockMatch![0]).toMatch(/FIAT_CREDIT/);
+  });
+
+  it("edit convert Select maps CONVERT_TYPE_OPTIONS not TYPE_OPTIONS", () => {
+    expect(dialogSrc).toMatch(
+      /mode\s*===\s*["']create["']\s*\?\s*TYPE_OPTIONS\s*:\s*CONVERT_TYPE_OPTIONS/,
+    );
+  });
 });
