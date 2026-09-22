@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { isCreditType } from "@/lib/account-type";
 import {
@@ -88,6 +90,20 @@ describe("list_accounts (CAP-01 / MCP-01)", () => {
     expect(row.annualRatePercent).toBe(16.5);
     expect(typeof row.annualRatePercent).toBe("number");
     expect(row).not.toHaveProperty("isSavings");
+    expect(Object.keys(row).sort()).toEqual(LIST_ACCOUNT_KEYS);
+  });
+
+  it("accounts.ts source names rate fields and omits SAVISO-01 (D-04, D-12)", () => {
+    const src = readFileSync(
+      resolve(process.cwd(), "src/lib/mcp/tools/accounts.ts"),
+      "utf8",
+    );
+    expect(src).toMatch(/annualRateBps/);
+    expect(src).toMatch(/accrualDayOfMonth/);
+    expect(src).toMatch(/annualRatePercent/);
+    expect(src).toMatch(/SAVINGS/);
+    expect(src).not.toMatch(/SAVISO-01/);
+    expect(src).toMatch(/formatBpsToPercentMajor/);
   });
 
   it("non-SAVINGS rows force null rate fields even if input carried bps (MCP-01 boundary)", () => {
