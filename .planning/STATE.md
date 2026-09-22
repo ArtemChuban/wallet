@@ -5,11 +5,11 @@ milestone_name: Сберегательный счет (Phases 27–31)
 current_phase: 31
 current_phase_name: ASSET ↔ SAVINGS type conversion
 status: planning
-stopped_at: Phase 31 research complete
-last_updated: "2026-09-22T12:05:00.000Z"
+stopped_at: Phase 31 plans created (31-01, 31-02)
+last_updated: "2026-09-22T14:20:00.000Z"
 last_activity: 2026-09-22
-last_activity_desc: Phase 31 RESEARCH.md written — ready to plan
-state_head: c4e33e8a6606c19cc3a73723393b834797dfc1c2
+last_activity_desc: Phase 31 PLAN.md files written — ready for plan-check / execute
+state_head: 21c66a0c01088aed1ffaee9de8412f63788c2827
 progress:
   total_phases: 5
   completed_phases: 4
@@ -30,9 +30,9 @@ See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательн�
 ## Current Position
 
 Phase: 31 — ASSET ↔ SAVINGS type conversion
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-09-22 — Phase 31 research complete
+Plan: 31-01 / 31-02 planned
+Status: Ready to execute
+Last activity: 2026-09-22 — Phase 31 plans created
 
 Progress: [██████░░░░] 60%
 
@@ -140,10 +140,10 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-22T12:00:00.010Z
-Stopped at: Phase 31 research complete
-Resume file: .planning/phases/31-asset-savings-type-conversion/31-CONTEXT.md
+Last session: 2026-09-22T14:20:00.000Z
+Stopped at: Phase 31 plans created
+Resume file: /home/artem/Documents/wallet/.planning/phases/31-asset-savings-type-conversion/31-01-PLAN.md
 
 ## Operator Next Steps
 
-- Execute Phase 30: `/gsd-execute-phase 30`
+- Plan-check then execute: `/gsd-execute-phase 31` (or plan-checker first if enabled)
