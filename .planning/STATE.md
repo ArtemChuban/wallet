@@ -5,16 +5,16 @@ milestone_name: Сберегательный счет (Phases 27–31)
 current_phase: 30
 current_phase_name: mcp-parity-verify
 status: executing
-stopped_at: Completed 30-01-PLAN.md
-last_updated: "2026-09-22T09:16:37.821Z"
+stopped_at: Completed 30-02-PLAN.md
+last_updated: "2026-09-22T09:21:04.732Z"
 last_activity: 2026-09-22
-last_activity_desc: "Completed 30-01 MCP PARITY catalog + interest + SAVISO"
-state_head: 620cb1950877b46c2937f42d38b39bc5ddcff359
+last_activity_desc: Completed 30-01 MCP PARITY catalog + interest + SAVISO
+state_head: 5b8abd0a34a92b4011bdfcdfcf0b1b3c733ce164
 progress:
   total_phases: 5
   completed_phases: 3
   total_plans: 10
-  completed_plans: 9
+  completed_plans: 10
   percent: 60
 ---
 
@@ -68,6 +68,7 @@ Progress: [██████░░░░] 60%
 | Phase 29 P01 | 5min | 3 tasks | 3 files |
 | Phase 29 P02 | 3min | 2 tasks | 4 files |
 | Phase 30 P01 | 4min | 3 tasks | 7 files |
+| Phase 30 P02 | 2min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -99,6 +100,8 @@ Decisions are logged in PROJECT.md Key Decisions table. v1.5 locks from scoping/
 - [Phase 30]: annualRatePercent via Number(formatBpsToPercentMajor(bps)) for SAVINGS only
 - [Phase 30]: Inline interest membership in loadForecastOverlay (no shell extract)
 - [Phase 30]: Triple-tag closer INISO-01/GRISO-01/SAVISO-01; drop A′ prose
+- [Phase 30]: Skipped UI create (D-15) — live UAT Накопительный 27 already present — Orca UAT found existing SAVINGS seed; create path not exercised this run
+- [Phase 30]: Assert no-write via sqlite BalanceSnapshot count + get_net_worth JSON identity — T-30-02 / D-14 dual barrier for overlay-only MCP reads
 
 ### Pending Todos
 
@@ -137,8 +140,8 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-22T09:16:37.734Z
-Stopped at: Completed 30-01-PLAN.md
+Last session: 2026-09-22T09:21:04.634Z
+Stopped at: Completed 30-02-PLAN.md
 Resume file: None
 
 ## Operator Next Steps
