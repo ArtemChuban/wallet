@@ -312,6 +312,174 @@ describe("updateAccount ASSET↔SAVINGS (ACCT-04)", () => {
     expect(prisma.balanceSnapshot.upsert).not.toHaveBeenCalled();
     expect(prisma.balanceSnapshot.delete).not.toHaveBeenCalled();
   });
+
+  it("SAVINGS→ASSET persists type ASSET with annualRateBps/accrualDayOfMonth null (D-15 / D-16)", async () => {
+    vi.mocked(prisma.account.findUnique).mockResolvedValue({
+      id: 12,
+      name: "Накопительный",
+      type: "SAVINGS",
+      currencyCode: "RUB",
+      annualRateBps: 1650,
+      accrualDayOfMonth: 15,
+    } as never);
+
+    const formData = new FormData();
+    formData.set("id", "12");
+    formData.set("name", "Актив снова");
+    formData.set("type", "ASSET");
+    formData.set("currencyCode", "USD");
+
+    const result = await updateAccount({}, formData);
+
+    expect(result.success).toBe(true);
+    expect(prisma.account.update).toHaveBeenCalledWith({
+      where: { id: 12 },
+      data: {
+        name: "Актив снова",
+        type: "ASSET",
+        annualRateBps: null,
+        accrualDayOfMonth: null,
+      },
+    });
+    const data = vi.mocked(prisma.account.update).mock.calls[0]![0]!.data as Record<
+      string,
+      unknown
+    >;
+    expect(Object.keys(data).sort()).toEqual(
+      ["accrualDayOfMonth", "annualRateBps", "name", "type"].sort(),
+    );
+    expect(data.annualRateBps).toBeNull();
+    expect(data.accrualDayOfMonth).toBeNull();
+    expect(prisma.balanceSnapshot.upsert).not.toHaveBeenCalled();
+    expect(prisma.balanceSnapshot.delete).not.toHaveBeenCalled();
+  });
+
+  it("convert-to-SAVINGS missing rate or DOM returns Russian field errors (D-12)", async () => {
+    vi.mocked(prisma.account.findUnique).mockResolvedValue({
+      id: 11,
+      name: "Актив",
+      type: "ASSET",
+      currencyCode: "RUB",
+      annualRateBps: null,
+      accrualDayOfMonth: null,
+    } as never);
+
+    {
+      vi.mocked(prisma.account.update).mockClear();
+      const formData = new FormData();
+      formData.set("id", "11");
+      formData.set("name", "Накопительный");
+      formData.set("type", "SAVINGS");
+      formData.set("accrualDayOfMonth", "15");
+      const result = await updateAccount({}, formData);
+      expect(result.success).toBeUndefined();
+      expect(result.errors?.annualRatePercentMajor?.[0]).toBe(
+        "Укажите годовой процент",
+      );
+      expect(prisma.account.update).not.toHaveBeenCalled();
+    }
+    {
+      vi.mocked(prisma.account.update).mockClear();
+      const formData = new FormData();
+      formData.set("id", "11");
+      formData.set("name", "Накопительный");
+      formData.set("type", "SAVINGS");
+      formData.set("annualRatePercentMajor", "16.50");
+      const result = await updateAccount({}, formData);
+      expect(result.success).toBeUndefined();
+      expect(result.errors?.accrualDayOfMonth?.[0]).toBe(
+        "Укажите день начисления",
+      );
+      expect(prisma.account.update).not.toHaveBeenCalled();
+    }
+  });
+
+  it("FIAT_CREDIT / legacy dbType + forged convertible type rejects without update (D-15)", async () => {
+    for (const dbType of ["FIAT_CREDIT", "CRYPTO"] as const) {
+      vi.mocked(prisma.account.update).mockClear();
+      vi.mocked(prisma.account.findUnique).mockResolvedValue({
+        id: 20,
+        name: "Locked",
+        type: dbType,
+        currencyCode: "RUB",
+      } as never);
+
+      for (const forged of ["ASSET", "SAVINGS"] as const) {
+        vi.mocked(prisma.account.update).mockClear();
+        const formData = new FormData();
+        formData.set("id", "20");
+        formData.set("name", "Locked v2");
+        formData.set("type", forged);
+        if (forged === "SAVINGS") {
+          formData.set("annualRatePercentMajor", "10");
+          formData.set("accrualDayOfMonth", "5");
+        }
+        const result = await updateAccount({}, formData);
+        expect(result.success).toBeUndefined();
+        expect(result.message).toBe(
+          "Не удалось сохранить. Проверьте поля и попробуйте снова.",
+        );
+        expect(prisma.account.update).not.toHaveBeenCalled();
+      }
+    }
+  });
+
+  it("ASSET/SAVINGS dbType + forged FIAT_CREDIT rejects; update not called (D-15)", async () => {
+    for (const dbType of ["ASSET", "SAVINGS"] as const) {
+      vi.mocked(prisma.account.update).mockClear();
+      vi.mocked(prisma.account.findUnique).mockResolvedValue({
+        id: 21,
+        name: "Peer",
+        type: dbType,
+        currencyCode: "RUB",
+        annualRateBps: dbType === "SAVINGS" ? 1000 : null,
+        accrualDayOfMonth: dbType === "SAVINGS" ? 10 : null,
+      } as never);
+
+      const formData = new FormData();
+      formData.set("id", "21");
+      formData.set("name", "Peer v2");
+      formData.set("type", "FIAT_CREDIT");
+      if (dbType === "SAVINGS") {
+        formData.set("annualRatePercentMajor", "10");
+        formData.set("accrualDayOfMonth", "10");
+      }
+
+      const result = await updateAccount({}, formData);
+      expect(result.success).toBeUndefined();
+      expect(result.errors?.type || result.message).toBeTruthy();
+      expect(prisma.account.update).not.toHaveBeenCalled();
+    }
+  });
+
+  it("ASSET name-only (no type / type=ASSET) writes only name; currency ignored (D-03)", async () => {
+    vi.mocked(prisma.account.findUnique).mockResolvedValue({
+      id: 11,
+      name: "Актив",
+      type: "ASSET",
+      currencyCode: "RUB",
+      annualRateBps: null,
+      accrualDayOfMonth: null,
+    } as never);
+
+    for (const withType of [false, true] as const) {
+      vi.mocked(prisma.account.update).mockClear();
+      const formData = new FormData();
+      formData.set("id", "11");
+      formData.set("name", "Актив v2");
+      formData.set("currencyCode", "USD");
+      if (withType) formData.set("type", "ASSET");
+
+      const result = await updateAccount({}, formData);
+      expect(result.success).toBe(true);
+      expect(prisma.account.update).toHaveBeenCalledWith({
+        where: { id: 11 },
+        data: { name: "Актив v2" },
+      });
+      const data = vi.mocked(prisma.account.update).mock.calls[0]![0]!.data;
+      expect(Object.keys(data as object)).toEqual(["name"]);
+    }
+  });
 });
 
 describe("updateAccount SAVINGS (D-08 / D-16 / ACCT-01)", () => {
