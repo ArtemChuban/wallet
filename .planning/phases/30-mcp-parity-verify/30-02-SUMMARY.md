@@ -106,7 +106,7 @@ Each task was committed atomically:
 1. **Task 1: Confirm COVERAGE.md and prohibition file scans** - `a06c557` (docs)
 2. **Task 2: Orca UAT list_accounts + overlay interest + snap count** - `5b8abd0` (docs)
 
-**Plan metadata:** (pending final docs commit)
+**Plan metadata:** `22c0f3d` (docs: complete plan)
 
 ## Files Created/Modified
 

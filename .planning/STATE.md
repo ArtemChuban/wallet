@@ -4,12 +4,12 @@ milestone: v1.5
 milestone_name: Сберегательный счет (Phases 27–31)
 current_phase: 30
 current_phase_name: mcp-parity-verify
-status: executing
+status: ready_for_verification
 stopped_at: Completed 30-02-PLAN.md
-last_updated: "2026-09-22T09:21:04.732Z"
+last_updated: "2026-09-22T09:22:00.000Z"
 last_activity: 2026-09-22
-last_activity_desc: Completed 30-01 MCP PARITY catalog + interest + SAVISO
-state_head: 5b8abd0a34a92b4011bdfcdfcf0b1b3c733ce164
+last_activity_desc: Completed 30-02 MCP PARITY verify + Orca UAT
+state_head: 22c0f3d
 progress:
   total_phases: 5
   completed_phases: 3

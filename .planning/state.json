@@ -21,7 +21,7 @@
     {
       "number": "30",
       "name": "MCP PARITY + verify",
-      "status": "pending"
+      "status": "ready_for_verification"
     },
     {
       "number": "31",
@@ -29,10 +29,6 @@
       "status": "pending"
     }
   ],
-  "next": {
-    "command": "/gsd:progress --next",
-    "label": "Advance to the next step (plan phase 30)",
-    "reason": "Phase 30 of 5 — needs a plan"
-  },
-  "updated_at": "2026-09-22T09:09:01.944Z"
+  "next": "verify-work phase 30",
+  "updated_at": "2026-09-22T09:22:00Z"
 }
