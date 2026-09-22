@@ -414,15 +414,14 @@ export type AccountUpdateInput = {
 
 **If empty of blocking assumptions:** A1–A2 are copy/UX discretion only — no schema blockers.
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Exact forbidden-transition Russian copy**
+1. **Exact forbidden-transition Russian copy** — RESOLVED
    - What we know: D-15 allows generic save failure and/or `errors.type`.
-   - What's unclear: precise string.
-   - Recommendation: reuse generic «Не удалось сохранить. Проверьте поля и попробуйте снова.» for DB matrix rejects; let Zod enum failures populate `errors.type` if client sends garbage enum.
+   - Answer (CONTEXT discretion A1 / UI-SPEC): DB matrix rejects use generic «Не удалось сохранить. Проверьте поля и попробуйте снова.»; Zod enum failures may populate `errors.type` if client sends garbage enum.
 
-2. **DialogDescription when type unlocked**
-   - Recommendation: «Валюта не меняется.» for convertible edits; keep «Тип и валюта не меняются.» for credit/legacy label path.
+2. **DialogDescription when type unlocked** — RESOLVED
+   - Answer (UI-SPEC / RESEARCH recommendation): convertible edits (`ASSET`\|`SAVINGS`) use «Валюта не меняется.»; credit/legacy locked path keeps «Тип и валюта не меняются.»
 
 ## Environment Availability
 
