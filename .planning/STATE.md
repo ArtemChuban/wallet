@@ -5,10 +5,10 @@ milestone_name: Сберегательный счет (Phases 27–31)
 current_phase: 31
 current_phase_name: ASSET ↔ SAVINGS type conversion
 status: planning
-stopped_at: Phase 31 plans created (31-01, 31-02)
-last_updated: "2026-09-22T14:20:00.000Z"
+stopped_at: Phase 31 plan-check blockers cleared (VALIDATION + RESEARCH Qs)
+last_updated: "2026-09-22T14:25:00.000Z"
 last_activity: 2026-09-22
-last_activity_desc: Phase 31 PLAN.md files written — ready for plan-check / execute
+last_activity_desc: 31-VALIDATION.md authored; RESEARCH Open Questions (RESOLVED) — re-run plan-checker
 state_head: 21c66a0c01088aed1ffaee9de8412f63788c2827
 progress:
   total_phases: 5
@@ -31,8 +31,8 @@ See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательн�
 
 Phase: 31 — ASSET ↔ SAVINGS type conversion
 Plan: 31-01 / 31-02 planned
-Status: Ready to execute
-Last activity: 2026-09-22 — Phase 31 plans created
+Status: Ready for plan-check re-run
+Last activity: 2026-09-22 — plan-check blockers cleared
 
 Progress: [██████░░░░] 60%
 
@@ -140,10 +140,10 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-22T14:20:00.000Z
-Stopped at: Phase 31 plans created
+Last session: 2026-09-22T14:25:00.000Z
+Stopped at: Phase 31 plan-check blockers cleared
 Resume file: /home/artem/Documents/wallet/.planning/phases/31-asset-savings-type-conversion/31-01-PLAN.md
 
 ## Operator Next Steps
 
-- Plan-check then execute: `/gsd-execute-phase 31` (or plan-checker first if enabled)
+- Re-run plan-checker then execute: `/gsd-execute-phase 31`
