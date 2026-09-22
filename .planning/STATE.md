@@ -5,11 +5,11 @@ milestone_name: Сберегательный счет (Phases 27–31)
 current_phase: 30
 current_phase_name: MCP PARITY + verify
 status: planning
-stopped_at: Phase 29 complete, ready to plan Phase 30
-last_updated: "2026-09-21T16:50:58.416Z"
+stopped_at: Phase 30 context gathered
+last_updated: "2026-09-22T08:39:47.496Z"
 last_activity: 2026-09-21
 last_activity_desc: Phase 29 complete, transitioned to Phase 30
-state_head: eaf445e5759c727e16b8218a6d76d132562ff1f6
+state_head: 74ad16fd03730e50245ef9252b7674df6b58a1cd
 progress:
   total_phases: 5
   completed_phases: 3
@@ -133,9 +133,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-21T16:39:09.880Z
-Stopped at: Phase 29 complete, ready to plan Phase 30
-Resume file: .planning/phases/29-kapital-overlay-saviso/29-UAT.md
+Last session: 2026-09-22T08:39:47.350Z
+Stopped at: Phase 30 context gathered
+Resume file: .planning/phases/30-mcp-parity-verify/30-CONTEXT.md
 
 ## Operator Next Steps
 
