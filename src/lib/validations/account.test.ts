@@ -294,6 +294,43 @@ describe("updateAccountSchema (ACCT-01 / D-06 / D-08)", () => {
     }
   });
 
+  it("accepts optional type ASSET (ACCT-04 / D-15)", () => {
+    const result = updateAccountSchema.safeParse({
+      name: "Актив",
+      type: "ASSET",
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.type).toBe("ASSET");
+    }
+  });
+
+  it("accepts optional type SAVINGS with rate + DOM (ACCT-04 / D-15)", () => {
+    const result = updateAccountSchema.safeParse({
+      name: "Накопительный",
+      type: "SAVINGS",
+      annualRatePercentMajor: "16.50",
+      accrualDayOfMonth: 15,
+    });
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data.type).toBe("SAVINGS");
+      expect(result.data.annualRatePercentMajor).toBe("16.50");
+      expect(result.data.accrualDayOfMonth).toBe(15);
+    }
+  });
+
+  it("rejects type FIAT_CREDIT and legacy enums on update (D-15)", () => {
+    for (const type of ["FIAT_CREDIT", "CRYPTO", "CASH", "FIAT_DEBIT"] as const) {
+      const result = updateAccountSchema.safeParse({ name: "x", type });
+      expect(result.success).toBe(false);
+      if (!result.success) {
+        const paths = result.error.issues.map((i) => i.path.join("."));
+        expect(paths).toContain("type");
+      }
+    }
+  });
+
   it("rejects empty name", () => {
     expect(updateAccountSchema.safeParse({ name: "" }).success).toBe(false);
   });
