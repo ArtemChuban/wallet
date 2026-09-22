@@ -19,9 +19,7 @@ describe("phase 30 parity gate (PARITY-01 / D-16)", () => {
     expect(src).toMatch(/No external API integration/);
   });
 
-  // ESCALATED (30-VALIDATION Manual-Only): todo already under completed/;
-  // restore to pending/ then unskip — see D-16.
-  it.skip("D-16 savings todo remains under pending/ (not completed mid-milestone)", () => {
+  it("D-16 savings todo remains under pending/ (not completed mid-milestone)", () => {
     expect(existsSync(resolve(process.cwd(), PENDING_SAVINGS_TODO))).toBe(
       true,
     );
