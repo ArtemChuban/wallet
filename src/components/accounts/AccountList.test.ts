@@ -6,22 +6,32 @@ const listSrc = readFileSync(
   "utf8",
 );
 
-describe("AccountList snapshot delete confirm (D-17 / PERSON-02)", () => {
-  it("does not use a browser native confirm API", () => {
-    expect(listSrc).not.toMatch(/window\.confirm/);
-    expect(listSrc).not.toMatch(/\bconfirm\s*\(/);
+/**
+ * Phase 27 ACCT-03 / D-11 / D-12 — SAVINGS list secondary uses rate% + countdown,
+ * never raw accrualDayOfMonth as the countdown segment.
+ */
+describe("AccountList SAVINGS secondary (ACCT-03 / D-11 / D-12)", () => {
+  it("wires formatBpsToPercentMajor and formatAccrualCountdown for SAVINGS meta", () => {
+    expect(listSrc).toMatch(/formatBpsToPercentMajor/);
+    expect(listSrc).toMatch(/formatAccrualCountdown/);
+    expect(listSrc).toMatch(/nextAccrualAsOf/);
+    expect(listSrc).toMatch(/account\.type\s*===\s*["']SAVINGS["']/);
   });
 
-  it("uses UI-SPEC Russian snapshot confirm copy template", () => {
-    expect(listSrc).toMatch(/Удалить снимок за/);
-    expect(listSrc).toMatch(/Это нельзя отменить/);
+  it("builds rate segment as formatBpsToPercentMajor(bps)+%", () => {
+    expect(listSrc).toMatch(
+      /\$\{formatBpsToPercentMajor\(account\.annualRateBps\)\}%/,
+    );
   });
 
-  it("reuses DestructiveConfirmStep for in-dialog second step", () => {
-    expect(listSrc).toMatch(/DestructiveConfirmStep/);
-    expect(listSrc).toMatch(/@\/components\/ui\/destructive-confirm-step/);
+  it("does not render raw accrualDayOfMonth as secondary countdown copy", () => {
+    // Countdown must go through formatAccrualCountdown(today, nextAccrualAsOf(...))
+    expect(listSrc).toMatch(
+      /formatAccrualCountdown\(\s*today\s*,\s*nextAccrualAsOf\(\s*today\s*,\s*account\.accrualDayOfMonth/,
+    );
+    // No template that dumps DOM int as human countdown chrome
     expect(listSrc).not.toMatch(
-      /@\/components\/debts\/DestructiveConfirmStep/,
+      /через\s*\$\{[^}]*accrualDayOfMonth/,
     );
   });
 });

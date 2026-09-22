@@ -18,6 +18,33 @@ describe("AccountFormDialog controlled name (ACCT-01 / G-02-2 / 02-05-02)", () =
   });
 });
 
+describe("AccountFormDialog SAVINGS chrome (ACCT-01 / ACCT-03 / D-09 / D-10 / D-13)", () => {
+  it("edit title is Изменить счёт (D-09)", () => {
+    expect(dialogSrc).toMatch(/Изменить счёт/);
+    expect(dialogSrc).not.toMatch(/только название/);
+  });
+
+  it("exposes gated labels Годовой % and День начисления (D-13)", () => {
+    expect(dialogSrc).toMatch(/Годовой %/);
+    expect(dialogSrc).toMatch(/День начисления/);
+  });
+
+  it("create TYPE_OPTIONS includes SAVINGS Накопительный (D-10 / D-14)", () => {
+    const createBlockMatch = dialogSrc.match(
+      /(?:^|\n)const TYPE_OPTIONS\s*=\s*\[[\s\S]*?\]\s*as const/,
+    );
+    expect(createBlockMatch).not.toBeNull();
+    expect(createBlockMatch![0]).toMatch(/["']SAVINGS["']/);
+    expect(createBlockMatch![0]).toMatch(/Накопительный/);
+  });
+
+  it("gates savings fields on accountType === SAVINGS", () => {
+    expect(dialogSrc).toMatch(
+      /showSavingsFields\s*=\s*accountType\s*===\s*["']SAVINGS["']/,
+    );
+  });
+});
+
 describe("AccountFormDialog edit ASSET↔SAVINGS unlock (ACCT-04 / 31-02)", () => {
   it("canConvertType uses exact ASSET|SAVINGS peer check — not isAssetType", () => {
     expect(dialogSrc).toMatch(/canConvertType/);
