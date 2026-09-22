@@ -98,6 +98,52 @@ describe("phase-29 tooltip and shell file-scan", () => {
     expect(chartSrc).toMatch(/счёт \$\{(?:ev\.)?accountId\}/);
   });
 
+  it("D-02 probe: same-day interest rows order Альфа, Яндекс, Бета (amount desc then А→Я)", () => {
+    // Extract the production comparator from ForecastInterestTooltipBlock — not a twin copy.
+    const block = chartSrc.match(
+      /function ForecastInterestTooltipBlock[\s\S]*?\.sort\(\(a, b\) => \{([\s\S]*?)\n\s*\}\)/,
+    );
+    expect(block?.[1]).toBeTruthy();
+    // eslint-disable-next-line @typescript-eslint/no-implied-eval, no-new-func -- run locked chart source
+    const compare = new Function(
+      "a",
+      "b",
+      `${block![1]};`,
+    ) as (a: {
+      displayPrimaryMajor: number;
+      accountName?: string | null;
+      accountId?: number | null;
+    }, b: {
+      displayPrimaryMajor: number;
+      accountName?: string | null;
+      accountId?: number | null;
+    }) => number;
+
+    type Row = {
+      displayPrimaryMajor: number;
+      accountName: string;
+      accountId: number;
+    };
+    // Plan probe: amounts 20, 20, 10 — names Альфа, Яндекс, Бета → Альфа, Яндекс, Бета
+    const probe: Row[] = [
+      { displayPrimaryMajor: 20, accountName: "Яндекс", accountId: 2 },
+      { displayPrimaryMajor: 10, accountName: "Бета", accountId: 3 },
+      { displayPrimaryMajor: 20, accountName: "Альфа", accountId: 1 },
+    ];
+    const ordered = probe.slice().sort(compare).map((r) => r.accountName);
+    expect(ordered).toEqual(["Альфа", "Яндекс", "Бета"]);
+
+    // Tie-break alone must not alpha-sort Бета before Яндекс when amounts differ.
+    const amountOnly: Row[] = [
+      { displayPrimaryMajor: 10, accountName: "Альфа", accountId: 1 },
+      { displayPrimaryMajor: 20, accountName: "Бета", accountId: 2 },
+    ];
+    expect(amountOnly.slice().sort(compare).map((r) => r.accountName)).toEqual([
+      "Бета",
+      "Альфа",
+    ]);
+  });
+
   it("tooltip card roots use text-sm not text-xs (UI-SPEC Label)", () => {
     expect(chartSrc).toMatch(
       /rounded-lg border border-border\/50 bg-background[\s\S]*?text-sm/,
