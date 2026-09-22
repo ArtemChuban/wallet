@@ -62,6 +62,19 @@ describe("SIDE MCP isolation-contract (D-05)", () => {
     expect(src).toMatch(/DISOL-01/);
     expect(src).toMatch(/INISO-01/);
     expect(src).toMatch(/GRISO-01/);
+    // Phase 30 PARITY-01 / SAVISO: triple-tag closer on overlay instructions
+    expect(src).toMatch(/SAVISO-01/);
+    expect(src).toMatch(/INISO-01\/GRISO-01\/SAVISO-01/);
+    expect(src).not.toMatch(/A′/);
+  });
+
+  it("forecast tool description drops retired grace-line mark (D-11)", () => {
+    const src = readFileSync(
+      resolve(process.cwd(), "src/lib/mcp/tools/forecast.ts"),
+      "utf8",
+    );
+    expect(src).toMatch(/SAVISO-01/);
+    expect(src).not.toMatch(/A′/);
   });
 
   it("wallet_ping declares readOnlyHint true and openWorldHint false (D-10)", () => {

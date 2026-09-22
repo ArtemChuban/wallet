@@ -7,12 +7,12 @@ import {
   resolveForecastHorizonEnd,
 } from "@/lib/mcp/reads/load-forecast-overlay";
 
-/** D-08/INISO-01+GRISO-01 forecast overlay — isolation in description, not payload meta. */
+/** D-09/D-10 INISO+GRISO+SAVISO forecast overlay — isolation in description, not payload meta. */
 export const GET_FORECAST_OVERLAY_DESCRIPTION =
-  "Read Капитал forecast overlay / Прогноз: sparse points[] with income + A′ grace forecastEvents. " +
+  "Read Капитал forecast overlay / Прогноз: sparse points[] with income + interest + grace forecastEvents. " +
   "Optional horizonEnd (YYYY-MM-DD); omit defaults to today+365 (same as UI 1y/all). " +
   "UI presets 30d/90d/1y are how to pick a date — not tool params. " +
-  "INISO-01/GRISO-01: Капитал forecast overlay (Прогноз) is income + A′ grace — do not fold into historical NW LOCF.";
+  "INISO-01/GRISO-01/SAVISO-01: Капитал forecast overlay (Прогноз) is income + interest + grace — do not fold into historical NW LOCF.";
 
 export function registerGetForecastOverlay(server: McpServer) {
   server.registerTool(

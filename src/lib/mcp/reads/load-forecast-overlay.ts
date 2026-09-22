@@ -1,7 +1,8 @@
 /**
- * MCP forecast overlay loader (SIDE-04).
+ * MCP forecast overlay loader (SIDE-04 / MCP-02).
  * Ports DashboardChartsShell forecastMeta fold → buildNetWorthForecastSeries.
  * Accounts-only NW anchor via loadNetWorthAsOf — never debts / historical series builder.
+ * Interest membership mirrors page.tsx forecastSavings + shell listInterestSlotsInRange (D-05).
  */
 
 import { openGraceForecastMembership } from "@/lib/credit-grace";
@@ -11,7 +12,7 @@ import {
   listAllInRange,
   occurrenceKeyString,
 } from "@/lib/income";
-import { type RateRow } from "@/lib/locf";
+import { firstHitLocfMap, type RateRow } from "@/lib/locf";
 import { loadNetWorthAsOf } from "@/lib/mcp/reads/load-net-worth-asof";
 import { minorToJson } from "@/lib/mcp/serialize";
 import {
@@ -19,6 +20,7 @@ import {
   type BuildNetWorthForecastSeriesResult,
   type ForecastSlot,
 } from "@/lib/nw-forecast";
+import { listInterestSlotsInRange } from "@/lib/savings-interest";
 
 /** Default horizon when wire horizonEnd omitted (D-04 = UI 1y/all). */
 export function resolveForecastHorizonEnd(
@@ -108,7 +110,7 @@ export function serializeForecastPayload(
 
 /**
  * Page/shell-parity forecast overlay (Капитал Прогноз).
- * Membership: open income slots + openGraceForecastMembership; domain builder only.
+ * Membership: open income + interest (SAVINGS LOCF) + openGraceForecastMembership.
  */
 export async function loadForecastOverlay(args: {
   today: string;
@@ -125,6 +127,8 @@ export async function loadForecastOverlay(args: {
     recurringActuals,
     oneTimeActuals,
     openGraceObligations,
+    savingsAccounts,
+    snapshotsLte,
   ] = await Promise.all([
     loadNetWorthAsOf(today),
     prisma.fxRate.findMany({
@@ -180,6 +184,24 @@ export async function loadForecastOverlay(args: {
             },
           },
         },
+      },
+    }),
+    // page.tsx forecastSavings filter (D-05)
+    prisma.account.findMany({
+      where: {
+        type: "SAVINGS",
+        annualRateBps: { not: null },
+        accrualDayOfMonth: { not: null },
+      },
+      include: { currency: true },
+    }),
+    prisma.balanceSnapshot.findMany({
+      where: { asOfDate: { lte: today } },
+      orderBy: { asOfDate: "desc" },
+      select: {
+        accountId: true,
+        asOfDate: true,
+        amountMinor: true,
       },
     }),
   ]);
@@ -319,9 +341,39 @@ export async function loadForecastOverlay(args: {
     dueAsOf: m.dueAsOf,
   }));
 
+  // Mirror DashboardChartsShell interest map (D-05 / D-08 inline)
+  const locfByAccount = firstHitLocfMap(snapshotsLte, (s) => s.accountId);
+  const interestSlots: ForecastSlot[] = listInterestSlotsInRange(
+    savingsAccounts.map((a) => {
+      const locf = locfByAccount.get(a.id);
+      return {
+        accountId: a.id,
+        accountName: a.name,
+        balanceMinor: locf?.amountMinor ?? 0n,
+        annualRateBps: a.annualRateBps!,
+        accrualDayOfMonth: a.accrualDayOfMonth!,
+        currencyCode: a.currencyCode,
+        currencyScale: a.currency.scale,
+        isPrimaryCurrency: a.currency.isPrimary,
+      };
+    }),
+    today,
+    horizonEnd,
+  ).map((s) => ({
+    kind: "interest" as const,
+    parentId: s.parentId,
+    plannedAsOf: s.plannedAsOf,
+    plannedAmountMinor: s.interestMinor,
+    currencyCode: s.currencyCode,
+    currencyScale: s.currencyScale,
+    isPrimaryCurrency: s.isPrimaryCurrency,
+    accountId: s.accountId,
+    ...(s.accountName !== undefined ? { accountName: s.accountName } : {}),
+  }));
+
   const built = buildNetWorthForecastSeries({
     anchorPrimaryMinor,
-    slots: [...openSlots, ...graceSlots],
+    slots: [...openSlots, ...interestSlots, ...graceSlots],
     rates,
     primaryScale: nw.primaryScale,
     today,
