@@ -4,17 +4,17 @@ milestone: v1.5
 milestone_name: Сберегательный счет (Phases 27–31)
 current_phase: 31
 current_phase_name: ASSET ↔ SAVINGS type conversion
-status: planning
-stopped_at: Phase 31 plan-check blockers cleared (VALIDATION + RESEARCH Qs)
-last_updated: "2026-09-22T14:25:00.000Z"
+status: in_progress
+stopped_at: Completed 31-01-PLAN.md
+last_updated: "2026-09-22T12:32:29.962Z"
 last_activity: 2026-09-22
-last_activity_desc: 31-VALIDATION.md authored; RESEARCH Open Questions (RESOLVED) — re-run plan-checker
-state_head: 21c66a0c01088aed1ffaee9de8412f63788c2827
+last_activity_desc: Completed 31-01 — Zod + updateAccount ASSET↔SAVINGS matrix
+state_head: 1f108440390d061be52a873ab34ab3f64bff9547
 progress:
   total_phases: 5
   completed_phases: 4
-  total_plans: 10
-  completed_plans: 10
+  total_plans: 12
+  completed_plans: 11
   percent: 80
 ---
 
@@ -30,11 +30,11 @@ See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательн�
 ## Current Position
 
 Phase: 31 — ASSET ↔ SAVINGS type conversion
-Plan: 31-01 / 31-02 planned
-Status: Ready for plan-check re-run
-Last activity: 2026-09-22 — plan-check blockers cleared
+Plan: 2 of 2 (next: 31-02)
+Status: 31-01 complete — server conversion matrix green
+Last activity: 2026-09-22 — completed 31-01-PLAN.md
 
-Progress: [██████░░░░] 60%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
@@ -69,6 +69,7 @@ Progress: [██████░░░░] 60%
 | Phase 29 P02 | 3min | 2 tasks | 4 files |
 | Phase 30 P01 | 4min | 3 tasks | 7 files |
 | Phase 30 P02 | 2min | 2 tasks | 2 files |
+| Phase 31 P01 | 5min | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -102,6 +103,9 @@ Decisions are logged in PROJECT.md Key Decisions table. v1.5 locks from scoping/
 - [Phase 30]: Triple-tag closer INISO-01/GRISO-01/SAVISO-01; drop A′ prose
 - [Phase 30]: Skipped UI create (D-15) — live UAT Накопительный 27 already present — Orca UAT found existing SAVINGS seed; create path not exercised this run
 - [Phase 30]: Assert no-write via sqlite BalanceSnapshot count + get_net_worth JSON identity — T-30-02 / D-14 dual barrier for overlay-only MCP reads
+- [Phase 31]: Optional Zod type enum ASSET|SAVINGS only; FIAT_CREDIT/legacy rejected at schema
+- [Phase 31]: Forbidden non-peer transitions return generic Russian save failure (no type detail)
+- [Phase 31]: Same-type SAVINGS update omits type field; convert paths set type explicitly
 
 ### Pending Todos
 
@@ -140,10 +144,11 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-22T14:25:00.000Z
-Stopped at: Phase 31 plan-check blockers cleared
-Resume file: /home/artem/Documents/wallet/.planning/phases/31-asset-savings-type-conversion/31-01-PLAN.md
+Last session: 2026-09-22T12:32:29.792Z
+Stopped at: Completed 31-01-PLAN.md
+Resume file: None
 
 ## Operator Next Steps
 
-- Re-run plan-checker then execute: `/gsd-execute-phase 31`
+- Next: execute `/gsd-execute-phase 31` plan 31-02 (AccountFormDialog unlock)
+- Or: `/gsd-execute-plan` for 31-02

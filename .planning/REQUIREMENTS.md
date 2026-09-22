@@ -63,7 +63,7 @@
 | ACCT-01 | Phase 27 | Complete |
 | ACCT-02 | Phase 27 | Complete |
 | ACCT-03 | Phase 27 | Complete |
-| ACCT-04 | Phase 31 | Pending |
+| ACCT-04 | Phase 31 | Pending (31-01 server done; 31-02 UI) |
 | INT-01 | Phase 28 | Complete |
 | INT-02 | Phase 29 | Complete |
 | INT-03 | Phase 29 | Complete |

@@ -190,10 +190,11 @@ Plans:
   3. Balance snapshots and historical NW stay; conversion does not write a new snapshot and does not drop history
   4. Other types (`FIAT_CREDIT` and legacy asset aliases) stay immutable — only `ASSET` ↔ `SAVINGS`
 
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 
 Plans:
-- [ ] 31-01-PLAN.md — Tracer: Zod + updateAccount ASSET↔SAVINGS matrix + never-calls snapshot
+
+- [x] 31-01-PLAN.md — Tracer: Zod + updateAccount ASSET↔SAVINGS matrix + never-calls snapshot
 - [ ] 31-02-PLAN.md — UI AccountFormDialog unlock + source-scan tests + UAT scaffold
 
 **UI hint**: yes
@@ -206,7 +207,7 @@ Plans:
 | 28. Interest math + forecast kind | 2/2 | Complete    | 2026-09-21 |
 | 29. Капитал overlay + SAVISO | 2/2 | Complete    | 2026-09-21 |
 | 30. MCP PARITY + verify | 2/2 | Complete    | 2026-09-22 |
-| 31. ASSET ↔ SAVINGS type conversion | 0/2 | Planned | - |
+| 31. ASSET ↔ SAVINGS type conversion | 1/2 | In Progress|  |
 
 ---
 *Roadmap updated: 2026-09-21 — v1.5 adds Phase 31 ASSET ↔ SAVINGS conversion*
