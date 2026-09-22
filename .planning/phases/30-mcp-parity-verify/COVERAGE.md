@@ -1,0 +1,1 @@
+No external API integration: Phase 30 extends existing in-repo localhost MCP read tools (`list_accounts`, `get_forecast_overlay`) only — field and membership parity, not a new third-party SaaS/SDK surface.

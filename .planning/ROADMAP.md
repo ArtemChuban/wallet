@@ -161,7 +161,11 @@ Plans:
   3. New savings read surfaces ship matching MCP read tool fields in the same milestone (PARITY-01 upheld)
   4. MCP descriptions/isolation contract name SAVISO alongside INISO/GRISO; Orca/Nyquist verify overlay visible and historical NW unchanged without new snaps
 
-**Plans**: TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 30-01-PLAN.md — Tracer: list_accounts SAVINGS fields + overlay interest + SAVISO Wave 0→green
+- [ ] 30-02-PLAN.md — Orca UAT + COVERAGE.md + D-16 todo gate
 
 ### Phase 31: ASSET ↔ SAVINGS type conversion
 
@@ -185,7 +189,7 @@ Plans:
 | 27. SAVINGS schema + CRUD | 4/4 | Complete    | 2026-09-11 |
 | 28. Interest math + forecast kind | 2/2 | Complete    | 2026-09-21 |
 | 29. Капитал overlay + SAVISO | 2/2 | Complete    | 2026-09-21 |
-| 30. MCP PARITY + verify | 0/? | Not started | - |
+| 30. MCP PARITY + verify | 0/2 | Planned | - |
 | 31. ASSET ↔ SAVINGS type conversion | 0/? | Not started | - |
 
 ---

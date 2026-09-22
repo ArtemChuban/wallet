@@ -5,10 +5,10 @@ milestone_name: Сберегательный счет (Phases 27–31)
 current_phase: 30
 current_phase_name: MCP PARITY + verify
 status: planning
-stopped_at: Phase 30 research complete
-last_updated: "2026-09-22T08:50:44.247Z"
+stopped_at: Phase 30 plans created
+last_updated: "2026-09-22T09:10:00.000Z"
 last_activity: 2026-09-22
-last_activity_desc: Phase 30 RESEARCH.md written
+last_activity_desc: Phase 30 PLAN.md files written (30-01, 30-02)
 state_head: c2cf76ed55d51eb746c0e4b5a4ab1f726264dc38
 progress:
   total_phases: 5
@@ -30,9 +30,9 @@ See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательн�
 ## Current Position
 
 Phase: 30 — MCP PARITY + verify
-Plan: Not started
-Status: Ready to plan
-Last activity: 2026-09-22 — Phase 30 RESEARCH.md written
+Plan: 30-01 ready (2 plans)
+Status: Ready to execute
+Last activity: 2026-09-22 — Phase 30 plans created
 
 Progress: [██████░░░░] 60%
 
