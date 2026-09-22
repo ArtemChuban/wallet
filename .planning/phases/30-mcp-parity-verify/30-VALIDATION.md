@@ -66,6 +66,7 @@ validated: "2026-09-22"
 | Behavior | Requirement | Why Manual | Test Instructions |
 |----------|-------------|------------|-------------------|
 | Orca: list_accounts SAVINGS fields + get_forecast_overlay interest + snap count unchanged | PARITY-01 / MCP-01 / MCP-02 | Live MCP + UI drive per OPERATOR.md | Agent: `npm run dev` + Orca; evidence in `30-UAT.md` |
+| D-16 savings todo must remain under `.planning/todos/pending/` until `/gsd-complete-milestone` v1.5 | PARITY-01 / D-16 | **ESCALATED BLOCKER** — file under `completed/`; auditor cannot move todos | Developer: `mv` todo to `pending/`; re-run `npx vitest run src/lib/mcp/phase-30-parity-gate.test.ts` (expect 2/2) |
 
 ---
 
