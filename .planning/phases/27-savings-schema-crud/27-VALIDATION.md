@@ -1,9 +1,11 @@
 ---
 phase: "27"
 slug: "savings-schema-crud"
-status: draft
-nyquist_compliant: false
-wave_0_complete: false
+# status lifecycle: draft (seeded by plan-phase) → validated (set by validate-phase §6)
+# audit-milestone §5.5 distinguishes NOT-VALIDATED (draft) from PARTIAL (validated + nyquist_compliant: false) (#2117)
+status: validated
+nyquist_compliant: true
+wave_0_complete: true
 created: "2026-09-11"
 ---
 
@@ -19,7 +21,7 @@ created: "2026-09-11"
 |----------|-------|
 | **Framework** | vitest 4.x |
 | **Config file** | `vitest.config.ts` |
-| **Quick run command** | `npx vitest run src/lib/account-type.test.ts src/lib/validations/account.test.ts src/lib/net-worth.test.ts` |
+| **Quick run command** | `npx vitest run src/lib/validations/account.test.ts src/lib/account-type.test.ts src/lib/net-worth.test.ts src/lib/savings-rate.test.ts src/lib/savings-accrual-display.test.ts src/lib/savings-account-schema.test.ts src/app/accounts/actions.test.ts src/components/accounts/AccountFormDialog.test.ts src/components/accounts/AccountList.test.ts` |
 | **Full suite command** | `npm test` |
 | **Estimated runtime** | ~30–90 seconds |
 
@@ -27,7 +29,7 @@ created: "2026-09-11"
 
 ## Sampling Rate
 
-- **After every task commit:** Run quick vitest subset (expand as files land)
+- **After every task commit:** Run quick vitest subset above
 - **After every plan wave:** Run `npm test`
 - **Before `/gsd-verify-work`:** Full suite must be green
 - **Max feedback latency:** 120 seconds
@@ -38,15 +40,15 @@ created: "2026-09-11"
 
 | Task ID | Plan | Wave | Requirement | Threat Ref | Secure Behavior | Test Type | Automated Command | File Exists | Status |
 |---------|------|------|-------------|------------|-----------------|-----------|-------------------|-------------|--------|
-| 27-01-T1 | 01 | 0 | ACCT-01…03 | T-27-02/03/04 | Red Zod/soft/NW contracts | stubs | `npx vitest run src/lib/validations/account.test.ts src/lib/account-type.test.ts src/lib/net-worth.test.ts; test $? -ne 0` | ✅ extend | ⬜ pending |
-| 27-01-T2 | 01 | 0 | ACCT-01/03 | T-27-05 | Red display + create actions; update todo/skip | stubs | `npx vitest run src/lib/savings-accrual-display.test.ts src/app/accounts/actions.test.ts; test $? -ne 0` | ❌→✅ W0 | ⬜ pending |
-| 27-02-T2 | 02 | 1 | ACCT-01/02 | T-27-01…04 | Zod+CHECK+create+NW | unit | `npx vitest run src/lib/validations/account.test.ts src/lib/account-type.test.ts src/lib/net-worth.test.ts && npx vitest run src/app/accounts/actions.test.ts -t 'createAccount'` | ✅ | ⬜ pending |
-| 27-02-T3 | 02 | 1 | ACCT-01 | — | migrate deploy live | migrate | `DATABASE_URL=file:./data/wallet.db npx prisma migrate deploy` | ✅ | ⬜ pending |
-| 27-03-T1 | 03 | 2 | ACCT-01 | T-27-01/05 | update SAVINGS; no snapshot | unit | `npx vitest run src/app/accounts/actions.test.ts src/lib/validations/account.test.ts` | ✅ | ⬜ pending |
-| 27-03-T2 | 03 | 2 | ACCT-03 | — | form labels/title | source+unit | `grep -q 'Изменить счёт' src/components/accounts/AccountFormDialog.tsx` | ✅ | ⬜ pending |
-| 27-04-T1 | 04 | 3 | ACCT-03 | — | days-until clamp | unit | `npx vitest run src/lib/savings-accrual-display.test.ts` | ❌→✅ | ⬜ pending |
-| 27-04-T2 | 04 | 3 | ACCT-03 | — | list rate+countdown | source+unit | `grep -q annualRateBps src/app/accounts/page.tsx` | ✅ | ⬜ pending |
-| 27-04-T3 | 04 | 3 | ACCT-02 | T-27-05 | SAVINGS snapshot manual only | unit | `npx vitest run src/app/accounts/actions.test.ts && npm test` | ✅ | ⬜ pending |
+| 27-01-T1 | 01 | 0 | ACCT-01…03 | T-27-02/03/04 | Zod/soft/NW SAVINGS contracts | unit | `npx vitest run src/lib/validations/account.test.ts src/lib/account-type.test.ts src/lib/net-worth.test.ts` | ✅ | ✅ green |
+| 27-01-T2 | 01 | 0 | ACCT-01/03 | T-27-05 | Display clamp + create SAVINGS actions | unit | `npx vitest run src/lib/savings-accrual-display.test.ts src/app/accounts/actions.test.ts` | ✅ | ✅ green |
+| 27-02-T2 | 02 | 1 | ACCT-01/02 | T-27-01…04 | Zod+CHECK+create+NW+bps helpers | unit | `npx vitest run src/lib/validations/account.test.ts src/lib/account-type.test.ts src/lib/net-worth.test.ts src/lib/savings-rate.test.ts src/lib/savings-account-schema.test.ts src/app/accounts/actions.test.ts -t 'createAccount'` | ✅ | ✅ green |
+| 27-02-T3 | 02 | 1 | ACCT-01 | — | migrate deploy + CHECK triad live | migrate+unit | `DATABASE_URL=file:./data/wallet.db npx prisma migrate status; npx vitest run src/lib/foundation.test.ts src/lib/savings-account-schema.test.ts` | ✅ | ✅ green |
+| 27-03-T1 | 03 | 2 | ACCT-01 | T-27-01/05 | update SAVINGS; no snapshot | unit | `npx vitest run src/app/accounts/actions.test.ts src/lib/validations/account.test.ts` | ✅ | ✅ green |
+| 27-03-T2 | 03 | 2 | ACCT-03 | — | form labels/title D-09/D-13 | source+unit | `npx vitest run src/components/accounts/AccountFormDialog.test.ts` | ✅ | ✅ green |
+| 27-04-T1 | 04 | 3 | ACCT-03 | — | days-until clamp | unit | `npx vitest run src/lib/savings-accrual-display.test.ts` | ✅ | ✅ green |
+| 27-04-T2 | 04 | 3 | ACCT-03 | — | list rate%+countdown | source+unit | `npx vitest run src/components/accounts/AccountList.test.ts` | ✅ | ✅ green |
+| 27-04-T3 | 04 | 3 | ACCT-02 | T-27-05 | SAVINGS snapshot manual only | unit | `npx vitest run src/app/accounts/actions.test.ts` | ✅ | ✅ green |
 
 *Status: ⬜ pending · ✅ green · ❌ red · ⚠️ flaky*
 
@@ -54,12 +56,12 @@ created: "2026-09-11"
 
 ## Wave 0 Requirements
 
-- [ ] Extend `src/lib/validations/account.test.ts` — SAVINGS createAccountSchema refine (ACCT-01); update refine owned by Plan 03 — **27-01-T1**
-- [ ] Extend `src/lib/account-type.test.ts` — SAVINGS label + `isAssetType` (ACCT-02/03) — **27-01-T1**
-- [ ] Extend `src/lib/net-worth.test.ts` — SAVINGS inclusion (ACCT-02) — **27-01-T1**
-- [ ] New `src/lib/savings-accrual-display.test.ts` — clamp + today/next month (ACCT-03) — **27-01-T2**
-- [ ] Extend `src/app/accounts/actions.test.ts` — create SAVINGS hard-fail (Plan 02 greens); update/no-snapshot as `it.todo` / `describe.skip` owned by Plan 03 — **no hard-fail cross-wave poison** — **27-01-T2**
-- [ ] Optional: UI source scan for «Годовой %» / «День начисления» / «Накопительный» — covered in 27-02/03/04 greps
+- [x] Extend `src/lib/validations/account.test.ts` — SAVINGS createAccountSchema refine (ACCT-01); update refine owned by Plan 03 — **27-01-T1**
+- [x] Extend `src/lib/account-type.test.ts` — SAVINGS label + `isAssetType` (ACCT-02/03) — **27-01-T1**
+- [x] Extend `src/lib/net-worth.test.ts` — SAVINGS inclusion (ACCT-02) — **27-01-T1**
+- [x] New `src/lib/savings-accrual-display.test.ts` — clamp + today/next month (ACCT-03) — **27-01-T2**
+- [x] Extend `src/app/accounts/actions.test.ts` — create SAVINGS + update/no-snapshot green (Plan 03) — **27-01-T2**
+- [x] Nyquist gap fill 2026-09-22: `savings-rate.test.ts`, `savings-account-schema.test.ts`, AccountFormDialog/AccountList source contracts
 
 *Existing Vitest infrastructure covers framework — no install Wave 0.*
 
@@ -76,11 +78,25 @@ created: "2026-09-11"
 
 ## Validation Sign-Off
 
-- [ ] All tasks have `<automated>` verify or Wave 0 dependencies
-- [ ] Sampling continuity: no 3 consecutive tasks without automated verify
-- [ ] Wave 0 covers all MISSING references
-- [ ] No watch-mode flags
-- [ ] Feedback latency < 120s
-- [ ] `nyquist_compliant: true` set in frontmatter
+- [x] All tasks have `<automated>` verify or Wave 0 dependencies
+- [x] Sampling continuity: no 3 consecutive tasks without automated verify
+- [x] Wave 0 covers all MISSING references
+- [x] No watch-mode flags
+- [x] Feedback latency < 120s
+- [x] `nyquist_compliant: true` set in frontmatter
 
-**Approval:** pending
+**Approval:** validated 2026-09-22 — phase suite 136 green (gap-fill + prior contracts)
+
+## Validation Audit 2026-09-22
+
+| Metric | Count |
+|--------|-------|
+| Gaps found | 4 |
+| Resolved | 4 |
+| Escalated | 0 |
+
+Tests added/extended:
+- `src/lib/savings-rate.test.ts` — parsePercentToBps / formatBpsToPercentMajor (ACCT-01 / D-01…D-03)
+- `src/lib/savings-account-schema.test.ts` — SAVINGS enum + CHECK triad source contract (D-14/D-15)
+- `src/components/accounts/AccountFormDialog.test.ts` — D-09/D-13 chrome (Изменить счёт, Годовой %, День начисления)
+- `src/components/accounts/AccountList.test.ts` — secondary rate% + countdown, no raw DOM
