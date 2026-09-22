@@ -17,3 +17,50 @@ describe("AccountFormDialog controlled name (ACCT-01 / G-02-2 / 02-05-02)", () =
     expect(dialogSrc.match(/defaultValue/g) ?? []).toHaveLength(0);
   });
 });
+
+describe("AccountFormDialog edit ASSET↔SAVINGS unlock (ACCT-04 / 31-02)", () => {
+  it("canConvertType uses exact ASSET|SAVINGS peer check — not isAssetType", () => {
+    expect(dialogSrc).toMatch(/canConvertType/);
+    expect(dialogSrc).toMatch(
+      /account\.type\s*===\s*["']ASSET["']\s*\|\|\s*account\.type\s*===\s*["']SAVINGS["']/,
+    );
+    // Unlock must not soft-match legacy aliases via isAssetType
+    const unlockBlock = dialogSrc.slice(
+      dialogSrc.indexOf("canConvertType"),
+      dialogSrc.indexOf("canConvertType") + 400,
+    );
+    expect(unlockBlock).not.toMatch(/isAssetType/);
+  });
+
+  it("CONVERT_TYPE_OPTIONS is ASSET+SAVINGS only (no FIAT_CREDIT)", () => {
+    expect(dialogSrc).toMatch(/CONVERT_TYPE_OPTIONS/);
+    const convertBlockMatch = dialogSrc.match(
+      /CONVERT_TYPE_OPTIONS\s*=\s*\[[\s\S]*?\]\s*as const/,
+    );
+    expect(convertBlockMatch).not.toBeNull();
+    const convertBlock = convertBlockMatch![0];
+    expect(convertBlock).toMatch(/["']ASSET["']/);
+    expect(convertBlock).toMatch(/["']SAVINGS["']/);
+    expect(convertBlock).not.toMatch(/FIAT_CREDIT/);
+  });
+
+  it("showSavingsFields keys off draft accountType === SAVINGS in edit", () => {
+    expect(dialogSrc).toMatch(/showSavingsFields/);
+    // Draft gate (create and edit) — not frozen account?.type only
+    expect(dialogSrc).toMatch(/accountType\s*===\s*["']SAVINGS["']/);
+    expect(dialogSrc).not.toMatch(
+      /showSavingsFields\s*=\s*[\s\S]*?mode\s*===\s*["']edit["']\s*&&\s*account\?\.type\s*===\s*["']SAVINGS["']/,
+    );
+  });
+
+  it("convertible edit DialogDescription is Валюта не меняется.", () => {
+    expect(dialogSrc).toMatch(/Валюта не меняется\./);
+    expect(dialogSrc).toMatch(/Тип и валюта не меняются\./);
+  });
+
+  it("leave-SAVINGS onValueChange clears annual rate and DOM", () => {
+    expect(dialogSrc).toMatch(/setAnnualRate\(["']["']\)/);
+    expect(dialogSrc).toMatch(/setAccrualDom\(["']["']\)/);
+    expect(dialogSrc).toMatch(/next\s*!==\s*["']SAVINGS["']/);
+  });
+});
