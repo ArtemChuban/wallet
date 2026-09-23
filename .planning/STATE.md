@@ -145,9 +145,9 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 ## Session Continuity
 
-Last session: 2026-09-22T14:10:13Z
-Stopped at: Milestone audit complete — tech_debt
-Resume file: .planning/v1.5-MILESTONE-AUDIT.md
+Last session: 2026-09-23T11:10:00Z
+Stopped at: Milestone v1.5 archived — ready for /gsd-new-milestone
+Resume file: —
 
 ## Operator Next Steps
 
