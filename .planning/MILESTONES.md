@@ -1,5 +1,24 @@
 # Milestones
 
+## v1.5 Сберегательный счет (Shipped: 2026-09-23)
+
+**Closeout:** override_closeout  
+**Known verification overrides:** 1 newly acknowledged, 1 carried forward from a prior close (see STATE.md Deferred Items)  
+**Audit:** passed (12/12 reqs, integration 11/11, flows 5/5, Nyquist 27–31 compliant)  
+**Phases completed:** 5 phases, 12 plans, 29 tasks  
+**Git range:** `v1.4` → `v1.5` (~115 files, +16.7k/−195 since Phase 27 start)  
+**Timeline:** 2026-09-11 → 2026-09-23 (~12 days)
+
+**Key accomplishments:**
+
+- Distinct `SAVINGS` AccountType with rate/DOM CRUD, CHECK invariant, NW inclusion like assets
+- ÷12 truncate monthly interest + `ForecastSlotKind` interest (future-only ΔNW)
+- Капитал dashed «Прогноз» interest overlay + SAVISO isolation; grace dips primary NW (D-11)
+- MCP `list_accounts` rate/DOM/percent + `get_forecast_overlay` interest events (PARITY-01)
+- ASSET ↔ SAVINGS type conversion in settings without BalanceSnapshot writes
+
+---
+
 ## v1.4 Local MCP (Shipped: 2026-09-11)
 
 **Closeout:** override_closeout  

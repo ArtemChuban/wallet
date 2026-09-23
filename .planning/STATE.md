@@ -2,44 +2,42 @@
 gsd_state_version: 1.0
 milestone: v1.5
 milestone_name: Сберегательный счет (Phases 27–31)
-current_phase: 31
-status: milestone_audit_tech_debt
-stopped_at: Milestone audit complete — tech_debt (Nyquist + light debt)
-last_updated: "2026-09-22T14:10:13Z"
-last_activity: 2026-09-22
-last_activity_desc: "Phase 30 Nyquist compliant — D-16 todo restored to pending/"
-state_head: b69409c82c5ac2f02bbbf26c428ea9b8ce1d74b9
+status: Awaiting next milestone
+stopped_at: Milestone v1.5 archived — ready for /gsd-new-milestone
+last_updated: "2026-09-23T11:10:00Z"
+last_activity: 2026-09-23
+last_activity_desc: "v1.5 archived — ROADMAP collapsed, REQUIREMENTS pending git rm, tag next"
+state_head: 7ee2233bf56ef7e69c7a09c8979d98ecc509ee19
 progress:
   total_phases: 5
   completed_phases: 5
   total_plans: 12
   completed_plans: 12
   percent: 100
+current_phase: —
 ---
 
 # Project State
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-09-11 — v1.5 Сберегательный счет)
+See: .planning/PROJECT.md (updated 2026-09-23 after v1.5)
 
 **Core value:** At any moment, see true net worth (assets minus credit-card debt) in the primary currency and in each account's original currency, with history you can trust over time.
-**Current focus:** v1.5 audit done — Phase 30 Nyquist compliant; remaining Nyquist drafts 27/28/31
+**Current focus:** Planning next milestone (`/gsd-new-milestone`)
 
 ## Current Position
 
-Phase: 31 (milestone complete)
+Phase: —
 Plan: —
-Status: Milestone audited — tech_debt (see `.planning/v1.5-MILESTONE-AUDIT.md`)
-Last activity: 2026-09-22 — Phase 30 Nyquist D-16 restored (`nyquist_compliant: true`)
-
-Progress: [██████████] 100%
+Status: Awaiting next milestone
+Last activity: 2026-09-23 — Milestone v1.5 archived
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 83 (v1.0: 24 + v1.1: 18 + v1.2: 14 + v1.3: 13 + v1.4: 14)
+- Total plans completed: 95 (v1.0: 24 + v1.1: 18 + v1.2: 14 + v1.3: 13 + v1.4: 14 + v1.5: 12)
 - Average duration: —
 - Total execution time: —
 
@@ -136,6 +134,7 @@ Items acknowledged and deferred at milestone close, most recent first:
 
 | Category | Item | Status | Deferred At | Milestone |
 |----------|------|--------|-------------|-----------|
+| todos | 2026-09-10-savings-account-type-with-interest-nw-forecast.md | closed → completed/ (v1.5 shipped) | 2026-09-23 | v1.5 |
 | todos | 2026-09-10-savings-account-type-with-interest-nw-forecast.md | promoted → v1.5 (active) | 2026-09-11 | v1.4 |
 | todos | 2026-09-05-add-salary-income-tracking-with-forecast.md | promoted → v1.2 (shipped) | 2026-09-07 | v1.1 |
 | todos | 2026-09-05-add-timezone-selection-to-settings.md | (presence-only) | 2026-09-07 | v1.1 |
@@ -152,6 +151,4 @@ Resume file: .planning/v1.5-MILESTONE-AUDIT.md
 
 ## Operator Next Steps
 
-- A: `/gsd-complete-milestone v1.5` — accept tech debt, archive
-- B: `/gsd-validate-phase 27` (then 28, 31) — reconcile remaining Nyquist before close
-- Or insert cleanup phase for dual membership / D-02 sort probe
+- Start the next milestone with /gsd-new-milestone

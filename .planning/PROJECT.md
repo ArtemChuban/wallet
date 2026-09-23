@@ -10,22 +10,15 @@ At any moment, see true net worth (assets minus credit-card debt) in the primary
 
 ## Current State
 
-**Shipped:** v1.0 MVP (2026-09-04); **v1.1 Долги людям (2026-09-07)**; **v1.2 Доходы (2026-09-08)**; **v1.3 Кредитка (2026-09-10)**; **v1.4 Local MCP (2026-09-11)**.
+**Shipped:** v1.0 MVP (2026-09-04); **v1.1 Долги людям (2026-09-07)**; **v1.2 Доходы (2026-09-08)**; **v1.3 Кредитка (2026-09-10)**; **v1.4 Local MCP (2026-09-11)**; **v1.5 Сберегательный счет (2026-09-23)**.
 
-**Building:** v1.5 Сберегательный счет — SAVINGS account type + monthly interest forecast overlay on Капитал «Прогноз» (no auto BalanceSnapshot).
+**Next:** Plan next milestone via `/gsd-new-milestone` (fresh REQUIREMENTS).
 
-Local Dockerized net-worth tracker + personal-debts + income + credit-grace ledgers + in-process MCP: SQLite → currencies/accounts → dated balances → dated FX → NW dashboard/charts with dashed «Прогноз» from income and open grace obligations (A′ ΔNW=0) → `/debts` + `/income` + account «Грейс» → Streamable HTTP MCP at `http://127.0.0.1:3000/api/mcp` (Host/Origin + Compose loopback). Stack: Next.js 16 App Router, Prisma 7 + SQLite, mcp-handler / MCP SDK, shadcn/ui, recharts, Vitest. Russian-first UI. Debts never change NW (DISOL-01). Income never writes BalanceSnapshot / past LOCF (ISO-01 / INISO-01). Grace never writes BalanceSnapshot / past LOCF (GRISO-01). Agents stay at UI parity (PARITY-01).
+Local Dockerized net-worth tracker + personal-debts + income + credit-grace + SAVINGS ledgers + in-process MCP: SQLite → currencies/accounts (ASSET / FIAT_CREDIT / SAVINGS) → dated balances → dated FX → NW dashboard/charts with dashed «Прогноз» (income + SAVINGS interest credits + grace that dips primary NW) → `/debts` + `/income` + account «Грейс» → Streamable HTTP MCP at `http://127.0.0.1:3000/api/mcp`. Stack: Next.js 16 App Router, Prisma 7 + SQLite, mcp-handler / MCP SDK, shadcn/ui, recharts, Vitest. Russian-first UI. Isolation walls: DISOL / INISO / GRISO / SAVISO. Agents at UI parity (PARITY-01).
 
-## Current Milestone: v1.5 Сберегательный счет
+## Next Milestone Goals
 
-**Goal:** Новый тип счёта SAVINGS с годовой ставкой и днём начисления; вклад ожидаемых процентов в dashed «Прогноз» на Капитал без переписывания historical NW / LOCF.
-
-**Target features:**
-- Тип счёта `SAVINGS` (отдельный от debit/credit/crypto/cash)
-- Поля: годовой %, день месяца начисления
-- Математика: баланс × ставка / 12 → ожидаемое начисление в день месяца
-- Overlay «Прогноз» на `/` (как income) — только прогноз, без авто BalanceSnapshot
-- MCP read-tools под PARITY-01 для нового read-surface
+TBD in `/gsd-new-milestone`. Likely candidates from deferred scope: overdue accrual UX, chart legend polish, dated rate history, MCP writes / in-app chat, timezone settings.
 
 ## Requirements
 
@@ -80,13 +73,19 @@ Local Dockerized net-worth tracker + personal-debts + income + credit-grace ledg
 - ✓ Agent can list debts, income, grace obligations, and forecast overlay via MCP without folding side ledgers into historical NW — Phase 25 (SIDE-01…04; DISOL/INISO/GRISO)
 - ✓ MCP tools declare `readOnlyHint` + named isolation copy; Claude Code / Cursor connect docs — Phase 26 (CLI-01/02)
 - ✓ Standing PARITY-01 rule in AGENTS.md — new user-visible read surfaces ship matching MCP tools same phase — Phase 26
-- ✓ User can create and manage SAVINGS accounts with annual interest rate and day-of-month accrual — Phase 27–28
-- ✓ User sees expected monthly interest on Капитал dashed «Прогноз» overlay; grace payment dips primary NW (D-11) — Phase 29 (INT-02/03, SAVISO)
-- ✓ Interest forecast never writes BalanceSnapshot or changes historical NW LOCF (SAVISO twin of INISO/GRISO) — Phase 29
+
+### Validated (v1.5)
+
+- ✓ User can create and manage SAVINGS accounts with annual rate + accrual day-of-month; balances in NW like assets — Phases 27 (ACCT-01…03)
+- ✓ Expected monthly interest = LOCF × annual rate / 12 on accrual DOM (`clampDayOfMonth`) — Phase 28 (INT-01)
+- ✓ Капитал dashed «Прогноз» includes future interest; grace dips primary NW; FX partial banner — Phase 29 (INT-02/03)
+- ✓ Interest forecast never writes BalanceSnapshot / historical LOCF; SAVISO regression suite — Phase 29 (SAVISO-01/02)
+- ✓ MCP `list_accounts` rate/DOM/percent + `get_forecast_overlay` interest events; PARITY-01 same milestone — Phase 30 (MCP-01/02, PARITY-01)
+- ✓ User can convert ASSET ↔ SAVINGS in settings (rate/DOM required/cleared; snapshots stay; other types immutable) — Phase 31 (ACCT-04)
 
 ### Active
 
-- New savings read surfaces expose matching read-only MCP tools (PARITY-01) — Phase 30
+_(empty — define in `/gsd-new-milestone`)_
 
 ### Out of Scope
 
@@ -105,15 +104,17 @@ Local Dockerized net-worth tracker + personal-debts + income + credit-grace ledg
 - Automatic FX from external APIs — deferred; manual rates only
 - FX between arbitrary non-primary pairs — primary ↔ other only
 - Multi-user / auth / cloud sync — single local user
-- Timezone selection in settings — deferred (Moscow calendar still default; todo acknowledged at v1.4 close)
+- Timezone selection in settings — deferred (Moscow calendar still default; todo still pending)
 - Auto BalanceSnapshot when savings interest accrues — deferred (v1.5 forecast overlay only)
-- Compound / daily accrual engines beyond simple annual%÷12 monthly — deferred
+- Compound / daily / min-balance bank accrual engines beyond simple annual%÷12 monthly — deferred
+- Dated interest-rate history — deferred
+- Overdue accrual UX («проценты должны были капнуть») — deferred
 - Long-term savings goals with target dates — still deferred
 - Local AI agent via subprocess spawn from app — superseded by in-app MCP host; CLI agent stays external
-- MCP write / mutate tools — deferred (v1.4 shipped read-only)
+- MCP write / mutate tools — deferred (read-only through v1.5)
 - In-app chat / «Ассистент» UI — deferred (CLI connects to MCP)
-- Nav «Валюты» discoverability / account delete (ACCT-04) — residual debt
-- Chart legend separating доходы vs обязательства on «Прогноз» — deferred
+- Nav «Валюты» discoverability / account delete — residual debt
+- Chart legend / tooltip polish separating income vs interest vs grace — deferred
 - Cash / APR / min-payment / «missed min voids grace» bank rules — D-07…D-10 OOS
 - Publish MCP on `0.0.0.0` / LAN — locked out (localhost only)
 
@@ -127,7 +128,9 @@ v1.2: income side ledger + Капитал «Прогноз» from open planned p
 
 v1.3 (2026-09-10): credit grace dual-DOM schedules, manual «Платёж для беспроцентного», A′ overlay, GRISO isolation. Audit `tech_debt`: Nyquist VALIDATION still draft on phases 19–22 (carry-forward).
 
-v1.4 (2026-09-11): in-app read-only MCP (`mcp-handler` + Streamable HTTP) with capital + side-ledger tools, named DISOL/INISO/GRISO annotations, Claude/Cursor connect docs, PARITY-01 AGENTS block. Audit `tech_debt`: SUMMARY transport wording, 25-01 frontmatter, 26-VERIFICATION/UAT doc drift. Nyquist 23–26 compliant. Deferred todo: savings account + interest NW forecast.
+v1.4 (2026-09-11): in-app read-only MCP (`mcp-handler` + Streamable HTTP) with capital + side-ledger tools, named DISOL/INISO/GRISO annotations, Claude/Cursor connect docs, PARITY-01 AGENTS block. Audit `tech_debt`: SUMMARY transport wording, 25-01 frontmatter, 26-VERIFICATION/UAT doc drift. Nyquist 23–26 compliant.
+
+v1.5 (2026-09-23): distinct `SAVINGS` AccountType with annual%÷12 interest on dashed «Прогноз»; SAVISO twin; MCP rate/DOM + interest events; ASSET↔SAVINGS conversion. Audit `passed` (12/12 reqs, Nyquist 27–31 compliant). Soft debt: dual interest membership mirror, D-02 sort probe, orphan `isAssetType`.
 
 **UI constitution — destructive actions:** Never use `window.confirm` for deletes or irreversible actions. In-app second step with Russian copy. App-wide from Phase 9.
 
@@ -181,6 +184,11 @@ v1.4 (2026-09-11): in-app read-only MCP (`mcp-handler` + Streamable HTTP) with c
 | String bigint minors + server-side convert (no agent FX invent) | Match Капитал honesty / partial totals | ✓ Good — Phase 24 |
 | SIDE tools page-parity + named DISOL/INISO/GRISO in descriptions only | Isolation walls without payload meta flags | ✓ Good — Phases 25–26 |
 | PARITY-01 via AGENTS.md BEGIN/END only (no .cursor/rules) | Standing rule survives agent runtime swaps | ✓ Good — Phase 26 |
+| Distinct `SAVINGS` AccountType (not flag on debit) | User lock; CHECK rate+DOM iff SAVINGS | ✓ Good — Phase 27 |
+| Monthly interest = LOCF × annual bps / 12 truncate toward 0 | Simple bank-ish credit; no APY/`Math.pow` | ✓ Good — Phase 28 |
+| Interest on dashed «Прогноз» only; never auto BalanceSnapshot | Twin of INISO/GRISO (SAVISO) | ✓ Good — Phase 29–30 |
+| Phase 29 D-11: grace dips primary NW (overrides A′=0 for payment) | Forecast honesty for open grace | ✓ Good — Phase 29 |
+| ASSET↔SAVINGS convert clears rate/DOM; snapshots Restrict | Settings unlock without history rewrite | ✓ Good — Phase 31 |
 
 ## Evolution
 
@@ -200,4 +208,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-22 — Phase 30 MCP PARITY + verify complete (MCP-01/02, PARITY-01)*
+*Last updated: 2026-09-23 after v1.5 milestone*

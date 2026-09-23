@@ -222,6 +222,53 @@
 
 ---
 
+## Milestone: v1.5 — Сберегательный счет
+
+**Shipped:** 2026-09-23
+**Phases:** 5 | **Plans:** 12 | **Tasks:** 29
+
+### What Was Built
+
+- Distinct `SAVINGS` type with annual rate + accrual DOM; principal in NW
+- ÷12 monthly interest enumerator + `interest` forecast kind
+- Капитал dashed «Прогноз» interest credits + SAVISO; grace dips primary NW
+- MCP catalog rate/DOM/percent + overlay interest events (PARITY-01)
+- ASSET ↔ SAVINGS conversion in account settings
+
+### What Worked
+
+- SAVISO twin of INISO/GRISO scaled without new isolation design
+- Wave 0 red contracts → green tracer pattern held for math + MCP
+- Closing Nyquist on all 5 phases before audit avoided v1.3-style tech_debt gate
+- D-16 “keep todo open until complete-milestone” made archive ack intentional
+
+### What Was Inefficient
+
+- ~10-day gap Phase 27 → 28 (context resume cost)
+- Dual interest membership (UI page map vs MCP loader) intentional but drift-prone
+- Phase 29 frontmatter `human_needed` vs body `passed` status churn until UAT
+
+### Patterns Established
+
+- Capital-growth forecast kind (`interest`) distinct from income and grace A′
+- Same-milestone MCP parity for every new read surface (PARITY-01 held for savings)
+- Type-conversion matrix with CHECK-safe null-clear on leave SAVINGS
+
+### Key Lessons
+
+1. Isolation twins (INISO → GRISO → SAVISO) compound — budget the suite early
+2. Keep PARITY MCP in same milestone as UI overlay — agents otherwise lag
+3. Reconcile VALIDATION.md to `validated` before `/gsd-audit-milestone` or status stays tech_debt
+4. Intentional pending todos need explicit close at milestone complete (not silent ack-only)
+
+### Cost Observations
+
+- Timeline: ~12 calendar days (2026-09-11 → 2026-09-23); densest after Phase 28 restart
+- Plans: 12; ~115 files / +16.7k LOC since Phase 27 start
+- Notable: Phase 27 heavy schema/UI; 28–29 math+chart; 30 MCP thin; 31 conversion bolt-on
+
+---
+
 ## Cross-Milestone Trends
 
 ### Process Evolution
@@ -233,6 +280,7 @@
 | v1.2 | — | 5 | Second side ledger (income) + forecast overlay; Nyquist closed in-phase |
 | v1.3 | — | 5 | Credit grace + A′ forecast; Nyquist draft 19–22 accepted as tech_debt |
 | v1.4 | — | 4 | In-app MCP host; Nyquist 23–26 validated before close |
+| v1.5 | — | 5 | SAVINGS + interest overlay + SAVISO + MCP parity; Nyquist 27–31 before close |
 
 ### Cumulative Quality
 
@@ -243,6 +291,7 @@
 | v1.2 | ~296 | — | Income domain + INISO scan + nw-forecast overlay |
 | v1.3 | — | — | credit-grace domain + GRISO twin + grace forecast slots |
 | v1.4 | — | — | mcp-handler host + CAP/SIDE tools + isolation-contract |
+| v1.5 | — | — | savings-interest + saviso + MCP rate/interest + ASSET↔SAVINGS convert |
 
 ### Top Lessons (Verified Across Milestones)
 
@@ -253,3 +302,4 @@
 5. Side ledgers (debts, income, grace) stay out of historical NW via explicit isolation suites
 6. Bank/contract study before schema beats guessing calendar semantics mid-build
 7. MCP tools must reuse page loaders + honesty adapters — duplicate math drifts from UI
+8. Isolation twins scale (INISO → GRISO → SAVISO); ship regression suite with the overlay
